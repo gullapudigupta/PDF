@@ -1,731 +1,263 @@
 # PDF Viewer & Editor - Design Document
 
 **Project**: PDF Viewer & Editor  
-**Framework**: Electron + Angular + TypeScript  
-**Version**: 1.0  
+**Framework**: Electron 27 + Angular 22 + TypeScript 5  
+**Version**: 2.0  
 **Date**: June 16, 2026
 
 ---
 
-## 📐 Architecture Overview
+## 1. Architecture Overview
 
-### High-Level Architecture
+### 1.1 Layered Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    USER INTERFACE LAYER                      │
-│                    (Angular Components)                      │
-├─────────────────────────────────────────────────────────────┤
-│ • Viewer Component    • Toolbar Component                   │
-│ • Sidebar Component   • Annotations Panel Component         │
-└─────────────────────────────────────────────────────────────┘
-                              ↑↓
-┌─────────────────────────────────────────────────────────────┐
-│                  STATE MANAGEMENT LAYER                      │
-│                        (NgRx Store)                          │
-├─────────────────────────────────────────────────────────────┤
-│ • Store: PDF State        • Selectors: Query State          │
-│ • Actions: Dispatch Calls  • Reducers: State Updates        │
-│ • Effects: Side Effects    • Devtools: Debugging            │
-└─────────────────────────────────────────────────────────────┘
-                              ↑↓
-┌─────────────────────────────────────────────────────────────┐
-│                    SERVICES LAYER                            │
-│              (Business Logic & Integration)                  │
-├─────────────────────────────────────────────────────────────┤
-│ • PdfService           • AnnotationService                  │
-│ • ElectronService      • StorageService                     │
-│ • ErrorHandlerService  • LoggerService                      │
-└─────────────────────────────────────────────────────────────┘
-                              ↑↓
-┌─────────────────────────────────────────────────────────────┐
-│                   PDF PROCESSING LAYER                       │
-│              (PDF.js, pdf-lib Libraries)                    │
-├─────────────────────────────────────────────────────────────┤
-│ • PDF Rendering       • PDF Manipulation                    │
-│ • Text Extraction     • Annotation Embedding                │
-│ • Page Operations     • Metadata Handling                   │
-└─────────────────────────────────────────────────────────────┘
-                              ↑↓
-┌─────────────────────────────────────────────────────────────┐
-│                  ELECTRON LAYER                              │
-│           (Desktop Integration & File System)               │
-├─────────────────────────────────────────────────────────────┤
-│ • Main Process        • IPC Communication                   │
-│ • File Operations     • Window Management                   │
-│ • System Integration  • Native Dialogs                      │
-└─────────────────────────────────────────────────────────────┘
-                              ↑↓
-┌─────────────────────────────────────────────────────────────┐
-│                   DATA LAYER                                 │
-│              (SQLite, File System)                          │
-├─────────────────────────────────────────────────────────────┤
-│ • Local Database      • File I/O                            │
-│ • Settings Storage    • Cache Management                    │
-│ • Document Storage    • Temporary Files                     │
-└─────────────────────────────────────────────────────────────┘
+1. **Presentation Layer (Angular Components)**  
+   Viewer, toolbar, sidebars, forms designer, annotation panel, properties panel.
+
+2. **State Layer (NgRx)**  
+   Document state, page state, annotations, forms, security, UI state.
+
+3. **Application Services Layer**  
+   PDF loading/rendering/editing, forms, OCR, signatures, redaction, storage, history.
+
+4. **PDF Engine Layer**  
+   `PDF.js` for rendering/extraction and `pdf-lib` for manipulation/output.
+
+5. **Desktop Integration Layer (Electron)**  
+   File system access, native dialogs, secure IPC, platform integration.
+
+6. **Data Layer**  
+   Local JSON/SQLite for preferences, recent files, workspace state, autosave snapshots.
+
+---
+
+## 2. Target Module Structure
+
+```text
+src/app/
+  core/
+    services/
+      electron.service.ts
+      storage.service.ts
+      logger.service.ts
+      error-handler.service.ts
+      settings.service.ts
+  shared/
+    components/
+    directives/
+    pipes/
+  modules/pdf-workspace/
+    components/
+      viewer/
+      toolbar/
+      sidebar/
+      search-panel/
+      annotations-panel/
+      forms-panel/
+      properties-panel/
+      redaction-panel/
+      signature-panel/
+    services/
+      pdf-document.service.ts
+      pdf-render.service.ts
+      pdf-edit.service.ts
+      annotation.service.ts
+      form-field.service.ts
+      signature.service.ts
+      redaction.service.ts
+      ocr.service.ts
+      history.service.ts
+      export.service.ts
+    models/
+      document.model.ts
+      page.model.ts
+      annotation.model.ts
+      form-field.model.ts
+      signature.model.ts
+      redaction.model.ts
+      search.model.ts
+    store/
+      workspace.state.ts
+      workspace.actions.ts
+      workspace.reducer.ts
+      workspace.effects.ts
+      workspace.selectors.ts
 ```
 
 ---
 
-## 🗂️ Project Structure
-
-### Folder Organization
-
-```
-pdf-viewer-editor/
-│
-├── src/
-│   ├── app/
-│   │   ├── core/                    # Singleton services
-│   │   │   ├── services/
-│   │   │   │   ├── electron.service.ts
-│   │   │   │   ├── storage.service.ts
-│   │   │   │   ├── error-handler.service.ts
-│   │   │   │   └── logger.service.ts
-│   │   │   ├── interceptors/
-│   │   │   ├── guards/
-│   │   │   └── core.module.ts
-│   │   │
-│   │   ├── shared/                 # Reusable components
-│   │   │   ├── components/
-│   │   │   │   ├── spinner/
-│   │   │   │   ├── dialog/
-│   │   │   │   └── confirm-dialog/
-│   │   │   ├── pipes/
-│   │   │   │   ├── file-size.pipe.ts
-│   │   │   │   └── date-format.pipe.ts
-│   │   │   ├── directives/
-│   │   │   └── shared.module.ts
-│   │   │
-│   │   ├── modules/                # Feature modules
-│   │   │   └── pdf-viewer/
-│   │   │       ├── components/
-│   │   │       │   ├── viewer/     # Main PDF canvas
-│   │   │       │   ├── toolbar/    # Controls
-│   │   │       │   ├── sidebar/    # Thumbnails
-│   │   │       │   ├── annotations-panel/
-│   │   │       │   ├── search/
-│   │   │       │   └── pagination/
-│   │   │       ├── services/
-│   │   │       │   ├── pdf.service.ts
-│   │   │       │   └── annotation.service.ts
-│   │   │       ├── models/
-│   │   │       │   ├── pdf.model.ts
-│   │   │       │   └── annotation.model.ts
-│   │   │       ├── store/          # NgRx state
-│   │   │       │   ├── pdf.state.ts
-│   │   │       │   ├── pdf.actions.ts
-│   │   │       │   ├── pdf.reducer.ts
-│   │   │       │   ├── pdf.effects.ts
-│   │   │       │   └── pdf.selector.ts
-│   │   │       └── pdf-viewer.module.ts
-│   │   │
-│   │   ├── app.component.ts        # Root component
-│   │   ├── app.component.html
-│   │   ├── app.component.scss
-│   │   ├── app.routes.ts
-│   │   └── app.module.ts
-│   │
-│   ├── assets/                     # Static assets
-│   ├── styles/
-│   │   └── styles.scss             # Global styles
-│   ├── main.ts
-│   └── index.html
-│
-├── electron/                       # Electron main process
-│   ├── main.ts                     # Entry point
-│   ├── preload.ts                  # Preload script
-│   └── types.ts                    # IPC types
-│
-├── angular.json
-├── tsconfig.json
-├── tsconfig.app.json
-├── tsconfig.spec.json
-├── package.json
-├── electron-builder.json
-├── README.md
-├── REQUIREMENTS.md
-├── ARCHITECTURE.md
-├── DESIGN.md                       # This file
-├── TASKS.md                        # Task list
-├── CODE_COMPLETION_GRAPH.md
-└── .gitignore
-```
-
----
-
-## 🔄 Data Flow
-
-### PDF Loading Flow
-
-```
-User Action: Click "Open File"
-    ↓
-ToolbarComponent → ElectronService.showOpenDialog()
-    ↓
-Electron Main Process → File Dialog
-    ↓
-User Selects File → File Path Returned
-    ↓
-ToolbarComponent → Dispatch loadDocument Action
-    ↓
-NgRx Store → Action Received
-    ↓
-PdfEffects → Intercept loadDocument
-    ↓
-PdfService.loadDocument(path)
-    ↓
-ElectronService.readFile(path)
-    ↓
-Electron Main → File System Read
-    ↓
-File Data → PdfService
-    ↓
-PDF.js.getDocument() → Parse PDF
-    ↓
-Success → Dispatch loadDocumentSuccess Action
-    ↓
-Reducer Updates State:
-  - currentDocument
-  - totalPages
-  - loading = false
-    ↓
-Component Selects State:
-  - selectCurrentDocument
-  - selectTotalPages
-    ↓
-ViewerComponent → detectChanges()
-    ↓
-Call renderPage(1)
-    ↓
-PdfService → PDF.js getPage(1)
-    ↓
-Render Canvas
-    ↓
-Update View
-```
-
-### Annotation Flow
-
-```
-User Highlights Text
-    ↓
-ViewerComponent → mouseUp Event
-    ↓
-Get Selected Text & Position
-    ↓
-Dispatch addAnnotation Action
-    ↓
-Action: { annotation: Annotation }
-    ↓
-Reducer → Add to annotations array
-    ↓
-State Updated
-    ↓
-AnnotationsPanelComponent → Receive updated annotations
-    ↓
-Display new annotation
-    ↓
-ViewerComponent → Render highlight on canvas
-    ↓
-Show visual feedback to user
-```
-
----
-
-## 🔐 Module Relationships
-
-### CoreModule
-**Purpose**: Provide singleton services to entire application
-
-**Services**:
-- `ElectronService`: IPC communication with main process
-- `StorageService`: SQLite database operations
-- `ErrorHandlerService`: Global error handling
-- `LoggerService`: Application logging
-
-**Imported By**: `AppModule`  
-**Imports**: Nothing (lowest level)
-
----
-
-### SharedModule
-**Purpose**: Provide reusable components and utilities
-
-**Exports**:
-- Reusable components
-- Custom pipes
-- Custom directives
-- Material modules
-- CommonModule
-
-**Imported By**: `PdfViewerModule`, other feature modules  
-**Imports**: `CommonModule`, Material modules
-
----
-
-### PdfViewerModule
-**Purpose**: Main PDF viewing and editing feature
-
-**Components**:
-- `PdfViewerComponent`: Main container
-- `ToolbarComponent`: Control buttons
-- `SidebarComponent`: Thumbnails
-- `AnnotationsPanelComponent`: Annotation management
-- `PaginationComponent`: Page navigation
-- `SearchComponent`: Text search
-
-**Services**:
-- `PdfService`: PDF operations
-- `AnnotationService`: Annotation management
-
-**State**:
-- `PdfState`: Redux state shape
-- `PdfActions`: Action creators
-- `PdfReducer`: State updates
-- `PdfEffects`: Side effects
-- `PdfSelectors`: State queries
-
-**Imported By**: `AppModule`  
-**Imports**: `SharedModule`, `StoreModule`, `EffectsModule`
-
----
-
-## 📊 State Management (NgRx)
-
-### PDF State Structure
+## 3. State Design (NgRx)
 
 ```typescript
-interface PdfState {
-  // Document
-  currentDocument: PdfDocument | null;
-  documentList: PdfDocument[];
-  loading: boolean;
-  error: string | null;
-
-  // Navigation
-  currentPage: number;
-  totalPages: number;
-  zoom: number;
-  rotation: number;
-
-  // Annotations
+interface WorkspaceState {
+  document: {
+    current: PdfDocument | null;
+    loading: boolean;
+    error: string | null;
+    dirty: boolean;
+  };
+  view: {
+    currentPage: number;
+    totalPages: number;
+    zoom: number;
+    rotation: number;
+    viewMode: 'single' | 'continuous' | 'facing';
+  };
+  edit: {
+    selection: SelectionState | null;
+    clipboard: ClipboardState | null;
+    undoStack: HistoryEntry[];
+    redoStack: HistoryEntry[];
+  };
   annotations: Annotation[];
-  selectedAnnotationId: string | null;
-
-  // UI
-  sidebarOpen: boolean;
-  annotationsPanelOpen: boolean;
+  forms: FormField[];
+  signatures: SignatureAsset[];
+  redactions: RedactionMark[];
+  search: SearchState;
+  security: SecurityState;
+  ui: {
+    leftSidebarOpen: boolean;
+    rightPanelOpen: boolean;
+    activeTool: ToolType;
+    theme: 'light' | 'dark' | 'system';
+  };
 }
 ```
 
-### Actions
+---
 
-**Document Actions**:
-- `loadDocument`: Load PDF from file
-- `loadDocumentSuccess`: Document loaded successfully
-- `loadDocumentError`: Document load failed
-- `saveDocument`: Save modified PDF
-- `saveDocumentSuccess`: Save completed
-- `closeDocument`: Close current document
+## 4. Key Service Responsibilities
 
-**Navigation Actions**:
-- `goToPage`: Navigate to specific page
-- `setZoom`: Change zoom level
-- `rotatePages`: Rotate pages
+### 4.1 `PdfDocumentService`
+- Open/load/save/save-as
+- Metadata read/write
+- Merge/split/insert/delete/reorder pages
 
-**Annotation Actions**:
-- `addAnnotation`: Add new annotation
-- `removeAnnotation`: Delete annotation
-- `updateAnnotation`: Modify annotation
-- `selectAnnotation`: Select for editing
+### 4.2 `PdfRenderService`
+- Render pages and thumbnails using PDF.js
+- Text extraction for search/highlight
+- Viewport transforms (zoom/rotation)
 
-**UI Actions**:
-- `toggleSidebar`: Show/hide sidebar
-- `toggleAnnotationsPanel`: Show/hide panel
+### 4.3 `PdfEditService`
+- Text/image/link/watermark/header/footer edits
+- Object placement, move, resize
+- Output generation via pdf-lib
+
+### 4.4 `AnnotationService`
+- Highlight/comment/drawing CRUD
+- Page-scoped annotation queries
+- Annotation import/export hooks
+
+### 4.5 `FormFieldService`
+- Create/edit/delete form fields
+- Field typing (text/checkbox/radio/dropdown/date/signature/formula/payment placeholder)
+- Conditional and required rules
+
+### 4.6 `SignatureService`
+- Signature asset management (draw/type/upload)
+- Placement, scaling, and replacement
+- Stamp/seal support
+
+### 4.7 `RedactionService`
+- Mark text/image regions
+- Preview and irreversible apply
+- Flatten output to remove underlying data
+
+### 4.8 `OcrService`
+- OCR pipeline for scanned PDFs
+- Text layer generation and confidence output
+- Optional provider abstraction for future plugins
+
+### 4.9 `HistoryService`
+- Unified undo/redo command model
+- Transaction batching for complex edits
 
 ---
 
-## 🔄 Service Architecture
+## 5. Primary Data Flows
 
-### PdfService
+### 5.1 Open → Render Flow
+1. User selects file from toolbar/menu.
+2. `ElectronService` returns path + bytes through secure IPC.
+3. `PdfDocumentService` initializes PDF model.
+4. `PdfRenderService` renders page + text layer.
+5. NgRx state updates `document` and `view`.
+6. Viewer and sidebar re-render from selectors.
 
-**Responsibilities**:
-- PDF document loading
-- Page rendering to canvas
-- Text extraction
-- Metadata retrieval
+### 5.2 Edit → Save Flow
+1. User performs edit (text/image/form/signature/etc).
+2. Action dispatched; reducer updates state.
+3. `HistoryService` records command.
+4. On save, `PdfEditService` composes changes.
+5. `pdf-lib` writes updated PDF.
+6. `ElectronService` persists bytes to disk.
 
-**Key Methods**:
-```typescript
-loadDocument(path: string): Observable<PdfDocument>
-renderPage(pageNumber: number, scale: number): Observable<HTMLCanvasElement>
-extractText(pageNumber: number): Observable<string>
-getDocumentMetadata(): Observable<Metadata>
-searchText(query: string): Observable<SearchResult[]>
-```
-
----
-
-### AnnotationService
-
-**Responsibilities**:
-- Annotation CRUD operations
-- Annotation storage
-- Annotation retrieval by page
-
-**Key Methods**:
-```typescript
-addAnnotation(annotation: Annotation): void
-removeAnnotation(id: string): void
-updateAnnotation(annotation: Annotation): void
-getAnnotations(): Observable<Annotation[]>
-getAnnotationsByPage(pageNumber: number): Annotation[]
-```
+### 5.3 Redaction Apply Flow
+1. User marks redact areas.
+2. `RedactionService` stores marks in state.
+3. User confirms apply.
+4. Service burns redaction overlay and removes source content references.
+5. Saved output is irreversible by design.
 
 ---
 
-### ElectronService
+## 6. Security and Desktop Boundaries
 
-**Responsibilities**:
-- IPC communication
-- File operations
-- Native dialogs
-
-**Key Methods**:
-```typescript
-readFile(path: string): Promise<Uint8Array>
-saveFile(path: string, data: Uint8Array): Promise<void>
-showOpenDialog(options: any): Promise<string[]>
-showSaveDialog(options: any): Promise<string>
-ipcInvoke(channel: string, ...args: any[]): Promise<any>
-```
+- Context isolation enabled in Electron
+- Strictly typed preload API (allowlist channels only)
+- Validate all IPC payloads
+- No remote code execution or `eval`
+- Local-only file processing unless explicit integration enabled
+- Protected temporary files and cleanup on session end
 
 ---
 
-## 🎨 UI Components Hierarchy
+## 7. Performance Strategy
 
-```
-AppComponent
-├── ToolbarComponent
-├── SidebarComponent
-│   └── ThumbnailListComponent
-│       └── ThumbnailItemComponent (virtualized)
-├── MainContentComponent
-│   └── ViewerComponent
-│       ├── CanvasComponent (PDF rendering)
-│       └── AnnotationOverlayComponent
-├── AnnotationsPanelComponent
-│   └── AnnotationListComponent
-│       └── AnnotationItemComponent
-└── SearchComponent (modal)
-```
+- Angular `OnPush` for heavy viewer components
+- Virtualized thumbnail list
+- Incremental page rendering (visible pages first)
+- Cached text layers/thumbnails with eviction policy
+- Debounced search and worker-based OCR pipeline
+- Memory guardrails for large documents
 
 ---
 
-## 🔗 Inter-Component Communication
+## 8. Testing Architecture
 
-### Communication Patterns
-
-1. **Parent → Child**: `@Input()` properties
-2. **Child → Parent**: `@Output()` EventEmitter
-3. **Any ↔ Any**: NgRx Store
-4. **Service-based**: Dependency injection
-
-### Example: Page Navigation
-
-```
-ToolbarComponent (has Next/Prev buttons)
-  ↓ User clicks Next
-  ↓ Dispatch NgRx Action: goToPage(2)
-  ↓ Store updates currentPage
-  ↓ ViewerComponent subscribes to selectCurrentPage
-  ↓ ViewerComponent calls renderPage(2)
-  ↓ Page displays
-```
+- **Unit**: services, reducers, selectors, utility transformers
+- **Integration**: viewer + toolbar + store workflows
+- **E2E**: open/edit/save, annotate, form-fill, redact, sign
+- **Performance**: large-file rendering and scrolling benchmarks
+- **Security**: IPC contract tests and protected-file scenarios
+- **Accessibility**: keyboard navigation and contrast checks
 
 ---
 
-## 📁 File I/O Architecture
+## 9. Requirements-to-Design Traceability
 
-### Read PDF File
+Each normalized requirement category is mapped to explicit implementation units:
 
-```
-User selects file
-  ↓
-ElectronService.showOpenDialog()
-  ↓
-Electron preload script → IPC invoke
-  ↓
-Main process → fs.readFile()
-  ↓
-Send back Uint8Array
-  ↓
-PdfService.loadDocument()
-  ↓
-PDF.js processes document
-  ↓
-Ready for rendering
-```
-
-### Save Modified PDF
-
-```
-User clicks Save
-  ↓
-Dispatch NgRx saveDocument action
-  ↓
-Effects intercept
-  ↓
-Collect all annotations and modifications
-  ↓
-PdfService.generateModifiedPdf()
-  ↓
-pdf-lib creates new PDF
-  ↓
-Embeds annotations
-  ↓
-Returns Uint8Array
-  ↓
-ElectronService.saveFile()
-  ↓
-IPC invoke main process
-  ↓
-Main writes to file system
-  ↓
-Success notification
-```
+- Viewing/navigation → `PdfRenderService`, viewer components
+- Editing/manipulation → `PdfEditService`, `HistoryService`
+- Annotation/review → `AnnotationService`, annotation panel
+- Forms/interactive PDF → `FormFieldService`, forms panel
+- Signature/stamp/seal → `SignatureService`, signature panel
+- OCR/scanned docs → `OcrService`
+- Redaction/security → `RedactionService`, security state
+- Save/export/convert → `PdfDocumentService`, `ExportService`
 
 ---
 
-## 🔒 Security Considerations
+## 10. Deployment Targets
 
-### IPC Security
-
-- **Preload Script**: Limited API exposure
-- **Validation**: All IPC inputs validated
-- **Sandboxing**: Context isolation enabled
-- **Permissions**: Principle of least privilege
-
-### File Handling
-
-- **No Network**: All file operations local
-- **No External Scripts**: No eval() usage
-- **Content Security Policy**: Strict CSP headers
-- **Input Validation**: All user inputs sanitized
+- Windows: MSI/portable
+- macOS: DMG
+- Linux: AppImage/DEB
+- CI pipeline: lint → unit/integration tests → build → package → artifacts
 
 ---
 
-## ⚡ Performance Optimizations
-
-### Change Detection Strategy
-
-```typescript
-@Component({
-  selector: 'app-viewer',
-  templateUrl: './viewer.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
-})
-```
-
-- Use `OnPush` strategy globally
-- Manual change detection when needed
-- Minimize change detection runs
-
-### Virtual Scrolling
-
-- Thumbnail list uses CDK virtual scroll
-- Only visible items rendered
-- ~1000 page PDF uses ~50MB vs 500MB
-
-### Lazy Loading
-
-- Module-level code splitting
-- Load features on demand
-- Faster initial load time
-
-### Observable Optimization
-
-- Use `shareReplay()` for repeated queries
-- Unsubscribe in `ngOnDestroy`
-- Use `async` pipe for auto-unsubscribe
-
----
-
-## 🧪 Testing Strategy
-
-### Unit Tests (PdfService)
-
-```typescript
-describe('PdfService', () => {
-  it('should load PDF document', (done) => {
-    service.loadDocument('test.pdf').subscribe(doc => {
-      expect(doc.pages).toBeGreaterThan(0);
-      done();
-    });
-  });
-});
-```
-
-### Integration Tests (PdfViewerModule)
-
-```typescript
-describe('PDF Loading Workflow', () => {
-  it('should load and render PDF', (done) => {
-    store.dispatch(loadDocument({ path: 'test.pdf' }));
-    store.select(selectCurrentPage).subscribe(page => {
-      expect(page).toBe(1);
-      done();
-    });
-  });
-});
-```
-
-### E2E Tests (User Workflows)
-
-```typescript
-describe('User highlights text', () => {
-  it('should create annotation', () => {
-    openPdf('test.pdf');
-    selectText('Sample text');
-    highlightText('Yellow');
-    expect(annotation).toBeDefined();
-  });
-});
-```
-
----
-
-## 📦 Build & Deployment
-
-### Development Build
-
-```bash
-ng serve
-# or for Electron
-npm run electron:serve
-```
-
-### Production Build
-
-```bash
-ng build --configuration production
-npm run electron:build
-```
-
-### Distribution Formats
-
-- **Windows**: MSI installer, Portable EXE
-- **macOS**: DMG package
-- **Linux**: AppImage, DEB package
-
----
-
-## 🔄 CI/CD Pipeline
-
-### GitHub Actions
-
-```yaml
-- Trigger: Push to main
-- Jobs:
-  1. Install dependencies
-  2. Run linting
-  3. Run tests
-  4. Build for production
-  5. Create installers
-  6. Upload to releases
-```
-
----
-
-## 📈 Scalability Considerations
-
-### For Team Growth
-
-- Clear module structure enables parallel development
-- Service layer abstracts implementation details
-- State management (NgRx) prevents prop drilling
-- Dependency injection enables easy testing
-
-### For Feature Growth
-
-- Modular architecture supports new feature modules
-- Store extensible with new slices
-- Service layer can add new methods
-- Components composable
-
----
-
-## 🎓 Developer Guidelines
-
-### Naming Conventions
-
-- **Components**: `*.component.ts` (PascalCase)
-- **Services**: `*.service.ts` (PascalCase)
-- **Modules**: `*.module.ts` (PascalCase)
-- **Variables**: `camelCase`
-- **Constants**: `UPPER_SNAKE_CASE`
-
-### Folder Organization
-
-- Keep components with their templates and styles
-- Services grouped by module
-- Store files in dedicated store folder
-- Models/interfaces in models folder
-
-### Code Style
-
-- Use strict TypeScript mode
-- Follow Angular styleguide
-- Use functional programming where possible
-- Avoid side effects in services
-
----
-
-## 📝 Documentation Standards
-
-### Code Comments
-
-```typescript
-/**
- * Load PDF document from file system
- * @param path - Full file path to PDF
- * @returns Observable with loaded document
- * @throws Error if file not found or invalid PDF
- */
-loadDocument(path: string): Observable<PdfDocument>
-```
-
-### README Sections
-
-- Project overview
-- Technology stack
-- Setup instructions
-- Running the application
-- Testing
-- Building for distribution
-- Contributing guidelines
-
----
-
-## 🚀 Deployment Checklist
-
-Before releasing version 1.0:
-
-- ✅ All tests passing (60%+ coverage)
-- ✅ Code reviewed and approved
-- ✅ Documentation complete
-- ✅ Performance tested and optimized
-- ✅ Security audit completed
-- ✅ Cross-platform testing done
-- ✅ Release notes prepared
-- ✅ Installers created and tested
-- ✅ Auto-update mechanism working
-- ✅ Crash reporting configured
-
----
-
-**Design Version**: 1.0  
+**Design Version**: 2.0  
 **Last Updated**: June 16, 2026  
-**Next Review**: After Sprint 2 Completion
+**Next Review**: After Sprint 2 planning lock
