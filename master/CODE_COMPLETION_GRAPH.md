@@ -11,93 +11,80 @@
 
 ```mermaid
 graph TD
-    A["🟢 P1-S1-001<br/>Environment Setup<br/>100%"] --> B["🔴 P1-S1-002<br/>Angular Init<br/>0%"]
-    A --> C["🔴 P1-S1-007<br/>Electron Config<br/>0%"]
-    
-    B --> D["🔴 P1-S1-003<br/>Folder Structure<br/>0%"]
-    B --> E["🔴 P1-S1-006<br/>NgRx Setup<br/>0%"]
-    
+    A["🟢 P1-S1-001<br/>Environment Setup<br/>100%"] --> B["🟢 P1-S1-002<br/>Workspace Init<br/>100%"]
+
+    B --> D["🟢 P1-S1-003<br/>Architecture Skeleton<br/>100%"]
+
     D --> F["🔴 P1-S1-004<br/>CoreModule<br/>0%"]
     D --> G["🔴 P1-S1-005<br/>SharedModule<br/>0%"]
-    
-    F --> H["🔴 P1-S1-008<br/>Finalization<br/>0%"]
-    G --> H
-    E --> H
-    C --> H
-    
-    H --> I["🔴 P1-S2-001<br/>Architecture Docs<br/>0%"]
-    H --> J["🔴 P1-S2-002<br/>Testing Setup<br/>0%"]
-    
-    H --> K["🔴 P1-S3-001<br/>PDF.js Integration<br/>0%"]
-    
-    K --> L["🔴 P1-S3-002<br/>Viewer Component<br/>0%"]
-    K --> M["🔴 P1-S3-005<br/>Zoom Functionality<br/>0%"]
-    K --> N["🔴 P1-S3-006<br/>Page Rotation<br/>0%"]
-    
-    L --> O["🔴 P1-S3-003<br/>Toolbar Component<br/>0%"]
-    L --> P["🔴 P1-S3-004<br/>Navigation<br/>0%"]
-    L --> Q["🔴 P1-S3-007<br/>Sidebar Thumbnails<br/>0%"]
-    
-    O --> P
-    
-    L --> R["🔴 P1-S5-001<br/>Annotation Models<br/>0%"]
-    
-    R --> S["🔴 P1-S5-002<br/>Annotation Service<br/>0%"]
-    S --> T["🔴 P1-S5-003<br/>Highlight Feature<br/>0%"]
-    S --> U["🔴 P1-S5-004<br/>Text Notes<br/>0%"]
-    S --> V["🔴 P1-S5-005<br/>Drawing Tools<br/>0%"]
-    S --> W["🔴 P1-S5-006<br/>Annotations Panel<br/>0%"]
-    
-    P --> X["🔴 P1-S7-001<br/>Delete Pages<br/>0%"]
-    Q --> Y["🔴 P1-S7-002<br/>Reorder Pages<br/>0%"]
-    K --> Z["🔴 P1-S7-003<br/>Extract Pages<br/>0%"]
-    
-    T --> AA["🔴 P1-S8-001<br/>Save PDF<br/>0%"]
-    AA --> AB["🔴 P1-S8-002<br/>Export Images<br/>0%"]
-    AA --> AC["🔴 P1-S8-003<br/>Auto-save<br/>0%"]
-    
-    K --> AD["🔴 P1-S9-001<br/>Full Text Search<br/>0%"]
-    G --> AE["🔴 P1-S9-002<br/>Recent Files<br/>0%"]
-    G --> AF["🔴 P1-S9-003<br/>Dark Mode<br/>0%"]
-    
-    J --> AG["🔴 P1-S10-001<br/>Unit Tests<br/>0%"]
-    AG --> AH["🔴 P1-S10-002<br/>Integration Tests<br/>0%"]
-    
-    AH --> AI["🔴 P1-S10-003<br/>Performance Opt<br/>0%"]
-    AI --> AJ["🔴 P1-S10-004<br/>Bug Fixes<br/>0%"]
-    
-    AJ --> AK["🔴 P1-S11-001<br/>Documentation<br/>0%"]
-    
-    AK --> AL["🔴 P1-S12-001<br/>Packaging<br/>0%"]
-    AL --> AM["🔴 P1-S12-002<br/>Release Prep<br/>0%"]
-    
+
+    B --> H["🟢 P1-S2-001<br/>Electron IPC<br/>100%"]
+    B --> I["🟢 P1-S2-002<br/>Extension Runtime<br/>100%"]
+    D --> J["🟢 P1-S2-003<br/>Persistence Layer<br/>100%"]
+    D --> K["🟢 P1-S2-004<br/>NgRx Store<br/>100%"]
+
+    K --> L["🔴 P1-S3-001<br/>PDF.js Integration<br/>0%"]
+
+    L --> M["🔴 P1-S3-002<br/>Viewer Component<br/>0%"]
+    L --> N["🔴 P1-S3-005<br/>Zoom Functionality<br/>0%"]
+    L --> O["🔴 P1-S3-006<br/>Page Rotation<br/>0%"]
+
+    M --> P["🔴 P1-S3-003<br/>Toolbar Component<br/>0%"]
+    M --> Q["🔴 P1-S3-004<br/>Navigation<br/>0%"]
+    M --> R["🔴 P1-S3-007<br/>Sidebar Thumbnails<br/>0%"]
+
+    P --> Q
+
+    M --> S["🔴 P1-S5-001<br/>Annotation Models<br/>0%"]
+
+    S --> T["🔴 P1-S5-002<br/>Annotation Service<br/>0%"]
+    T --> U["🔴 P1-S5-003<br/>Highlight Feature<br/>0%"]
+    T --> V["🔴 P1-S5-004<br/>Text Notes<br/>0%"]
+    T --> W["🔴 P1-S5-005<br/>Drawing Tools<br/>0%"]
+    T --> X["🔴 P1-S5-006<br/>Annotations Panel<br/>0%"]
+
+    Q --> Y["🔴 P1-S7-001<br/>Delete Pages<br/>0%"]
+    R --> Z["🔴 P1-S7-002<br/>Reorder Pages<br/>0%"]
+    L --> AA["🔴 P1-S7-003<br/>Extract Pages<br/>0%"]
+
+    U --> AB["🔴 P1-S8-001<br/>Save PDF<br/>0%"]
+    AB --> AC["🔴 P1-S8-002<br/>Export Images<br/>0%"]
+    AB --> AD["🔴 P1-S8-003<br/>Auto-save<br/>0%"]
+
+    L --> AE["🔴 P1-S9-001<br/>Full Text Search<br/>0%"]
+    J --> AF["🔴 P1-S9-002<br/>Recent Files<br/>0%"]
+
     style A fill:#4caf50
-    style B fill:#ff6b6b
-    style C fill:#ff6b6b
-    style D fill:#ff6b6b
-    style E fill:#ff6b6b
+    style B fill:#4caf50
+    style D fill:#4caf50
+    style H fill:#4caf50
+    style I fill:#4caf50
+    style J fill:#4caf50
+    style K fill:#4caf50
     style F fill:#ff6b6b
     style G fill:#ff6b6b
-    style H fill:#ff6b6b
-    style I fill:#ffa500
-    style J fill:#ffa500
-    style K fill:#ff6b6b
     style L fill:#ff6b6b
-    style M fill:#ffa500
-    style N fill:#ffd700
+    style M fill:#ff6b6b
+    style N fill:#ff6b6b
     style O fill:#ff6b6b
     style P fill:#ff6b6b
-    style Q fill:#ffd700
+    style Q fill:#ff6b6b
     style R fill:#ff6b6b
     style S fill:#ff6b6b
     style T fill:#ff6b6b
     style U fill:#ff6b6b
-    style V fill:#ffa500
-    style W fill:#ffd700
-    style X fill:#ffa500
-    style Y fill:#ffa500
-    style Z fill:#ffd700
+    style V fill:#ff6b6b
+    style W fill:#ff6b6b
+    style X fill:#ff6b6b
+    style Y fill:#ff6b6b
+    style Z fill:#ff6b6b
     style AA fill:#ff6b6b
+    style AB fill:#ff6b6b
+    style AC fill:#ff6b6b
+    style AD fill:#ff6b6b
+    style AE fill:#ff6b6b
+    style AF fill:#ff6b6b
+```
     style AB fill:#ffd700
     style AC fill:#ffd700
     style AD fill:#ffa500
@@ -119,21 +106,20 @@ graph TD
 ### Sprint 1-2: Foundation (Week 1-4)
 
 ```
-[████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 0% Complete
+[██████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 35% Complete
 
 Tasks:
-- [ ] P1-S1-001: Environment Setup (3 days)
-- [ ] P1-S1-002: Angular Init (2 days)
-- [ ] P1-S1-003: Folder Structure (1 day)
+- [x] P1-S1-001: Environment Setup (3 days)
+- [x] P1-S1-002: Workspace Init (2 days)
+- [x] P1-S1-003: Architecture Skeleton (2 days)
 - [ ] P1-S1-004: CoreModule (2 days)
 - [ ] P1-S1-005: SharedModule (2 days)
-- [ ] P1-S1-006: NgRx Setup (2 days)
-- [ ] P1-S1-007: Electron Config (2 days)
-- [ ] P1-S1-008: Finalization (1 day)
-- [ ] P1-S2-001: Architecture Docs (2 days)
-- [ ] P1-S2-002: Testing Setup (1 day)
+- [x] P1-S2-001: Electron IPC (2 days)
+- [x] P1-S2-002: Extension Runtime (3 days)
+- [x] P1-S2-003: Persistence Layer (3 days)
+- [x] P1-S2-004: NgRx Store (2 days)
 
-Critical Path: S1-001 → S1-002 → S1-003 → (S1-004|S1-005|S1-006|S1-007) → S1-008
+Critical Path: S1-001 → S1-002 → S1-003 → S2-003 → S2-004
 ```
 
 ### Sprint 3-4: PDF Core (Week 5-8)

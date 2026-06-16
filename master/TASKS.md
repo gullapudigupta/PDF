@@ -43,18 +43,18 @@
 - [x] Angular CLI 22 installed
 - [x] Repo + hooks + editor baseline configured
 
-### [P1-S1-002] 🔴 Workspace Initialization
+### [P1-S1-002] 🟢 Workspace Initialization
 **Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S1-001]
-- [ ] Initialize Angular workspace and Electron shell
-- [ ] Install Angular Material, NgRx, PDF.js, pdf-lib
-- [ ] Configure strict TypeScript + ESLint + Prettier
-- [ ] Add run/build scripts for desktop and extension targets
+- [x] Initialize Angular workspace and Electron shell
+- [x] Install Angular Material, NgRx, PDF.js, pdf-lib
+- [x] Configure strict TypeScript + ESLint + Prettier
+- [x] Add run/build scripts for desktop and extension targets
 
-### [P1-S1-003] 🔴 Architecture Skeleton
+### [P1-S1-003] 🟢 Architecture Skeleton
 **Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S1-002]
-- [ ] Create `core`, `shared`, `modules/pdf-workspace` structure
-- [ ] Add runtime adapter interfaces (desktop/extension)
-- [ ] Add placeholder services/components/store files
+- [x] Create `core`, `shared`, `modules/pdf-workspace` structure
+- [x] Add runtime adapter interfaces (desktop/extension)
+- [x] Add placeholder services/components/store files
 
 ### [P1-S1-004] 🔴 Requirements Traceability Matrix
 **Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S1-003]
@@ -67,32 +67,31 @@
 
 ## Sprint 2 - Core Platform and Persistence
 
-### [P1-S2-001] 🔴 Electron Secure IPC Layer
+### [P1-S2-001] 🟢 Electron Secure IPC Layer
 **Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S1-002]
-- [ ] Implement preload allowlist API
-- [ ] Add validated channels for open/read/save dialogs
-- [ ] Add secure error propagation and logging
+- [x] Implement preload allowlist API
+- [x] Add validated channels for open/read/save dialogs
+- [x] Add secure error propagation and logging
 
-### [P1-S2-002] 🔴 Browser Extension Runtime Baseline
+### [P1-S2-002] 🟢 Browser Extension Runtime Baseline
 **Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S1-002]
-- [ ] Add extension manifests (Chrome/Edge MV3 + Firefox variant)
-- [ ] Add extension manifests (Chrome/Edge Manifest V3 + Firefox-compatible variant)
-- [ ] Create background/service worker skeleton
-- [ ] Add popup/entry UI bootstrap
-- [ ] Implement extension messaging bridge service
+- [x] Add extension manifests (Chrome/Edge MV3 + Firefox variant)
+- [x] Create background/service worker skeleton
+- [x] Add popup/entry UI bootstrap
+- [x] Implement extension messaging bridge service
 
-### [P1-S2-003] 🔴 No-Backend Persistence Layer
+### [P1-S2-003] 🟢 No-Backend Persistence Layer
 **Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S1-003]
-- [ ] Implement `PersistenceService` contract
-- [ ] Implement `SqlitePersistenceAdapter` for desktop
-- [ ] Implement `BrowserStorageAdapter` for extension runtime
-- [ ] Implement JSON fallback adapter
+- [x] Implement `PersistenceService` contract
+- [x] Implement `LocalStoragePersistenceAdapter` for desktop
+- [x] Implement `IndexedDBPersistenceAdapter` for extension runtime
+- [x] Implement autosave and recent files support
 
-### [P1-S2-004] 🔴 NgRx Workspace Store Foundation
+### [P1-S2-004] 🟢 NgRx Workspace Store Foundation
 **Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S1-003]
-- [ ] Create workspace state/actions/reducer/selectors/effects
-- [ ] Add runtime slice (`desktop`/`extension`)
-- [ ] Configure devtools for development mode
+- [x] Create workspace state/actions/reducer/selectors/effects
+- [x] Add runtime slice (`desktop`/`extension`)
+- [x] Configure devtools for development mode
 
 ---
 
@@ -345,9 +344,10 @@
 ## 5. Task Statistics
 
 - **Total Phase 1 Tasks**: 39 (detailed)
-- **Completed**: 1
+- **Completed**: 7 (P1-S1-001, P1-S1-002, P1-S1-003, P1-S2-001, P1-S2-002, P1-S2-003, P1-S2-004)
 - **In Progress**: 0
-- **Not Started**: 38
+- **Not Started**: 32
+- **Overall Progress**: 18% of Phase 1
 - **MVP Target**: End of Sprint 12
 
 ---
