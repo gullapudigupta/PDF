@@ -1,0 +1,1009 @@
+﻿# PDF Viewer & Editor - Master Task List
+
+**Project**: PDF Viewer & Editor with Angular  
+**Framework**: Electron + Angular + TypeScript  
+**Status**: 🟢 Ready for Execution  
+**Last Updated**: June 16, 2026
+
+---
+
+## 📋 Task Management System
+
+### Task Naming Convention
+- **[PHASE-SPRINT-TASK_ID]** Format
+- Example: `[P1-S1-001]` = Phase 1, Sprint 1, Task 001
+
+### Status Indicators
+- 🔴 Not Started
+- 🟡 In Progress
+- 🟢 Completed
+- 🔵 Blocked
+- 🟠 On Hold
+
+### Priority Levels
+- 🔴 Critical (blocks other tasks)
+- 🟠 High (needed soon)
+- 🟡 Medium (regular priority)
+- 🟢 Low (nice to have)
+
+---
+
+## 🎯 PHASE 1: MVP (4-5 Months) - Sprints 1-12
+
+### SPRINT 1: Project Setup & Architecture (Week 1-2)
+
+#### [P1-S1-001] 🔴 Environment Setup
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 3 days  
+**Dependencies**: None  
+**Assigned To**: DevOps Lead  
+**Description**: Set up complete development environment
+
+**Subtasks**:
+- [ ] Install Node.js 20 LTS
+- [ ] Install Angular CLI 22.x globally
+- [ ] Configure Git and repository
+- [ ] Set up .gitignore and git hooks
+- [ ] Install Visual Studio Code
+- [ ] Install required VSCode extensions
+
+**Completion**: 0%  
+**Blockers**: None  
+**Notes**: 
+- Document all installation steps
+- Create .env template for team
+
+---
+
+#### [P1-S1-002] 🔴 Angular Project Initialization
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S1-001]  
+**Assigned To**: Lead Developer  
+**Description**: Create base Angular project with all dependencies
+
+**Subtasks**:
+- [ ] Create Angular project: `ng new pdf-viewer-editor --routing --style=scss`
+- [ ] Add Angular Material: `ng add @angular/material`
+- [ ] Install NgRx: `npm install @ngrx/store @ngrx/effects @ngrx/entity`
+- [ ] Install PDF libraries: `npm install pdfjs-dist pdf-lib`
+- [ ] Install Electron: `npm install --save-dev electron electron-builder`
+- [ ] Configure TypeScript strict mode
+- [ ] Set up ESLint and Prettier
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-001]  
+**Notes**:
+- Use tsconfig with strict settings
+- Configure Prettier to format on save
+
+---
+
+#### [P1-S1-003] 🔴 Folder Structure Creation
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 1 day  
+**Dependencies**: [P1-S1-002]  
+**Assigned To**: Lead Developer  
+**Description**: Create proper Angular folder structure
+
+**Subtasks**:
+- [ ] Create `src/app/core/` directory
+- [ ] Create `src/app/shared/` directory
+- [ ] Create `src/app/modules/` directory
+- [ ] Create `src/app/modules/pdf-viewer/` directory
+- [ ] Create `electron/` directory
+- [ ] Create necessary subdirectories (components, services, models, store)
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-002]  
+
+---
+
+#### [P1-S1-004] 🔴 CoreModule Implementation
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S1-003]  
+**Assigned To**: Lead Developer  
+**Description**: Create CoreModule with singleton services
+
+**Subtasks**:
+- [ ] Create `core.module.ts`
+- [ ] Create `ElectronService` for IPC communication
+- [ ] Create `StorageService` for SQLite operations
+- [ ] Create `ErrorHandlerService` for global error handling
+- [ ] Create `LoggerService` for logging
+- [ ] Write unit tests for services (20% coverage)
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-003]  
+**Notes**:
+- Use dependency injection pattern
+- Create @Injectable() services
+
+---
+
+#### [P1-S1-005] 🔴 SharedModule Implementation
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S1-003]  
+**Assigned To**: UI Developer  
+**Description**: Create SharedModule with common components
+
+**Subtasks**:
+- [ ] Create `shared.module.ts`
+- [ ] Create reusable components (Spinner, Dialog, etc.)
+- [ ] Create custom pipes (FileSizePipe, DateFormatPipe, etc.)
+- [ ] Create custom directives
+- [ ] Import and export Material modules
+- [ ] Write unit tests for components
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-003]  
+
+---
+
+#### [P1-S1-006] 🔴 NgRx Store Setup
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S1-002]  
+**Assigned To**: Lead Developer  
+**Description**: Configure NgRx store structure
+
+**Subtasks**:
+- [ ] Create `pdf.state.ts` with state interface
+- [ ] Create `pdf.actions.ts` with actions
+- [ ] Create `pdf.reducer.ts` with initial state and reducer function
+- [ ] Create `pdf.selector.ts` with selectors
+- [ ] Create `pdf.effects.ts` (empty for now)
+- [ ] Configure StoreModule in app.module.ts
+- [ ] Install Redux DevTools for debugging
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-002]  
+**Notes**:
+- Follow NgRx best practices
+- Use createAction, createReducer, createSelector patterns
+
+---
+
+#### [P1-S1-007] 🔴 Electron Configuration
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S1-002]  
+**Assigned To**: DevOps Lead  
+**Description**: Set up Electron main process and IPC
+
+**Subtasks**:
+- [ ] Create `electron/main.ts` for main process
+- [ ] Create `electron/preload.ts` for preload script
+- [ ] Configure IPC handlers for file operations
+- [ ] Set up window creation and management
+- [ ] Create `electron-builder.json` configuration
+- [ ] Add npm scripts for dev and build
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-002]  
+
+---
+
+#### [P1-S1-008] 🔴 Development Environment Finalization
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 1 day  
+**Dependencies**: [P1-S1-001] through [P1-S1-007]  
+**Assigned To**: DevOps Lead  
+**Description**: Finalize dev environment setup
+
+**Subtasks**:
+- [ ] Create docker-compose.yml if needed
+- [ ] Document setup instructions in README.md
+- [ ] Create .env.example file
+- [ ] Set up CI/CD pipeline (GitHub Actions)
+- [ ] Create pre-commit hooks with Husky
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-001] through [P1-S1-007]  
+
+---
+
+### SPRINT 2: Architecture Documentation & Testing (Week 3-4)
+
+#### [P1-S2-001] 🔴 Architecture Documentation
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 2 days  
+**Dependencies**: [P1-S1-008]  
+**Assigned To**: Lead Developer  
+**Description**: Document architecture decisions
+
+**Subtasks**:
+- [ ] Create ARCHITECTURE.md
+- [ ] Document module structure
+- [ ] Document NgRx store pattern
+- [ ] Create sequence diagrams for PDF loading
+- [ ] Create component hierarchy diagram
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-008]  
+
+---
+
+#### [P1-S2-002] 🔴 Testing Framework Setup
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 1 day  
+**Dependencies**: [P1-S1-008]  
+**Assigned To**: QA Lead  
+**Description**: Configure Jasmine and Karma
+
+**Subtasks**:
+- [ ] Configure Karma configuration
+- [ ] Set up test coverage thresholds
+- [ ] Create test utilities and helpers
+- [ ] Configure code coverage reporting
+- [ ] Add pre-commit test hook
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-008]  
+
+---
+
+### SPRINT 3-4: PDF Rendering Core (Week 5-8)
+
+#### [P1-S3-001] 🔴 PDF.js Integration
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 3 days  
+**Dependencies**: [P1-S1-008]  
+**Assigned To**: Lead Developer  
+**Description**: Integrate PDF.js library
+
+**Subtasks**:
+- [ ] Create `PdfService` with PDF.js wrapper
+- [ ] Implement document loading
+- [ ] Implement page rendering to canvas
+- [ ] Implement text extraction
+- [ ] Create unit tests (50% coverage)
+- [ ] Handle PDF loading errors
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-008]  
+**Notes**:
+- Set up PDF.js worker
+- Handle large PDFs efficiently
+
+---
+
+#### [P1-S3-002] 🔴 PDF Viewer Component
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S3-001]  
+**Assigned To**: UI Developer  
+**Description**: Create main PDF viewer component
+
+**Subtasks**:
+- [ ] Create `viewer.component.ts`
+- [ ] Create canvas for PDF rendering
+- [ ] Implement page display logic
+- [ ] Add error handling
+- [ ] Style with SCSS
+- [ ] Write component tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-001]  
+
+---
+
+#### [P1-S3-003] 🔴 Toolbar Component
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S1-005]  
+**Assigned To**: UI Developer  
+**Description**: Create toolbar with controls
+
+**Subtasks**:
+- [ ] Create `toolbar.component.ts`
+- [ ] Add open file button
+- [ ] Add save button
+- [ ] Add print button
+- [ ] Style with Material Design
+- [ ] Write component tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-005]  
+
+---
+
+#### [P1-S3-004] 🔴 Navigation Implementation
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S3-002], [P1-S3-003]  
+**Assigned To**: Lead Developer  
+**Description**: Implement page navigation
+
+**Subtasks**:
+- [ ] Create navigation actions in NgRx
+- [ ] Implement go to page action
+- [ ] Implement next/previous page
+- [ ] Create pagination UI component
+- [ ] Add keyboard shortcuts (arrow keys)
+- [ ] Write tests for navigation
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-002], [P1-S3-003]  
+
+---
+
+#### [P1-S3-005] 🔴 Zoom Functionality
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 2 days  
+**Dependencies**: [P1-S3-002]  
+**Assigned To**: Lead Developer  
+**Description**: Implement zoom controls
+
+**Subtasks**:
+- [ ] Create zoom actions in NgRx
+- [ ] Implement zoom presets (fit page, fit width, etc.)
+- [ ] Implement custom zoom percentage
+- [ ] Add zoom buttons to toolbar
+- [ ] Handle zoom with mouse wheel
+- [ ] Write zoom logic tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-002]  
+
+---
+
+#### [P1-S3-006] 🔴 Page Rotation
+**Status**: 🔴 Not Started  
+**Priority**: 🟡 Medium  
+**Duration**: 1 day  
+**Dependencies**: [P1-S3-002]  
+**Assigned To**: Lead Developer  
+**Description**: Implement page rotation
+
+**Subtasks**:
+- [ ] Create rotation actions in NgRx
+- [ ] Implement rotation logic (0, 90, 180, 270 degrees)
+- [ ] Add rotation buttons to toolbar
+- [ ] Apply CSS transforms for rotation
+- [ ] Write rotation tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-002]  
+
+---
+
+#### [P1-S3-007] 🔴 Sidebar with Thumbnails
+**Status**: 🔴 Not Started  
+**Priority**: 🟡 Medium  
+**Duration**: 2 days  
+**Dependencies**: [P1-S1-005], [P1-S3-001]  
+**Assigned To**: UI Developer  
+**Description**: Create sidebar with page thumbnails
+
+**Subtasks**:
+- [ ] Create `sidebar.component.ts`
+- [ ] Implement thumbnail generation
+- [ ] Create virtualized list for performance
+- [ ] Add click to navigate functionality
+- [ ] Style thumbnails
+- [ ] Write component tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-005], [P1-S3-001]  
+
+---
+
+### SPRINT 5-6: Annotations Layer 1 (Week 9-12)
+
+#### [P1-S5-001] 🔴 Annotation Models
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 1 day  
+**Dependencies**: [P1-S1-008]  
+**Assigned To**: Lead Developer  
+**Description**: Define annotation data models
+
+**Subtasks**:
+- [ ] Create `Annotation` interface
+- [ ] Create `HighlightAnnotation` type
+- [ ] Create `NoteAnnotation` type
+- [ ] Create `DrawingAnnotation` type
+- [ ] Create utility functions for annotations
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-008]  
+
+---
+
+#### [P1-S5-002] 🔴 Annotation Service
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S5-001]  
+**Assigned To**: Lead Developer  
+**Description**: Create annotation service
+
+**Subtasks**:
+- [ ] Create `AnnotationService`
+- [ ] Implement add annotation method
+- [ ] Implement remove annotation method
+- [ ] Implement update annotation method
+- [ ] Implement get annotations by page
+- [ ] Write service tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S5-001]  
+
+---
+
+#### [P1-S5-003] 🔴 Highlight Functionality
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 3 days  
+**Dependencies**: [P1-S5-002]  
+**Assigned To**: Lead Developer  
+**Description**: Implement text highlighting
+
+**Subtasks**:
+- [ ] Implement text selection detection
+- [ ] Create highlight action in NgRx
+- [ ] Render highlights on canvas
+- [ ] Implement highlight color selection
+- [ ] Implement delete highlight
+- [ ] Write tests for highlighting
+
+**Completion**: 0%  
+**Blockers**: [P1-S5-002]  
+
+---
+
+#### [P1-S5-004] 🔴 Text Notes
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S5-002]  
+**Assigned To**: UI Developer  
+**Description**: Implement text notes/comments
+
+**Subtasks**:
+- [ ] Create note creation UI (modal/dialog)
+- [ ] Implement note positioning on page
+- [ ] Create note display component
+- [ ] Implement edit note functionality
+- [ ] Implement delete note functionality
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S5-002]  
+
+---
+
+#### [P1-S5-005] 🔴 Drawing Tools
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 3 days  
+**Dependencies**: [P1-S5-002]  
+**Assigned To**: Lead Developer  
+**Description**: Implement freehand drawing
+
+**Subtasks**:
+- [ ] Implement canvas drawing mode
+- [ ] Implement mouse event handling
+- [ ] Create drawing tools (pen, eraser, etc.)
+- [ ] Implement stroke color and width selection
+- [ ] Implement undo/redo for drawings
+- [ ] Write drawing tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S5-002]  
+
+---
+
+#### [P1-S5-006] 🔴 Annotations Panel
+**Status**: 🔴 Not Started  
+**Priority**: 🟡 Medium  
+**Duration**: 2 days  
+**Dependencies**: [P1-S5-002]  
+**Assigned To**: UI Developer  
+**Description**: Create annotations management panel
+
+**Subtasks**:
+- [ ] Create `annotations-panel.component.ts`
+- [ ] Display all annotations for current page
+- [ ] Implement filter by annotation type
+- [ ] Implement search annotations
+- [ ] Add annotation management buttons (edit, delete)
+- [ ] Write component tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S5-002]  
+
+---
+
+### SPRINT 7: Page Manipulation (Week 13-14)
+
+#### [P1-S7-001] 🔴 Page Delete Functionality
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 1 day  
+**Dependencies**: [P1-S3-001]  
+**Assigned To**: Lead Developer  
+**Description**: Implement page deletion
+
+**Subtasks**:
+- [ ] Create delete action in NgRx
+- [ ] Implement PDF page removal
+- [ ] Update total pages count
+- [ ] Update current page if necessary
+- [ ] Add confirmation dialog
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-001]  
+
+---
+
+#### [P1-S7-002] 🔴 Page Reorder (Drag & Drop)
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 2 days  
+**Dependencies**: [P1-S3-007]  
+**Assigned To**: UI Developer  
+**Description**: Implement page reordering
+
+**Subtasks**:
+- [ ] Implement drag & drop for thumbnails
+- [ ] Create reorder action in NgRx
+- [ ] Update page order in PDF
+- [ ] Reflect changes in thumbnail view
+- [ ] Add undo/redo support
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-007]  
+
+---
+
+#### [P1-S7-003] 🔴 Page Extraction
+**Status**: 🔴 Not Started  
+**Priority**: 🟡 Medium  
+**Duration**: 1 day  
+**Dependencies**: [P1-S3-001]  
+**Assigned To**: Lead Developer  
+**Description**: Extract pages from PDF
+
+**Subtasks**:
+- [ ] Create extraction function
+- [ ] Implement page range selection
+- [ ] Create new document from extracted pages
+- [ ] Add export functionality
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-001]  
+
+---
+
+### SPRINT 8: Save & Export (Week 15-16)
+
+#### [P1-S8-001] 🔴 Save PDF Functionality
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 2 days  
+**Dependencies**: [P1-S3-001], [P1-S5-002]  
+**Assigned To**: Lead Developer  
+**Description**: Save modified PDF
+
+**Subtasks**:
+- [ ] Implement PDF library integration (pdf-lib)
+- [ ] Create save action in NgRx
+- [ ] Collect all modifications
+- [ ] Generate new PDF with changes
+- [ ] Save to file system via Electron
+- [ ] Add save success notification
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-001], [P1-S5-002]  
+
+---
+
+#### [P1-S8-002] 🔴 Export to Images
+**Status**: 🔴 Not Started  
+**Priority**: 🟡 Medium  
+**Duration**: 2 days  
+**Dependencies**: [P1-S3-001]  
+**Assigned To**: Lead Developer  
+**Description**: Export pages to image formats
+
+**Subtasks**:
+- [ ] Implement PNG export
+- [ ] Implement JPEG export
+- [ ] Add quality settings for JPEG
+- [ ] Create batch export dialog
+- [ ] Add progress indicator
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-001]  
+
+---
+
+#### [P1-S8-003] 🔴 Auto-save Implementation
+**Status**: 🔴 Not Started  
+**Priority**: 🟡 Medium  
+**Duration**: 1 day  
+**Dependencies**: [P1-S8-001]  
+**Assigned To**: Lead Developer  
+**Description**: Implement auto-save feature
+
+**Subtasks**:
+- [ ] Create auto-save timer
+- [ ] Save to temporary location
+- [ ] Recover from crashes
+- [ ] Show auto-save status
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S8-001]  
+
+---
+
+### SPRINT 9: Search & UI Polish (Week 17-18)
+
+#### [P1-S9-001] 🔴 Full-Text Search
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 2 days  
+**Dependencies**: [P1-S3-001]  
+**Assigned To**: Lead Developer  
+**Description**: Implement document search
+
+**Subtasks**:
+- [ ] Extract all text from PDF
+- [ ] Create search index
+- [ ] Implement search functionality
+- [ ] Highlight search results
+- [ ] Add case-sensitive option
+- [ ] Add regex support
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S3-001]  
+
+---
+
+#### [P1-S9-002] 🔴 Recent Files Management
+**Status**: 🔴 Not Started  
+**Priority**: 🟡 Medium  
+**Duration**: 1 day  
+**Dependencies**: [P1-S1-005]  
+**Assigned To**: Lead Developer  
+**Description**: Track and display recent files
+
+**Subtasks**:
+- [ ] Create recent files storage
+- [ ] Implement add to recent
+- [ ] Create recent files list UI
+- [ ] Add quick open from recent
+- [ ] Add pin/unpin feature
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-005]  
+
+---
+
+#### [P1-S9-003] 🔴 Dark Mode Support
+**Status**: 🔴 Not Started  
+**Priority**: 🟡 Medium  
+**Duration**: 1 day  
+**Dependencies**: [P1-S1-005]  
+**Assigned To**: UI Developer  
+**Description**: Implement dark mode theme
+
+**Subtasks**:
+- [ ] Create dark theme CSS
+- [ ] Add theme toggle button
+- [ ] Persist theme preference
+- [ ] Apply Material dark theme
+- [ ] Test contrast and readability
+- [ ] Write tests
+
+**Completion**: 0%  
+**Blockers**: [P1-S1-005]  
+
+---
+
+### SPRINT 10-12: Testing, Optimization & Polish (Week 19-24)
+
+#### [P1-S10-001] 🔴 Unit Testing (60% Coverage)
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 3 days  
+**Dependencies**: [P1-S2-002]  
+**Assigned To**: QA Lead  
+**Description**: Achieve 60% unit test coverage
+
+**Subtasks**:
+- [ ] Write tests for PdfService
+- [ ] Write tests for AnnotationService
+- [ ] Write tests for reducers
+- [ ] Write tests for selectors
+- [ ] Write tests for core services
+- [ ] Generate coverage report
+- [ ] Document testing strategy
+
+**Completion**: 0%  
+**Blockers**: [P1-S2-002]  
+
+---
+
+#### [P1-S10-002] 🔴 Integration Testing
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 2 days  
+**Dependencies**: [P1-S10-001]  
+**Assigned To**: QA Lead  
+**Description**: Write integration tests
+
+**Subtasks**:
+- [ ] Test PDF loading workflow
+- [ ] Test annotation creation workflow
+- [ ] Test page navigation workflow
+- [ ] Test save workflow
+- [ ] Test error scenarios
+- [ ] Document test cases
+
+**Completion**: 0%  
+**Blockers**: [P1-S10-001]  
+
+---
+
+#### [P1-S10-003] 🔴 Performance Optimization
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 2 days  
+**Dependencies**: All previous tasks  
+**Assigned To**: Lead Developer  
+**Description**: Optimize application performance
+
+**Subtasks**:
+- [ ] Profile PDF rendering
+- [ ] Optimize change detection (OnPush strategy)
+- [ ] Implement virtual scrolling for thumbnails
+- [ ] Lazy load modules
+- [ ] Optimize bundle size
+- [ ] Document optimizations
+
+**Completion**: 0%  
+**Blockers**: All previous tasks  
+
+---
+
+#### [P1-S10-004] 🔴 Bug Fixes & Refinements
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 2 days  
+**Dependencies**: [P1-S10-001], [P1-S10-002]  
+**Assigned To**: All Developers  
+**Description**: Fix bugs and refine features
+
+**Subtasks**:
+- [ ] Review and fix failing tests
+- [ ] Cross-browser testing
+- [ ] Memory leak testing
+- [ ] Fix edge cases
+- [ ] Improve error messages
+- [ ] User feedback implementation
+
+**Completion**: 0%  
+**Blockers**: [P1-S10-001], [P1-S10-002]  
+
+---
+
+#### [P1-S11-001] 🔴 Documentation Finalization
+**Status**: 🔴 Not Started  
+**Priority**: 🟠 High  
+**Duration**: 2 days  
+**Dependencies**: [P1-S10-004]  
+**Assigned To**: Tech Writer  
+**Description**: Complete user and developer documentation
+
+**Subtasks**:
+- [ ] Write user manual
+- [ ] Create video tutorials
+- [ ] Write API documentation
+- [ ] Create troubleshooting guide
+- [ ] Document keyboard shortcuts
+- [ ] Create FAQ
+
+**Completion**: 0%  
+**Blockers**: [P1-S10-004]  
+
+---
+
+#### [P1-S12-001] 🔴 Electron Packaging & Build
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 1 day  
+**Dependencies**: All previous tasks  
+**Assigned To**: DevOps Lead  
+**Description**: Package application for distribution
+
+**Subtasks**:
+- [ ] Configure electron-builder
+- [ ] Build for Windows (MSI, Portable)
+- [ ] Build for macOS (DMG)
+- [ ] Build for Linux (AppImage)
+- [ ] Sign applications (if needed)
+- [ ] Create checksums for verification
+
+**Completion**: 0%  
+**Blockers**: All previous tasks  
+
+---
+
+#### [P1-S12-002] 🔴 Release Preparation
+**Status**: 🔴 Not Started  
+**Priority**: 🔴 Critical  
+**Duration**: 1 day  
+**Dependencies**: [P1-S12-001]  
+**Assigned To**: Project Manager  
+**Description**: Prepare for alpha release
+
+**Subtasks**:
+- [ ] Create release notes
+- [ ] Test installers on target platforms
+- [ ] Verify all features working
+- [ ] Create GitHub release
+- [ ] Upload build artifacts
+- [ ] Announce alpha release
+
+**Completion**: 0%  
+**Blockers**: [P1-S12-001]  
+
+---
+
+## 📊 Task Statistics
+
+**Total Tasks**: 45+  
+**Completed**: 0 (0%)  
+**In Progress**: 0 (0%)  
+**Not Started**: 45+ (100%)  
+
+**Critical Tasks**: 18  
+**High Priority**: 15  
+**Medium Priority**: 10  
+**Low Priority**: 2  
+
+---
+
+## 🔗 Task Dependencies Map
+
+```
+[P1-S1-001] (Env Setup)
+    ↓
+[P1-S1-002] (Angular Init) → [P1-S1-003] (Folder Structure)
+    ↓                              ↓
+[P1-S1-004] (CoreModule)   [P1-S1-005] (SharedModule)
+[P1-S1-006] (NgRx Setup)   [P1-S1-007] (Electron)
+    ↓
+[P1-S1-008] (Finalization)
+    ↓
+[P1-S2-001] (Architecture)
+[P1-S2-002] (Testing Setup)
+    ↓
+[P1-S3-001] (PDF.js) → [P1-S3-002] (Viewer) → [P1-S3-003] (Toolbar)
+                           ↓
+                    [P1-S3-004] (Navigation)
+                    [P1-S3-005] (Zoom)
+                    [P1-S3-006] (Rotation)
+                    [P1-S3-007] (Sidebar)
+    ↓
+[P1-S5-001] (Models) → [P1-S5-002] (Service)
+                            ↓
+                    [P1-S5-003] (Highlight)
+                    [P1-S5-004] (Notes)
+                    [P1-S5-005] (Drawing)
+                    [P1-S5-006] (Panel)
+    ↓
+[P1-S7-001] (Delete) [P1-S7-002] (Reorder) [P1-S7-003] (Extract)
+    ↓
+[P1-S8-001] (Save) → [P1-S8-002] (Export) → [P1-S8-003] (Auto-save)
+    ↓
+[P1-S9-001] (Search) [P1-S9-002] (Recent) [P1-S9-003] (Dark Mode)
+    ↓
+[P1-S10-001] (Unit Tests) → [P1-S10-002] (Integration)
+    ↓
+[P1-S10-003] (Performance) → [P1-S10-004] (Bug Fixes)
+    ↓
+[P1-S11-001] (Documentation)
+    ↓
+[P1-S12-001] (Packaging) → [P1-S12-002] (Release)
+```
+
+---
+
+## 📅 Sprint Schedule
+
+| Sprint | Duration | Focus | Status |
+|--------|----------|-------|--------|
+| S1 | Week 1-2 | Setup & Architecture | 🔴 Not Started |
+| S2 | Week 3-4 | Documentation & Testing | 🔴 Not Started |
+| S3-S4 | Week 5-8 | PDF Core | 🔴 Not Started |
+| S5-S6 | Week 9-12 | Annotations | 🔴 Not Started |
+| S7 | Week 13-14 | Page Manipulation | 🔴 Not Started |
+| S8 | Week 15-16 | Save & Export | 🔴 Not Started |
+| S9 | Week 17-18 | Search & Polish | 🔴 Not Started |
+| S10-S12 | Week 19-24 | Testing & Release | 🔴 Not Started |
+
+---
+
+## ✅ Execution Instructions
+
+### How to Use This Document
+
+1. **Before Starting**:
+   - Review all tasks in order
+   - Understand dependencies
+   - Assign tasks to team members
+   - Set up project with [P1-S1-001]
+
+2. **During Execution**:
+   - Update status after each task completion
+   - Document blockers immediately
+   - Update completion percentage
+   - Check task dependencies
+   - Run tests after each feature
+
+3. **After Completion**:
+   - Mark task as complete (✅)
+   - Update completion percentage
+   - Document any notes/learnings
+   - Move to dependent tasks
+   - Update this document
+
+### Command to Start Phase 1, Sprint 1:
+
+```bash
+# Execute: [P1-S1-001] Environment Setup
+npm install -g @angular/cli@17
+node --version  # Verify Node.js 20+
+npm --version   # Verify npm 10+
+
+# When complete, mark [P1-S1-001] as 🟢 Completed
+# Then proceed to [P1-S1-002] Angular Project Initialization
+```
+
+---
+
+## 🎯 Success Criteria
+
+Each task is successful when:
+- ✅ All subtasks completed
+- ✅ Code written and committed
+- ✅ Tests written (minimum coverage)
+- ✅ Code reviewed
+- ✅ Blockers resolved
+- ✅ Documentation updated
+- ✅ Status marked complete in this file
+
+---
+
+**Document Version**: 1.0  
+**Last Updated**: June 16, 2026  
+**Next Review**: After [P1-S1-008] Completion

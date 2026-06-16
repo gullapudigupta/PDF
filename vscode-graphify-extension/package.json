@@ -1,0 +1,130 @@
+{
+  "name": "vscode-graphify",
+  "displayName": "Graphify Code Analysis",
+  "description": "VS Code integration for graphify - analyze code and generate visualizations",
+  "version": "1.0.0",
+  "publisher": "graphify",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Visualization",
+    "Analysis",
+    "Developer Tools"
+  ],
+  "keywords": [
+    "graphify",
+    "code analysis",
+    "visualization",
+    "code graph"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "graphify.analyzeFile",
+        "title": "Graphify: Analyze Current File",
+        "description": "Analyze the current file using graphify"
+      },
+      {
+        "command": "graphify.analyzeWorkspace",
+        "title": "Graphify: Analyze Workspace",
+        "description": "Analyze the entire workspace using graphify"
+      },
+      {
+        "command": "graphify.generateGraph",
+        "title": "Graphify: Generate Graph Visualization",
+        "description": "Generate a graph visualization from analysis results"
+      },
+      {
+        "command": "graphify.openPanel",
+        "title": "Graphify: Open Results Panel",
+        "description": "Open the graphify results panel"
+      },
+      {
+        "command": "graphify.clearResults",
+        "title": "Graphify: Clear Results",
+        "description": "Clear cached graphify results"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "graphify.analyzeFile",
+        "key": "ctrl+shift+g f",
+        "mac": "cmd+shift+g f",
+        "when": "editorFocus"
+      },
+      {
+        "command": "graphify.analyzeWorkspace",
+        "key": "ctrl+shift+g w",
+        "mac": "cmd+shift+g w"
+      },
+      {
+        "command": "graphify.generateGraph",
+        "key": "ctrl+shift+g g",
+        "mac": "cmd+shift+g g"
+      },
+      {
+        "command": "graphify.openPanel",
+        "key": "ctrl+shift+g p",
+        "mac": "cmd+shift+g p"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "graphify.analyzeFile",
+          "group": "1_modification",
+          "when": "editorFocus"
+        },
+        {
+          "command": "graphify.generateGraph",
+          "group": "1_modification",
+          "when": "editorFocus"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "graphify.analyzeWorkspace",
+          "group": "2_workspace"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "graphify-view",
+          "title": "Graphify",
+          "icon": "media/graphify.svg"
+        }
+      ]
+    },
+    "views": {
+      "graphify-view": [
+        {
+          "id": "graphify-results",
+          "name": "Analysis Results"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0"
+  }
+}

@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+echo "Running pre-commit checks..."
+
+# Placeholder checks before Angular project bootstrap.
+# Update this hook to run lint/test after task P1-S1-002.
+exit 0

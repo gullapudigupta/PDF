@@ -1,4 +1,4 @@
-# PDF Viewer & Editor - Project Root
+﻿# PDF Viewer & Editor - Project Root
 
 **Project**: PDF Viewer & Editor (Electron + Angular 22)  
 **Status**: In Planning Phase  
@@ -50,11 +50,6 @@ PdfProject/
 # Open master folder INDEX
 # Read: master/INDEX.md
 ```
-
-### Option 1.5: Sprint 1 Environment Setup
-1. Follow [master/ENVIRONMENT_SETUP.md](master/ENVIRONMENT_SETUP.md)
-2. Create `.env` from `.env.example`
-3. Configure hooks path: `git config core.hooksPath .githooks`
 
 ### Option 2: Quick Overview
 1. Read [master/EXECUTIVE_SUMMARY.md](master/EXECUTIVE_SUMMARY.md) (5 min)
