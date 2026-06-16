@@ -1,47 +1,94 @@
 # PDF Viewer & Editor - Design Document
 
 **Project**: PDF Viewer & Editor  
-**Framework**: Electron 27 + Angular 22 + TypeScript 5  
-**Version**: 2.0  
+**Framework**: Electron 27 + Angular 22 + TypeScript 5 + WebExtensions  
+**Version**: 3.0  
 **Date**: June 16, 2026
 
 ---
 
 ## 1. Architecture Overview
 
-### 1.1 Layered Architecture
+### 1.1 Platform Strategy
+The product is delivered on two runtime surfaces using one shared feature core:
 
-1. **Presentation Layer (Angular Components)**  
-   Viewer, toolbar, sidebars, forms designer, annotation panel, properties panel.
+1. **Desktop App** (`Electron + Angular`)  
+2. **Browser Extension App** (`Chrome`, `Edge`, `Firefox`, latest Chromium-based browsers)
+
+A shared domain layer prevents duplicated PDF business logic across runtimes.
+
+### 1.2 Layered Architecture
+
+1. **Presentation Layer (Angular UI)**  
+   Viewer, toolbar, sidebar, forms panel, annotation panel, properties panel.
 
 2. **State Layer (NgRx)**  
-   Document state, page state, annotations, forms, security, UI state.
+   Workspace/document/view/edit/search/security/form/annotation/signature state.
 
 3. **Application Services Layer**  
-   PDF loading/rendering/editing, forms, OCR, signatures, redaction, storage, history.
+   PDF loading/rendering/editing, forms, signatures, redaction, OCR, history, export.
 
-4. **PDF Engine Layer**  
-   `PDF.js` for rendering/extraction and `pdf-lib` for manipulation/output.
+4. **Platform Adapter Layer**  
+   - Desktop adapter: file dialogs, filesystem, native shell integration.  
+   - Browser adapter: extension APIs, background/service worker messaging, tab/context integration.
 
-5. **Desktop Integration Layer (Electron)**  
-   File system access, native dialogs, secure IPC, platform integration.
+5. **PDF Engine Layer**  
+   `PDF.js` for rendering/text extraction, `pdf-lib` for manipulation/output.
 
-6. **Data Layer**  
-   Local JSON/SQLite for preferences, recent files, workspace state, autosave snapshots.
+6. **Persistence Layer (No Backend)**  
+   Local-only persistence with portable storage adapters.
 
 ---
 
-## 2. Target Module Structure
+## 2. No-Backend Persistence Design
+
+### 2.1 Primary Storage Choices
+- **Desktop primary**: `SQLite` (portable embedded DB) for settings, recents, session snapshots, lightweight metadata indexes.
+- **Desktop fallback**: local JSON file storage if SQLite module is unavailable.
+- **Extension primary**: browser `IndexedDB`/`storage.local` for settings/session state.
+- **Cross-runtime optional**: `sql.js` (WASM SQLite) for a shared query model where needed.
+
+### 2.2 Data Domains
+- Preferences (theme, keyboard options, UI layout)
+- Recent files and pinned docs
+- Workspace restore state (page, zoom, tool)
+- Auto-save snapshots
+- Signature assets (encrypted at rest where applicable)
+
+### 2.3 Adapter Contract
+`PersistenceService` should expose a stable contract:
+- `getSetting/setSetting`
+- `saveSession/loadSession`
+- `saveRecent/listRecent/pinRecent`
+- `saveSnapshot/loadSnapshot/clearSnapshot`
+
+Implementations:
+- `SqlitePersistenceAdapter` (desktop)
+- `BrowserStorageAdapter` (extension)
+- `JsonPersistenceAdapter` (desktop fallback)
+
+---
+
+## 3. Target Module Structure
 
 ```text
 src/app/
   core/
+    adapters/
+      runtime.adapter.ts
+      desktop-runtime.adapter.ts
+      extension-runtime.adapter.ts
+      persistence.adapter.ts
+      sqlite-persistence.adapter.ts
+      browser-storage.adapter.ts
+      json-persistence.adapter.ts
     services/
       electron.service.ts
+      extension-bridge.service.ts
       storage.service.ts
+      settings.service.ts
       logger.service.ts
       error-handler.service.ts
-      settings.service.ts
   shared/
     components/
     directives/
@@ -68,25 +115,23 @@ src/app/
       ocr.service.ts
       history.service.ts
       export.service.ts
-    models/
-      document.model.ts
-      page.model.ts
-      annotation.model.ts
-      form-field.model.ts
-      signature.model.ts
-      redaction.model.ts
-      search.model.ts
     store/
       workspace.state.ts
       workspace.actions.ts
       workspace.reducer.ts
       workspace.effects.ts
       workspace.selectors.ts
+extension/
+  manifest.chrome.json
+  manifest.firefox.json
+  background.ts
+  content-script.ts
+  popup/
 ```
 
 ---
 
-## 3. State Design (NgRx)
+## 4. State Design (NgRx)
 
 ```typescript
 interface WorkspaceState {
@@ -115,6 +160,10 @@ interface WorkspaceState {
   redactions: RedactionMark[];
   search: SearchState;
   security: SecurityState;
+  runtime: {
+    platform: 'desktop' | 'extension';
+    browser?: 'chrome' | 'edge' | 'firefox' | 'chromium';
+  };
   ui: {
     leftSidebarOpen: boolean;
     rightPanelOpen: boolean;
@@ -126,138 +175,133 @@ interface WorkspaceState {
 
 ---
 
-## 4. Key Service Responsibilities
+## 5. Key Service Responsibilities
 
-### 4.1 `PdfDocumentService`
+### 5.1 `PdfDocumentService`
 - Open/load/save/save-as
 - Metadata read/write
 - Merge/split/insert/delete/reorder pages
 
-### 4.2 `PdfRenderService`
-- Render pages and thumbnails using PDF.js
+### 5.2 `PdfRenderService`
+- Render pages and thumbnails with aspect ratio preservation
 - Text extraction for search/highlight
-- Viewport transforms (zoom/rotation)
+- Case-sensitive + regex search preparation support
 
-### 4.3 `PdfEditService`
+### 5.3 `PdfEditService`
 - Text/image/link/watermark/header/footer edits
 - Object placement, move, resize
-- Output generation via pdf-lib
+- Output generation through `pdf-lib`
 
-### 4.4 `AnnotationService`
-- Highlight/comment/drawing CRUD
-- Page-scoped annotation queries
-- Annotation import/export hooks
-
-### 4.5 `FormFieldService`
+### 5.4 `FormFieldService`
 - Create/edit/delete form fields
-- Field typing (text/checkbox/radio/dropdown/date/signature/formula/payment placeholder)
-- Conditional and required rules
+- Support required/conditional fields
+- Auto-save form data via persistence adapter
 
-### 4.6 `SignatureService`
-- Signature asset management (draw/type/upload)
-- Placement, scaling, and replacement
-- Stamp/seal support
+### 5.5 `ExtensionBridgeService`
+- Wrap browser extension messaging API
+- Handle background/service-worker requests
+- Route context-menu/tab-level open actions
 
-### 4.7 `RedactionService`
-- Mark text/image regions
-- Preview and irreversible apply
-- Flatten output to remove underlying data
+### 5.6 `StorageService`
+- Runtime selection of persistence adapter
+- SQLite-backed persistence in desktop runtime
+- IndexedDB/storage.local-backed persistence in extension runtime
 
-### 4.8 `OcrService`
-- OCR pipeline for scanned PDFs
-- Text layer generation and confidence output
-- Optional provider abstraction for future plugins
-
-### 4.9 `HistoryService`
+### 5.7 `HistoryService`
 - Unified undo/redo command model
 - Transaction batching for complex edits
 
 ---
 
-## 5. Primary Data Flows
+## 6. Primary Data Flows
 
-### 5.1 Open → Render Flow
-1. User selects file from toolbar/menu.
-2. `ElectronService` returns path + bytes through secure IPC.
-3. `PdfDocumentService` initializes PDF model.
+### 6.1 Desktop Open → Render
+1. User chooses file.
+2. `ElectronService` obtains bytes.
+3. `PdfDocumentService` parses and loads.
 4. `PdfRenderService` renders page + text layer.
-5. NgRx state updates `document` and `view`.
-6. Viewer and sidebar re-render from selectors.
+5. State updates and UI refreshes.
 
-### 5.2 Edit → Save Flow
-1. User performs edit (text/image/form/signature/etc).
-2. Action dispatched; reducer updates state.
-3. `HistoryService` records command.
-4. On save, `PdfEditService` composes changes.
-5. `pdf-lib` writes updated PDF.
-6. `ElectronService` persists bytes to disk.
+### 6.2 Extension Open → Render
+1. User triggers extension on PDF URL/tab.
+2. `ExtensionBridgeService` requests fetch/access via extension permissions.
+3. Bytes streamed to `PdfDocumentService`.
+4. Viewer renders and edits in extension UI.
 
-### 5.3 Redaction Apply Flow
-1. User marks redact areas.
-2. `RedactionService` stores marks in state.
-3. User confirms apply.
-4. Service burns redaction overlay and removes source content references.
-5. Saved output is irreversible by design.
+### 6.3 Save/Autosave Flow (Both Runtimes)
+1. User changes document state.
+2. `HistoryService` records command.
+3. Auto-save snapshot persisted via selected adapter.
+4. Save action composes final PDF bytes using `pdf-lib`.
+5. Desktop writes file directly; extension initiates download/save flow.
 
 ---
 
-## 6. Security and Desktop Boundaries
+## 7. Security Boundaries
 
-- Context isolation enabled in Electron
-- Strictly typed preload API (allowlist channels only)
-- Validate all IPC payloads
-- No remote code execution or `eval`
-- Local-only file processing unless explicit integration enabled
-- Protected temporary files and cleanup on session end
-
----
-
-## 7. Performance Strategy
-
-- Angular `OnPush` for heavy viewer components
-- Virtualized thumbnail list
-- Incremental page rendering (visible pages first)
-- Cached text layers/thumbnails with eviction policy
-- Debounced search and worker-based OCR pipeline
-- Memory guardrails for large documents
+- Context isolation and strict preload API in Electron
+- Least-privilege browser extension permissions
+- No wildcard host permissions unless feature-justified
+- Validate all IPC/message payloads
+- No `eval` or remote code execution patterns
+- Local-only processing by default, no cloud upload without explicit consent
 
 ---
 
-## 8. Testing Architecture
+## 8. Performance Strategy
 
-- **Unit**: services, reducers, selectors, utility transformers
-- **Integration**: viewer + toolbar + store workflows
+- Angular `OnPush` for viewer-heavy components
+- Virtualized thumbnails
+- Incremental page rendering for current viewport
+- Text layer and thumbnail cache with eviction
+- Debounced search and background worker OCR
+- Memory guardrails for large document loads
+
+---
+
+## 9. Testing Architecture
+
+- **Unit**: services, reducers, selectors, adapter implementations
+- **Integration**: desktop flow and extension flow separately
 - **E2E**: open/edit/save, annotate, form-fill, redact, sign
-- **Performance**: large-file rendering and scrolling benchmarks
-- **Security**: IPC contract tests and protected-file scenarios
-- **Accessibility**: keyboard navigation and contrast checks
+- **Compatibility**: Chrome, Edge, Firefox extension behavior tests
+- **Performance**: large-file rendering and memory envelope checks
+- **Security**: IPC and extension permission contract tests
 
 ---
 
-## 9. Requirements-to-Design Traceability
+## 10. Requirements-to-Design Traceability
 
-Each normalized requirement category is mapped to explicit implementation units:
-
-- Viewing/navigation → `PdfRenderService`, viewer components
+- Viewing/navigation → `PdfRenderService`, viewer/sidebar
 - Editing/manipulation → `PdfEditService`, `HistoryService`
-- Annotation/review → `AnnotationService`, annotation panel
 - Forms/interactive PDF → `FormFieldService`, forms panel
-- Signature/stamp/seal → `SignatureService`, signature panel
+- Signatures/stamps → `SignatureService`
 - OCR/scanned docs → `OcrService`
 - Redaction/security → `RedactionService`, security state
 - Save/export/convert → `PdfDocumentService`, `ExportService`
+- Browser extension support → `ExtensionBridgeService`, runtime adapter layer
+- No-backend data persistence → persistence adapters (`SQLite`, browser storage)
 
 ---
 
-## 10. Deployment Targets
+## 11. Deployment Targets
 
+### Desktop
 - Windows: MSI/portable
 - macOS: DMG
 - Linux: AppImage/DEB
-- CI pipeline: lint → unit/integration tests → build → package → artifacts
+
+### Browser Extensions
+- Chrome Web Store package
+- Edge Add-ons package
+- Firefox Add-ons (AMO) package
+- Chromium-compatible zip package for manual install
+
+### CI Pipeline
+lint → test → desktop build → extension build → package → release artifacts
 
 ---
 
-**Design Version**: 2.0  
+**Design Version**: 3.0  
 **Last Updated**: June 16, 2026  
 **Next Review**: After Sprint 2 planning lock

@@ -1,232 +1,78 @@
 # PDF Viewer & Editor - Project Root
 
-**Project**: PDF Viewer & Editor (Electron + Angular 22)  
+**Project**: PDF Viewer & Editor (Electron + Angular 22 + WebExtensions)  
 **Status**: In Planning Phase  
-**Last Updated**: June 16, 2026  
+**Last Updated**: June 16, 2026
 
 ---
 
-## 🎯 Quick Navigation
+## 🎯 Start Here
 
-### 📌 START HERE
-
-👉 **[MASTER DOCUMENTATION INDEX](master/INDEX.md)** ← All documentation
+👉 **[master/INDEX.md](master/INDEX.md)**
 
 ---
 
 ## 📁 Project Structure
 
-```
+```text
 PdfProject/
-│
-├── 📂 master/                    ← ALL DOCUMENTATION HERE
-│   ├── INDEX.md                  ← START HERE (complete guide)
-│   ├── REQUIREMENTS.md           (features & specifications)
-│   ├── DESIGN.md                 (⭐ architecture)
-│   ├── TASKS.md                  (⭐ execution plan)
-│   ├── CODE_COMPLETION_GRAPH.md  (⭐ progress tracking)
-│   ├── ANGULAR_IMPLEMENTATION_GUIDE.md (setup instructions)
-│   ├── ROADMAP.md                (timeline)
-│   ├── TECHNOLOGY_RECOMMENDATIONS.md (tech stack analysis)
-│   ├── EXECUTIVE_SUMMARY.md      (overview)
-│   ├── ANGULAR_DECISION_FINAL.md (decision confirmation)
-│   ├── ANGULAR_VS_REACT_ANALYSIS.md (framework comparison)
-│   ├── ANGULAR_VS_REACT_QUICK_GUIDE.md (quick reference)
-│   └── QUICK_REFERENCE.md        (commands & lookups)
-│
-├── 📂 vscode-graphify-extension/ (optional tools)
-├── 📂 .vs/                       (Visual Studio metadata)
-├── Agents.md                     (project instructions)
-├── PdfProject.sln                (Visual Studio solution)
-└── README.md                     (this file)
+├── master/
+│   ├── INDEX.md
+│   ├── REQUIREMENTS.md
+│   ├── DESIGN.md
+│   ├── TASKS.md
+│   ├── CODE_COMPLETION_GRAPH.md
+│   ├── ANGULAR_IMPLEMENTATION_GUIDE.md
+│   ├── ROADMAP.md
+│   ├── TECHNOLOGY_RECOMMENDATIONS.md
+│   ├── EXECUTIVE_SUMMARY.md
+│   ├── ANGULAR_DECISION_FINAL.md
+│   ├── ANGULAR_VS_REACT_ANALYSIS.md
+│   ├── ANGULAR_VS_REACT_QUICK_GUIDE.md
+│   └── QUICK_REFERENCE.md
+├── extension/                     # Browser extension artifacts (planned)
+├── Agents.md
+├── PdfProject.sln
+└── README.md
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🔑 Current Scope
 
-### Option 1: View Documentation (Recommended First Step)
-```bash
-# Open master folder INDEX
-# Read: master/INDEX.md
-```
-
-### Option 1.5: Sprint 1 Environment Setup
-1. Follow [master/ENVIRONMENT_SETUP.md](master/ENVIRONMENT_SETUP.md)
-2. Create `.env` from `.env.example`
-3. Configure hooks path: `git config core.hooksPath .githooks`
-
-### Option 2: Quick Overview
-1. Read [master/EXECUTIVE_SUMMARY.md](master/EXECUTIVE_SUMMARY.md) (5 min)
-2. Review [master/DESIGN.md](master/DESIGN.md) - Architecture (10 min)
-3. Get tasks from [master/TASKS.md](master/TASKS.md)
-
-### Option 3: Setup Development Environment
-See [master/ANGULAR_IMPLEMENTATION_GUIDE.md](master/ANGULAR_IMPLEMENTATION_GUIDE.md)
+- Desktop app: `Electron + Angular`
+- Browser extension targets: `Chrome`, `Edge`, `Firefox`, latest Chromium-based browsers
+- Shared PDF core: rendering/editing services reused across desktop + extension
+- No mandatory backend
 
 ---
 
-## 📖 Document Categories
+## 💾 Local Data Strategy (No Backend)
 
-### 🎯 For Different Roles
-
-**Project Managers**:
-- [master/EXECUTIVE_SUMMARY.md](master/EXECUTIVE_SUMMARY.md)
-- [master/ROADMAP.md](master/ROADMAP.md)
-- [master/CODE_COMPLETION_GRAPH.md](master/CODE_COMPLETION_GRAPH.md)
-- [master/TASKS.md](master/TASKS.md)
-
-**Architects**:
-- [master/DESIGN.md](master/DESIGN.md)
-- [master/TECHNOLOGY_RECOMMENDATIONS.md](master/TECHNOLOGY_RECOMMENDATIONS.md)
-- [master/ANGULAR_IMPLEMENTATION_GUIDE.md](master/ANGULAR_IMPLEMENTATION_GUIDE.md)
-
-**Developers**:
-- [master/REQUIREMENTS.md](master/REQUIREMENTS.md)
-- [master/DESIGN.md](master/DESIGN.md)
-- [master/ANGULAR_IMPLEMENTATION_GUIDE.md](master/ANGULAR_IMPLEMENTATION_GUIDE.md)
-- [master/TASKS.md](master/TASKS.md) ← **START EXECUTION HERE**
-
-**Testers**:
-- [master/REQUIREMENTS.md](master/REQUIREMENTS.md)
-- [master/TASKS.md](master/TASKS.md)
-- [master/DESIGN.md](master/DESIGN.md)
+- Desktop primary persistence: `SQLite` (portable embedded database)
+- Desktop fallback: local JSON files
+- Extension persistence: `IndexedDB` / browser `storage.local`
+- Session, preferences, recent files, and autosave snapshots are stored locally
 
 ---
 
-## 🔑 Key Information
+## 🚀 Execution Workflow
 
-| Item | Value |
-|------|-------|
-| **Project Name** | PDF Viewer & Editor |
-| **Technology Stack** | Electron + Angular 22 + TypeScript 5 |
-| **Duration (MVP)** | 4-5 months |
-| **Total Tasks** | 45+ |
-| **Sprints** | 12 |
-| **Status** | 🟡 Planning Phase |
+1. Read `master/REQUIREMENTS.md`
+2. Follow architecture in `master/DESIGN.md`
+3. Execute items in `master/TASKS.md`
+4. Update `master/TASKS.md` and `master/CODE_COMPLETION_GRAPH.md` after each completed task
 
 ---
 
-## ⚡ Quick Commands
+## 📌 Primary Documents
 
-```bash
-# View architecture
-cat master/DESIGN.md
-
-# View requirements
-cat master/REQUIREMENTS.md
-
-# Get task list
-cat master/TASKS.md
-
-# Setup Angular 22
-npm install -g @angular/cli@22
-
-# Create project
-ng new pdf-viewer-editor --routing --style=scss
-```
+- Requirements: [master/REQUIREMENTS.md](master/REQUIREMENTS.md)
+- Design: [master/DESIGN.md](master/DESIGN.md)
+- Tasks: [master/TASKS.md](master/TASKS.md)
+- Progress Graph: [master/CODE_COMPLETION_GRAPH.md](master/CODE_COMPLETION_GRAPH.md)
 
 ---
 
-## 📊 Project Statistics
-
-- **Documentation Files**: 12
-- **Total Specifications**: Complete
-- **Architecture Design**: ✅ Complete
-- **Task Breakdown**: 45+ tasks across 12 sprints
-- **Implementation Status**: 🔴 Not Started
-
----
-
-## 🔄 How to Use This Project
-
-### Phase 1: Setup (Week 1-2)
-1. Review [master/EXECUTIVE_SUMMARY.md](master/EXECUTIVE_SUMMARY.md)
-2. Setup environment per [master/ANGULAR_IMPLEMENTATION_GUIDE.md](master/ANGULAR_IMPLEMENTATION_GUIDE.md)
-3. Execute tasks from [master/TASKS.md](master/TASKS.md) - Sprint 1
-4. Track progress in [master/CODE_COMPLETION_GRAPH.md](master/CODE_COMPLETION_GRAPH.md)
-
-### Phase 2: Development (Week 3-20)
-1. Get next task from [master/TASKS.md](master/TASKS.md)
-2. Implement per [master/DESIGN.md](master/DESIGN.md)
-3. Mark complete in [master/TASKS.md](master/TASKS.md)
-4. Update [master/CODE_COMPLETION_GRAPH.md](master/CODE_COMPLETION_GRAPH.md)
-
-### Phase 3: Testing & Release (Week 21-24)
-1. Run tests from [master/DESIGN.md](master/DESIGN.md) - Testing Strategy
-2. Execute final sprint tasks
-3. Package per [master/ANGULAR_IMPLEMENTATION_GUIDE.md](master/ANGULAR_IMPLEMENTATION_GUIDE.md)
-4. Release
-
----
-
-## 📞 Important Notes
-
-### ⚠️ Critical Files
-
-These files must be updated after each task completion:
-- **[master/TASKS.md](master/TASKS.md)** - Mark task status
-- **[master/CODE_COMPLETION_GRAPH.md](master/CODE_COMPLETION_GRAPH.md)** - Update progress graph
-
-### 📌 Main Reference Files
-
-- **[master/DESIGN.md](master/DESIGN.md)** - Architecture & implementation patterns
-- **[master/REQUIREMENTS.md](master/REQUIREMENTS.md)** - Feature specifications
-- **[master/ANGULAR_IMPLEMENTATION_GUIDE.md](master/ANGULAR_IMPLEMENTATION_GUIDE.md)** - Setup & code patterns
-
-### 🎯 Execution
-
-- **All execution starts from [master/TASKS.md](master/TASKS.md)**
-- Updates go back to [master/TASKS.md](master/TASKS.md) and [master/CODE_COMPLETION_GRAPH.md](master/CODE_COMPLETION_GRAPH.md)
-
----
-
-## 🗂️ Complete Document Index
-
-| Document | Purpose | Link |
-|----------|---------|------|
-| INDEX (Master) | Central reference | [master/INDEX.md](master/INDEX.md) |
-| Requirements | Feature specifications | [master/REQUIREMENTS.md](master/REQUIREMENTS.md) |
-| Executive Summary | Project overview | [master/EXECUTIVE_SUMMARY.md](master/EXECUTIVE_SUMMARY.md) |
-| Technology Recommendations | Tech stack analysis | [master/TECHNOLOGY_RECOMMENDATIONS.md](master/TECHNOLOGY_RECOMMENDATIONS.md) |
-| Design | Architecture & patterns | [master/DESIGN.md](master/DESIGN.md) |
-| Angular Decision | Framework choice | [master/ANGULAR_DECISION_FINAL.md](master/ANGULAR_DECISION_FINAL.md) |
-| Roadmap | Development timeline | [master/ROADMAP.md](master/ROADMAP.md) |
-| Tasks | Execution plan | [master/TASKS.md](master/TASKS.md) |
-| Completion Graph | Progress tracking | [master/CODE_COMPLETION_GRAPH.md](master/CODE_COMPLETION_GRAPH.md) |
-| Angular Guide | Setup instructions | [master/ANGULAR_IMPLEMENTATION_GUIDE.md](master/ANGULAR_IMPLEMENTATION_GUIDE.md) |
-| Angular vs React | Comparison analysis | [master/ANGULAR_VS_REACT_ANALYSIS.md](master/ANGULAR_VS_REACT_ANALYSIS.md) |
-| Quick Reference | Commands & lookups | [master/QUICK_REFERENCE.md](master/QUICK_REFERENCE.md) |
-
----
-
-## ✅ Pre-Development Checklist
-
-- [ ] Read [master/INDEX.md](master/INDEX.md)
-- [ ] Review [master/EXECUTIVE_SUMMARY.md](master/EXECUTIVE_SUMMARY.md)
-- [ ] Study [master/DESIGN.md](master/DESIGN.md)
-- [ ] Setup per [master/ANGULAR_IMPLEMENTATION_GUIDE.md](master/ANGULAR_IMPLEMENTATION_GUIDE.md)
-- [ ] Read [master/REQUIREMENTS.md](master/REQUIREMENTS.md)
-- [ ] Get first tasks from [master/TASKS.md](master/TASKS.md)
-- [ ] Mark tasks in progress
-- [ ] Begin Phase 1, Sprint 1
-
----
-
-## 🔗 All References Point to Master Folder
-
-**Convention**: All documentation is centralized in `master/` folder.
-
-- Every task references master documents
-- Every component design references master architecture
-- Every feature traces back to master requirements
-- All progress tracked in master completion graph
-
-**Example**: To find PDF service design → [master/DESIGN.md](master/DESIGN.md) → Services Architecture section
-
----
-
-**Project Root README**  
-**Version**: 1.0  
-**Date**: June 16, 2026  
+**Version**: 2.0  
 **Next Step**: Open [master/INDEX.md](master/INDEX.md)

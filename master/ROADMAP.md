@@ -1,223 +1,157 @@
-# PDF Viewer & Editor - Development Roadmap
+﻿# PDF Viewer & Editor - Development Roadmap
 
 ## Project Timeline & Phases
 
-### Phase 1: MVP (Minimum Viable Product) - 3-4 Months
+**Scope**: Desktop (`Electron + Angular`) + Browser Extensions (`Chrome`, `Edge`, `Firefox`, latest Chromium-based)  
+**Backend**: No mandatory backend (local-only persistence)
 
-#### Sprint 1-2: Setup & Architecture (2 weeks)
-- [ ] Project initialization (Electron + React + TypeScript boilerplate)
+---
+
+## Phase 1: MVP (4-5 Months)
+
+### Sprint 1-2: Setup, Architecture, and Storage Foundation (2 weeks)
+- [ ] Project initialization (Electron + Angular + TypeScript)
+- [ ] Extension workspace bootstrap (Chrome/Edge Manifest V3 + Firefox-compatible variant)
 - [ ] Development environment setup
 - [ ] Version control and CI/CD pipeline
-- [ ] Architecture documentation
-- [ ] UI framework setup (Ant Design/Material UI)
-- [ ] Database schema design (SQLite)
+- [ ] Architecture documentation and runtime adapter contracts
+- [ ] Persistence layer setup:
+  - [ ] SQLite adapter for desktop
+  - [ ] Browser storage adapter for extension
+  - [ ] JSON fallback adapter
 
 **Deliverables:**
-- Project running locally
-- Dev environment documented
-- Architecture ready for development
+- Desktop app boots locally
+- Extension scaffold runs in target browsers
+- No-backend persistence architecture ready
 
-#### Sprint 3-4: PDF Viewing Core (3-4 weeks)
+### Sprint 3-4: PDF Viewing Core (3-4 weeks)
 - [ ] PDF.js integration
 - [ ] Basic PDF rendering in canvas
 - [ ] Multi-page support
 - [ ] Page navigation controls
-- [ ] Zoom functionality (preset + custom levels)
+- [ ] Zoom functionality (preset + custom)
 - [ ] Page rotation
+- [ ] Aspect-ratio-safe rendering
 - [ ] Keyboard shortcuts
 
 **Deliverables:**
 - Open and display PDFs
-- Navigate pages
-- Basic viewing controls
+- Navigate pages smoothly
+- Core viewing controls functional
 
-#### Sprint 5-6: UI Polish & Search (2-3 weeks)
-- [ ] Sidebar with thumbnails
-- [ ] Full-text search
-- [ ] Search highlighting
-- [ ] Bookmark navigation
-- [ ] Recent files list
-- [ ] Dark mode toggle
-- [ ] Responsive UI
-
-**Deliverables:**
-- Professional UI appearance
-- Search functionality working
-- User preferences saved
-
-#### Sprint 7: Annotations Layer 1 (2-3 weeks)
-- [ ] Highlight text
-- [ ] Text notes/comments
-- [ ] Drawing tools (freehand)
-- [ ] Annotation colors
-- [ ] Edit/delete annotations
-- [ ] Annotation sidebar
+### Sprint 5-6: Editing, Annotation, Search (3 weeks)
+- [ ] Sidebar with thumbnails and bookmarks
+- [ ] Full-text search with highlight
+- [ ] Case-sensitive and regex search
+- [ ] Highlight, notes/comments, draw tools
+- [ ] Annotation color/opacity
+- [ ] Undo/redo command history
 
 **Deliverables:**
-- Users can annotate documents
-- Annotations persist during session
+- Core annotation and search features complete
+- Stable editing interaction model
 
-#### Sprint 8-9: Page Manipulation (2-3 weeks)
-- [ ] Delete pages
-- [ ] Reorder pages (drag & drop)
-- [ ] Extract pages
-- [ ] Rotate pages
-
-**Deliverables:**
-- Users can modify page structure
-- Intuitive drag-drop interface
-
-#### Sprint 10: Save & Export (2 weeks)
-- [ ] Save modified PDFs
-- [ ] Export to image formats (PNG, JPEG)
-- [ ] File dialogs
-- [ ] Error handling
+### Sprint 7-8: Page Operations, Forms, Save Pipeline (3 weeks)
+- [ ] Insert/delete/reorder/extract/split/merge pages
+- [ ] Interactive form fill support
+- [ ] Form auto-save and form-data persistence
+- [ ] Signature/initials baseline
+- [ ] Save/Save As
+- [ ] Autosave + crash recovery
 
 **Deliverables:**
-- Users can save changes
-- Export functionality working
+- Editing and form workflows functional end-to-end
+- Reliable save and recovery behavior
 
-#### Sprint 11-12: Testing & Polish (2-3 weeks)
-- [ ] Unit tests (30-40% coverage)
-- [ ] Integration tests
-- [ ] Bug fixes
-- [ ] Performance optimization
-- [ ] Documentation
-- [ ] Help/About dialogs
+### Sprint 9-10: Security, Metadata, Extension Runtime (3 weeks)
+- [ ] Metadata editing
+- [ ] Password protection + permissions baseline
+- [ ] Recent files + pinned docs + workspace restore
+- [ ] Extension open/edit/download flow
+- [ ] Least-privilege extension permission hardening
+- [ ] Cross-browser compatibility pass
 
 **Deliverables:**
-- Stable, testable codebase
-- User documentation
-- Ready for alpha release
+- Security baseline completed
+- Extension MVP flow validated in Chrome/Edge/Firefox
+
+### Sprint 11-12: Testing, Packaging, Release Candidate (2-3 weeks)
+- [ ] Unit tests (60%+ target)
+- [ ] Integration tests (desktop + extension)
+- [ ] Performance and memory optimization
+- [ ] Desktop packaging (MSI/DMG/AppImage)
+- [ ] Extension packaging (Web Store/Edge Add-ons/AMO)
+
+**Deliverables:**
+- Alpha release candidate for desktop + extension
+- Documented test and release artifacts
 
 ### Phase 1 Summary
-- **Duration**: 3-4 months (10-12 weeks)
-- **Team Size**: 2-3 developers
-- **Core Features**: Viewing, basic editing, saving
-- **User Features Ready**: Yes, suitable for early adopters
-- **Performance Target**: Acceptable for typical usage
-- **Release**: Alpha / Early Access
+- **Duration**: 4-5 months
+- **Team Size**: 3-4 developers (including extension/testing coverage)
+- **Core Features**: Viewing, editing, forms/signature baseline, save/export, desktop + extension runtime
+- **Release**: Alpha / Early Access (Desktop + Extension)
 
 ---
 
-### Phase 2: Advanced Features - 2-3 Months
+## Phase 2: Advanced Features (2-3 Months)
 
-#### Sprint 13-14: Annotations Layer 2 (2-3 weeks)
-- [ ] Shape tools (rectangles, circles, lines)
+### Sprint 13-14: Advanced Annotation and Forms
+- [ ] Shape tools and advanced markups
 - [ ] Watermarks/stamps
-- [ ] Underline and strikethrough
-- [ ] Annotation summary panel
-- [ ] Export annotations as PDF
+- [ ] Conditional fields, formula fields, payment-ready fields
+- [ ] Advanced form data export
 
-**Deliverables:**
-- Advanced annotation options
-- Professional markup capabilities
+### Sprint 15-16: OCR and Scanned PDF Workflows
+- [ ] OCR provider integration
+- [ ] Scanned PDF text layer generation
+- [ ] OCR confidence and correction UX
+- [ ] Search across OCR text
 
-#### Sprint 15: Form Handling (2-3 weeks)
-- [ ] Form field detection
-- [ ] Fill interactive forms
-- [ ] Save form data
-- [ ] Auto-fill capabilities
-- [ ] Export form data
+### Sprint 17: Redaction and Protection Enhancements
+- [ ] Redaction suite (text/image/signature)
+- [ ] Irreversible apply + flatten verification
+- [ ] Protection workflow hardening
 
-**Deliverables:**
-- Users can interact with forms
-- Data preservation
-
-#### Sprint 16: OCR Integration (2-3 weeks)
-- [ ] Tesseract.js integration
-- [ ] Scanned PDF support
-- [ ] Text extraction from images
-- [ ] Searchable scanned PDFs
-- [ ] Language selection
-
-**Deliverables:**
-- Users can work with scanned documents
-- Search across OCR text
-
-#### Sprint 17: Metadata & Compression (2 weeks)
-- [ ] Edit document metadata
-- [ ] Compression options
-- [ ] PDF optimization
-- [ ] File size reduction
-
-**Deliverables:**
-- Document management capabilities
-- Optimized PDF output
-
-#### Sprint 18: Testing & Stability (1-2 weeks)
-- [ ] Extended test coverage (60%)
-- [ ] Performance profiling
-- [ ] Memory optimization
-- [ ] Bug fixes
-
-**Deliverables:**
-- Production-ready codebase
-- Release as stable version 1.0
+### Sprint 18: Stability and v1.0 Readiness
+- [ ] Extended test coverage
+- [ ] Performance profiling and memory optimization
+- [ ] Bug fixing and release hardening
 
 ### Phase 2 Summary
-- **Duration**: 2-3 months (8-10 weeks)
-- **Team Size**: 2-3 developers
-- **User Features**: 80%+ of non-niche requirements
+- **Duration**: 2-3 months
 - **Release**: Stable v1.0
 
 ---
 
-### Phase 3: Premium Features - 2-3 Months
+## Phase 3: Enterprise Features (2-3 Months)
 
-#### Sprint 19-20: Digital Signatures (2-3 weeks)
-- [ ] Certificate management
-- [ ] Signature field support
-- [ ] Sign documents
-- [ ] Signature verification
-- [ ] Timestamping
+### Sprint 19-20: Signature and Compliance
+- [ ] Digital signature verification workflows
+- [ ] Certificate and compliance support
+- [ ] Audit trail foundations
 
-**Deliverables:**
-- Legal document signing capability
-
-#### Sprint 21: Batch Processing (2 weeks)
-- [ ] Batch page operations
-- [ ] Merge multiple PDFs
-- [ ] Split PDFs by page range
-- [ ] Bulk compression
+### Sprint 21: Batch Processing
+- [ ] Batch merge/split/convert/protect
 - [ ] Queue management
 
-**Deliverables:**
-- Advanced document operations
+### Sprint 22: Plugin Platform
+- [ ] Plugin architecture + SDK
+- [ ] Extension points for OCR/export/annotation
 
-#### Sprint 22: Plugin System (2-3 weeks)
-- [ ] Plugin architecture design
-- [ ] Plugin SDK documentation
-- [ ] Example plugins
-- [ ] Plugin marketplace preparation
+### Sprint 23-24: Advanced Processing
+- [ ] Compare/review tooling
+- [ ] Advanced conversion pipelines
+- [ ] Enterprise optimization
 
-**Deliverables:**
-- Extensibility framework
-- Developer tools
-
-#### Sprint 23-24: Advanced OCR & AI (2-3 weeks)
-- [ ] Improved OCR accuracy
-- [ ] Table detection
-- [ ] Auto-annotation suggestions
-- [ ] Document classification
-
-**Deliverables:**
-- Advanced document understanding
-
-#### Sprint 25: Testing & Optimization (1-2 weeks)
-- [ ] Extended test coverage (80%+)
-- [ ] Performance tuning
-- [ ] Large document optimization
-- [ ] Final bug fixes
-
-**Deliverables:**
-- Enterprise-ready application
-- Release as v2.0
+### Sprint 25: Final Optimization and Release
+- [ ] Extended test coverage (80%+ target)
+- [ ] Performance tuning for large documents
+- [ ] Final release validation
 
 ### Phase 3 Summary
-- **Duration**: 2-3 months (8-10 weeks)
-- **Team Size**: 2-3 developers
-- **Advanced Features**: Complete feature set
+- **Duration**: 2-3 months
 - **Release**: Enterprise v2.0
 
 ---
@@ -227,14 +161,13 @@
 ```
                       MVP            Advanced          Enterprise
                     (Phase 1)        (Phase 2)         (Phase 3)
-                   3-4 months       2-3 months        2-3 months
+                   4-5 months       2-3 months        2-3 months
                        |                 |                 |
     Sprint   1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
-             |-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
-    
-    Alpha Release ✓        Beta Release ✓         Stable v1.0 ✓    v2.0 ✓
-    
-    Total Timeline: 7-10 months for complete product
+
+    Alpha RC (Desktop + Extension) ✓    Stable v1.0 ✓    Enterprise v2.0 ✓
+
+    Total Timeline: ~8-11 months for full product scope
 ```
 
 ---
@@ -243,70 +176,38 @@
 
 ### Team Structure (Recommended)
 
-#### Phase 1: MVP (2-3 Developers)
-- **1 Lead Full-Stack Developer** (Electron + React + PDF logic)
-- **1 UI/Frontend Developer** (React components, styling)
-- **1 Part-time DevOps/QA** (Testing, deployment)
+#### Phase 1: MVP (3-4 Developers)
+- **1 Lead Full-Stack Developer** (architecture, PDF core)
+- **1 Frontend Developer** (Angular UI and workflows)
+- **1 Extension Developer** (browser runtime and permissions)
+- **1 Part-time QA/DevOps** (test automation, packaging, stores)
 
-**Responsibilities:**
-- Lead: Architecture, PDF rendering, core features
-- Frontend: UI components, user experience
-- QA: Testing, CI/CD setup
+#### Phase 2: Advanced (3-4 Developers)
+- Same core team with OCR/security emphasis
 
-#### Phase 2: Advanced (2-3 Developers)
-- Same core team
-- Add features incrementally
-- Increase test coverage
-
-#### Phase 3: Enterprise (2-4 Developers)
-- Core team + 1 specialist for plugins/integrations
-- External specialists for OCR/AI features
+#### Phase 3: Enterprise (3-5 Developers)
+- Core team + plugin/compliance specialist
 
 ---
 
 ## Technology Stack Timeline
 
 ### Phase 1: Core Stack
-```
-├── Frontend
-│   ├── React 18.x
-│   ├── TypeScript 5.x
-│   ├── Ant Design v5
-│   └── Vite 5.x
-├── PDF Engine
-│   ├── PDF.js (rendering)
-│   └── pdf-lib (editing)
-├── Desktop
-│   └── Electron 27.x
-└── Data
-    ├── SQLite 3
-    └── Electron Store
-```
+- Angular 22 + TypeScript 5
+- Electron 27
+- WebExtensions (MV3 + Firefox-compatible variant)
+- PDF.js + pdf-lib
+- NgRx
+- Persistence: SQLite (desktop), browser storage (extension), JSON fallback
 
 ### Phase 2: Extended Stack
-```
-Add to Phase 1:
-├── OCR
-│   └── Tesseract.js
-├── Processing
-│   ├── Sharp (image)
-│   └── sharp-wasm
-└── Analysis
-    └── PDF metadata parsing
-```
+- OCR provider integration
+- Redaction and security hardening utilities
 
 ### Phase 3: Full Stack
-```
-Add to Phase 2:
-├── Crypto
-│   └── node-forge (signatures)
-├── Advanced
-│   ├── Plugin SDK
-│   └── IPC bridge optimization
-└── Optional
-    ├── Machine Learning
-    └── Cloud sync
-```
+- Plugin SDK
+- Advanced conversion/compare modules
+- Compliance/audit tooling
 
 ---
 
@@ -314,132 +215,15 @@ Add to Phase 2:
 
 | Milestone | Timeline | Success Criteria |
 |-----------|----------|-----------------|
-| **Project Setup** | Week 2 | Dev env working, boilerplate running |
-| **Alpha Release** | Month 3-4 | Core viewing + basic annotations |
-| **Beta Release** | Month 6-7 | Advanced features, stable codebase |
-| **v1.0 Release** | Month 7-8 | Production ready, feature complete |
-| **v2.0 Release** | Month 10-11 | Enterprise features added |
+| Project Setup Complete | Week 2 | Desktop + extension scaffolds running |
+| Viewing Core Complete | Month 2 | Open/render/navigate/search in both runtimes |
+| Editing MVP Complete | Month 4 | Edit/save/forms/signatures baseline complete |
+| Alpha RC | Month 5 | Desktop and extension packages ready |
+| Stable v1.0 | Month 7-8 | Advanced features and reliability targets met |
+| Enterprise v2.0 | Month 10-11 | Plugin/compliance/batch capabilities complete |
 
 ---
 
-## Testing Strategy
-
-### Phase 1
-- Unit Tests: Core PDF logic (40-50% coverage)
-- Integration Tests: UI + PDF rendering
-- Manual Testing: Feature verification
-
-### Phase 2
-- Expand Unit Tests: 60-70% coverage
-- E2E Tests: User workflows
-- Performance Tests: Large documents
-
-### Phase 3
-- Full Test Coverage: 80%+
-- Stress Testing: Edge cases
-- Security Testing: Signature validation
-- Accessibility Testing: WCAG compliance
-
----
-
-## Deployment Strategy
-
-### Phase 1
-- Windows: MSI installer
-- macOS: DMG package
-- Linux: AppImage
-- Distribution: GitHub Releases
-
-### Phase 2
-- Add auto-update capability
-- Website with downloads
-- Release notes and documentation
-
-### Phase 3
-- Software stores (if applicable)
-- Commercial distribution channels
-- Licensing system
-
----
-
-## Risk & Mitigation
-
-| Risk | Impact | Mitigation |
-|------|--------|-----------|
-| PDF rendering performance | High | Use PDF.js proven library, benchmark early |
-| Large file handling | High | Implement streaming, test with large PDFs |
-| Cross-platform issues | Medium | Regular testing on all platforms |
-| Dependencies outdated | Medium | Dependency audit quarterly |
-| Scope creep | High | Strict phase boundaries, user feedback loops |
-| Team turnover | Medium | Documentation, code reviews, knowledge sharing |
-
----
-
-## Budget Estimate (Assuming $80k/year developer salary)
-
-### Phase 1: MVP
-- 3 months × 3 developers × $6.6k/month = **$59,400**
-- Infrastructure & tools: **$2,000**
-- Total Phase 1: **~$61,400**
-
-### Phase 2: Advanced
-- 2.5 months × 3 developers × $6.6k/month = **$49,500**
-- Infrastructure & tools: **$1,500**
-- Total Phase 2: **~$51,000**
-
-### Phase 3: Enterprise
-- 2.5 months × 3.5 developers × $6.6k/month = **$57,750**
-- Infrastructure & tools: **$2,000**
-- Total Phase 3: **~$59,750**
-
-### Grand Total: ~$172,150 for 7.5 months development
-
----
-
-## Success Metrics
-
-### Phase 1
-- [ ] MVP runs without crashes (99% uptime in testing)
-- [ ] Opens and displays any valid PDF
-- [ ] Users can annotate and save
-- [ ] 500+ lines of test code
-- [ ] Documentation complete
-
-### Phase 2
-- [ ] All core features working
-- [ ] 80% test coverage
-- [ ] Performance: PDF load < 500ms
-- [ ] User feedback: 4/5 or higher
-- [ ] Zero critical bugs in beta
-
-### Phase 3
-- [ ] Enterprise features implemented
-- [ ] 80%+ test coverage
-- [ ] 10,000+ downloads/month
-- [ ] User satisfaction: 4.5/5+
-- [ ] Security audit passed
-
----
-
-## Decision Points
-
-### After Phase 1 (Month 4)
-- **Decision**: Proceed to Phase 2?
-- **Criteria**: 
-  - Alpha feedback positive
-  - No critical architectural flaws
-  - Performance acceptable
-
-### After Phase 2 (Month 7)
-- **Decision**: Proceed to Phase 3?
-- **Criteria**:
-  - v1.0 stable and well-tested
-  - User base growing
-  - Market demand confirmed
-
-### After Phase 3 (Month 10)
-- **Decision**: Maintenance or new features?
-- **Options**:
-  - Long-term support mode
-  - Start v3.0 development
-  - Pivot to other product
+**Roadmap Version**: 2.0  
+**Last Updated**: June 16, 2026  
+**Status**: Synced with `REQUIREMENTS.md`, `DESIGN.md`, and `TASKS.md`

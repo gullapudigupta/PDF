@@ -1,6 +1,6 @@
 # Code Completion Graph - PDF Viewer Project
 
-**Project**: PDF Viewer & Editor (Electron + Angular)  
+**Project**: PDF Viewer & Editor (Electron + Angular + WebExtensions)  
 **Graph Type**: Task Dependency & Completion Status  
 **Format**: Mermaid Diagram with Progress Tracking  
 **Last Updated**: June 16, 2026

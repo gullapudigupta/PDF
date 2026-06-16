@@ -193,7 +193,7 @@ This model covers all PDF-related entries in the provided master list.
 ### 6.2 Browser Extension Integration
 - Shared core PDF engine with browser-adapter layer
 - Support WebExtensions model across Chrome, Edge, and Firefox
-- MV3 compatibility for Chromium-based browsers (Chrome/Edge)
+- Manifest V3 compatibility for Chromium-based browsers (Chrome/Edge)
 - Background/service worker orchestration for extension workflows
 - Content script integration where needed for in-browser PDF actions
 - Extension settings sync/local storage support as applicable by browser policy

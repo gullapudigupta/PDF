@@ -2,7 +2,14 @@
 
 ## Executive Summary
 
-For an Electron-based PDF viewer and editor application, **React is the better choice** despite Angular's strengths in enterprise applications. React's simplicity, lighter weight, and better performance align better with desktop application constraints.
+For this project, the implementation baseline is **Electron + Angular + TypeScript + WebExtensions**. This document provides a comparative framework discussion between Angular and React.
+
+This document compares Angular and React from a general engineering perspective.
+
+**Terminology standard (project-wide):**
+- `WebExtensions` (Chrome/Edge Manifest V3, Firefox-compatible variant)
+- `browser storage` (`IndexedDB` / `storage.local`)
+- Timeline wording: MVP `4-5 months`, full scope `8-11 months`
 
 ---
 
@@ -849,4 +856,3 @@ Recommendation: Skip for PDF app
 
 **Analysis Version**: 1.0  
 **Date**: June 16, 2026  
-**Recommendation**: React for PDF Viewer Project

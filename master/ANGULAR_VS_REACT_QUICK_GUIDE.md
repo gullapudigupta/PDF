@@ -2,18 +2,21 @@
 
 ## 🎯 Quick Answer
 
-| Metric | React | Angular | Winner |
-|--------|-------|---------|--------|
-| **MVP Timeline** | 3-4 mo | 4-5 mo | 🏆 React |
-| **App Size** | 300-400MB | 350-450MB | 🏆 React |
-| **Memory Usage** | 300-400MB runtime | 380-430MB runtime | 🏆 React (~25% lighter) |
-| **Startup Speed** | 3.5s | 6s | 🏆 React (~40% faster) |
-| **Learning Curve** | Shallow | Steep | 🏆 React |
-| **Developer DX** | Excellent | Good | 🏆 React |
-| **PDF Libraries** | 50+ | 15+ | 🏆 React |
-| **Team Size (ideal)** | 1-3 devs | 5+ devs | 🏆 React (for this project) |
-| **Enterprise Ready** | Yes | Yes++ | 🏆 Angular |
-| **Flexibility** | High | Medium | 🏆 React |
+This is a framework comparison reference.  
+**Project decision remains**: `Electron + Angular + TypeScript + WebExtensions`.
+
+**Terminology standard (project-wide):**
+- `WebExtensions` (Chrome/Edge Manifest V3, Firefox-compatible variant)
+- `browser storage` (`IndexedDB` / `storage.local`)
+- Timeline wording: MVP `4-5 months`, full scope `8-11 months`
+
+| Metric | React | Angular | Notes |
+|--------|-------|---------|-------|
+| MVP Timeline | 3.5-4.5 mo | 4-5 mo | Project uses Angular for structure + scale |
+| Architecture Structure | Medium | High | Angular preferred for this project |
+| Extension Alignment | High | High | Both support WebExtensions |
+| Enterprise Maintainability | Good | Excellent | Angular favored for long-term consistency |
+| Learning Curve | Shallow | Moderate/Steeper | Known trade-off |
 
 ---
 
