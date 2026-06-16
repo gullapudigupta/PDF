@@ -97,23 +97,23 @@
 
 ## Sprint 3 - PDF Loading and Rendering
 
-### [P1-S3-001] 🔴 PDF.js Integration
+### [P1-S3-001] 🟢 PDF.js Integration
 **Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S2-001], [P1-S2-004]
-- [ ] Implement `PdfDocumentService` + `PdfRenderService`
-- [ ] Configure worker and first-page render
-- [ ] Preserve aspect ratio in render pipeline
+- [x] Implement `PdfDocumentService` + `PdfRenderService`
+- [x] Configure worker and first-page render
+- [x] Preserve aspect ratio in render pipeline
 
-### [P1-S3-002] 🔴 Viewer + Toolbar Core
+### [P1-S3-002] 🟢 Viewer + Toolbar Core
 **Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S3-001]
-- [ ] Build viewer canvas host and toolbar shell
-- [ ] Add open/save/search entry points
-- [ ] Add loading/error UI states
+- [x] Build viewer canvas host and toolbar shell
+- [x] Add open/save/search entry points
+- [x] Add loading/error UI states
 
-### [P1-S3-003] 🔴 Navigation, Zoom, Rotation
+### [P1-S3-003] 🟢 Navigation, Zoom, Rotation
 **Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S3-002]
-- [ ] Implement page navigation actions
-- [ ] Implement zoom presets + custom zoom
-- [ ] Implement page rotation controls
+- [x] Implement page navigation actions
+- [x] Implement zoom presets + custom zoom
+- [x] Implement page rotation controls
 
 ### [P1-S3-004] 🔴 Thumbnails + Bookmarks Sidebar
 **Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S3-001]
@@ -344,10 +344,10 @@
 ## 5. Task Statistics
 
 - **Total Phase 1 Tasks**: 39 (detailed)
-- **Completed**: 7 (P1-S1-001, P1-S1-002, P1-S1-003, P1-S2-001, P1-S2-002, P1-S2-003, P1-S2-004)
+- **Completed**: 10 (P1-S1-001, P1-S1-002, P1-S1-003, P1-S2-001, P1-S2-002, P1-S2-003, P1-S2-004, P1-S3-001, P1-S3-002, P1-S3-003)
 - **In Progress**: 0
-- **Not Started**: 32
-- **Overall Progress**: 18% of Phase 1
+- **Not Started**: 29
+- **Overall Progress**: 26% of Phase 1
 - **MVP Target**: End of Sprint 12
 
 ---

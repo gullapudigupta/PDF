@@ -2,7 +2,10 @@ import { createAction, props } from '@ngrx/store';
 
 export const loadPdf = createAction('[Workspace] Load PDF', props<{ file: File }>());
 
-export const loadPdfSuccess = createAction('[Workspace] Load PDF Success', props<{ documentId: string; title: string }>());
+export const loadPdfSuccess = createAction(
+  '[Workspace] Load PDF Success',
+  props<{ documentId: string; title: string; totalPages: number }>()
+);
 
 export const loadPdfFailure = createAction('[Workspace] Load PDF Failure', props<{ error: string }>());
 

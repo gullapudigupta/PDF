@@ -30,10 +30,12 @@ export const workspaceReducer = createReducer(
     loading: true,
     error: null,
   })),
-  on(WorkspaceActions.loadPdfSuccess, (state, { documentId, title }) => ({
+  on(WorkspaceActions.loadPdfSuccess, (state, { documentId, title, totalPages }) => ({
     ...state,
     documentId,
     title,
+    totalPages,
+    currentPage: 1,
     loading: false,
     error: null,
   })),

@@ -12,91 +12,36 @@
 ```mermaid
 graph TD
     A["🟢 P1-S1-001<br/>Environment Setup<br/>100%"] --> B["🟢 P1-S1-002<br/>Workspace Init<br/>100%"]
+    B --> C["🟢 P1-S1-003<br/>Architecture Skeleton<br/>100%"]
 
-    B --> D["🟢 P1-S1-003<br/>Architecture Skeleton<br/>100%"]
+    B --> D["🟢 P1-S2-001<br/>Electron IPC<br/>100%"]
+    B --> E["🟢 P1-S2-002<br/>Extension Runtime<br/>100%"]
+    C --> F["🟢 P1-S2-003<br/>Persistence Layer<br/>100%"]
+    C --> G["🟢 P1-S2-004<br/>NgRx Store<br/>100%"]
 
-    D --> F["🔴 P1-S1-004<br/>CoreModule<br/>0%"]
-    D --> G["🔴 P1-S1-005<br/>SharedModule<br/>0%"]
+    G --> H["🟢 P1-S3-001<br/>PDF.js Integration<br/>100%"]
+    H --> I["🟢 P1-S3-002<br/>Viewer + Toolbar<br/>100%"]
+    I --> J["🟢 P1-S3-003<br/>Navigation/Zoom/Rotation<br/>100%"]
+    H --> K["🔴 P1-S3-004<br/>Thumbnails + Bookmarks<br/>0%"]
 
-    B --> H["🟢 P1-S2-001<br/>Electron IPC<br/>100%"]
-    B --> I["🟢 P1-S2-002<br/>Extension Runtime<br/>100%"]
-    D --> J["🟢 P1-S2-003<br/>Persistence Layer<br/>100%"]
-    D --> K["🟢 P1-S2-004<br/>NgRx Store<br/>100%"]
-
-    K --> L["🔴 P1-S3-001<br/>PDF.js Integration<br/>0%"]
-
-    L --> M["🔴 P1-S3-002<br/>Viewer Component<br/>0%"]
-    L --> N["🔴 P1-S3-005<br/>Zoom Functionality<br/>0%"]
-    L --> O["🔴 P1-S3-006<br/>Page Rotation<br/>0%"]
-
-    M --> P["🔴 P1-S3-003<br/>Toolbar Component<br/>0%"]
-    M --> Q["🔴 P1-S3-004<br/>Navigation<br/>0%"]
-    M --> R["🔴 P1-S3-007<br/>Sidebar Thumbnails<br/>0%"]
-
-    P --> Q
-
-    M --> S["🔴 P1-S5-001<br/>Annotation Models<br/>0%"]
-
-    S --> T["🔴 P1-S5-002<br/>Annotation Service<br/>0%"]
-    T --> U["🔴 P1-S5-003<br/>Highlight Feature<br/>0%"]
-    T --> V["🔴 P1-S5-004<br/>Text Notes<br/>0%"]
-    T --> W["🔴 P1-S5-005<br/>Drawing Tools<br/>0%"]
-    T --> X["🔴 P1-S5-006<br/>Annotations Panel<br/>0%"]
-
-    Q --> Y["🔴 P1-S7-001<br/>Delete Pages<br/>0%"]
-    R --> Z["🔴 P1-S7-002<br/>Reorder Pages<br/>0%"]
-    L --> AA["🔴 P1-S7-003<br/>Extract Pages<br/>0%"]
-
-    U --> AB["🔴 P1-S8-001<br/>Save PDF<br/>0%"]
-    AB --> AC["🔴 P1-S8-002<br/>Export Images<br/>0%"]
-    AB --> AD["🔴 P1-S8-003<br/>Auto-save<br/>0%"]
-
-    L --> AE["🔴 P1-S9-001<br/>Full Text Search<br/>0%"]
-    J --> AF["🔴 P1-S9-002<br/>Recent Files<br/>0%"]
+    J --> L["🔴 P1-S4-001<br/>Editing Overlay<br/>0%"]
+    L --> M["🔴 P1-S4-002<br/>Text/Image Editing<br/>0%"]
+    L --> N["🔴 P1-S4-003<br/>Undo/Redo History<br/>0%"]
 
     style A fill:#4caf50
     style B fill:#4caf50
+    style C fill:#4caf50
     style D fill:#4caf50
+    style E fill:#4caf50
+    style F fill:#4caf50
+    style G fill:#4caf50
     style H fill:#4caf50
     style I fill:#4caf50
     style J fill:#4caf50
-    style K fill:#4caf50
-    style F fill:#ff6b6b
-    style G fill:#ff6b6b
+    style K fill:#ff6b6b
     style L fill:#ff6b6b
     style M fill:#ff6b6b
     style N fill:#ff6b6b
-    style O fill:#ff6b6b
-    style P fill:#ff6b6b
-    style Q fill:#ff6b6b
-    style R fill:#ff6b6b
-    style S fill:#ff6b6b
-    style T fill:#ff6b6b
-    style U fill:#ff6b6b
-    style V fill:#ff6b6b
-    style W fill:#ff6b6b
-    style X fill:#ff6b6b
-    style Y fill:#ff6b6b
-    style Z fill:#ff6b6b
-    style AA fill:#ff6b6b
-    style AB fill:#ff6b6b
-    style AC fill:#ff6b6b
-    style AD fill:#ff6b6b
-    style AE fill:#ff6b6b
-    style AF fill:#ff6b6b
-```
-    style AB fill:#ffd700
-    style AC fill:#ffd700
-    style AD fill:#ffa500
-    style AE fill:#ffd700
-    style AF fill:#ffd700
-    style AG fill:#ff6b6b
-    style AH fill:#ffa500
-    style AI fill:#ffa500
-    style AJ fill:#ffa500
-    style AK fill:#ffa500
-    style AL fill:#ff6b6b
-    style AM fill:#ff6b6b
 ```
 
 ---
@@ -125,18 +70,18 @@ Critical Path: S1-001 → S1-002 → S1-003 → S2-003 → S2-004
 ### Sprint 3-4: PDF Core (Week 5-8)
 
 ```
-[░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 0% Complete
+[███████████████████░░░░░░░░░░░░░░░░░░░░░░░░] 43% Complete
 
 Tasks:
-- [ ] P1-S3-001: PDF.js Integration (3 days)
-- [ ] P1-S3-002: Viewer Component (2 days)
-- [ ] P1-S3-003: Toolbar Component (2 days)
+- [x] P1-S3-001: PDF.js Integration (3 days)
+- [x] P1-S3-002: Viewer Component (2 days)
+- [x] P1-S3-003: Toolbar Component (2 days)
 - [ ] P1-S3-004: Navigation (2 days)
 - [ ] P1-S3-005: Zoom (2 days)
 - [ ] P1-S3-006: Rotation (1 day)
 - [ ] P1-S3-007: Sidebar (2 days)
 
-Critical Path: S3-001 → S3-002 → (S3-003|S3-004|S3-005|S3-006|S3-007)
+Critical Path: S3-001 → S3-002 → (S3-004|S3-005|S3-006|S3-007)
 ```
 
 ### Sprint 5-6: Annotations (Week 9-12)
