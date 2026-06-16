@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "qa:test-headless-logged",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-ExecutionPolicy",
+				"Bypass",
+				"-Command",
+				"if (Test-Path test-run.log) { Remove-Item test-run.log -Force }; corepack pnpm install --no-frozen-lockfile --reporter=append-only *>&1 | Tee-Object -FilePath test-run.log -Append; corepack pnpm ng test --watch=false --browsers=ChromeHeadless --progress=false *>&1 | Tee-Object -FilePath test-run.log -Append; Write-Output \"DONE\" | Tee-Object -FilePath test-run.log -Append"
+			],
+			"isBackground": false
+		}
+	]
+}

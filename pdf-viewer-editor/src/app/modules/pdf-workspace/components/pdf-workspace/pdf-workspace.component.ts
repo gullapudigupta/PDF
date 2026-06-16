@@ -276,9 +276,7 @@ export class PdfWorkspaceComponent {
       return;
     }
 
-    const page = await this.pdfDocumentService.getPage(this.currentPage);
-
-    await this.pdfRenderService.renderPageToCanvas(page, canvas, {
+    await this.pdfRenderService.renderPageToCanvas(this.document.bytes, this.currentPage, canvas, {
       fitWidth: Math.max(100, host.clientWidth - 32),
       fitHeight: Math.max(100, host.clientHeight - 32),
       zoom: this.zoom,
