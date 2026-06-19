@@ -6,6 +6,19 @@ export interface RuntimeAdapter {
   getPlatform(): 'desktop' | 'extension';
 }
 
+function arrayBufferToBase64(data: ArrayBuffer): string {
+  const bytes = new Uint8Array(data);
+  const chunkSize = 0x8000;
+  let binary = '';
+
+  for (let index = 0; index < bytes.length; index += chunkSize) {
+    const chunk = bytes.subarray(index, index + chunkSize);
+    binary += String.fromCharCode(...chunk);
+  }
+
+  return btoa(binary);
+}
+
 export class DesktopRuntimeAdapter implements RuntimeAdapter {
   async openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string }> {
     const result = await (window as any).electronAPI.openFile();
@@ -21,7 +34,7 @@ export class DesktopRuntimeAdapter implements RuntimeAdapter {
   }
 
   async saveFileDialog(defaultName: string, data: ArrayBuffer): Promise<{ canceled: boolean; filePath?: string }> {
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(data)));
+    const base64 = arrayBufferToBase64(data);
     const result = await (window as any).electronAPI.saveFile(defaultName, base64);
     
     return result;
@@ -39,7 +52,7 @@ export class DesktopRuntimeAdapter implements RuntimeAdapter {
   }
 
   async writeFile(filePath: string, data: ArrayBuffer): Promise<void> {
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(data)));
+    const base64 = arrayBufferToBase64(data);
     const result = await (window as any).electronAPI.writeFile(filePath, base64);
     
     if (!result.success) {
@@ -77,16 +90,39 @@ export class ExtensionRuntimeAdapter implements RuntimeAdapter {
   }
 
   async saveFileDialog(defaultName: string, data: ArrayBuffer): Promise<{ canceled: boolean; filePath?: string }> {
+    const extensionApi = (globalThis as any).chrome ?? (globalThis as any).browser;
+
+    if (extensionApi?.runtime?.sendMessage) {
+      const payload = {
+        type: 'EXT_DOWNLOAD_PDF',
+        fileName: defaultName,
+        dataUrl: `data:application/pdf;base64,${arrayBufferToBase64(data)}`,
+      };
+
+      try {
+        const response = await extensionApi.runtime.sendMessage(payload);
+        if (response?.success) {
+          return { canceled: false, filePath: response.filePath ?? defaultName };
+        }
+
+        if (response?.error) {
+          throw new Error(response.error);
+        }
+      } catch {
+        // Fall through to anchor-based download fallback below.
+      }
+    }
+
     const blob = new Blob([data], { type: 'application/pdf' });
     const url = URL.createObjectURL(blob);
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = defaultName;
     a.click();
-    
-    URL.revokeObjectURL(url);
-    
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
     return { canceled: false, filePath: defaultName };
   }
 

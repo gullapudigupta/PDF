@@ -12,6 +12,7 @@ export interface LoadedPdfDocument {
 @Injectable({ providedIn: 'root' })
 export class PdfDocumentService {
   private currentDocument: LoadedPdfDocument | null = null;
+  private getDocument = pdfjsLib.getDocument.bind(pdfjsLib);
 
   constructor() {
     if (!pdfjsLib.GlobalWorkerOptions.workerSrc) {
@@ -25,10 +26,10 @@ export class PdfDocumentService {
 
     let proxy: any;
     try {
-      proxy = await pdfjsLib.getDocument({ data: bytes }).promise;
+      proxy = await this.getDocument({ data: bytes }).promise;
     } catch {
       pdfjsLib.GlobalWorkerOptions.workerSrc = 'assets/pdf.worker.min.js';
-      proxy = await pdfjsLib.getDocument({ data: bytes }).promise;
+      proxy = await this.getDocument({ data: bytes }).promise;
     }
 
     const loaded: LoadedPdfDocument = {

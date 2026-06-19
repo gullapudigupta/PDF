@@ -1,4 +1,3 @@
-import * as pdfjsLib from 'pdfjs-dist';
 import { PdfRenderService } from './pdf-render.service';
 
 describe('PdfRenderService', () => {
@@ -28,7 +27,7 @@ describe('PdfRenderService', () => {
       getPage: jasmine.createSpy().and.resolveTo(page),
     };
 
-    spyOn(pdfjsLib, 'getDocument').and.returnValue({ promise: Promise.resolve(doc as any) } as any);
+    spyOn<any>(service, 'getDocument').and.returnValue({ promise: Promise.resolve(doc as any) } as any);
 
     const canvas = document.createElement('canvas');
     const context = {
@@ -60,7 +59,7 @@ describe('PdfRenderService', () => {
       getPage: jasmine.createSpy().and.resolveTo(page),
     };
 
-    spyOn(pdfjsLib, 'getDocument').and.returnValue({ promise: Promise.resolve(doc as any) } as any);
+    spyOn<any>(service, 'getDocument').and.returnValue({ promise: Promise.resolve(doc as any) } as any);
 
     const canvas = document.createElement('canvas');
     spyOn(canvas, 'getContext').and.returnValue(null);
@@ -81,7 +80,7 @@ describe('PdfRenderService', () => {
       getPage: jasmine.createSpy().and.resolveTo(page),
     };
 
-    spyOn(pdfjsLib, 'getDocument').and.returnValue({ promise: Promise.resolve(doc as any) } as any);
+    spyOn<any>(service, 'getDocument').and.returnValue({ promise: Promise.resolve(doc as any) } as any);
 
     const text = await service.extractText(new Uint8Array([1]), 1);
     expect(text).toBe('A B');

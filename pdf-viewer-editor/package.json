@@ -1,6 +1,7 @@
 {
   "name": "pdf-viewer-editor",
   "version": "0.1.0",
+  "main": "electron/main.js",
   "private": true,
   "description": "PDF Viewer & Editor (Electron + Angular + WebExtensions)",
   "scripts": {
@@ -51,9 +52,10 @@
     "@angular/cli": "^22.0.0",
     "@angular/compiler-cli": "^22.0.0",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "^22.10.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
-    "electron": "^27.0.0",
+    "electron": "^27.3.11",
     "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
     "jasmine-core": "~5.1.0",
@@ -63,6 +65,23 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "prettier": "^3.2.0",
-    "typescript": "~5.5.0"
+    "typescript": "~6.0.0"
+  },
+  "build": {
+    "appId": "com.pdfviewer.editor",
+    "productName": "PDF Viewer Editor",
+    "electronDist": ".cache/electron-dist",
+    "directories": {
+      "output": "dist/electron"
+    },
+    "files": [
+      "dist/pdf-viewer-editor/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "dir",
+      "signAndEditExecutable": false
+    }
   }
 }

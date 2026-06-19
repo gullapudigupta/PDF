@@ -11,7 +11,13 @@ if (-not (Test-Path $ProjectDir)) {
 }
 
 if (Test-Path $LogFile) {
-  Remove-Item $LogFile -Force
+  try {
+    Clear-Content $LogFile -ErrorAction Stop
+  }
+  catch {
+    $stamp = Get-Date -Format 'yyyyMMddHHmmss'
+    $LogFile = [System.IO.Path]::Combine($ProjectDir, "install-for-tests-$stamp.log")
+  }
 }
 
 $env:PNPM_FETCH_TIMEOUT = '600000'
@@ -27,30 +33,9 @@ Write-Output "[install] started=$(Get-Date -Format o)" | Tee-Object -FilePath $L
 
 Push-Location $ProjectDir
 try {
-  $packagePath = Join-Path $ProjectDir 'package.json'
-  $packageBackupPath = Join-Path $ProjectDir 'package.json.install-tests.bak'
-
-  $pkg = Get-Content $packagePath -Raw | ConvertFrom-Json
-  if (Test-Path $packageBackupPath) {
-    Remove-Item $packageBackupPath -Force
-  }
-  Copy-Item $packagePath $packageBackupPath
-
-  if ($pkg.devDependencies.PSObject.Properties.Name -contains 'electron') {
-    $pkg.devDependencies.PSObject.Properties.Remove('electron')
-  }
-
-  if ($pkg.devDependencies.PSObject.Properties.Name -contains 'electron-builder') {
-    $pkg.devDependencies.PSObject.Properties.Remove('electron-builder')
-  }
-
-  if ($pkg.scripts.PSObject.Properties.Name -contains 'postinstall') {
-    $pkg.scripts.postinstall = 'echo postinstall skipped in install:tests'
-  }
-
-  ($pkg | ConvertTo-Json -Depth 20) | Set-Content -Path $packagePath -Encoding UTF8
-
   corepack pnpm config set store-dir $env:PNPM_STORE_DIR
+  corepack pnpm config set ignore-scripts true
+  corepack pnpm config set strict-dep-builds false
 
   # Install test/runtime deps while skipping optional heavy artifacts and lifecycle scripts.
   corepack pnpm install --prod=false --no-optional --ignore-scripts --reporter=append-only 2>&1 |
@@ -86,10 +71,5 @@ try {
   Write-Output "[install] exit_code=0" | Tee-Object -FilePath $LogFile -Append
 }
 finally {
-  $packagePath = Join-Path $ProjectDir 'package.json'
-  $packageBackupPath = Join-Path $ProjectDir 'package.json.install-tests.bak'
-  if (Test-Path $packageBackupPath) {
-    Move-Item -Path $packageBackupPath -Destination $packagePath -Force
-  }
   Pop-Location
 }

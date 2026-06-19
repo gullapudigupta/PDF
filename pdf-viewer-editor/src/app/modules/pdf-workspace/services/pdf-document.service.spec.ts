@@ -15,9 +15,7 @@ describe('PdfDocumentService', () => {
       destroy: jasmine.createSpy(),
     };
 
-    spyOn(pdfjsLib, 'getDocument').and.returnValue({
-      promise: Promise.resolve(fakeProxy as any),
-    } as any);
+    spyOn<any>(service, 'getDocument').and.returnValue({ promise: Promise.resolve(fakeProxy as any) } as any);
 
     const file = new File([new Uint8Array([1, 2, 3])], 'sample.pdf', { type: 'application/pdf' });
     const loaded = await service.loadFromFile(file);
@@ -31,7 +29,7 @@ describe('PdfDocumentService', () => {
     const fakeProxy = { numPages: 1, getPage: jasmine.createSpy(), destroy: jasmine.createSpy() };
     let callCount = 0;
 
-    spyOn(pdfjsLib, 'getDocument').and.callFake(() => {
+    spyOn<any>(service, 'getDocument').and.callFake(() => {
       callCount += 1;
       if (callCount === 1) {
         return { promise: Promise.reject(new Error('worker fail')) } as any;
@@ -53,7 +51,7 @@ describe('PdfDocumentService', () => {
       destroy: jasmine.createSpy(),
     };
 
-    spyOn(pdfjsLib, 'getDocument').and.returnValue({ promise: Promise.resolve(fakeProxy as any) } as any);
+    spyOn<any>(service, 'getDocument').and.returnValue({ promise: Promise.resolve(fakeProxy as any) } as any);
     await service.loadFromFile(new File([new Uint8Array([1])], 'single.pdf'));
 
     await expectAsync(service.getPage(2)).toBeRejectedWithError('Invalid page number: 2');
@@ -69,7 +67,7 @@ describe('PdfDocumentService', () => {
       destroy: jasmine.createSpy(),
     };
 
-    spyOn(pdfjsLib, 'getDocument').and.returnValue({ promise: Promise.resolve(fakeProxy as any) } as any);
+    spyOn<any>(service, 'getDocument').and.returnValue({ promise: Promise.resolve(fakeProxy as any) } as any);
     await service.loadFromFile(new File([new Uint8Array([1])], 'text.pdf'));
 
     const text = await service.extractText(1);

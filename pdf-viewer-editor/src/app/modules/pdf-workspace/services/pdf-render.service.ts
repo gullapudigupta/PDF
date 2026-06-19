@@ -10,13 +10,15 @@ export interface RenderOptions {
 
 @Injectable({ providedIn: 'root' })
 export class PdfRenderService {
+  private getDocument = pdfjsLib.getDocument.bind(pdfjsLib);
+
   async renderPageToCanvas(
     bytes: Uint8Array,
     pageNumber: number,
     canvas: HTMLCanvasElement,
     options: RenderOptions = {}
   ): Promise<void> {
-    const doc = await pdfjsLib.getDocument({ data: bytes }).promise;
+    const doc = await this.getDocument({ data: bytes }).promise;
     const page = await doc.getPage(pageNumber);
 
     const rotation = options.rotation ?? 0;
@@ -44,7 +46,7 @@ export class PdfRenderService {
   }
 
   async extractText(bytes: Uint8Array, pageNumber: number): Promise<string> {
-    const doc = await pdfjsLib.getDocument({ data: bytes }).promise;
+    const doc = await this.getDocument({ data: bytes }).promise;
     const page = await doc.getPage(pageNumber);
     const textContent = await page.getTextContent();
 

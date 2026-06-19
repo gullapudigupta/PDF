@@ -44,3 +44,4 @@ junit.xml
 
 # Husky / git hooks temporary
 .husky/_/
+/pdf-viewer-editor/.pnpm-store/v11
