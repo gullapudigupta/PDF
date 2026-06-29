@@ -2,6 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "rootDir": "..",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -28,7 +29,9 @@
       "@core/*": ["src/app/core/*"],
       "@shared/*": ["src/app/shared/*"],
       "@modules/*": ["src/app/modules/*"],
-      "@environments/*": ["src/environments/*"]
+      "@environments/*": ["src/environments/*"],
+      "@mobile-gallery-view": ["../mobile-gallery-view/src/index.ts"],
+      "@mobile-gallery-view/*": ["../mobile-gallery-view/src/*"]
     }
   },
   "angularCompilerOptions": {

@@ -4,8 +4,13 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'pdf-workspace',
+    redirectTo: 'mobile-gallery',
     pathMatch: 'full',
+  },
+  {
+    path: 'mobile-gallery',
+    loadChildren: () =>
+      import('./modules/mobile-gallery/mobile-gallery.module').then(m => m.MobileGalleryModule),
   },
   {
     path: 'pdf-workspace',

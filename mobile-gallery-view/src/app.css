@@ -1,0 +1,155 @@
+:root {
+  --bg-a: #f8fbff;
+  --bg-b: #eef6f7;
+  --bg-c: #fdf6ef;
+  --ink-900: #11283d;
+  --ink-700: #32506d;
+  --brand: #0f5e76;
+  --brand-2: #0b4f63;
+  --good: #0f7a35;
+  --bad: #b42318;
+  --card-border: #dbe8ef;
+  --card-bg: rgba(255, 255, 255, 0.9);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", "Trebuchet MS", system-ui, sans-serif;
+  color: var(--ink-900);
+  background: linear-gradient(160deg, var(--bg-a) 0%, var(--bg-b) 50%, var(--bg-c) 100%);
+}
+
+.app {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(22px, 4vw, 34px);
+}
+
+.hero p {
+  margin: 6px 0 0;
+  color: var(--ink-700);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+select,
+button {
+  border: 1px solid #9eb7c7;
+  border-radius: 10px;
+  padding: 8px 12px;
+  background: #fff;
+}
+
+button {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--brand-2);
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.card,
+.panel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.card h3,
+.panel h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.card p {
+  margin: 8px 0 0;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+ul {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+li {
+  display: grid;
+  grid-template-columns: 1.5fr auto auto;
+  gap: 8px;
+  align-items: center;
+  border-bottom: 1px solid #edf3f6;
+  padding-bottom: 8px;
+}
+
+li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.ok {
+  color: var(--good);
+}
+
+.bad {
+  color: var(--bad);
+}
+
+.error {
+  border-color: #f7c4c4;
+  color: var(--bad);
+}
+
+@media (max-width: 680px) {
+  .app {
+    padding: 12px;
+  }
+
+  li {
+    grid-template-columns: 1fr;
+  }
+}
