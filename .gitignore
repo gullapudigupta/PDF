@@ -45,3 +45,7 @@ junit.xml
 # Husky / git hooks temporary
 .husky/_/
 /pdf-viewer-editor/.pnpm-store/v11
+/.vs/pdf
+/.vs/slnx.sqlite
+/.vs/slnx.sqlite-journal
+/.vs/VSWorkspaceState.json
