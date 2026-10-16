@@ -1,5 +1,8 @@
 # PDF Viewer & Editor - Technology Quick Reference
 
+> Reference guidance only. Start execution and update progress through
+> [TASKS.md](TASKS.md).
+
 ## 🎯 RECOMMENDED STACK
 
 ```text

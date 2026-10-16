@@ -2,6 +2,11 @@
 
 ## Project Timeline & Phases
 
+> Planning context, not an execution or completion checklist. The canonical
+> sprint assignments and current statuses are in [TASKS.md](TASKS.md) and its
+> linked [agent task records](agent-tasks/README.md). This older roadmap groups
+> work differently; its unchecked boxes do not reset completed tasks.
+
 **Scope**: Desktop (`Electron + Angular`) + Browser Extensions (`Chrome`, `Edge`, `Firefox`, latest Chromium-based)  
 **Backend**: No mandatory backend (local-only persistence)
 

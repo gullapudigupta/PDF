@@ -1,0 +1,179 @@
+{
+  "phase": "phase2",
+  "name": "Phase 2 - Advanced Features",
+  "module": "processing-export",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P2-S13-001",
+      "name": "OCR for scanned PDFs",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-2",
+        "sprint-13"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 40,
+        "batch": 13,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 13,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 320,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P2-S13-001] OCR for scanned PDFs",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P2-S13-002",
+      "name": "OCR correction workflow and confidence UX",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-2",
+        "sprint-13"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 41,
+        "batch": 13,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 13,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 321,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P2-S13-002] OCR correction workflow and confidence UX",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P2-S15-001",
+      "name": "Advanced watermark/header/footer templates",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-2",
+        "sprint-15"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 44,
+        "batch": 15,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 15,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 324,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P2-S15-001] Advanced watermark/header/footer templates",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,5 +1,8 @@
 # Angular vs React for PDF Viewer & Editor - Detailed Analysis
 
+> Historical technology analysis, not an execution backlog. Follow
+> [TASKS.md](TASKS.md) for canonical task definitions and status.
+
 ## Executive Summary
 
 For this project, the implementation baseline is **Electron + Angular + TypeScript + WebExtensions**. This document provides a comparative framework discussion between Angular and React.

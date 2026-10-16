@@ -3,6 +3,10 @@
 **Project**: PDF Viewer & Editor  
 **Technology Stack**: Electron + Angular 22 + TypeScript 5 + WebExtensions  
 **Report Date**: December 2024  
+
+> Historical report retained for provenance. Counts, task labels, and next-work
+> suggestions below are not current execution instructions. Use
+> [TASKS.md](TASKS.md) and the [canonical registry](agent-tasks/README.md).
 **Branch**: features/mvp-phase1
 
 ---
@@ -409,4 +413,3 @@ The **PDF Viewer & Editor** project foundation is now **COMPLETE** and ready for
 **Report Generated**: December 2024  
 **Next Review**: After Sprint 3 completion  
 **Approved By**: Development Team
-

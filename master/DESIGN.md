@@ -7,6 +7,40 @@
 
 ---
 
+## Task Registry Migration Design (2026-10-16)
+
+The existing product design below is unchanged. Task planning follows the
+reference registry's canonical-domain/reference-only-index architecture:
+
+- `agent-tasks/<domain>/phaseN-tasks.json`: the only full task objects.
+- `agent-tasks/<domain>/meta.json` and `master_tasks_index.json`: derived summaries.
+- `agent-tasks/phaseN-tasks.json`: links to canonical objects, never copies.
+- `agent-tasks/meta.json` and `master_tasks_index.json`: project rollups.
+- `agent-tasks/source-snapshot.json`: immutable migration input and source hashes.
+- [TASKS.md](TASKS.md): generated execution entry point and migration checklist.
+- [CODE_COMPLETION_GRAPH.md](CODE_COMPLETION_GRAPH.md): generated Mermaid DAG,
+  with a sequence entry after each distinct synchronized task state.
+
+The local zero-dependency Node tool uses the reference schema's fields but does
+not run the external initializer/synchronizer: those scripts hard-code six phases,
+unrelated product directories, and requirements paths. This project has three
+product phases and logical task domains sharing the existing implementation.
+`modulePath` therefore points to the actual `pdf-viewer-editor` implementation.
+
+Import preserves completed status with `verification.status = not_reverified`;
+the old documentation is evidence of a claim, not a new passing test run.
+Unknown historical models/dates and backlog estimates remain null. Task records
+carry original source text, task/checklist provenance, and normalization notes.
+The source snapshot also retains the prior graph, whose reused IDs and names
+must not override canonical task definitions.
+
+The tool validates canonical records before deriving Markdown, indexes, and
+graph output; validation checks the rendered content against canonical data.
+Future direct JSON edits must be followed by synchronization and validation
+before execution continues through [TASKS.md](TASKS.md). Fresh completions
+require actual execution information, passed verification, artifacts, and
+completed prerequisites; inherited claims are explicitly exempt, not fabricated.
+
 ## 1. Architecture Overview
 
 ### 1.1 Platform Strategy

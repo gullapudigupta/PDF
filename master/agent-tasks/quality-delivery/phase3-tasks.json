@@ -1,0 +1,67 @@
+{
+  "phase": "phase3",
+  "name": "Phase 3 - Enterprise",
+  "module": "quality-delivery",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P3-S24-001",
+      "name": "Enterprise performance and scale tuning",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P2-S18-001"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-3",
+        "sprint-24"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 3,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 55,
+        "batch": 24,
+        "band": "phase-3",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 24,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 340,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P3-S24-001] Enterprise performance and scale tuning\r\n\r\n---",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P2-S18-001",
+            "reason": "Normalized release gate: stable v1.0 before enterprise implementation."
+          }
+        ]
+      }
+    }
+  ]
+}

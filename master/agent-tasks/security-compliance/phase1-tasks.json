@@ -1,0 +1,85 @@
+{
+  "phase": "phase1",
+  "name": "Phase 1 - MVP",
+  "module": "security-compliance",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P1-S8-002",
+      "name": "Metadata, Permissions, and Protection",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S6-003"
+      ],
+      "deliverables": [
+        "Edit metadata (title/author/subject/keywords)",
+        "Password protection and permission presets",
+        "Open authorized protected PDFs"
+      ],
+      "acceptanceCriteria": [
+        "Edit metadata (title/author/subject/keywords)",
+        "Password protection and permission presets",
+        "Open authorized protected PDFs"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-8"
+      ],
+      "module": "security-compliance",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 26,
+        "batch": 8,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 8,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 220,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S8-002] 🔴 Metadata, Permissions, and Protection\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S6-003]\r\n- [ ] Edit metadata (title/author/subject/keywords)\r\n- [ ] Password protection and permission presets\r\n- [ ] Open authorized protected PDFs",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Edit metadata (title/author/subject/keywords)"
+          },
+          {
+            "completed": false,
+            "text": "Password protection and permission presets"
+          },
+          {
+            "completed": false,
+            "text": "Open authorized protected PDFs"
+          }
+        ],
+        "declaredDependencyText": "[P1-S6-003]",
+        "declaredDependencies": [
+          "P1-S6-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    }
+  ]
+}

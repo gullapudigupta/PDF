@@ -1,0 +1,67 @@
+{
+  "phase": "phase3",
+  "name": "Phase 3 - Enterprise",
+  "module": "platform",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P3-S21-001",
+      "name": "Plugin architecture foundation",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P2-S18-001"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-3",
+        "sprint-21"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 3,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 52,
+        "batch": 21,
+        "band": "phase-3",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 21,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 337,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P3-S21-001] Plugin architecture foundation",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P2-S18-001",
+            "reason": "Normalized release gate: stable v1.0 before enterprise implementation."
+          }
+        ]
+      }
+    }
+  ]
+}

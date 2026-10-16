@@ -1,0 +1,859 @@
+{
+  "phase": "phase1",
+  "name": "Phase 1 - MVP",
+  "module": "viewer-editor",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P1-S3-001",
+      "name": "PDF.js Integration",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S2-001",
+        "P1-S2-004"
+      ],
+      "deliverables": [
+        "Implement `PdfDocumentService` + `PdfRenderService`",
+        "Configure worker and first-page render",
+        "Preserve aspect ratio in render pipeline"
+      ],
+      "acceptanceCriteria": [
+        "Implement `PdfDocumentService` + `PdfRenderService`",
+        "Configure worker and first-page render",
+        "Preserve aspect ratio in render pipeline"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-3"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 9,
+        "batch": 3,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 3,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 100,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S3-001] 🟢 PDF.js Integration\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S2-001], [P1-S2-004]\r\n- [x] Implement `PdfDocumentService` + `PdfRenderService`\r\n- [x] Configure worker and first-page render\r\n- [x] Preserve aspect ratio in render pipeline",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Implement `PdfDocumentService` + `PdfRenderService`"
+          },
+          {
+            "completed": true,
+            "text": "Configure worker and first-page render"
+          },
+          {
+            "completed": true,
+            "text": "Preserve aspect ratio in render pipeline"
+          }
+        ],
+        "declaredDependencyText": "[P1-S2-001], [P1-S2-004]",
+        "declaredDependencies": [
+          "P1-S2-001",
+          "P1-S2-004"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S3-002",
+      "name": "Viewer + Toolbar Core",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-001"
+      ],
+      "deliverables": [
+        "Build viewer canvas host and toolbar shell",
+        "Add open/save/search entry points",
+        "Add loading/error UI states"
+      ],
+      "acceptanceCriteria": [
+        "Build viewer canvas host and toolbar shell",
+        "Add open/save/search entry points",
+        "Add loading/error UI states"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-3"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 10,
+        "batch": 3,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 3,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 106,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S3-002] 🟢 Viewer + Toolbar Core\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S3-001]\r\n- [x] Build viewer canvas host and toolbar shell\r\n- [x] Add open/save/search entry points\r\n- [x] Add loading/error UI states",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Build viewer canvas host and toolbar shell"
+          },
+          {
+            "completed": true,
+            "text": "Add open/save/search entry points"
+          },
+          {
+            "completed": true,
+            "text": "Add loading/error UI states"
+          }
+        ],
+        "declaredDependencyText": "[P1-S3-001]",
+        "declaredDependencies": [
+          "P1-S3-001"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S3-003",
+      "name": "Navigation, Zoom, Rotation",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-002"
+      ],
+      "deliverables": [
+        "Implement page navigation actions",
+        "Implement zoom presets + custom zoom",
+        "Implement page rotation controls"
+      ],
+      "acceptanceCriteria": [
+        "Implement page navigation actions",
+        "Implement zoom presets + custom zoom",
+        "Implement page rotation controls"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-3"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 11,
+        "batch": 3,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 3,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 112,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S3-003] 🟢 Navigation, Zoom, Rotation\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S3-002]\r\n- [x] Implement page navigation actions\r\n- [x] Implement zoom presets + custom zoom\r\n- [x] Implement page rotation controls",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Implement page navigation actions"
+          },
+          {
+            "completed": true,
+            "text": "Implement zoom presets + custom zoom"
+          },
+          {
+            "completed": true,
+            "text": "Implement page rotation controls"
+          }
+        ],
+        "declaredDependencyText": "[P1-S3-002]",
+        "declaredDependencies": [
+          "P1-S3-002"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S3-004",
+      "name": "Thumbnails + Bookmarks Sidebar",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-001"
+      ],
+      "deliverables": [
+        "Generate thumbnail previews",
+        "Add virtualized list",
+        "Add bookmark navigation baseline"
+      ],
+      "acceptanceCriteria": [
+        "Generate thumbnail previews",
+        "Add virtualized list",
+        "Add bookmark navigation baseline"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-3"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 12,
+        "batch": 3,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 3,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 118,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S3-004] 🔴 Thumbnails + Bookmarks Sidebar\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S3-001]\r\n- [ ] Generate thumbnail previews\r\n- [ ] Add virtualized list\r\n- [ ] Add bookmark navigation baseline\r\n\r\n---\r\n\r\n## Sprint 4 - Editing Foundations",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Generate thumbnail previews"
+          },
+          {
+            "completed": false,
+            "text": "Add virtualized list"
+          },
+          {
+            "completed": false,
+            "text": "Add bookmark navigation baseline"
+          }
+        ],
+        "declaredDependencyText": "[P1-S3-001]",
+        "declaredDependencies": [
+          "P1-S3-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S4-001",
+      "name": "Editing Overlay and Selection Engine",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-002"
+      ],
+      "deliverables": [
+        "Add overlay layer for editable objects",
+        "Implement selection, move, resize handles",
+        "Add cut/copy/paste baseline"
+      ],
+      "acceptanceCriteria": [
+        "Add overlay layer for editable objects",
+        "Implement selection, move, resize handles",
+        "Add cut/copy/paste baseline"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 13,
+        "batch": 4,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 4,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 128,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S4-001] 🔴 Editing Overlay and Selection Engine\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S3-002]\r\n- [ ] Add overlay layer for editable objects\r\n- [ ] Implement selection, move, resize handles\r\n- [ ] Add cut/copy/paste baseline",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Add overlay layer for editable objects"
+          },
+          {
+            "completed": false,
+            "text": "Implement selection, move, resize handles"
+          },
+          {
+            "completed": false,
+            "text": "Add cut/copy/paste baseline"
+          }
+        ],
+        "declaredDependencyText": "[P1-S3-002]",
+        "declaredDependencies": [
+          "P1-S3-002"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S4-002",
+      "name": "Text and Image Editing (MVP Scope)",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S4-001"
+      ],
+      "deliverables": [
+        "Add text box create/edit/delete",
+        "Add image insert/move/resize/delete",
+        "Add link insertion and edit baseline"
+      ],
+      "acceptanceCriteria": [
+        "Add text box create/edit/delete",
+        "Add image insert/move/resize/delete",
+        "Add link insertion and edit baseline"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 14,
+        "batch": 4,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 4,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 134,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S4-002] 🔴 Text and Image Editing (MVP Scope)\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S4-001]\r\n- [ ] Add text box create/edit/delete\r\n- [ ] Add image insert/move/resize/delete\r\n- [ ] Add link insertion and edit baseline",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Add text box create/edit/delete"
+          },
+          {
+            "completed": false,
+            "text": "Add image insert/move/resize/delete"
+          },
+          {
+            "completed": false,
+            "text": "Add link insertion and edit baseline"
+          }
+        ],
+        "declaredDependencyText": "[P1-S4-001]",
+        "declaredDependencies": [
+          "P1-S4-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S4-003",
+      "name": "Undo/Redo Command History",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S4-001"
+      ],
+      "deliverables": [
+        "Implement `HistoryService`",
+        "Integrate with store actions",
+        "Add keyboard shortcuts"
+      ],
+      "acceptanceCriteria": [
+        "Implement `HistoryService`",
+        "Integrate with store actions",
+        "Add keyboard shortcuts"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 15,
+        "batch": 4,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 4,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 140,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S4-003] 🔴 Undo/Redo Command History\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S4-001]\r\n- [ ] Implement `HistoryService`\r\n- [ ] Integrate with store actions\r\n- [ ] Add keyboard shortcuts\r\n\r\n---\r\n\r\n## Sprint 5 - Annotation Layer",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Implement `HistoryService`"
+          },
+          {
+            "completed": false,
+            "text": "Integrate with store actions"
+          },
+          {
+            "completed": false,
+            "text": "Add keyboard shortcuts"
+          }
+        ],
+        "declaredDependencyText": "[P1-S4-001]",
+        "declaredDependencies": [
+          "P1-S4-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S8-001",
+      "name": "Full Text Search",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-001"
+      ],
+      "deliverables": [
+        "Index extracted text",
+        "Search with page navigation + highlight",
+        "Case-sensitive + regex modes"
+      ],
+      "acceptanceCriteria": [
+        "Index extracted text",
+        "Search with page navigation + highlight",
+        "Case-sensitive + regex modes"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-8"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 25,
+        "batch": 8,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 8,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 214,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S8-001] 🔴 Full Text Search\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S3-001]\r\n- [ ] Index extracted text\r\n- [ ] Search with page navigation + highlight\r\n- [ ] Case-sensitive + regex modes",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Index extracted text"
+          },
+          {
+            "completed": false,
+            "text": "Search with page navigation + highlight"
+          },
+          {
+            "completed": false,
+            "text": "Case-sensitive + regex modes"
+          }
+        ],
+        "declaredDependencyText": "[P1-S3-001]",
+        "declaredDependencies": [
+          "P1-S3-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S9-001",
+      "name": "Recent Files + Workspace Persistence",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S2-003"
+      ],
+      "deliverables": [
+        "Recent files CRUD and pinning",
+        "Restore last view state (page/zoom/theme)",
+        "Validate SQLite migration and fallback behavior"
+      ],
+      "acceptanceCriteria": [
+        "Recent files CRUD and pinning",
+        "Restore last view state (page/zoom/theme)",
+        "Validate SQLite migration and fallback behavior"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-9"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 28,
+        "batch": 9,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 9,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 235,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S9-001] 🔴 Recent Files + Workspace Persistence\r\n**Priority**: 🟡 Medium | **Duration**: 2 days | **Dependencies**: [P1-S2-003]\r\n- [ ] Recent files CRUD and pinning\r\n- [ ] Restore last view state (page/zoom/theme)\r\n- [ ] Validate SQLite migration and fallback behavior",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Recent files CRUD and pinning"
+          },
+          {
+            "completed": false,
+            "text": "Restore last view state (page/zoom/theme)"
+          },
+          {
+            "completed": false,
+            "text": "Validate SQLite migration and fallback behavior"
+          }
+        ],
+        "declaredDependencyText": "[P1-S2-003]",
+        "declaredDependencies": [
+          "P1-S2-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S9-002",
+      "name": "Accessibility and Keyboard Pass",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S5-003",
+        "P1-S8-001"
+      ],
+      "deliverables": [
+        "Keyboard navigation coverage",
+        "Contrast and focus states",
+        "Screen-reader label pass"
+      ],
+      "acceptanceCriteria": [
+        "Keyboard navigation coverage",
+        "Contrast and focus states",
+        "Screen-reader label pass"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-9"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 29,
+        "batch": 9,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 9,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 241,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S9-002] 🔴 Accessibility and Keyboard Pass\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S5-003], [P1-S8-001]\r\n- [ ] Keyboard navigation coverage\r\n- [ ] Contrast and focus states\r\n- [ ] Screen-reader label pass",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Keyboard navigation coverage"
+          },
+          {
+            "completed": false,
+            "text": "Contrast and focus states"
+          },
+          {
+            "completed": false,
+            "text": "Screen-reader label pass"
+          }
+        ],
+        "declaredDependencyText": "[P1-S5-003], [P1-S8-001]",
+        "declaredDependencies": [
+          "P1-S5-003",
+          "P1-S8-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S9-003",
+      "name": "UI Customization and Localization Baseline",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 8,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-002"
+      ],
+      "deliverables": [
+        "Toolbar customization baseline",
+        "Tooltip/help baseline",
+        "i18n scaffolding"
+      ],
+      "acceptanceCriteria": [
+        "Toolbar customization baseline",
+        "Tooltip/help baseline",
+        "i18n scaffolding"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-9"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 30,
+        "batch": 9,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 9,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 247,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S9-003] 🔴 UI Customization and Localization Baseline\r\n**Priority**: 🟡 Medium | **Duration**: 1 day | **Dependencies**: [P1-S3-002]\r\n- [ ] Toolbar customization baseline\r\n- [ ] Tooltip/help baseline\r\n- [ ] i18n scaffolding\r\n\r\n---\r\n\r\n## Sprint 10 - Browser Extension Productization",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Toolbar customization baseline"
+          },
+          {
+            "completed": false,
+            "text": "Tooltip/help baseline"
+          },
+          {
+            "completed": false,
+            "text": "i18n scaffolding"
+          }
+        ],
+        "declaredDependencyText": "[P1-S3-002]",
+        "declaredDependencies": [
+          "P1-S3-002"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 1,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    }
+  ]
+}

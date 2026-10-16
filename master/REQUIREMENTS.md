@@ -1,3 +1,25 @@
+## Task Registry Migration Requirements (2026-10-16)
+
+- Migrate every task definition and the execution log from the original
+  [TASKS.md](TASKS.md), retaining IDs, names, checklists, priorities, durations,
+  declared dependencies, and reported completion state.
+- Use the reference agent-task schema: canonical domain/phase JSON records,
+  per-domain metadata/indexes, root metadata/index, and reference-only phase files.
+  Retain this project's phases 1-3 rather than inventing reference-project phases.
+- Keep [TASKS.md](TASKS.md) as the sole execution entry point. Regenerate it,
+  indexes, and the completion graph after successful task updates.
+- Preserve source snapshots and reconcile older graph/roadmap/report references
+  without treating contradictory historical checklists as new task definitions.
+- Distinguish inherited completion claims from freshly verified work. Do not
+  invent execution dates, models, test results, or estimates for sparse backlog items.
+- Record narrative dependency gates explicitly; no Phase 2/3 implementation may
+  bypass earlier release acceptance. Keep declared and newly normalized links
+  distinguishable.
+- Validate uniqueness, required fields, dependency existence/order/cycles, source
+  coverage, rollup totals, reference-only indexes, and graph/index synchronization.
+- All migration files and tooling stay in [master](.). Product implementation,
+  installed dependencies, and the external reference project remain unchanged.
+
 ## Project Overview
 # PDF Viewer and Editor - Project Requirements
 
@@ -30,7 +52,7 @@ This model covers all PDF-related entries in the provided master list.
 - Support large documents (100MB+ target for MVP; scalable architecture for larger)
 - Multi-page navigation (first/last/next/prev/go-to)
 - Zoom (fit page, fit width, custom)
-- Rotation (0°, 90°, 180°, 270°)
+- Rotation (0ï¿½, 90ï¿½, 180ï¿½, 270ï¿½)
 - Text search with result navigation and highlighting
 - Text search supports case-sensitive and regex modes
 - Bookmarks/outline navigation
@@ -184,7 +206,7 @@ This model covers all PDF-related entries in the provided master list.
 ## 6. INTEGRATIONS & EXTENSIBILITY
 
 ### 6.1 System Integration
-- File explorer “Open with”
+- File explorer ï¿½Open withï¿½
 - Default app association (optional)
 - Command-line arguments
 - Drag-and-drop opening

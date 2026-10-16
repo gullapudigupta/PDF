@@ -1,0 +1,67 @@
+{
+  "phase": "phase2",
+  "name": "Phase 2 - Advanced Features",
+  "module": "quality-delivery",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P2-S18-001",
+      "name": "Stability + v1.0 release hardening",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-2",
+        "sprint-18"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 49,
+        "batch": 18,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 18,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 329,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P2-S18-001] Stability + v1.0 release hardening\r\n\r\n---",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          }
+        ]
+      }
+    }
+  ]
+}

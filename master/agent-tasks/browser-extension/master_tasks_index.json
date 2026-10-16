@@ -1,0 +1,65 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "module": "browser-extension",
+    "executionEntryPoint": "../../TASKS.md"
+  },
+  "phases": [
+    {
+      "phase": "phase1",
+      "file": "./phase1-tasks.json",
+      "totalTasks": 3,
+      "statusSummary": {
+        "pending": 3,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 48,
+      "unestimatedTasks": 0,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P1-S10-001",
+        "P1-S10-002",
+        "P1-S10-003"
+      ]
+    }
+  ],
+  "progressTracking": {
+    "totalTasks": 3,
+    "statusSummary": {
+      "pending": 3,
+      "in_progress": 0,
+      "completed": 0,
+      "blocked": 0,
+      "cancelled": 0
+    },
+    "completedTasks": 0,
+    "completionPercentage": "0%",
+    "totalEstimatedHours": 48,
+    "unestimatedTasks": 0,
+    "inheritedUnverifiedCompletions": 0,
+    "taskIds": [
+      "P1-S10-001",
+      "P1-S10-002",
+      "P1-S10-003"
+    ]
+  },
+  "tasks": [
+    {
+      "taskId": "P1-S10-001",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S10-002",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S10-003",
+      "canonicalFile": "./phase1-tasks.json"
+    }
+  ]
+}

@@ -4,6 +4,14 @@
 **Last Updated**: June 16, 2026  
 **Status**: All Documentation in Master Folder
 
+## Canonical Task Registry (2026-10-16)
+
+Execute only from [TASKS.md](TASKS.md). Canonical task records now live in
+[agent-tasks](agent-tasks); see the [registry guide](agent-tasks/README.md),
+[master index](agent-tasks/master_tasks_index.json), and generated
+[completion graph](CODE_COMPLETION_GRAPH.md). Source snapshots retain older
+task labels and completion claims without treating them as new verification.
+
 ---
 
 ## 📑 Complete Documentation Map
@@ -46,7 +54,7 @@
 ### 📊 Phase 3: Implementation Planning
 
 7. **[TASKS.md](TASKS.md)** ⭐ PRIMARY EXECUTION DOCUMENT
-   - Sprint-by-sprint execution plan
+   - Migration checklist and phase/sprint task execution entry point
    - Desktop and extension implementation tracks
    - Priority and dependency mapping
 
@@ -110,8 +118,10 @@
 ## 🔄 Update Workflow
 
 After each completed task:
-1. Update `TASKS.md`
-2. Update `CODE_COMPLETION_GRAPH.md`
+1. Update the canonical task JSON linked from [TASKS.md](TASKS.md)
+2. Run `node .\master\tools\task-registry.cjs sync` and
+   `node .\master\tools\task-registry.cjs validate` to update
+   [TASKS.md](TASKS.md), indexes, and [CODE_COMPLETION_GRAPH.md](CODE_COMPLETION_GRAPH.md)
 3. Update `DESIGN.md` if architecture changed
 4. Update `REQUIREMENTS.md` if scope changed
 

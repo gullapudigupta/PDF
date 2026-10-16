@@ -1,0 +1,229 @@
+{
+  "phase": "phase1",
+  "name": "Phase 1 - MVP",
+  "module": "browser-extension",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P1-S10-001",
+      "name": "Extension PDF Open/Edit Flow",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S2-002",
+        "P1-S6-003"
+      ],
+      "deliverables": [
+        "Open PDF from browser context/menu",
+        "Render/edit flow in extension surface",
+        "Save/download flow in extension runtime"
+      ],
+      "acceptanceCriteria": [
+        "Open PDF from browser context/menu",
+        "Render/edit flow in extension surface",
+        "Save/download flow in extension runtime"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-10"
+      ],
+      "module": "browser-extension",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 31,
+        "batch": 10,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 10,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 257,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S10-001] 🔴 Extension PDF Open/Edit Flow\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S2-002], [P1-S6-003]\r\n- [ ] Open PDF from browser context/menu\r\n- [ ] Render/edit flow in extension surface\r\n- [ ] Save/download flow in extension runtime",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Open PDF from browser context/menu"
+          },
+          {
+            "completed": false,
+            "text": "Render/edit flow in extension surface"
+          },
+          {
+            "completed": false,
+            "text": "Save/download flow in extension runtime"
+          }
+        ],
+        "declaredDependencyText": "[P1-S2-002], [P1-S6-003]",
+        "declaredDependencies": [
+          "P1-S2-002",
+          "P1-S6-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S10-002",
+      "name": "Cross-Browser Compatibility Pass",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S10-001"
+      ],
+      "deliverables": [
+        "Validate Chrome + Edge (MV3)",
+        "Validate Firefox variant",
+        "Validate latest Chromium-based install path"
+      ],
+      "acceptanceCriteria": [
+        "Validate Chrome + Edge (MV3)",
+        "Validate Firefox variant",
+        "Validate latest Chromium-based install path"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-10"
+      ],
+      "module": "browser-extension",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 32,
+        "batch": 10,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 10,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 263,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S10-002] 🔴 Cross-Browser Compatibility Pass\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S10-001]\r\n- [ ] Validate Chrome + Edge (MV3)\r\n- [ ] Validate Firefox variant\r\n- [ ] Validate latest Chromium-based install path",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Validate Chrome + Edge (MV3)"
+          },
+          {
+            "completed": false,
+            "text": "Validate Firefox variant"
+          },
+          {
+            "completed": false,
+            "text": "Validate latest Chromium-based install path"
+          }
+        ],
+        "declaredDependencyText": "[P1-S10-001]",
+        "declaredDependencies": [
+          "P1-S10-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S10-003",
+      "name": "Extension Permission Hardening",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 8,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S10-001"
+      ],
+      "deliverables": [
+        "Enforce least-privilege permissions",
+        "Add permission documentation and audit checklist"
+      ],
+      "acceptanceCriteria": [
+        "Enforce least-privilege permissions",
+        "Add permission documentation and audit checklist"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-10"
+      ],
+      "module": "browser-extension",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 33,
+        "batch": 10,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 10,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 269,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S10-003] 🔴 Extension Permission Hardening\r\n**Priority**: 🟠 High | **Duration**: 1 day | **Dependencies**: [P1-S10-001]\r\n- [ ] Enforce least-privilege permissions\r\n- [ ] Add permission documentation and audit checklist\r\n\r\n---\r\n\r\n## Sprint 11 - Quality Engineering",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Enforce least-privilege permissions"
+          },
+          {
+            "completed": false,
+            "text": "Add permission documentation and audit checklist"
+          }
+        ],
+        "declaredDependencyText": "[P1-S10-001]",
+        "declaredDependencies": [
+          "P1-S10-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 1,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    }
+  ]
+}

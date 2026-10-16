@@ -1,5 +1,8 @@
 # PDF Viewer and Editor - Technology & Language Recommendations
 
+> Technology planning context, not an execution backlog. Current task scope
+> and status are maintained through [TASKS.md](TASKS.md).
+
 ## Executive Summary
 
 Based on the updated scope (desktop + browser extension delivery with no mandatory backend), the recommended stack remains:

@@ -1,0 +1,693 @@
+{
+  "phase": "phase1",
+  "name": "Phase 1 - MVP",
+  "module": "platform",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P1-S1-001",
+      "name": "Environment Setup",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [],
+      "deliverables": [
+        "Node.js 20 LTS installed",
+        "Angular CLI 22 installed",
+        "Repo + hooks + editor baseline configured"
+      ],
+      "acceptanceCriteria": [
+        "Node.js 20 LTS installed",
+        "Angular CLI 22 installed",
+        "Repo + hooks + editor baseline configured"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-1"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 1,
+        "batch": 1,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 1,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 40,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S1-001] 🟢 Environment Setup\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: None\r\n- [x] Node.js 20 LTS installed\r\n- [x] Angular CLI 22 installed\r\n- [x] Repo + hooks + editor baseline configured",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Node.js 20 LTS installed"
+          },
+          {
+            "completed": true,
+            "text": "Angular CLI 22 installed"
+          },
+          {
+            "completed": true,
+            "text": "Repo + hooks + editor baseline configured"
+          }
+        ],
+        "declaredDependencyText": "None",
+        "declaredDependencies": [],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S1-002",
+      "name": "Workspace Initialization",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-001"
+      ],
+      "deliverables": [
+        "Initialize Angular workspace and Electron shell",
+        "Install Angular Material, NgRx, PDF.js, pdf-lib",
+        "Configure strict TypeScript + ESLint + Prettier",
+        "Add run/build scripts for desktop and extension targets"
+      ],
+      "acceptanceCriteria": [
+        "Initialize Angular workspace and Electron shell",
+        "Install Angular Material, NgRx, PDF.js, pdf-lib",
+        "Configure strict TypeScript + ESLint + Prettier",
+        "Add run/build scripts for desktop and extension targets"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-1"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 2,
+        "batch": 1,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 1,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 46,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S1-002] 🟢 Workspace Initialization\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S1-001]\r\n- [x] Initialize Angular workspace and Electron shell\r\n- [x] Install Angular Material, NgRx, PDF.js, pdf-lib\r\n- [x] Configure strict TypeScript + ESLint + Prettier\r\n- [x] Add run/build scripts for desktop and extension targets",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Initialize Angular workspace and Electron shell"
+          },
+          {
+            "completed": true,
+            "text": "Install Angular Material, NgRx, PDF.js, pdf-lib"
+          },
+          {
+            "completed": true,
+            "text": "Configure strict TypeScript + ESLint + Prettier"
+          },
+          {
+            "completed": true,
+            "text": "Add run/build scripts for desktop and extension targets"
+          }
+        ],
+        "declaredDependencyText": "[P1-S1-001]",
+        "declaredDependencies": [
+          "P1-S1-001"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S1-003",
+      "name": "Architecture Skeleton",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-002"
+      ],
+      "deliverables": [
+        "Create `core`, `shared`, `modules/pdf-workspace` structure",
+        "Add runtime adapter interfaces (desktop/extension)",
+        "Add placeholder services/components/store files"
+      ],
+      "acceptanceCriteria": [
+        "Create `core`, `shared`, `modules/pdf-workspace` structure",
+        "Add runtime adapter interfaces (desktop/extension)",
+        "Add placeholder services/components/store files"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-1"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 3,
+        "batch": 1,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 1,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 53,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S1-003] 🟢 Architecture Skeleton\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S1-002]\r\n- [x] Create `core`, `shared`, `modules/pdf-workspace` structure\r\n- [x] Add runtime adapter interfaces (desktop/extension)\r\n- [x] Add placeholder services/components/store files",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Create `core`, `shared`, `modules/pdf-workspace` structure"
+          },
+          {
+            "completed": true,
+            "text": "Add runtime adapter interfaces (desktop/extension)"
+          },
+          {
+            "completed": true,
+            "text": "Add placeholder services/components/store files"
+          }
+        ],
+        "declaredDependencyText": "[P1-S1-002]",
+        "declaredDependencies": [
+          "P1-S1-002"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S1-004",
+      "name": "Requirements Traceability Matrix",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-003"
+      ],
+      "deliverables": [
+        "Create normalized matrix (`raw phrase -> action/target/phase`)",
+        "Map PDF + extension requirements",
+        "Tag MVP vs Phase 2 vs Phase 3",
+        "Add QA test-case IDs"
+      ],
+      "acceptanceCriteria": [
+        "Create normalized matrix (`raw phrase -> action/target/phase`)",
+        "Map PDF + extension requirements",
+        "Tag MVP vs Phase 2 vs Phase 3",
+        "Add QA test-case IDs"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-1"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 4,
+        "batch": 1,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 1,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 59,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S1-004] 🔴 Requirements Traceability Matrix\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S1-003]\r\n- [ ] Create normalized matrix (`raw phrase -> action/target/phase`)\r\n- [ ] Map PDF + extension requirements\r\n- [ ] Tag MVP vs Phase 2 vs Phase 3\r\n- [ ] Add QA test-case IDs\r\n\r\n---\r\n\r\n## Sprint 2 - Core Platform and Persistence",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Create normalized matrix (`raw phrase -> action/target/phase`)"
+          },
+          {
+            "completed": false,
+            "text": "Map PDF + extension requirements"
+          },
+          {
+            "completed": false,
+            "text": "Tag MVP vs Phase 2 vs Phase 3"
+          },
+          {
+            "completed": false,
+            "text": "Add QA test-case IDs"
+          }
+        ],
+        "declaredDependencyText": "[P1-S1-003]",
+        "declaredDependencies": [
+          "P1-S1-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S2-001",
+      "name": "Electron Secure IPC Layer",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-002"
+      ],
+      "deliverables": [
+        "Implement preload allowlist API",
+        "Add validated channels for open/read/save dialogs",
+        "Add secure error propagation and logging"
+      ],
+      "acceptanceCriteria": [
+        "Implement preload allowlist API",
+        "Add validated channels for open/read/save dialogs",
+        "Add secure error propagation and logging"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-2"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 5,
+        "batch": 2,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 2,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 70,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S2-001] 🟢 Electron Secure IPC Layer\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S1-002]\r\n- [x] Implement preload allowlist API\r\n- [x] Add validated channels for open/read/save dialogs\r\n- [x] Add secure error propagation and logging",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Implement preload allowlist API"
+          },
+          {
+            "completed": true,
+            "text": "Add validated channels for open/read/save dialogs"
+          },
+          {
+            "completed": true,
+            "text": "Add secure error propagation and logging"
+          }
+        ],
+        "declaredDependencyText": "[P1-S1-002]",
+        "declaredDependencies": [
+          "P1-S1-002"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S2-002",
+      "name": "Browser Extension Runtime Baseline",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-002"
+      ],
+      "deliverables": [
+        "Add extension manifests (Chrome/Edge MV3 + Firefox variant)",
+        "Create background/service worker skeleton",
+        "Add popup/entry UI bootstrap",
+        "Implement extension messaging bridge service"
+      ],
+      "acceptanceCriteria": [
+        "Add extension manifests (Chrome/Edge MV3 + Firefox variant)",
+        "Create background/service worker skeleton",
+        "Add popup/entry UI bootstrap",
+        "Implement extension messaging bridge service"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-2"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 6,
+        "batch": 2,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 2,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 76,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S2-002] 🟢 Browser Extension Runtime Baseline\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S1-002]\r\n- [x] Add extension manifests (Chrome/Edge MV3 + Firefox variant)\r\n- [x] Create background/service worker skeleton\r\n- [x] Add popup/entry UI bootstrap\r\n- [x] Implement extension messaging bridge service",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Add extension manifests (Chrome/Edge MV3 + Firefox variant)"
+          },
+          {
+            "completed": true,
+            "text": "Create background/service worker skeleton"
+          },
+          {
+            "completed": true,
+            "text": "Add popup/entry UI bootstrap"
+          },
+          {
+            "completed": true,
+            "text": "Implement extension messaging bridge service"
+          }
+        ],
+        "declaredDependencyText": "[P1-S1-002]",
+        "declaredDependencies": [
+          "P1-S1-002"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S2-003",
+      "name": "No-Backend Persistence Layer",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-003"
+      ],
+      "deliverables": [
+        "Implement `PersistenceService` contract",
+        "Implement `LocalStoragePersistenceAdapter` for desktop",
+        "Implement `IndexedDBPersistenceAdapter` for extension runtime",
+        "Implement autosave and recent files support"
+      ],
+      "acceptanceCriteria": [
+        "Implement `PersistenceService` contract",
+        "Implement `LocalStoragePersistenceAdapter` for desktop",
+        "Implement `IndexedDBPersistenceAdapter` for extension runtime",
+        "Implement autosave and recent files support"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-2"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 7,
+        "batch": 2,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 2,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 83,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S2-003] 🟢 No-Backend Persistence Layer\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S1-003]\r\n- [x] Implement `PersistenceService` contract\r\n- [x] Implement `LocalStoragePersistenceAdapter` for desktop\r\n- [x] Implement `IndexedDBPersistenceAdapter` for extension runtime\r\n- [x] Implement autosave and recent files support",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Implement `PersistenceService` contract"
+          },
+          {
+            "completed": true,
+            "text": "Implement `LocalStoragePersistenceAdapter` for desktop"
+          },
+          {
+            "completed": true,
+            "text": "Implement `IndexedDBPersistenceAdapter` for extension runtime"
+          },
+          {
+            "completed": true,
+            "text": "Implement autosave and recent files support"
+          }
+        ],
+        "declaredDependencyText": "[P1-S1-003]",
+        "declaredDependencies": [
+          "P1-S1-003"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S2-004",
+      "name": "NgRx Workspace Store Foundation",
+      "status": "COMPLETED",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-003"
+      ],
+      "deliverables": [
+        "Create workspace state/actions/reducer/selectors/effects",
+        "Add runtime slice (`desktop`/`extension`)",
+        "Configure devtools for development mode"
+      ],
+      "acceptanceCriteria": [
+        "Create workspace state/actions/reducer/selectors/effects",
+        "Add runtime slice (`desktop`/`extension`)",
+        "Configure devtools for development mode"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-2"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 8,
+        "batch": 2,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": 2,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 90,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S2-004] 🟢 NgRx Workspace Store Foundation\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S1-003]\r\n- [x] Create workspace state/actions/reducer/selectors/effects\r\n- [x] Add runtime slice (`desktop`/`extension`)\r\n- [x] Configure devtools for development mode\r\n\r\n---\r\n\r\n## Sprint 3 - PDF Loading and Rendering",
+        "checklist": [
+          {
+            "completed": true,
+            "text": "Create workspace state/actions/reducer/selectors/effects"
+          },
+          {
+            "completed": true,
+            "text": "Add runtime slice (`desktop`/`extension`)"
+          },
+          {
+            "completed": true,
+            "text": "Configure devtools for development mode"
+          }
+        ],
+        "declaredDependencyText": "[P1-S1-003]",
+        "declaredDependencies": [
+          "P1-S1-003"
+        ],
+        "reportedStatus": "COMPLETED",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    }
+  ]
+}

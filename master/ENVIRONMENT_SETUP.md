@@ -1,5 +1,8 @@
 # Environment Setup Guide
 
+> Setup guidance for the task linked from [TASKS.md](TASKS.md).
+> This guide does not override canonical task status or verification.
+
 This guide covers task `P1-S1-001` prerequisites for the PDF Viewer & Editor project.
 
 ## 1) Install Node.js 20 LTS

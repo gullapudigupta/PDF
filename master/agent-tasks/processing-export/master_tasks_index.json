@@ -1,0 +1,139 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "module": "processing-export",
+    "executionEntryPoint": "../../TASKS.md"
+  },
+  "phases": [
+    {
+      "phase": "phase1",
+      "file": "./phase1-tasks.json",
+      "totalTasks": 4,
+      "statusSummary": {
+        "pending": 4,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 80,
+      "unestimatedTasks": 0,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P1-S6-001",
+        "P1-S6-002",
+        "P1-S6-003",
+        "P1-S8-003"
+      ]
+    },
+    {
+      "phase": "phase2",
+      "file": "./phase2-tasks.json",
+      "totalTasks": 3,
+      "statusSummary": {
+        "pending": 3,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 0,
+      "unestimatedTasks": 3,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P2-S13-001",
+        "P2-S13-002",
+        "P2-S15-001"
+      ]
+    },
+    {
+      "phase": "phase3",
+      "file": "./phase3-tasks.json",
+      "totalTasks": 2,
+      "statusSummary": {
+        "pending": 2,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 0,
+      "unestimatedTasks": 2,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P3-S20-001",
+        "P3-S22-001"
+      ]
+    }
+  ],
+  "progressTracking": {
+    "totalTasks": 9,
+    "statusSummary": {
+      "pending": 9,
+      "in_progress": 0,
+      "completed": 0,
+      "blocked": 0,
+      "cancelled": 0
+    },
+    "completedTasks": 0,
+    "completionPercentage": "0%",
+    "totalEstimatedHours": 80,
+    "unestimatedTasks": 5,
+    "inheritedUnverifiedCompletions": 0,
+    "taskIds": [
+      "P1-S6-001",
+      "P1-S6-002",
+      "P1-S6-003",
+      "P1-S8-003",
+      "P2-S13-001",
+      "P2-S13-002",
+      "P2-S15-001",
+      "P3-S20-001",
+      "P3-S22-001"
+    ]
+  },
+  "tasks": [
+    {
+      "taskId": "P1-S6-001",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S6-002",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S6-003",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S8-003",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P2-S13-001",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P2-S13-002",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P2-S15-001",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P3-S20-001",
+      "canonicalFile": "./phase3-tasks.json"
+    },
+    {
+      "taskId": "P3-S22-001",
+      "canonicalFile": "./phase3-tasks.json"
+    }
+  ]
+}

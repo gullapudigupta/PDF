@@ -1,5 +1,9 @@
 # Sprint 1-2 Completion Summary
 
+> Historical completion claims, not a fresh verification result. Use
+> [TASKS.md](TASKS.md) and the [canonical registry](agent-tasks/README.md)
+> for task status and execution; older progress figures below are archival.
+
 **Date Completed**: December 2024  
 **Sprint**: Sprint 1-2 (Foundation)  
 **Overall Progress**: 35% of Phase 1 Foundation Complete

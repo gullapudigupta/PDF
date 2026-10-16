@@ -1,0 +1,67 @@
+{
+  "phase": "phase2",
+  "name": "Phase 2 - Advanced Features",
+  "module": "forms-signatures",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P2-S14-001",
+      "name": "Advanced form designer (conditional/formula/payment)",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-2",
+        "sprint-14"
+      ],
+      "module": "forms-signatures",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 42,
+        "batch": 14,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 14,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 322,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P2-S14-001] Advanced form designer (conditional/formula/payment)",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          }
+        ]
+      }
+    }
+  ]
+}

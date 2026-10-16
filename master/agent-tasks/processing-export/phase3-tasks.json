@@ -1,0 +1,123 @@
+{
+  "phase": "phase3",
+  "name": "Phase 3 - Enterprise",
+  "module": "processing-export",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P3-S20-001",
+      "name": "Batch operations (bulk merge/split/convert/protect)",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P2-S18-001"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-3",
+        "sprint-20"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 3,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 51,
+        "batch": 20,
+        "band": "phase-3",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 20,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 336,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P3-S20-001] Batch operations (bulk merge/split/convert/protect)",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P2-S18-001",
+            "reason": "Normalized release gate: stable v1.0 before enterprise implementation."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P3-S22-001",
+      "name": "Advanced conversion pipelines",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P2-S18-001"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-3",
+        "sprint-22"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 3,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 53,
+        "batch": 22,
+        "band": "phase-3",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 22,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 338,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P3-S22-001] Advanced conversion pipelines",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P2-S18-001",
+            "reason": "Normalized release gate: stable v1.0 before enterprise implementation."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,307 @@
+{
+  "phase": "phase1",
+  "name": "Phase 1 - MVP",
+  "module": "processing-export",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P1-S6-001",
+      "name": "Page Insert/Delete/Reorder",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-004",
+        "P1-S4-003"
+      ],
+      "deliverables": [
+        "Delete page with confirmation",
+        "Reorder pages via drag-drop",
+        "Insert page(s) workflow"
+      ],
+      "acceptanceCriteria": [
+        "Delete page with confirmation",
+        "Reorder pages via drag-drop",
+        "Insert page(s) workflow"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-6"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 19,
+        "batch": 6,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 6,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 171,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S6-001] 🔴 Page Insert/Delete/Reorder\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S3-004], [P1-S4-003]\r\n- [ ] Delete page with confirmation\r\n- [ ] Reorder pages via drag-drop\r\n- [ ] Insert page(s) workflow",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Delete page with confirmation"
+          },
+          {
+            "completed": false,
+            "text": "Reorder pages via drag-drop"
+          },
+          {
+            "completed": false,
+            "text": "Insert page(s) workflow"
+          }
+        ],
+        "declaredDependencyText": "[P1-S3-004], [P1-S4-003]",
+        "declaredDependencies": [
+          "P1-S3-004",
+          "P1-S4-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S6-002",
+      "name": "Page Extract/Split/Merge",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S6-001"
+      ],
+      "deliverables": [
+        "Extract page ranges to new PDF",
+        "Merge multiple PDFs",
+        "Split by page range"
+      ],
+      "acceptanceCriteria": [
+        "Extract page ranges to new PDF",
+        "Merge multiple PDFs",
+        "Split by page range"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-6"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 20,
+        "batch": 6,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 6,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 177,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S6-002] 🔴 Page Extract/Split/Merge\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S6-001]\r\n- [ ] Extract page ranges to new PDF\r\n- [ ] Merge multiple PDFs\r\n- [ ] Split by page range",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Extract page ranges to new PDF"
+          },
+          {
+            "completed": false,
+            "text": "Merge multiple PDFs"
+          },
+          {
+            "completed": false,
+            "text": "Split by page range"
+          }
+        ],
+        "declaredDependencyText": "[P1-S6-001]",
+        "declaredDependencies": [
+          "P1-S6-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S6-003",
+      "name": "Save/Save As/Autosave/Recovery",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S4-003",
+        "P1-S6-001",
+        "P1-S2-003"
+      ],
+      "deliverables": [
+        "Consolidate edited state to `pdf-lib` output",
+        "Save + Save As workflows",
+        "Autosave snapshots + crash recovery"
+      ],
+      "acceptanceCriteria": [
+        "Consolidate edited state to `pdf-lib` output",
+        "Save + Save As workflows",
+        "Autosave snapshots + crash recovery"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-6"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 21,
+        "batch": 6,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 6,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 183,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S6-003] 🔴 Save/Save As/Autosave/Recovery\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S4-003], [P1-S6-001], [P1-S2-003]\r\n- [ ] Consolidate edited state to `pdf-lib` output\r\n- [ ] Save + Save As workflows\r\n- [ ] Autosave snapshots + crash recovery\r\n\r\n---\r\n\r\n## Sprint 7 - Forms and Signatures",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Consolidate edited state to `pdf-lib` output"
+          },
+          {
+            "completed": false,
+            "text": "Save + Save As workflows"
+          },
+          {
+            "completed": false,
+            "text": "Autosave snapshots + crash recovery"
+          }
+        ],
+        "declaredDependencyText": "[P1-S4-003], [P1-S6-001], [P1-S2-003]",
+        "declaredDependencies": [
+          "P1-S4-003",
+          "P1-S6-001",
+          "P1-S2-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S8-003",
+      "name": "Export Outputs",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S6-003"
+      ],
+      "deliverables": [
+        "Export pages to PNG/JPEG/SVG",
+        "Roadmap hooks for Word/Excel export adapters"
+      ],
+      "acceptanceCriteria": [
+        "Export pages to PNG/JPEG/SVG",
+        "Roadmap hooks for Word/Excel export adapters"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-8"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 27,
+        "batch": 8,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 8,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 226,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S8-003] 🔴 Export Outputs\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S6-003]\r\n- [ ] Export pages to PNG/JPEG/SVG\r\n- [ ] Roadmap hooks for Word/Excel export adapters\r\n\r\n---\r\n\r\n## Sprint 9 - UX, Accessibility, and Storage Hardening",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Export pages to PNG/JPEG/SVG"
+          },
+          {
+            "completed": false,
+            "text": "Roadmap hooks for Word/Excel export adapters"
+          }
+        ],
+        "declaredDependencyText": "[P1-S6-003]",
+        "declaredDependencies": [
+          "P1-S6-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    }
+  ]
+}

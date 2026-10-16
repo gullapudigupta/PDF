@@ -1,0 +1,723 @@
+{
+  "phase": "phase1",
+  "name": "Phase 1 - MVP",
+  "module": "quality-delivery",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P1-S11-001",
+      "name": "Unit Test Expansion (60% target)",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-001",
+        "P1-S1-002",
+        "P1-S1-003",
+        "P1-S1-004",
+        "P1-S2-001",
+        "P1-S2-002",
+        "P1-S2-003",
+        "P1-S2-004",
+        "P1-S3-001",
+        "P1-S3-002",
+        "P1-S3-003",
+        "P1-S3-004",
+        "P1-S4-001",
+        "P1-S4-002",
+        "P1-S4-003",
+        "P1-S5-001",
+        "P1-S5-002",
+        "P1-S5-003",
+        "P1-S6-001",
+        "P1-S6-002",
+        "P1-S6-003",
+        "P1-S7-001",
+        "P1-S7-002",
+        "P1-S7-003",
+        "P1-S8-001",
+        "P1-S8-002",
+        "P1-S8-003",
+        "P1-S9-001",
+        "P1-S9-002",
+        "P1-S9-003",
+        "P1-S10-001",
+        "P1-S10-002",
+        "P1-S10-003"
+      ],
+      "deliverables": [
+        "Service/reducer/selector coverage",
+        "Persistence adapter coverage",
+        "Extension bridge tests"
+      ],
+      "acceptanceCriteria": [
+        "Service/reducer/selector coverage",
+        "Persistence adapter coverage",
+        "Extension bridge tests"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-11"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 34,
+        "batch": 11,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 11,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 278,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S11-001] 🔴 Unit Test Expansion (60% target)\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: Core feature completion\r\n- [ ] Service/reducer/selector coverage\r\n- [ ] Persistence adapter coverage\r\n- [ ] Extension bridge tests",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Service/reducer/selector coverage"
+          },
+          {
+            "completed": false,
+            "text": "Persistence adapter coverage"
+          },
+          {
+            "completed": false,
+            "text": "Extension bridge tests"
+          }
+        ],
+        "declaredDependencyText": "Core feature completion",
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S1-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S1-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S1-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S1-004",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S2-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S2-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S2-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S2-004",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S3-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S3-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S3-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S3-004",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S4-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S4-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S4-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S5-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S5-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S5-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S6-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S6-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S6-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S7-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S7-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S7-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S8-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S8-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S8-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S9-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S9-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S9-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S10-001",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S10-002",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S10-003",
+            "reason": "Resolve source narrative gate: Core feature completion."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P1-S11-002",
+      "name": "Integration and Workflow Tests",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S11-001"
+      ],
+      "deliverables": [
+        "Desktop open-edit-save workflow",
+        "Extension open-edit-download workflow",
+        "Form and signature workflows"
+      ],
+      "acceptanceCriteria": [
+        "Desktop open-edit-save workflow",
+        "Extension open-edit-download workflow",
+        "Form and signature workflows"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-11"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 35,
+        "batch": 11,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 11,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 284,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S11-002] 🔴 Integration and Workflow Tests\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S11-001]\r\n- [ ] Desktop open-edit-save workflow\r\n- [ ] Extension open-edit-download workflow\r\n- [ ] Form and signature workflows",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Desktop open-edit-save workflow"
+          },
+          {
+            "completed": false,
+            "text": "Extension open-edit-download workflow"
+          },
+          {
+            "completed": false,
+            "text": "Form and signature workflows"
+          }
+        ],
+        "declaredDependencyText": "[P1-S11-001]",
+        "declaredDependencies": [
+          "P1-S11-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S11-003",
+      "name": "Performance and Reliability Pass",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S11-002"
+      ],
+      "deliverables": [
+        "Rendering and memory profiling",
+        "Recovery and large-document testing"
+      ],
+      "acceptanceCriteria": [
+        "Rendering and memory profiling",
+        "Recovery and large-document testing"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-11"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 36,
+        "batch": 11,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 11,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 290,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S11-003] 🔴 Performance and Reliability Pass\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S11-002]\r\n- [ ] Rendering and memory profiling\r\n- [ ] Recovery and large-document testing\r\n\r\n---\r\n\r\n## Sprint 12 - Packaging and Release",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Rendering and memory profiling"
+          },
+          {
+            "completed": false,
+            "text": "Recovery and large-document testing"
+          }
+        ],
+        "declaredDependencyText": "[P1-S11-002]",
+        "declaredDependencies": [
+          "P1-S11-002"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S12-001",
+      "name": "Desktop Packaging",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S11-003"
+      ],
+      "deliverables": [
+        "Configure `electron-builder`",
+        "Build Windows/macOS/Linux artifacts"
+      ],
+      "acceptanceCriteria": [
+        "Configure `electron-builder`",
+        "Build Windows/macOS/Linux artifacts"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-12"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 37,
+        "batch": 12,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 12,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 299,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S12-001] 🔴 Desktop Packaging\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S11-003]\r\n- [ ] Configure `electron-builder`\r\n- [ ] Build Windows/macOS/Linux artifacts",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Configure `electron-builder`"
+          },
+          {
+            "completed": false,
+            "text": "Build Windows/macOS/Linux artifacts"
+          }
+        ],
+        "declaredDependencyText": "[P1-S11-003]",
+        "declaredDependencies": [
+          "P1-S11-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S12-002",
+      "name": "Extension Packaging",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S10-002",
+        "P1-S11-003"
+      ],
+      "deliverables": [
+        "Build signed extension artifacts for Chrome/Edge",
+        "Build Firefox add-on package",
+        "Prepare store metadata/assets"
+      ],
+      "acceptanceCriteria": [
+        "Build signed extension artifacts for Chrome/Edge",
+        "Build Firefox add-on package",
+        "Prepare store metadata/assets"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-12"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 38,
+        "batch": 12,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 12,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 304,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S12-002] 🔴 Extension Packaging\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S10-002], [P1-S11-003]\r\n- [ ] Build signed extension artifacts for Chrome/Edge\r\n- [ ] Build Firefox add-on package\r\n- [ ] Prepare store metadata/assets",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Build signed extension artifacts for Chrome/Edge"
+          },
+          {
+            "completed": false,
+            "text": "Build Firefox add-on package"
+          },
+          {
+            "completed": false,
+            "text": "Prepare store metadata/assets"
+          }
+        ],
+        "declaredDependencyText": "[P1-S10-002], [P1-S11-003]",
+        "declaredDependencies": [
+          "P1-S10-002",
+          "P1-S11-003"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S12-003",
+      "name": "Release Readiness",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-001",
+        "P1-S12-002"
+      ],
+      "deliverables": [
+        "Validate MVP acceptance checklist",
+        "Prepare release notes",
+        "Publish desktop + extension release candidates"
+      ],
+      "acceptanceCriteria": [
+        "Validate MVP acceptance checklist",
+        "Prepare release notes",
+        "Publish desktop + extension release candidates"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-12"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 39,
+        "batch": 12,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 12,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 310,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S12-003] 🔴 Release Readiness\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S12-001], [P1-S12-002]\r\n- [ ] Validate MVP acceptance checklist\r\n- [ ] Prepare release notes\r\n- [ ] Publish desktop + extension release candidates\r\n\r\n---",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Validate MVP acceptance checklist"
+          },
+          {
+            "completed": false,
+            "text": "Prepare release notes"
+          },
+          {
+            "completed": false,
+            "text": "Publish desktop + extension release candidates"
+          }
+        ],
+        "declaredDependencyText": "[P1-S12-001], [P1-S12-002]",
+        "declaredDependencies": [
+          "P1-S12-001",
+          "P1-S12-002"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "EXEC-2026-06-16-001",
+      "name": "Completed - Completed Requirement QA Pass",
+      "status": "COMPLETED",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S1-001",
+        "P1-S1-002",
+        "P1-S1-003",
+        "P1-S2-001",
+        "P1-S2-002",
+        "P1-S2-003",
+        "P1-S2-004",
+        "P1-S3-001",
+        "P1-S3-002",
+        "P1-S3-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-1",
+        "historical-execution"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 56,
+        "batch": 0,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": null,
+        "provider": null,
+        "confidenceScore": null,
+        "executionNotes": "Imported historical completion claim; implementation was not re-executed during migration.",
+        "executedAt": null
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-06-16",
+      "artifacts": [
+        "specs/pdf-viewer-editor/traceability.md"
+      ],
+      "verification": {
+        "status": "not_reverified",
+        "commands": [],
+        "summary": "Source documentation reports completion. No passing result is asserted by this migration."
+      },
+      "sprint": null,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 363,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [EXEC-2026-06-16-001] 🟢 Completed - Completed Requirement QA Pass\r\n- Scope basis: completed tasks from this document (`P1-S1-001` to `P1-S3-003` where status is 🟢).\r\n- Delivered traceability test matrix: `specs/pdf-viewer-editor/traceability.md`.\r\n- Added automated tests for completed implementation scope:\r\n\t- Persistence adapter behavior\r\n\t- Runtime service delegation/helpers\r\n\t- Workspace reducer/selectors/effects\r\n\t- PDF document/render services\r\n\t- Workspace component open/save/search/navigation flows\r\n- Defect resolved:\r\n\t- `pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts`\r\n\t- Fixed `renderPageToCanvas` invocation to pass `(bytes, pageNumber, canvas, options)`.\r\n\r\n---\r\n\r\n**Document Version**: 3.0  \r\n**Last Updated**: June 16, 2026  \r\n**Next Review**: End of Sprint 1",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "COMPLETED",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S1-001",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S1-002",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S1-003",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S2-001",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S2-002",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S2-003",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S2-004",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S3-001",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S3-002",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          },
+          {
+            "taskId": "P1-S3-003",
+            "reason": "Historical QA scope explicitly lists the ten completed product tasks."
+          }
+        ]
+      }
+    }
+  ]
+}

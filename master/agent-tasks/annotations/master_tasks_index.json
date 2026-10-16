@@ -1,0 +1,96 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "module": "annotations",
+    "executionEntryPoint": "../../TASKS.md"
+  },
+  "phases": [
+    {
+      "phase": "phase1",
+      "file": "./phase1-tasks.json",
+      "totalTasks": 3,
+      "statusSummary": {
+        "pending": 3,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 48,
+      "unestimatedTasks": 0,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P1-S5-001",
+        "P1-S5-002",
+        "P1-S5-003"
+      ]
+    },
+    {
+      "phase": "phase2",
+      "file": "./phase2-tasks.json",
+      "totalTasks": 2,
+      "statusSummary": {
+        "pending": 2,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 0,
+      "unestimatedTasks": 2,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P2-S14-002",
+        "P2-S17-001"
+      ]
+    }
+  ],
+  "progressTracking": {
+    "totalTasks": 5,
+    "statusSummary": {
+      "pending": 5,
+      "in_progress": 0,
+      "completed": 0,
+      "blocked": 0,
+      "cancelled": 0
+    },
+    "completedTasks": 0,
+    "completionPercentage": "0%",
+    "totalEstimatedHours": 48,
+    "unestimatedTasks": 2,
+    "inheritedUnverifiedCompletions": 0,
+    "taskIds": [
+      "P1-S5-001",
+      "P1-S5-002",
+      "P1-S5-003",
+      "P2-S14-002",
+      "P2-S17-001"
+    ]
+  },
+  "tasks": [
+    {
+      "taskId": "P1-S5-001",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S5-002",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S5-003",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P2-S14-002",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P2-S17-001",
+      "canonicalFile": "./phase2-tasks.json"
+    }
+  ]
+}

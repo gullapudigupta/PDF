@@ -1,0 +1,179 @@
+{
+  "phase": "phase2",
+  "name": "Phase 2 - Advanced Features",
+  "module": "security-compliance",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P2-S15-002",
+      "name": "Metadata/security enhancements",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-2",
+        "sprint-15"
+      ],
+      "module": "security-compliance",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 45,
+        "batch": 15,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 15,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 325,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P2-S15-002] Metadata/security enhancements",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P2-S16-001",
+      "name": "Redaction suite (text/image/signature)",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-2",
+        "sprint-16"
+      ],
+      "module": "security-compliance",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 46,
+        "batch": 16,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 16,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 326,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P2-S16-001] Redaction suite (text/image/signature)",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P2-S16-002",
+      "name": "Irreversible apply + flatten verification",
+      "status": "PENDING",
+      "priority": null,
+      "estimatedHours": null,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [],
+      "acceptanceCriteria": [],
+      "tags": [
+        "phase-2",
+        "sprint-16"
+      ],
+      "module": "security-compliance",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 47,
+        "batch": 16,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 16,
+      "planningRequired": true,
+      "source": {
+        "file": "TASKS.md",
+        "line": 327,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P2-S16-002] Irreversible apply + flatten verification",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Not estimated in source.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          }
+        ]
+      }
+    }
+  ]
+}

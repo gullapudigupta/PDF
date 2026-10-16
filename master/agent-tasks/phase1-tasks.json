@@ -1,0 +1,345 @@
+{
+  "phase": "phase1",
+  "name": "MVP",
+  "metadata": {
+    "noTaskCopies": true,
+    "sourceOfTruth": "Canonical domain phase JSON only."
+  },
+  "totalTasks": 40,
+  "statusSummary": {
+    "pending": 29,
+    "in_progress": 0,
+    "completed": 11,
+    "blocked": 0,
+    "cancelled": 0
+  },
+  "completedTasks": 11,
+  "completionPercentage": "27%",
+  "totalEstimatedHours": 696,
+  "unestimatedTasks": 1,
+  "inheritedUnverifiedCompletions": 11,
+  "taskIds": [
+    "P1-S1-001",
+    "P1-S1-002",
+    "P1-S1-003",
+    "P1-S1-004",
+    "P1-S2-001",
+    "P1-S2-002",
+    "P1-S2-003",
+    "P1-S2-004",
+    "P1-S3-001",
+    "P1-S3-002",
+    "P1-S3-003",
+    "P1-S3-004",
+    "P1-S4-001",
+    "P1-S4-002",
+    "P1-S4-003",
+    "P1-S5-001",
+    "P1-S5-002",
+    "P1-S5-003",
+    "P1-S6-001",
+    "P1-S6-002",
+    "P1-S6-003",
+    "P1-S7-001",
+    "P1-S7-002",
+    "P1-S7-003",
+    "P1-S8-001",
+    "P1-S8-002",
+    "P1-S8-003",
+    "P1-S9-001",
+    "P1-S9-002",
+    "P1-S9-003",
+    "P1-S10-001",
+    "P1-S10-002",
+    "P1-S10-003",
+    "P1-S11-001",
+    "P1-S11-002",
+    "P1-S11-003",
+    "P1-S12-001",
+    "P1-S12-002",
+    "P1-S12-003",
+    "EXEC-2026-06-16-001"
+  ],
+  "tasks": [
+    {
+      "taskId": "P1-S1-001",
+      "module": "platform",
+      "phase": 1,
+      "canonicalFile": "./platform/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S1-002",
+      "module": "platform",
+      "phase": 1,
+      "canonicalFile": "./platform/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S1-003",
+      "module": "platform",
+      "phase": 1,
+      "canonicalFile": "./platform/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S1-004",
+      "module": "platform",
+      "phase": 1,
+      "canonicalFile": "./platform/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S2-001",
+      "module": "platform",
+      "phase": 1,
+      "canonicalFile": "./platform/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S2-002",
+      "module": "platform",
+      "phase": 1,
+      "canonicalFile": "./platform/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S2-003",
+      "module": "platform",
+      "phase": 1,
+      "canonicalFile": "./platform/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S2-004",
+      "module": "platform",
+      "phase": 1,
+      "canonicalFile": "./platform/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S3-001",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S3-002",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S3-003",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S3-004",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S4-001",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S4-002",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S4-003",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S5-001",
+      "module": "annotations",
+      "phase": 1,
+      "canonicalFile": "./annotations/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S5-002",
+      "module": "annotations",
+      "phase": 1,
+      "canonicalFile": "./annotations/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S5-003",
+      "module": "annotations",
+      "phase": 1,
+      "canonicalFile": "./annotations/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S6-001",
+      "module": "processing-export",
+      "phase": 1,
+      "canonicalFile": "./processing-export/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S6-002",
+      "module": "processing-export",
+      "phase": 1,
+      "canonicalFile": "./processing-export/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S6-003",
+      "module": "processing-export",
+      "phase": 1,
+      "canonicalFile": "./processing-export/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S7-001",
+      "module": "forms-signatures",
+      "phase": 1,
+      "canonicalFile": "./forms-signatures/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S7-002",
+      "module": "forms-signatures",
+      "phase": 1,
+      "canonicalFile": "./forms-signatures/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S7-003",
+      "module": "forms-signatures",
+      "phase": 1,
+      "canonicalFile": "./forms-signatures/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S8-001",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S8-002",
+      "module": "security-compliance",
+      "phase": 1,
+      "canonicalFile": "./security-compliance/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S8-003",
+      "module": "processing-export",
+      "phase": 1,
+      "canonicalFile": "./processing-export/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S9-001",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S9-002",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S9-003",
+      "module": "viewer-editor",
+      "phase": 1,
+      "canonicalFile": "./viewer-editor/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S10-001",
+      "module": "browser-extension",
+      "phase": 1,
+      "canonicalFile": "./browser-extension/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S10-002",
+      "module": "browser-extension",
+      "phase": 1,
+      "canonicalFile": "./browser-extension/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S10-003",
+      "module": "browser-extension",
+      "phase": 1,
+      "canonicalFile": "./browser-extension/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S11-001",
+      "module": "quality-delivery",
+      "phase": 1,
+      "canonicalFile": "./quality-delivery/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S11-002",
+      "module": "quality-delivery",
+      "phase": 1,
+      "canonicalFile": "./quality-delivery/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S11-003",
+      "module": "quality-delivery",
+      "phase": 1,
+      "canonicalFile": "./quality-delivery/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S12-001",
+      "module": "quality-delivery",
+      "phase": 1,
+      "canonicalFile": "./quality-delivery/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S12-002",
+      "module": "quality-delivery",
+      "phase": 1,
+      "canonicalFile": "./quality-delivery/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P1-S12-003",
+      "module": "quality-delivery",
+      "phase": 1,
+      "canonicalFile": "./quality-delivery/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "EXEC-2026-06-16-001",
+      "module": "quality-delivery",
+      "phase": 1,
+      "canonicalFile": "./quality-delivery/phase1-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    }
+  ]
+}

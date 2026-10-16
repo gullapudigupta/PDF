@@ -1,5 +1,8 @@
 # PDF Viewer & Editor - Angular Decision Summary
 
+> Reference guidance only. Execute tasks and record progress through
+> [TASKS.md](TASKS.md), not action lists in this document.
+
 **Date**: June 16, 2026  
 **Decision**: Proceed with **Electron + Angular + TypeScript + WebExtensions**  
 **Status**: ✅ Ready for Implementation

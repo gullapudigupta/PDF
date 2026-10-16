@@ -1,0 +1,227 @@
+{
+  "phase": "phase1",
+  "name": "Phase 1 - MVP",
+  "module": "forms-signatures",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P1-S7-001",
+      "name": "Interactive Form Fill Support",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-001"
+      ],
+      "deliverables": [
+        "Detect and fill existing PDF forms",
+        "Support text/checkbox/radio/dropdown/date",
+        "Persist + auto-save form data"
+      ],
+      "acceptanceCriteria": [
+        "Detect and fill existing PDF forms",
+        "Support text/checkbox/radio/dropdown/date",
+        "Persist + auto-save form data"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-7"
+      ],
+      "module": "forms-signatures",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 22,
+        "batch": 7,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 7,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 193,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S7-001] 🔴 Interactive Form Fill Support\r\n**Priority**: 🔴 Critical | **Duration**: 3 days | **Dependencies**: [P1-S3-001]\r\n- [ ] Detect and fill existing PDF forms\r\n- [ ] Support text/checkbox/radio/dropdown/date\r\n- [ ] Persist + auto-save form data",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Detect and fill existing PDF forms"
+          },
+          {
+            "completed": false,
+            "text": "Support text/checkbox/radio/dropdown/date"
+          },
+          {
+            "completed": false,
+            "text": "Persist + auto-save form data"
+          }
+        ],
+        "declaredDependencyText": "[P1-S3-001]",
+        "declaredDependencies": [
+          "P1-S3-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 3,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S7-002",
+      "name": "Basic Form Field Authoring",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S7-001"
+      ],
+      "deliverables": [
+        "Create/edit/delete text + checkbox + dropdown fields",
+        "Required and conditional baseline support"
+      ],
+      "acceptanceCriteria": [
+        "Create/edit/delete text + checkbox + dropdown fields",
+        "Required and conditional baseline support"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-7"
+      ],
+      "module": "forms-signatures",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 23,
+        "batch": 7,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 7,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 199,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S7-002] 🔴 Basic Form Field Authoring\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S7-001]\r\n- [ ] Create/edit/delete text + checkbox + dropdown fields\r\n- [ ] Required and conditional baseline support",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Create/edit/delete text + checkbox + dropdown fields"
+          },
+          {
+            "completed": false,
+            "text": "Required and conditional baseline support"
+          }
+        ],
+        "declaredDependencyText": "[P1-S7-001]",
+        "declaredDependencies": [
+          "P1-S7-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S7-003",
+      "name": "Signature and Initials Baseline",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S4-001"
+      ],
+      "deliverables": [
+        "Draw/type/upload signature",
+        "Place/move/resize signature/initials",
+        "Save reusable signature assets locally"
+      ],
+      "acceptanceCriteria": [
+        "Draw/type/upload signature",
+        "Place/move/resize signature/initials",
+        "Save reusable signature assets locally"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-7"
+      ],
+      "module": "forms-signatures",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 24,
+        "batch": 7,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 7,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 204,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S7-003] 🔴 Signature and Initials Baseline\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S4-001]\r\n- [ ] Draw/type/upload signature\r\n- [ ] Place/move/resize signature/initials\r\n- [ ] Save reusable signature assets locally\r\n\r\n---\r\n\r\n## Sprint 8 - Search, Security, and Metadata",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Draw/type/upload signature"
+          },
+          {
+            "completed": false,
+            "text": "Place/move/resize signature/initials"
+          },
+          {
+            "completed": false,
+            "text": "Save reusable signature assets locally"
+          }
+        ],
+        "declaredDependencyText": "[P1-S4-001]",
+        "declaredDependencies": [
+          "P1-S4-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    }
+  ]
+}

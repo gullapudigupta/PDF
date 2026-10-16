@@ -1,0 +1,227 @@
+{
+  "phase": "phase1",
+  "name": "Phase 1 - MVP",
+  "module": "annotations",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P1-S5-001",
+      "name": "Annotation Data Models and Service",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S2-004"
+      ],
+      "deliverables": [
+        "Create annotation models",
+        "Implement annotation CRUD service"
+      ],
+      "acceptanceCriteria": [
+        "Create annotation models",
+        "Implement annotation CRUD service"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-5"
+      ],
+      "module": "annotations",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 16,
+        "batch": 5,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 5,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 150,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S5-001] 🔴 Annotation Data Models and Service\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S2-004]\r\n- [ ] Create annotation models\r\n- [ ] Implement annotation CRUD service",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Create annotation models"
+          },
+          {
+            "completed": false,
+            "text": "Implement annotation CRUD service"
+          }
+        ],
+        "declaredDependencyText": "[P1-S2-004]",
+        "declaredDependencies": [
+          "P1-S2-004"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S5-002",
+      "name": "Highlight + Comment Tools",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S5-001"
+      ],
+      "deliverables": [
+        "Text highlight create/edit/delete",
+        "Comment/sticky note create/edit/delete",
+        "Color and opacity controls"
+      ],
+      "acceptanceCriteria": [
+        "Text highlight create/edit/delete",
+        "Comment/sticky note create/edit/delete",
+        "Color and opacity controls"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-5"
+      ],
+      "module": "annotations",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 17,
+        "batch": 5,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 5,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 155,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S5-002] 🔴 Highlight + Comment Tools\r\n**Priority**: 🔴 Critical | **Duration**: 2 days | **Dependencies**: [P1-S5-001]\r\n- [ ] Text highlight create/edit/delete\r\n- [ ] Comment/sticky note create/edit/delete\r\n- [ ] Color and opacity controls",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Text highlight create/edit/delete"
+          },
+          {
+            "completed": false,
+            "text": "Comment/sticky note create/edit/delete"
+          },
+          {
+            "completed": false,
+            "text": "Color and opacity controls"
+          }
+        ],
+        "declaredDependencyText": "[P1-S5-001]",
+        "declaredDependencies": [
+          "P1-S5-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    },
+    {
+      "id": "P1-S5-003",
+      "name": "Draw Tools + Annotation Panel",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S5-001"
+      ],
+      "deliverables": [
+        "Freehand draw tool",
+        "Annotation list with filters",
+        "Annotation jump-to-position support"
+      ],
+      "acceptanceCriteria": [
+        "Freehand draw tool",
+        "Annotation list with filters",
+        "Annotation jump-to-position support"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-5"
+      ],
+      "module": "annotations",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 18,
+        "batch": 5,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 5,
+      "planningRequired": false,
+      "source": {
+        "file": "TASKS.md",
+        "line": 161,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "### [P1-S5-003] 🔴 Draw Tools + Annotation Panel\r\n**Priority**: 🟠 High | **Duration**: 2 days | **Dependencies**: [P1-S5-001]\r\n- [ ] Freehand draw tool\r\n- [ ] Annotation list with filters\r\n- [ ] Annotation jump-to-position support\r\n\r\n---\r\n\r\n## Sprint 6 - Page Operations and Save Pipeline",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Freehand draw tool"
+          },
+          {
+            "completed": false,
+            "text": "Annotation list with filters"
+          },
+          {
+            "completed": false,
+            "text": "Annotation jump-to-position support"
+          }
+        ],
+        "declaredDependencyText": "[P1-S5-001]",
+        "declaredDependencies": [
+          "P1-S5-001"
+        ],
+        "reportedStatus": "PENDING",
+        "durationDays": 2,
+        "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
+        "normalizedDependencies": []
+      }
+    }
+  ]
+}

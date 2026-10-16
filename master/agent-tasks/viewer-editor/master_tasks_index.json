@@ -1,0 +1,113 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "module": "viewer-editor",
+    "executionEntryPoint": "../../TASKS.md"
+  },
+  "phases": [
+    {
+      "phase": "phase1",
+      "file": "./phase1-tasks.json",
+      "totalTasks": 11,
+      "statusSummary": {
+        "pending": 8,
+        "in_progress": 0,
+        "completed": 3,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 3,
+      "completionPercentage": "27%",
+      "totalEstimatedHours": 192,
+      "unestimatedTasks": 0,
+      "inheritedUnverifiedCompletions": 3,
+      "taskIds": [
+        "P1-S3-001",
+        "P1-S3-002",
+        "P1-S3-003",
+        "P1-S3-004",
+        "P1-S4-001",
+        "P1-S4-002",
+        "P1-S4-003",
+        "P1-S8-001",
+        "P1-S9-001",
+        "P1-S9-002",
+        "P1-S9-003"
+      ]
+    }
+  ],
+  "progressTracking": {
+    "totalTasks": 11,
+    "statusSummary": {
+      "pending": 8,
+      "in_progress": 0,
+      "completed": 3,
+      "blocked": 0,
+      "cancelled": 0
+    },
+    "completedTasks": 3,
+    "completionPercentage": "27%",
+    "totalEstimatedHours": 192,
+    "unestimatedTasks": 0,
+    "inheritedUnverifiedCompletions": 3,
+    "taskIds": [
+      "P1-S3-001",
+      "P1-S3-002",
+      "P1-S3-003",
+      "P1-S3-004",
+      "P1-S4-001",
+      "P1-S4-002",
+      "P1-S4-003",
+      "P1-S8-001",
+      "P1-S9-001",
+      "P1-S9-002",
+      "P1-S9-003"
+    ]
+  },
+  "tasks": [
+    {
+      "taskId": "P1-S3-001",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S3-002",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S3-003",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S3-004",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S4-001",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S4-002",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S4-003",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S8-001",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S9-001",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S9-002",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P1-S9-003",
+      "canonicalFile": "./phase1-tasks.json"
+    }
+  ]
+}

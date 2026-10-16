@@ -1,5 +1,8 @@
 # Angular + Electron + WebExtensions PDF Viewer & Editor - Implementation Guide
 
+> Implementation guidance only. Execute tasks and record progress through
+> [TASKS.md](TASKS.md), not checklists in this guide.
+
 ## Project Decision: Electron + Angular + TypeScript + Browser Extensions
 
 This document defines the implementation strategy for a unified PDF viewer/editor delivered as:

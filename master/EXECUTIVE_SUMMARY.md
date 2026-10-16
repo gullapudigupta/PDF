@@ -1,5 +1,8 @@
 # PDF Viewer & Editor - Executive Summary
 
+> Program context only. Current task identities, dependencies, and completion
+> status are maintained through [TASKS.md](TASKS.md).
+
 ## 📋 Project Overview
 
 A cross-platform PDF product with two delivery surfaces:

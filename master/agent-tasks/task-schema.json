@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0.0",
+  "reference": "model-master/agent-tasks + tools/agent-task-template.json",
+  "statuses": [
+    "PENDING",
+    "IN_PROGRESS",
+    "COMPLETED",
+    "BLOCKED",
+    "CANCELLED"
+  ],
+  "requiredFields": [
+    "id",
+    "name",
+    "status",
+    "priority",
+    "estimatedHours",
+    "value",
+    "recommendedModel",
+    "modelRationale",
+    "dependencies",
+    "deliverables",
+    "acceptanceCriteria",
+    "tags",
+    "module",
+    "modulePath",
+    "phase",
+    "userClarifications",
+    "modelAssignment",
+    "executionPlan",
+    "executionResult",
+    "jevRecommendation",
+    "completedDate",
+    "artifacts",
+    "verification"
+  ],
+  "compatibilityNotes": [
+    "Original IDs and phases 1-3 are retained.",
+    "Logical domain modulePath links point to the shared existing product.",
+    "Unknown values remain null; imported completion uses explicit not_reverified verification."
+  ]
+}

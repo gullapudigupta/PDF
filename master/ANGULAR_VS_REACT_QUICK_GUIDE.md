@@ -1,5 +1,8 @@
 # Angular vs React - Quick Visual Comparison
 
+> Reference guidance only. Follow [TASKS.md](TASKS.md) for executable tasks;
+> comparison checklists are not additional task records.
+
 ## 🎯 Quick Answer
 
 This is a framework comparison reference.  

@@ -1,0 +1,115 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "module": "security-compliance",
+    "executionEntryPoint": "../../TASKS.md"
+  },
+  "phases": [
+    {
+      "phase": "phase1",
+      "file": "./phase1-tasks.json",
+      "totalTasks": 1,
+      "statusSummary": {
+        "pending": 1,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 16,
+      "unestimatedTasks": 0,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P1-S8-002"
+      ]
+    },
+    {
+      "phase": "phase2",
+      "file": "./phase2-tasks.json",
+      "totalTasks": 3,
+      "statusSummary": {
+        "pending": 3,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 0,
+      "unestimatedTasks": 3,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P2-S15-002",
+        "P2-S16-001",
+        "P2-S16-002"
+      ]
+    },
+    {
+      "phase": "phase3",
+      "file": "./phase3-tasks.json",
+      "totalTasks": 1,
+      "statusSummary": {
+        "pending": 1,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 0,
+      "unestimatedTasks": 1,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P3-S23-001"
+      ]
+    }
+  ],
+  "progressTracking": {
+    "totalTasks": 5,
+    "statusSummary": {
+      "pending": 5,
+      "in_progress": 0,
+      "completed": 0,
+      "blocked": 0,
+      "cancelled": 0
+    },
+    "completedTasks": 0,
+    "completionPercentage": "0%",
+    "totalEstimatedHours": 16,
+    "unestimatedTasks": 4,
+    "inheritedUnverifiedCompletions": 0,
+    "taskIds": [
+      "P1-S8-002",
+      "P2-S15-002",
+      "P2-S16-001",
+      "P2-S16-002",
+      "P3-S23-001"
+    ]
+  },
+  "tasks": [
+    {
+      "taskId": "P1-S8-002",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P2-S15-002",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P2-S16-001",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P2-S16-002",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P3-S23-001",
+      "canonicalFile": "./phase3-tasks.json"
+    }
+  ]
+}
