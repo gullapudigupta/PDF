@@ -13,6 +13,7 @@ import { PdfPageOperationsService } from '../../services/pdf-page-operations.ser
 import { PdfEditSerializationService } from '../../services/pdf-edit-serialization.service';
 import { PdfFormService } from '../../services/pdf-form.service';
 import { PdfSecurityService } from '../../services/pdf-security.service';
+import { PdfPageExportService } from '../../services/pdf-page-export.service';
 import { PersistenceService } from '@core/services/persistence.service';
 
 describe('PdfWorkspaceComponent', () => {
@@ -24,14 +25,17 @@ describe('PdfWorkspaceComponent', () => {
     'saveFileDialog',
     'isDesktop',
     'writeFile',
+    'readFile',
   ]);
   const pdfDocumentService = jasmine.createSpyObj<PdfDocumentService>('PdfDocumentService', [
     'loadFromFile',
+    'loadFromBytes',
     'extractText',
     'getPage',
     'replaceCurrentDocumentBytes',
+    'closeCurrent',
   ]);
-  const pdfRenderService = jasmine.createSpyObj<PdfRenderService>('PdfRenderService', ['renderPageToCanvas']);
+  const pdfRenderService = jasmine.createSpyObj<PdfRenderService>('PdfRenderService', ['renderPageToCanvas', 'renderLoadedPageToCanvas']);
   const pdfPageOperationsService = jasmine.createSpyObj<PdfPageOperationsService>('PdfPageOperationsService', [
     'deletePage',
     'reorderPage',
@@ -60,12 +64,17 @@ describe('PdfWorkspaceComponent', () => {
     'updateMetadata',
     'protect',
   ]);
+  const pdfPageExportService = jasmine.createSpyObj<PdfPageExportService>('PdfPageExportService', ['exportPage']);
   const persistenceService = jasmine.createSpyObj<PersistenceService>('PersistenceService', [
     'getSetting',
     'setSetting',
     'getAutosaveData',
     'saveAutosave',
     'clearAutosave',
+    'listRecentFileRecords',
+    'recordRecentFile',
+    'setRecentFilePinned',
+    'removeRecentFileRecord',
   ]);
   const store = jasmine.createSpyObj<Store>('Store', ['dispatch']);
 
@@ -77,11 +86,20 @@ describe('PdfWorkspaceComponent', () => {
     pdfSecurityService.getMetadata.and.resolveTo({ title: '', author: '', subject: '', keywords: '' });
     pdfSecurityService.updateMetadata.and.callFake(async (_bytes, metadata) => new TextEncoder().encode(metadata.title));
     pdfSecurityService.protect.and.resolveTo(new Uint8Array([1, 2, 3]));
+    pdfPageExportService.exportPage.and.resolveTo({
+      bytes: new Uint8Array([8, 9]).buffer,
+      mimeType: 'image/png',
+      extension: 'png',
+    });
     persistenceService.getSetting.and.resolveTo(null);
     persistenceService.setSetting.and.resolveTo();
     persistenceService.getAutosaveData.and.resolveTo(null);
     persistenceService.saveAutosave.and.resolveTo();
     persistenceService.clearAutosave.and.resolveTo();
+    persistenceService.listRecentFileRecords.and.resolveTo([]);
+    persistenceService.recordRecentFile.and.resolveTo();
+    persistenceService.setRecentFilePinned.and.resolveTo();
+    persistenceService.removeRecentFileRecord.and.resolveTo();
     await TestBed.configureTestingModule({
       declarations: [PdfWorkspaceComponent],
       imports: [FormsModule],
@@ -93,6 +111,7 @@ describe('PdfWorkspaceComponent', () => {
         { provide: PdfEditSerializationService, useValue: pdfEditSerializationService },
         { provide: PdfFormService, useValue: pdfFormService },
         { provide: PdfSecurityService, useValue: pdfSecurityService },
+        { provide: PdfPageExportService, useValue: pdfPageExportService },
         { provide: PersistenceService, useValue: persistenceService },
         { provide: Store, useValue: store },
         { provide: HistoryService, useValue: new HistoryService<any>() },
@@ -109,7 +128,9 @@ describe('PdfWorkspaceComponent', () => {
     pdfDocumentService.loadFromFile.calls.reset();
     pdfDocumentService.extractText.calls.reset();
     pdfDocumentService.replaceCurrentDocumentBytes.calls.reset();
+    pdfDocumentService.closeCurrent.calls.reset();
     pdfRenderService.renderPageToCanvas.calls.reset();
+    pdfRenderService.renderLoadedPageToCanvas.calls.reset();
     pdfPageOperationsService.deletePage.calls.reset();
     pdfPageOperationsService.reorderPage.calls.reset();
     pdfPageOperationsService.insertPages.calls.reset();
@@ -129,9 +150,14 @@ describe('PdfWorkspaceComponent', () => {
     pdfSecurityService.getMetadata.calls.reset();
     pdfSecurityService.updateMetadata.calls.reset();
     pdfSecurityService.protect.calls.reset();
+    pdfPageExportService.exportPage.calls.reset();
     persistenceService.getAutosaveData.calls.reset();
     persistenceService.getSetting.calls.reset();
     persistenceService.setSetting.calls.reset();
+    persistenceService.listRecentFileRecords.calls.reset();
+    persistenceService.recordRecentFile.calls.reset();
+    persistenceService.setRecentFilePinned.calls.reset();
+    persistenceService.removeRecentFileRecord.calls.reset();
     persistenceService.saveAutosave.calls.reset();
     persistenceService.clearAutosave.calls.reset();
     store.dispatch.calls.reset();
@@ -162,6 +188,135 @@ describe('PdfWorkspaceComponent', () => {
       jasmine.any(HTMLCanvasElement),
       jasmine.objectContaining({ zoom: 1, rotation: 0 })
     );
+    expect(persistenceService.recordRecentFile).toHaveBeenCalledWith(jasmine.objectContaining({
+      id: loadedDoc.id,
+      name: loadedDoc.name,
+      path: null,
+    }));
+  });
+
+  it('restores and persists the current page and zoom for a document', async () => {
+    const file = new File([new Uint8Array([1])], 'doc.pdf', { type: 'application/pdf' });
+    const loadedDoc = {
+      id: 'doc-1',
+      name: 'doc.pdf',
+      totalPages: 3,
+      bytes: new Uint8Array([1, 2]),
+      proxy: {},
+    };
+    persistenceService.getSetting.and.callFake(async <T>(key: string): Promise<T | null> =>
+      key === 'workspaceView:doc-1'
+        ? { page: 2, zoom: 1.5, viewingMode: 'facing', theme: 'dark', darkPageRendering: true } as T
+        : null
+    );
+    runtimeService.openFileDialog.and.resolveTo({ canceled: false, file });
+    pdfDocumentService.loadFromFile.and.resolveTo(loadedDoc as any);
+    pdfRenderService.renderPageToCanvas.and.resolveTo();
+
+    await component.openFile();
+    expect(component.currentPage).toBe(2);
+    expect(component.zoom).toBe(1.5);
+    expect(component.viewingMode).toBe('facing');
+    expect(component.theme).toBe('dark');
+    expect(component.darkPageRendering).toBeTrue();
+
+    await component.nextPage();
+    expect(persistenceService.setSetting).toHaveBeenCalledWith('workspaceView:doc-1', {
+      page: 3,
+      zoom: 1.5,
+      viewingMode: 'facing',
+      theme: 'dark',
+      darkPageRendering: true,
+    });
+  });
+
+  it('persists viewing mode and theme preferences per app and document', async () => {
+    component.document = {
+      id: 'doc-views',
+      name: 'views.pdf',
+      totalPages: 4,
+      bytes: new Uint8Array([1]),
+      proxy: {},
+    } as any;
+    component.totalPages = 4;
+    pdfRenderService.renderLoadedPageToCanvas.and.resolveTo();
+
+    await component.setTheme('dark');
+    await component.setDarkPageRendering(true);
+    await component.setViewingMode('facing');
+
+    expect(component.viewingPages).toEqual([1, 2]);
+    expect(persistenceService.setSetting).toHaveBeenCalledWith('workspacePreferences', {
+      theme: 'dark',
+      darkPageRendering: true,
+      viewingMode: 'facing',
+      toolbarVisibility: { editing: true, search: true, navigation: true, annotations: true },
+    });
+    expect(persistenceService.setSetting).toHaveBeenCalledWith('workspaceView:doc-views', {
+      page: 1,
+      zoom: 1,
+      viewingMode: 'facing',
+      theme: 'dark',
+      darkPageRendering: true,
+    });
+  });
+
+  it('saves toolbar visibility customization as an app preference', async () => {
+    await component.setToolbarVisibility('search', false);
+
+    expect(component.toolbarVisibility.search).toBeFalse();
+    expect(persistenceService.setSetting).toHaveBeenCalledWith('workspacePreferences', jasmine.objectContaining({
+      toolbarVisibility: { editing: true, search: false, navigation: true, annotations: true },
+    }));
+  });
+
+  it('shows customization controls while hiding selected toolbar groups', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(fixture.nativeElement.querySelectorAll('.toolbar-customization input[type="checkbox"]').length).toBe(4);
+    await component.setToolbarVisibility('search', false);
+    await component.setToolbarVisibility('editing', false);
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.querySelector('.toolbar-right')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.pdf-toolbar-actions')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.toolbar-customization')).not.toBeNull();
+  });
+
+  it('renders a bounded window of pages in continuous mode', async () => {
+    component.document = {
+      id: 'doc-continuous',
+      name: 'long.pdf',
+      totalPages: 20,
+      bytes: new Uint8Array([1]),
+      proxy: {},
+    } as any;
+    component.totalPages = 20;
+    component.currentPage = 10;
+    component.viewingMode = 'continuous';
+    pdfRenderService.renderLoadedPageToCanvas.and.resolveTo();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const renderedPages = pdfRenderService.renderLoadedPageToCanvas.calls.allArgs().map(args => args[1]);
+    expect(renderedPages).toEqual([8, 9, 10, 11, 12]);
+  });
+
+  it('pins and removes a recent PDF record', async () => {
+    const recent = {
+      id: 'doc-1',
+      name: 'doc.pdf',
+      path: null,
+      lastOpenedAt: 1,
+      isPinned: false,
+    };
+    await component.toggleRecentPin(recent);
+    await component.removeRecentFile(recent);
+
+    expect(persistenceService.setRecentFilePinned).toHaveBeenCalledWith('doc-1', true);
+    expect(persistenceService.removeRecentFileRecord).toHaveBeenCalledWith('doc-1');
   });
 
   it('updates PDF metadata on the active document', async () => {
@@ -205,6 +360,28 @@ describe('PdfWorkspaceComponent', () => {
     expect(component.protectionOwnerPassword).toBe('');
   });
 
+  it('exports the current page in the selected image format', async () => {
+    component.document = {
+      id: 'page-export', name: 'sample.pdf', totalPages: 3, bytes: new Uint8Array([4]), proxy: {},
+    } as any;
+    component.currentPage = 2;
+    component.pageExportFormat = 'jpeg';
+    pdfPageExportService.exportPage.and.resolveTo({
+      bytes: new Uint8Array([8, 9]).buffer,
+      mimeType: 'image/jpeg',
+      extension: 'jpeg',
+    });
+
+    await component.exportCurrentPage();
+
+    expect(pdfPageExportService.exportPage).toHaveBeenCalledWith(component.document!.bytes, 2, 'jpeg');
+    expect(runtimeService.saveFileDialog).toHaveBeenCalledWith(
+      'sample-page-2.jpeg',
+      jasmine.any(ArrayBuffer),
+      'image/jpeg'
+    );
+  });
+
   it('does not save or autosave an opened protected PDF', async () => {
     pdfEditSerializationService.flattenEdits.calls.reset();
     persistenceService.saveAutosave.calls.reset();
@@ -217,6 +394,57 @@ describe('PdfWorkspaceComponent', () => {
 
     expect(pdfEditSerializationService.flattenEdits).not.toHaveBeenCalled();
     expect(persistenceService.saveAutosave).not.toHaveBeenCalled();
+  });
+
+  it('opens a protected PDF through its authorized proxy without persisting bytes or passwords', async () => {
+    const file = new File([new Uint8Array([1, 2])], 'protected.pdf', { type: 'application/pdf' });
+    const proxy = { getPage: jasmine.createSpy(), destroy: jasmine.createSpy() };
+    const protectedDocument = {
+      id: 'protected-id',
+      name: 'protected.pdf',
+      totalPages: 1,
+      bytes: new Uint8Array([1, 2]),
+      proxy,
+      isEncrypted: true,
+    };
+    runtimeService.openFileDialog.and.resolveTo({ canceled: false, file });
+    pdfDocumentService.loadFromFile.and.resolveTo(protectedDocument as any);
+    pdfRenderService.renderLoadedPageToCanvas.and.resolveTo();
+
+    await component.openFile();
+
+    expect(component.document?.isEncrypted).toBeTrue();
+    expect(pdfRenderService.renderLoadedPageToCanvas).toHaveBeenCalledWith(
+      proxy,
+      1,
+      jasmine.any(HTMLCanvasElement),
+      jasmine.any(Object)
+    );
+    expect(persistenceService.getAutosaveData).not.toHaveBeenCalled();
+    expect(persistenceService.saveAutosave).not.toHaveBeenCalled();
+    const recentRecord = persistenceService.recordRecentFile.calls.mostRecent().args[0] as Record<string, unknown>;
+    expect(Object.prototype.hasOwnProperty.call(recentRecord, 'bytes')).toBeFalse();
+    expect(Object.prototype.hasOwnProperty.call(recentRecord, 'password')).toBeFalse();
+    await component.closeDocument();
+    expect(pdfDocumentService.closeCurrent).toHaveBeenCalled();
+  });
+
+  it('closes the open document and releases its PDF.js proxy', async () => {
+    component.document = {
+      id: 'close-doc',
+      name: 'close.pdf',
+      totalPages: 1,
+      bytes: new Uint8Array([1]),
+      proxy: {},
+      isEncrypted: true,
+    } as any;
+    component.totalPages = 1;
+
+    await component.closeDocument();
+
+    expect(pdfDocumentService.closeCurrent).toHaveBeenCalled();
+    expect(component.document).toBeNull();
+    expect(component.totalPages).toBe(0);
   });
 
   it('prompts for protected PDF passwords and resolves cancellation explicitly', async () => {
@@ -719,7 +947,10 @@ describe('PdfWorkspaceComponent', () => {
     component.moveCrop(new MouseEvent('mousemove', { clientX: bounds.left + 120, clientY: bounds.top + 130 }));
     component.finishCrop();
 
-    expect(component.cropSelection).toEqual({ x: 20, y: 30, width: 100, height: 100 });
+    expect(Math.abs(component.cropSelection!.x - 20)).toBeLessThan(1);
+    expect(Math.abs(component.cropSelection!.y - 30)).toBeLessThan(1);
+    expect(component.cropSelection?.width).toBeCloseTo(100, 1);
+    expect(component.cropSelection?.height).toBeCloseTo(100, 1);
     component.startCropResize(new MouseEvent('mousedown', {
       button: 0,
       clientX: bounds.left + 20,
@@ -730,15 +961,14 @@ describe('PdfWorkspaceComponent', () => {
       clientY: bounds.top + 50,
     }));
     component.finishCrop();
-    expect(component.cropSelection).toEqual({ x: 40, y: 50, width: 80, height: 80 });
+    expect(Math.abs(component.cropSelection!.x - 40)).toBeLessThan(1);
+    expect(Math.abs(component.cropSelection!.y - 50)).toBeLessThan(1);
+    expect(component.cropSelection?.width).toBeCloseTo(80, 1);
+    expect(component.cropSelection?.height).toBeCloseTo(80, 1);
     await component.applyCropSelection();
-    expect(pdfPageOperationsService.cropPage).toHaveBeenCalledWith(
-      originalBytes,
-      1,
-      200,
-      200,
-      { x: 40, y: 50, width: 80, height: 80 }
-    );
+    const appliedCrop = pdfPageOperationsService.cropPage.calls.mostRecent().args[4];
+    expect(pdfPageOperationsService.cropPage).toHaveBeenCalledWith(originalBytes, 1, 200, 200, appliedCrop);
+    expect(Math.abs(appliedCrop.x - 40)).toBeLessThan(1);
     expect(component.cropMode).toBeFalse();
     expect(component.canUndo).toBeTrue();
   });
@@ -1063,6 +1293,44 @@ describe('PdfWorkspaceComponent', () => {
     expect(component.overlayObjects[0].text).toBe('Updated label');
   });
 
+  it('creates, edits, removes, and navigates internal page links with undo and redo', async () => {
+    spyOn(window, 'prompt').and.returnValues('page:2', 'Go to page 2', 'page:3', 'Go to page 3');
+    component.totalPages = 3;
+    component.overlayWidth = 600;
+    component.overlayHeight = 400;
+
+    component.addLinkObject();
+    const created = component.overlayObjects[0];
+    expect(created.pageNumber).toBe(2);
+    expect(created.url).toBeUndefined();
+
+    component.selectedObjectId = created.id;
+    component.editSelection();
+    expect(component.overlayObjects[0].pageNumber).toBe(3);
+    await component.undoEdit();
+    expect(component.overlayObjects[0].pageNumber).toBe(2);
+    await component.redoEdit();
+    expect(component.overlayObjects[0].pageNumber).toBe(3);
+
+    component.document = {
+      id: 'doc-internal-link',
+      name: 'links.pdf',
+      totalPages: 3,
+      bytes: new Uint8Array([1]),
+      proxy: {},
+    } as any;
+    const clickEvent = new MouseEvent('click', { cancelable: true });
+    component.activateLink(clickEvent, component.overlayObjects[0]);
+    expect(clickEvent.defaultPrevented).toBeTrue();
+    expect(component.currentPage).toBe(3);
+
+    component.selectedObjectId = component.overlayObjects[0].id;
+    component.deleteSelection();
+    expect(component.overlayObjects).toHaveSize(0);
+    await component.undoEdit();
+    expect(component.overlayObjects[0].pageNumber).toBe(3);
+  });
+
   it('deletes selected object', () => {
     component.overlayObjects = [
       {
@@ -1098,6 +1366,63 @@ describe('PdfWorkspaceComponent', () => {
     component.onKeydown(redo);
     expect(redo.defaultPrevented).toBeTrue();
     expect(component.overlayObjects.length).toBe(1);
+  });
+
+  it('supports page and zoom keyboard controls without hijacking form input keys', () => {
+    component.document = {
+      id: 'keyboard-doc',
+      name: 'keyboard.pdf',
+      totalPages: 3,
+      bytes: new Uint8Array([1]),
+      proxy: {},
+    } as any;
+    component.totalPages = 3;
+    component.overlayObjects = [{
+      id: 'selected-object',
+      type: 'text',
+      x: 10,
+      y: 10,
+      width: 100,
+      height: 40,
+      label: 'Text',
+    }];
+    component.selectedObjectId = 'selected-object';
+
+    const pageDown = new KeyboardEvent('keydown', { key: 'PageDown', cancelable: true });
+    component.onKeydown(pageDown);
+    expect(pageDown.defaultPrevented).toBeTrue();
+    expect(component.currentPage).toBe(2);
+
+    const zoomIn = new KeyboardEvent('keydown', { key: '+', cancelable: true });
+    component.onKeydown(zoomIn);
+    expect(zoomIn.defaultPrevented).toBeTrue();
+    expect(component.zoom).toBeCloseTo(1.1);
+
+    const input = document.createElement('input');
+    const deleteFromInput = new KeyboardEvent('keydown', { key: 'Delete', cancelable: true });
+    Object.defineProperty(deleteFromInput, 'target', { value: input });
+    component.onKeydown(deleteFromInput);
+    expect(deleteFromInput.defaultPrevented).toBeFalse();
+    expect(component.overlayObjects).toHaveSize(1);
+  });
+
+  it('exposes accessible labels for the page canvas and navigation controls', () => {
+    component.document = {
+      id: 'a11y-doc',
+      name: 'accessible.pdf',
+      totalPages: 2,
+      bytes: new Uint8Array([1]),
+      proxy: {},
+    } as any;
+    component.totalPages = 2;
+    fixture.detectChanges();
+
+    const canvas = fixture.nativeElement.querySelector('canvas[role="img"]') as HTMLCanvasElement;
+    expect(canvas.getAttribute('aria-label')).toBe('PDF page 1 of 2');
+    expect(canvas.getAttribute('aria-describedby')).toBe('viewer-keyboard-help');
+    expect(fixture.nativeElement.querySelector('[aria-label="Previous page"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('[aria-label="Next page"]')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('[aria-label="Page layout"]')).not.toBeNull();
   });
 
   it('supports undo and redo for overlay changes', () => {

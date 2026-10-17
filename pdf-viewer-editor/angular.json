@@ -21,6 +21,7 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
+              "@angular/localize/init",
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
@@ -76,7 +77,9 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "pdf-viewer-editor:build"
+            "buildTarget": "pdf-viewer-editor:build",
+            "format": "xlf",
+            "outputPath": "src/locale"
           }
         },
         "test": {
@@ -84,6 +87,7 @@
           "options": {
             "polyfills": [
               "zone.js",
+              "@angular/localize/init",
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",

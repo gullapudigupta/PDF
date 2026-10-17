@@ -70,6 +70,9 @@ ipcMain.handle('dialog:saveFile', async (event, { defaultPath, data, mimeType = 
   const fileTypes = {
     'application/pdf': { name: 'PDF Files', extensions: ['pdf'] },
     'application/json': { name: 'JSON Files', extensions: ['json'] },
+    'image/png': { name: 'PNG Images', extensions: ['png'] },
+    'image/jpeg': { name: 'JPEG Images', extensions: ['jpg', 'jpeg'] },
+    'image/svg+xml': { name: 'SVG Images', extensions: ['svg'] },
   };
   if (!Object.prototype.hasOwnProperty.call(fileTypes, mimeType)) {
     throw new Error(`Unsupported save file type: ${mimeType}`);

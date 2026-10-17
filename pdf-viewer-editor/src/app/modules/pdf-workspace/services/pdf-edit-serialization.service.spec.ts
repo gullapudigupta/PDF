@@ -36,14 +36,15 @@ describe('PdfEditSerializationService', () => {
     const bytes = await createPdf();
     const overlays: PdfEditableOverlay[] = [
       { type: 'text', x: 40, y: 50, width: 180, height: 60, label: 'Text Box', text: 'Edited text' },
-      { type: 'link', x: 60, y: 120, width: 160, height: 40, label: 'Link', text: 'Open page', url: 'https://example.com' },
+      { type: 'link', x: 60, y: 120, width: 160, height: 40, label: 'Link', text: 'Open site', url: 'https://example.com' },
+      { type: 'link', x: 240, y: 120, width: 120, height: 40, label: 'Link', text: 'Go to page 2', pageNumber: 2 },
     ];
     const updated = await service.flattenEdits(bytes, 1, 400, 500, overlays, [annotation(2, 'A note')]);
     const document = await PDFDocument.load(updated);
 
     expect(document.getPageCount()).toBe(2);
     expect(document.getPage(0).node.Contents()).toBeDefined();
-    expect(document.getPage(0).node.Annots()?.size()).toBe(1);
+    expect(document.getPage(0).node.Annots()?.size()).toBe(2);
     expect(document.getPage(1).node.Contents()).toBeDefined();
   });
 
@@ -60,5 +61,11 @@ describe('PdfEditSerializationService', () => {
     await expectAsync(service.flattenEdits(bytes, 1, 400, 500, [
       { type: 'link', x: 0, y: 0, width: 10, height: 10, label: 'Link', url: 'javascript:alert(1)' },
     ], [])).toBeRejectedWithError('PDF links must use HTTP or HTTPS');
+    await expectAsync(service.flattenEdits(bytes, 1, 400, 500, [
+      { type: 'link', x: 0, y: 0, width: 10, height: 10, label: 'Link', pageNumber: 3 },
+    ], [])).toBeRejectedWithError('Invalid internal link page: 3');
+    await expectAsync(service.flattenEdits(bytes, 1, 400, 500, [
+      { type: 'link', x: 0, y: 0, width: 10, height: 10, label: 'Link' },
+    ], [])).toBeRejectedWithError('PDF link is missing a valid destination');
   });
 });

@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { RuntimeService } from '@core/services/runtime.service';
 import { PasswordResponses } from 'pdfjs-dist';
@@ -10,12 +10,23 @@ import { PdfPageOperationsService } from '../../services/pdf-page-operations.ser
 import { PdfEditSerializationService } from '../../services/pdf-edit-serialization.service';
 import { PdfFormField, PdfFormFieldPlacement, PdfFormService } from '../../services/pdf-form.service';
 import { PdfMetadata, PdfPermissionPreset, PdfSecurityService } from '../../services/pdf-security.service';
-import { PersistenceService } from '@core/services/persistence.service';
+import { PdfPageExportService, PdfPageImageFormat } from '../../services/pdf-page-export.service';
+import { PersistenceService, RecentFileRecord } from '@core/services/persistence.service';
 import { Annotation, AnnotationType } from '../../models/annotation.model';
 import { recordEditCommand, redoEditCommand, undoEditCommand } from '../../store/workspace.actions';
 
 type ResizeHandle = 'nw' | 'ne' | 'sw' | 'se';
 type EditableObjectType = 'text' | 'image' | 'link';
+type ViewingMode = 'single' | 'continuous' | 'facing';
+type WorkspaceTheme = 'light' | 'dark';
+type ToolbarGroup = 'editing' | 'search' | 'navigation' | 'annotations';
+
+interface ToolbarVisibility {
+  editing: boolean;
+  search: boolean;
+  navigation: boolean;
+  annotations: boolean;
+}
 
 interface EditableObject {
   id: string;
@@ -28,6 +39,7 @@ interface EditableObject {
   text?: string;
   imageSrc?: string;
   url?: string;
+  pageNumber?: number;
 }
 
 interface SearchResult {
@@ -82,14 +94,33 @@ interface SignatureAsset {
   selector: 'app-pdf-workspace',
   standalone: false,
   template: `
-    <div class="workspace-container">
+    <div class="workspace-container" [class.dark-theme]="theme === 'dark'">
       <div class="toolbar">
         <div class="toolbar-left">
-          <h1>PDF Viewer & Editor</h1>
-          <button (click)="openFile()">Open</button>
-          <fieldset class="pdf-toolbar-actions" [disabled]="!!document?.isEncrypted">
-          <button [disabled]="!document || loading" (click)="saveFile()">Save</button>
-          <button [disabled]="!document || loading" (click)="saveFileAs()">Save As</button>
+          <h1 i18n="@@pdfWorkspaceTitle">PDF Viewer &amp; Editor</h1>
+          <details class="recent-files">
+            <summary i18n="@@recentFiles">Recent</summary>
+            <button type="button" title="Open a PDF file" i18n-title="@@openPdfTooltip" i18n="@@openPdf" (click)="openFile()">Open PDF</button>
+            <p *ngIf="!recentFiles.length">No recent PDFs.</p>
+            <ol>
+              <li *ngFor="let recent of recentFiles">
+                <span>{{ recent.isPinned ? 'Pinned: ' : '' }}{{ recent.name }}</span>
+                <button type="button" [attr.aria-label]="'Open ' + recent.name" (click)="openRecentFile(recent)">Open</button>
+                <button type="button" [attr.aria-label]="(recent.isPinned ? 'Unpin ' : 'Pin ') + recent.name" (click)="toggleRecentPin(recent)">{{ recent.isPinned ? 'Unpin' : 'Pin' }}</button>
+                <button type="button" [attr.aria-label]="'Remove ' + recent.name + ' from recent files'" (click)="removeRecentFile(recent)">Remove</button>
+              </li>
+            </ol>
+          </details>
+          <details class="toolbar-customization">
+            <summary i18n="@@customizeToolbar">Customize toolbar</summary>
+            <label><input type="checkbox" [ngModel]="toolbarVisibility.editing" (ngModelChange)="setToolbarVisibility('editing', $event)" /> <span i18n="@@showEditingActions">Editing actions</span></label>
+            <label><input type="checkbox" [ngModel]="toolbarVisibility.search" (ngModelChange)="setToolbarVisibility('search', $event)" /> <span i18n="@@showSearchTools">Search tools</span></label>
+            <label><input type="checkbox" [ngModel]="toolbarVisibility.navigation" (ngModelChange)="setToolbarVisibility('navigation', $event)" /> <span i18n="@@showPageNavigation">Page navigation</span></label>
+            <label><input type="checkbox" [ngModel]="toolbarVisibility.annotations" (ngModelChange)="setToolbarVisibility('annotations', $event)" /> <span i18n="@@showAnnotations">Annotations panel</span></label>
+          </details>
+          <fieldset *ngIf="toolbarVisibility.editing" class="pdf-toolbar-actions" [disabled]="!!document?.isEncrypted || viewingMode !== 'single'">
+          <button i18n="@@savePdf" title="Save changes to this PDF" i18n-title="@@savePdfTooltip" [disabled]="!document || loading" (click)="saveFile()">Save</button>
+          <button i18n="@@savePdfAs" title="Save a copy of this PDF" i18n-title="@@savePdfAsTooltip" [disabled]="!document || loading" (click)="saveFileAs()">Save As</button>
           <button *ngIf="document" (click)="openMetadataDialog()">Metadata</button>
           <button *ngIf="document" (click)="openProtectionDialog()">Protect PDF</button>
           <button [disabled]="!document || loading || totalPages <= 1" (click)="deleteCurrentPage()">Delete Page</button>
@@ -109,6 +140,15 @@ interface SignatureAsset {
           <button *ngIf="document" (click)="beginFormFieldAuthoring('checkbox')" [attr.aria-pressed]="formAuthoringType === 'checkbox'">Add Checkbox Field</button>
           <button *ngIf="document" (click)="beginFormFieldAuthoring('dropdown')" [attr.aria-pressed]="formAuthoringType === 'dropdown'">Add Dropdown Field</button>
           <button *ngIf="document" (click)="exportFormData()">Export Form Data</button>
+          <label *ngIf="document">
+            Export page format
+            <select aria-label="Export page format" [(ngModel)]="pageExportFormat">
+              <option value="png">PNG</option>
+              <option value="jpeg">JPEG</option>
+              <option value="svg">SVG</option>
+            </select>
+          </label>
+          <button *ngIf="document" [disabled]="loading || document.isEncrypted" (click)="exportCurrentPage()">Export Current Page</button>
           <button *ngIf="document" (click)="formDataInput.click()">Import Form Data</button>
           <input #formDataInput type="file" accept="application/json,.json" hidden (change)="importFormDataFile($event)" />
           <button *ngIf="selectedFormFieldName" (click)="toggleSelectedFieldRequired()">{{ selectedFormFieldRequired ? 'Mark Optional' : 'Mark Required' }}</button>
@@ -137,11 +177,12 @@ interface SignatureAsset {
           </fieldset>
         </div>
 
-        <div class="toolbar-right">
+        <div class="toolbar-right" *ngIf="toolbarVisibility.search">
           <input
             type="text"
             [(ngModel)]="searchQuery"
             (keyup.enter)="searchInDocument()"
+            aria-label="Search text"
             placeholder="Search text"
           />
           <label><input type="checkbox" [(ngModel)]="searchCaseSensitive" /> Match case</label>
@@ -201,23 +242,51 @@ interface SignatureAsset {
         </form>
       </section>
 
-      <div class="viewer-controls" *ngIf="document">
-        <button (click)="previousPage()" [disabled]="currentPage <= 1 || loading">?</button>
-        <span>Page {{ currentPage }} / {{ totalPages }}</span>
-        <button (click)="nextPage()" [disabled]="currentPage >= totalPages || loading">?</button>
+      <div class="viewer-controls" *ngIf="document && toolbarVisibility.navigation">
+        <button aria-label="Previous page" title="Go to the previous page" i18n-title="@@previousPageTooltip" i18n="@@previousPage" (click)="previousPage()" [disabled]="atFirstViewingSpread || loading">Previous</button>
+        <span role="status" aria-live="polite" i18n="@@pageCount">Page {{ currentPage }} / {{ totalPages }}</span>
+        <button aria-label="Next page" title="Go to the next page" i18n-title="@@nextPageTooltip" i18n="@@nextPage" (click)="nextPage()" [disabled]="atLastViewingSpread || loading">Next</button>
 
-        <button (click)="zoomOut()" [disabled]="loading">-</button>
-        <span>{{ (zoom * 100).toFixed(0) }}%</span>
-        <button (click)="zoomIn()" [disabled]="loading">+</button>
+        <button aria-label="Zoom out" title="Decrease page zoom" i18n-title="@@zoomOutTooltip" (click)="zoomOut()" [disabled]="loading">-</button>
+        <span aria-live="polite">{{ (zoom * 100).toFixed(0) }}%</span>
+        <button aria-label="Zoom in" title="Increase page zoom" i18n-title="@@zoomInTooltip" (click)="zoomIn()" [disabled]="loading">+</button>
 
-        <button (click)="rotateLeft()" [disabled]="loading">?</button>
-        <button (click)="rotateRight()" [disabled]="loading">?</button>
+        <button aria-label="Rotate counterclockwise" title="Rotate counterclockwise" i18n-title="@@rotateCounterclockwiseTooltip" (click)="rotateLeft()" [disabled]="loading">Rotate left</button>
+        <button aria-label="Rotate clockwise" title="Rotate clockwise" i18n-title="@@rotateClockwiseTooltip" (click)="rotateRight()" [disabled]="loading">Rotate right</button>
+        <label>
+          <span i18n="@@pageLayout">Page layout</span>
+          <select aria-label="Page layout" [ngModel]="viewingMode" (ngModelChange)="setViewingMode($event)">
+            <option value="single">Single page</option>
+            <option value="continuous">Continuous</option>
+            <option value="facing">Facing pages</option>
+          </select>
+        </label>
+        <label>
+          <span i18n="@@theme">Theme</span>
+          <select aria-label="Theme" [ngModel]="theme" (ngModelChange)="setTheme($event)">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+        </label>
+        <label><input type="checkbox" [ngModel]="darkPageRendering" (ngModelChange)="setDarkPageRendering($event)" /> Dark page</label>
+        <details class="viewer-help">
+          <summary i18n="@@help">Help</summary>
+          <p i18n="@@keyboardHelp">Use Page Up/Page Down or the arrow keys to navigate, plus/minus to zoom, and Control/Command with Z to undo.</p>
+          <p i18n="@@editingModeHelp">Switch to Single page to edit. Continuous and Facing pages are reading modes.</p>
+        </details>
+        <button type="button" (click)="closeDocument()" [disabled]="loading">Close PDF</button>
       </div>
 
       <div class="content" #viewerHost>
+        <span id="viewer-keyboard-help" class="visually-hidden">
+          Use Page Up and Page Down to navigate pages, plus and minus to zoom, and Control or Command with Z to undo.
+        </span>
         <div class="status" *ngIf="loading">Loading PDF...</div>
         <div class="status error" *ngIf="!loading && error">{{ error }}</div>
         <div class="status" *ngIf="!loading && !document && !error">Open a PDF to start.</div>
+        <div class="status" *ngIf="document && viewingMode !== 'single'" role="status">
+          Multi-page viewing is read-only. Switch to Single page to edit this PDF.
+        </div>
 
         <aside class="navigation-sidebar" *ngIf="document" aria-label="Page thumbnails and bookmarks">
           <h2>Pages</h2>
@@ -251,8 +320,10 @@ interface SignatureAsset {
           </ul>
         </aside>
 
-        <div class="page-stage" *ngIf="document && !loading" #stageHost>
-          <canvas #viewerCanvas></canvas>
+        <div class="page-stage" *ngIf="document && !loading && viewingMode === 'single'" #stageHost
+          role="region" aria-label="PDF page viewer">
+          <canvas #viewerCanvas tabindex="0" role="img" [attr.aria-describedby]="'viewer-keyboard-help'"
+            [attr.aria-label]="'PDF page ' + currentPage + ' of ' + totalPages" [class.dark-page]="darkPageRendering"></canvas>
 
           <div class="overlay-layer" #annotationLayer [class.annotation-mode]="annotationTool !== null" [class.crop-mode]="cropMode" [class.form-authoring-mode]="formAuthoringType !== null" [style.width.px]="overlayWidth" [style.height.px]="overlayHeight" (mousedown)="startAnnotation($event); startCrop($event); startFormFieldPlacement($event)" (mousemove)="moveAnnotation($event); moveCrop($event)" (mouseup)="finishAnnotation(); finishCrop()">
             <ng-container *ngFor="let annotation of pageAnnotations">
@@ -316,10 +387,10 @@ interface SignatureAsset {
               <a
                 *ngIf="object.type === 'link'"
                 class="overlay-link-content"
-                [href]="object.url || '#'"
-                target="_blank"
+                [href]="object.pageNumber ? '#page-' + object.pageNumber : (object.url || '#')"
+                [target]="object.pageNumber ? null : '_blank'"
                 rel="noreferrer"
-                (click)="$event.stopPropagation()"
+                (click)="activateLink($event, object)"
               >
                 {{ object.text || object.url }}
               </a>
@@ -355,9 +426,22 @@ interface SignatureAsset {
             </div>
           </div>
         </div>
+        <div class="multi-page-view" *ngIf="document && !loading && viewingMode !== 'single'"
+          #multiPageView [class.facing-pages]="viewingMode === 'facing'"
+          (scroll)="onMultiPageScroll($event)" [attr.aria-label]="viewingMode === 'continuous' ? 'Continuous PDF pages' : 'Facing PDF pages'">
+          <div class="mode-page" *ngFor="let page of viewingPages; trackBy: trackPageNumber"
+            [attr.data-view-page]="page">
+            <canvas *ngIf="shouldRenderModePage(page)" #modePageCanvas tabindex="0" role="img"
+              [class.dark-page]="darkPageRendering"
+              [attr.aria-label]="'PDF page ' + page"></canvas>
+            <div *ngIf="!shouldRenderModePage(page)" class="page-placeholder"
+              [style.height.px]="estimatedPageHeight" [attr.aria-label]="'PDF page ' + page"></div>
+            <span>Page {{ page }}</span>
+          </div>
+        </div>
       </div>
 
-<aside class="annotation-panel" *ngIf="document" aria-label="PDF annotations">
+<aside class="annotation-panel" *ngIf="document && toolbarVisibility.annotations" aria-label="PDF annotations">
         <h2>Annotations ({{ annotations.length }})</h2>
         <label>Filter annotations
           <select [(ngModel)]="annotationFilter" aria-label="Filter annotations">
@@ -367,7 +451,7 @@ interface SignatureAsset {
         <input type="search" [(ngModel)]="annotationSearch" aria-label="Search annotations" placeholder="Search annotations" />
         <ul><li *ngFor="let annotation of visibleAnnotations">
           <button type="button" class="annotation-jump" (click)="jumpToAnnotation(annotation)">{{ annotation.type }} ? page {{ annotation.page }}{{ annotation.content ? ': ' + annotation.content : '' }}</button>
-          <button type="button" (click)="editAnnotation(annotation)">Edit</button><button type="button" (click)="deleteAnnotation(annotation)">Delete</button>
+          <button type="button" [disabled]="!!document?.isEncrypted" (click)="editAnnotation(annotation)">Edit</button><button type="button" [disabled]="!!document?.isEncrypted" (click)="deleteAnnotation(annotation)">Delete</button>
         </li></ul>
       </aside>
       <div class="search-result" *ngIf="searchMessage">{{ searchMessage }}</div>
@@ -426,6 +510,67 @@ interface SignatureAsset {
         height: 100%;
       }
 
+      .workspace-container.dark-theme {
+        color: #f1f3f5;
+        background: #202124;
+      }
+
+      .dark-theme .toolbar,
+      .dark-theme .viewer-controls,
+      .dark-theme .navigation-sidebar,
+      .dark-theme .annotation-panel {
+        color: #f1f3f5;
+        background: #2b2d31;
+        border-color: #555;
+      }
+
+      .dark-theme .content { background: #17181a; }
+      .dark-theme button,
+      .dark-theme input,
+      .dark-theme select { color: #f1f3f5; background: #383a40; border-color: #666; }
+      .dark-theme .recent-files { color: #f1f3f5; background: #2b2d31; border-color: #666; }
+      .dark-theme .toolbar-customization { color: #f1f3f5; background: #2b2d31; border-color: #666; }
+      .dark-theme .status,
+      .dark-theme .search-result,
+      .dark-theme .search-results { color: #f1f3f5; background: #2b2d31; border-color: #555; }
+      .dark-theme .error,
+      .dark-theme .thumbnail-error { color: #ffb4ab; }
+      .dark-theme mark { color: #202124; background: #f4c542; }
+
+      .multi-page-view {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        min-width: 0;
+        overflow: auto;
+      }
+
+      .multi-page-view.facing-pages {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        justify-content: center;
+      }
+
+      .mode-page {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .mode-page canvas { max-width: 100%; }
+      .page-placeholder {
+        width: min(100%, 800px);
+        min-height: 320px;
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+      }
+      .facing-pages .page-placeholder { width: min(42vw, 400px); }
+      canvas.dark-page { filter: invert(1) hue-rotate(180deg); }
+
       .toolbar {
         display: flex;
         justify-content: space-between;
@@ -434,6 +579,50 @@ interface SignatureAsset {
         padding: 12px 16px;
         background: #f5f5f5;
         border-bottom: 1px solid #ddd;
+        position: relative;
+      }
+
+      .recent-files {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 16px;
+        z-index: 10;
+        max-width: min(540px, calc(100vw - 32px));
+        padding: 8px;
+        border: 1px solid #c9c9c9;
+        border-radius: 4px;
+        background: white;
+        box-shadow: 0 4px 12px #0002;
+      }
+
+      .toolbar-customization {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 120px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 8px;
+        border: 1px solid #c9c9c9;
+        border-radius: 4px;
+        background: white;
+        box-shadow: 0 4px 12px #0002;
+      }
+
+      .toolbar-customization label { display: flex; align-items: center; gap: 6px; }
+
+      .recent-files ol {
+        max-height: 40vh;
+        overflow-y: auto;
+        padding-left: 24px;
+      }
+
+      .recent-files li {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 6px 0;
       }
 
       .toolbar-left,
@@ -460,6 +649,34 @@ interface SignatureAsset {
       button:disabled {
         cursor: not-allowed;
         opacity: 0.6;
+      }
+
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      summary:focus-visible,
+      canvas:focus-visible,
+      [tabindex="0"]:focus-visible {
+        outline: 3px solid #0b57d0;
+        outline-offset: 2px;
+      }
+
+      .dark-theme button:focus-visible,
+      .dark-theme input:focus-visible,
+      .dark-theme select:focus-visible,
+      .dark-theme summary:focus-visible,
+      .dark-theme canvas:focus-visible {
+        outline-color: #8ab4f8;
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        clip-path: inset(50%);
       }
 
       input {
@@ -667,11 +884,13 @@ interface SignatureAsset {
     `,
   ],
 })
-export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
+export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnInit {
   @ViewChild('viewerCanvas') viewerCanvas?: ElementRef<HTMLCanvasElement>;
   @ViewChild('viewerHost') viewerHost?: ElementRef<HTMLDivElement>;
   @ViewChild('stageHost') stageHost?: ElementRef<HTMLDivElement>;
   @ViewChild('annotationLayer') annotationLayer?: ElementRef<HTMLDivElement>;
+  @ViewChild('multiPageView') multiPageView?: ElementRef<HTMLDivElement>;
+  @ViewChildren('modePageCanvas') modePageCanvases?: QueryList<ElementRef<HTMLCanvasElement>>;
   @ViewChild('signatureCanvas') signatureCanvas?: ElementRef<HTMLCanvasElement>;
 
   document: LoadedPdfDocument | null = null;
@@ -714,6 +933,14 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   protectionOwnerPassword = '';
   protectionOwnerPasswordConfirm = '';
   permissionPreset: PdfPermissionPreset = 'view';
+  pageExportFormat: PdfPageImageFormat = 'png';
+  recentFiles: RecentFileRecord[] = [];
+  toolbarVisibility: ToolbarVisibility = {
+    editing: true,
+    search: true,
+    navigation: true,
+    annotations: true,
+  };
   selectedPages: number[] = [];
   cropMode = false;
   cropDraft: CropRectangle | null = null;
@@ -723,6 +950,12 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   totalPages = 0;
   zoom = 1;
   rotation = 0;
+  viewingMode: ViewingMode = 'single';
+  theme: WorkspaceTheme = 'light';
+  darkPageRendering = false;
+  private preferredViewingMode: ViewingMode = 'single';
+  private preferredTheme: WorkspaceTheme = 'light';
+  private preferredDarkPageRendering = false;
 
   overlayObjects: EditableObject[] = [];
   selectedObjectId: string | null = null;
@@ -753,6 +986,8 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   private readonly thumbnailRenderScheduled = new Set<number>();
   private readonly pageTransformUndo: Uint8Array[] = [];
   private readonly pageTransformRedo: Uint8Array[] = [];
+  private renderedModeKey = '';
+  private viewStateSaveTimer: ReturnType<typeof setTimeout> | null = null;
   private cropStartX = 0;
   private cropStartY = 0;
   private signatureDataUrl = '';
@@ -775,21 +1010,30 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
     private editSerializationService: PdfEditSerializationService,
     private pdfFormService: PdfFormService,
     private pdfSecurityService: PdfSecurityService,
+    private pdfPageExportService: PdfPageExportService,
     private persistenceService: PersistenceService,
     private cdr: ChangeDetectorRef
   ) {}
 
+  ngOnInit(): void {
+    void this.refreshRecentFiles();
+    void this.loadWorkspacePreferences();
+  }
+
   ngAfterViewChecked(): void {
     this.renderVisibleThumbnails();
+    void this.renderModePagesIfNeeded();
   }
 
   ngOnDestroy(): void {
+    if (this.viewStateSaveTimer) clearTimeout(this.viewStateSaveTimer);
     this.cancelPasswordPrompt();
     if (this.autosaveTimer) {
       clearTimeout(this.autosaveTimer);
       this.autosaveTimer = null;
       void this.autosaveNow();
     }
+    this.pdfDocumentService.closeCurrent();
   }
 
   async openFile(): Promise<void> {
@@ -814,49 +1058,344 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
         result.file,
         reason => this.requestPdfPassword(reason)
       );
-      this.formWidgets = [];
-      this.formFields = [];
-      this.formVisibilityRules = [];
-      this.savedFilePath = this.runtimeService.isDesktop() ? result.fileName ?? null : null;
-      const autosaveData = await this.persistenceService.getAutosaveData(this.document.id);
-      if (autosaveData && !this.sameBytes(this.document.bytes, new Uint8Array(autosaveData))) {
-        if (window.confirm(`Recover the autosaved version of ${this.document.name}?`)) {
-          this.document = await this.pdfDocumentService.replaceCurrentDocumentBytes(new Uint8Array(autosaveData));
-        } else {
-          await this.persistenceService.clearAutosave(this.document.id);
-        }
-      } else if (autosaveData) {
-        await this.persistenceService.clearAutosave(this.document.id);
-      }
-      this.totalPages = this.document.totalPages;
-      this.thumbnailRenderStates.clear();
-      this.thumbnailSources.clear();
-      this.thumbnailRenderScheduled.clear();
-      this.thumbnailError = null;
-      this.visibleThumbnailPages = [];
-      this.updateThumbnailWindow(0, 360);
-      await this.loadBookmarks();
-      this.currentPage = 1;
-      this.zoom = 1;
-      this.rotation = 0;
-      this.overlayObjects = [];
-      this.annotations = this.annotationService.list(this.document.id);
-      this.annotationTool = null;
-      this.annotationDraft = null;
-      this.selectedObjectId = null;
-      this.clipboardObject = null;
-      this.historyService.clear();
-      this.syncHistoryState();
-      this.loading = false;
-      this.cdr.detectChanges();
-
-      await this.renderCurrentPage();
+      await this.activateLoadedDocument(this.document, result.filePath);
+      await this.persistRecentDocument(result.filePath ?? null);
     } catch (err) {
       this.error = err instanceof PdfPasswordCancelledError
         ? null
         : err instanceof Error ? err.message : 'Failed to open PDF';
       this.loading = false;
     }
+  }
+
+  async openRecentFile(recent: RecentFileRecord): Promise<void> {
+    if (!this.runtimeService.isDesktop() || !recent.path) {
+      await this.openFile();
+      return;
+    }
+    try {
+      if (this.autosaveTimer) {
+        clearTimeout(this.autosaveTimer);
+        this.autosaveTimer = null;
+        if (!(await this.autosaveNow())) return;
+      }
+      this.loading = true;
+      this.error = null;
+      const data = await this.runtimeService.readFile(recent.path);
+      this.document = await this.pdfDocumentService.loadFromBytes(
+        new Uint8Array(data),
+        recent.name,
+        recent.id,
+        reason => this.requestPdfPassword(reason)
+      );
+      await this.activateLoadedDocument(this.document, recent.path);
+      await this.persistRecentDocument(recent.path);
+    } catch (error) {
+      this.error = error instanceof PdfPasswordCancelledError
+        ? null
+        : `Unable to reopen ${recent.name}: ${error instanceof Error ? error.message : String(error)}`;
+      this.loading = false;
+    }
+  }
+
+  async toggleRecentPin(recent: RecentFileRecord): Promise<void> {
+    try {
+      await this.persistenceService.setRecentFilePinned(recent.id, !recent.isPinned);
+      await this.refreshRecentFiles();
+    } catch (error) {
+      this.error = `Unable to update pinned PDF: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
+  async removeRecentFile(recent: RecentFileRecord): Promise<void> {
+    try {
+      await this.persistenceService.removeRecentFileRecord(recent.id);
+      await this.refreshRecentFiles();
+    } catch (error) {
+      this.error = `Unable to remove recent PDF: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
+  async closeDocument(): Promise<void> {
+    if (this.autosaveTimer) {
+      clearTimeout(this.autosaveTimer);
+      this.autosaveTimer = null;
+      if (!(await this.autosaveNow())) return;
+    }
+    this.pdfDocumentService.closeCurrent();
+    this.document = null;
+    this.totalPages = 0;
+    this.currentPage = 1;
+    this.overlayObjects = [];
+    this.annotations = [];
+    this.formWidgets = [];
+    this.formFields = [];
+    this.selectedObjectId = null;
+    this.annotationTool = null;
+    this.viewingMode = this.preferredViewingMode;
+    this.renderedModeKey = '';
+    this.thumbnailRenderStates.clear();
+    this.thumbnailSources.clear();
+    this.visibleThumbnailPages = [];
+    this.cdr.detectChanges();
+  }
+
+  private async activateLoadedDocument(document: LoadedPdfDocument, filePath?: string): Promise<void> {
+    if (!this.document) return;
+    this.formWidgets = [];
+    this.formFields = [];
+    this.formVisibilityRules = [];
+    this.savedFilePath = this.runtimeService.isDesktop() ? filePath ?? null : null;
+    if (!document.isEncrypted) {
+      const autosaveData = await this.persistenceService.getAutosaveData(document.id);
+      if (autosaveData && !this.sameBytes(document.bytes, new Uint8Array(autosaveData))) {
+        if (window.confirm(`Recover the autosaved version of ${document.name}?`)) {
+          this.document = await this.pdfDocumentService.replaceCurrentDocumentBytes(new Uint8Array(autosaveData));
+        } else {
+          await this.persistenceService.clearAutosave(document.id);
+        }
+      } else if (autosaveData) {
+        await this.persistenceService.clearAutosave(document.id);
+      }
+    }
+    if (!this.document) return;
+    this.totalPages = this.document.totalPages;
+    this.thumbnailRenderStates.clear();
+    this.thumbnailSources.clear();
+    this.thumbnailRenderScheduled.clear();
+    this.thumbnailError = null;
+    this.visibleThumbnailPages = [];
+    this.updateThumbnailWindow(0, 360);
+    await this.loadBookmarks();
+    const viewState = await this.persistenceService.getSetting<{
+      page?: number;
+      zoom?: number;
+      viewingMode?: ViewingMode;
+      theme?: WorkspaceTheme;
+      darkPageRendering?: boolean;
+    }>(
+      `workspaceView:${document.id}`
+    );
+    this.currentPage = Number.isInteger(viewState?.page)
+      ? Math.min(Math.max(viewState!.page!, 1), this.totalPages)
+      : 1;
+    this.zoom = typeof viewState?.zoom === 'number' && Number.isFinite(viewState.zoom)
+      ? Math.min(3, Math.max(0.5, viewState.zoom))
+      : 1;
+    this.viewingMode = viewState?.viewingMode && ['single', 'continuous', 'facing'].includes(viewState.viewingMode)
+      ? viewState.viewingMode
+      : this.preferredViewingMode;
+    this.theme = viewState?.theme === 'light' || viewState?.theme === 'dark'
+      ? viewState.theme
+      : this.preferredTheme;
+    this.darkPageRendering = typeof viewState?.darkPageRendering === 'boolean'
+      ? viewState.darkPageRendering
+      : this.preferredDarkPageRendering;
+    this.rotation = 0;
+    this.renderedModeKey = '';
+    this.overlayObjects = [];
+    this.annotations = document.isEncrypted ? [] : this.annotationService.list(document.id);
+    this.annotationTool = null;
+    this.annotationDraft = null;
+    this.selectedObjectId = null;
+    this.clipboardObject = null;
+    this.historyService.clear();
+    this.syncHistoryState();
+    this.loading = false;
+    this.cdr.detectChanges();
+
+    await this.renderCurrentPage();
+  }
+
+  private async persistRecentDocument(path: string | null): Promise<void> {
+    if (!this.document) return;
+    try {
+      await this.persistenceService.recordRecentFile({
+        id: this.document.id,
+        name: this.document.name,
+        path,
+        lastOpenedAt: Date.now(),
+      });
+      await this.refreshRecentFiles();
+    } catch (error) {
+      this.error = `PDF opened, but recent-file history could not be saved: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
+  private async refreshRecentFiles(): Promise<void> {
+    try {
+      this.recentFiles = await this.persistenceService.listRecentFileRecords();
+    } catch (error) {
+      this.error = `Unable to load recent PDFs: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
+  get viewingPages(): number[] {
+    if (this.viewingMode === 'continuous') {
+      return Array.from({ length: this.totalPages }, (_, index) => index + 1);
+    }
+    if (this.viewingMode === 'facing') {
+      const firstPage = this.getFacingStart(this.currentPage);
+      return [firstPage, firstPage + 1].filter(page => page <= this.totalPages);
+    }
+    return [this.currentPage];
+  }
+
+  get modeCanvasPages(): number[] {
+    if (this.viewingMode === 'continuous') {
+      return this.viewingPages.filter(page => Math.abs(page - this.currentPage) <= 2);
+    }
+    return this.viewingPages;
+  }
+
+  get estimatedPageHeight(): number {
+    const availableWidth = Math.max(240, (this.multiPageView?.nativeElement.clientWidth ?? 960) - 32);
+    const pageWidth = this.viewingMode === 'facing' ? Math.max(120, (availableWidth - 16) / 2) : availableWidth;
+    return Math.ceil(pageWidth * 1.3);
+  }
+
+  shouldRenderModePage(page: number): boolean {
+    return this.viewingMode === 'continuous'
+      ? Math.abs(page - this.currentPage) <= 2
+      : this.viewingMode === 'facing' && this.viewingPages.includes(page);
+  }
+
+  get atFirstViewingSpread(): boolean {
+    return this.viewingMode === 'facing' ? this.getFacingStart(this.currentPage) <= 1 : this.currentPage <= 1;
+  }
+
+  get atLastViewingSpread(): boolean {
+    return this.viewingMode === 'facing'
+      ? this.getFacingStart(this.currentPage) + 1 >= this.totalPages
+      : this.currentPage >= this.totalPages;
+  }
+
+  private getFacingStart(page: number): number {
+    return page % 2 === 0 ? page - 1 : page;
+  }
+
+  trackPageNumber(_index: number, page: number): number {
+    return page;
+  }
+
+  async setViewingMode(mode: ViewingMode): Promise<void> {
+    if (!['single', 'continuous', 'facing'].includes(mode) || mode === this.viewingMode) return;
+    this.viewingMode = mode;
+    this.preferredViewingMode = mode;
+    this.renderedModeKey = '';
+    await this.persistWorkspacePreferences();
+    await this.persistWorkspaceViewState();
+    this.cdr.detectChanges();
+    if (mode === 'single') await this.renderCurrentPage();
+    else this.scrollToModePage(this.currentPage);
+  }
+
+  async setTheme(theme: WorkspaceTheme): Promise<void> {
+    if (theme !== 'light' && theme !== 'dark') return;
+    this.theme = theme;
+    this.preferredTheme = theme;
+    await this.persistWorkspacePreferences();
+    await this.persistWorkspaceViewState();
+  }
+
+  async setDarkPageRendering(enabled: boolean): Promise<void> {
+    this.darkPageRendering = enabled;
+    this.preferredDarkPageRendering = enabled;
+    this.renderedModeKey = '';
+    await this.persistWorkspacePreferences();
+    await this.persistWorkspaceViewState();
+  }
+
+  onMultiPageScroll(event: Event): void {
+    if (this.viewingMode !== 'continuous') return;
+    const container = event.currentTarget as HTMLElement;
+    const containerTop = container.getBoundingClientRect().top;
+    const visiblePages = Array.from(container.querySelectorAll<HTMLElement>('[data-view-page]'));
+    const current = visiblePages.reduce<{ page: number; distance: number } | null>((nearest, element) => {
+      const page = Number(element.dataset['viewPage']);
+      const distance = Math.abs(element.getBoundingClientRect().top - containerTop);
+      return !nearest || distance < nearest.distance ? { page, distance } : nearest;
+    }, null);
+    if (!current || current.page === this.currentPage) return;
+    this.currentPage = current.page;
+    this.scheduleWorkspaceViewStateSave();
+  }
+
+  private async loadWorkspacePreferences(): Promise<void> {
+    try {
+      const preferences = await this.persistenceService.getSetting<{
+        theme?: WorkspaceTheme;
+        darkPageRendering?: boolean;
+        viewingMode?: ViewingMode;
+        toolbarVisibility?: Partial<ToolbarVisibility>;
+      }>(
+        'workspacePreferences'
+      );
+      if (preferences?.theme === 'light' || preferences?.theme === 'dark') {
+        this.preferredTheme = this.theme = preferences.theme;
+      }
+      if (typeof preferences?.darkPageRendering === 'boolean') {
+        this.preferredDarkPageRendering = this.darkPageRendering = preferences.darkPageRendering;
+      }
+      if (preferences?.viewingMode && ['single', 'continuous', 'facing'].includes(preferences.viewingMode)) {
+        this.preferredViewingMode = this.viewingMode = preferences.viewingMode;
+      }
+      if (preferences?.toolbarVisibility) {
+        this.toolbarVisibility = {
+          editing: typeof preferences.toolbarVisibility.editing === 'boolean'
+            ? preferences.toolbarVisibility.editing : this.toolbarVisibility.editing,
+          search: typeof preferences.toolbarVisibility.search === 'boolean'
+            ? preferences.toolbarVisibility.search : this.toolbarVisibility.search,
+          navigation: typeof preferences.toolbarVisibility.navigation === 'boolean'
+            ? preferences.toolbarVisibility.navigation : this.toolbarVisibility.navigation,
+          annotations: typeof preferences.toolbarVisibility.annotations === 'boolean'
+            ? preferences.toolbarVisibility.annotations : this.toolbarVisibility.annotations,
+        };
+      }
+    } catch (error) {
+      this.error = `Unable to load viewer preferences: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
+  private async persistWorkspacePreferences(): Promise<void> {
+    try {
+      await this.persistenceService.setSetting('workspacePreferences', {
+        theme: this.preferredTheme,
+        darkPageRendering: this.preferredDarkPageRendering,
+        viewingMode: this.preferredViewingMode,
+        toolbarVisibility: { ...this.toolbarVisibility },
+      });
+    } catch (error) {
+      this.error = `Unable to save viewer preferences: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
+  async setToolbarVisibility(group: ToolbarGroup, visible: boolean): Promise<void> {
+    this.toolbarVisibility = { ...this.toolbarVisibility, [group]: visible };
+    await this.persistWorkspacePreferences();
+  }
+
+  private async persistWorkspaceViewState(): Promise<void> {
+    if (!this.document) return;
+    try {
+      await this.persistenceService.setSetting(`workspaceView:${this.document.id}`, {
+        page: this.currentPage,
+        zoom: this.zoom,
+        viewingMode: this.viewingMode,
+        theme: this.theme,
+        darkPageRendering: this.darkPageRendering,
+      });
+    } catch (error) {
+      this.error = `Unable to save document view state: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
+  private scheduleWorkspaceViewStateSave(): void {
+    if (this.viewStateSaveTimer) clearTimeout(this.viewStateSaveTimer);
+    this.viewStateSaveTimer = setTimeout(() => {
+      this.viewStateSaveTimer = null;
+      void this.persistWorkspaceViewState();
+    }, 250);
   }
 
   async saveFile(): Promise<void> {
@@ -949,6 +1488,26 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
       this.protectionUserPasswordConfirm = '';
       this.protectionOwnerPassword = '';
       this.protectionOwnerPasswordConfirm = '';
+    }
+  }
+
+  async exportCurrentPage(): Promise<void> {
+    if (!this.document || this.document.isEncrypted) return;
+    this.loading = true;
+    try {
+      const exported = await this.pdfPageExportService.exportPage(
+        this.document.bytes,
+        this.currentPage,
+        this.pageExportFormat
+      );
+      const baseName = this.document.name.replace(/\.pdf$/i, '');
+      const name = `${baseName}-page-${this.currentPage}.${exported.extension}`;
+      await this.runtimeService.saveFileDialog(name, exported.bytes, exported.mimeType);
+      this.error = null;
+    } catch (error) {
+      this.error = `Unable to export page: ${error instanceof Error ? error.message : String(error)}`;
+    } finally {
+      this.loading = false;
     }
   }
 
@@ -1062,20 +1621,26 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   }
 
   async previousPage(): Promise<void> {
-    if (this.currentPage <= 1 || this.loading) {
+    if (this.atFirstViewingSpread || this.loading) {
       return;
     }
 
-    this.currentPage -= 1;
+    this.currentPage = this.viewingMode === 'facing'
+      ? Math.max(1, this.getFacingStart(this.currentPage) - 2)
+      : this.currentPage - 1;
+    await this.persistWorkspaceViewState();
     await this.renderCurrentPage();
   }
 
   async nextPage(): Promise<void> {
-    if (this.currentPage >= this.totalPages || this.loading) {
+    if (this.atLastViewingSpread || this.loading) {
       return;
     }
 
-    this.currentPage += 1;
+    this.currentPage = this.viewingMode === 'facing'
+      ? Math.min(this.totalPages, this.getFacingStart(this.currentPage) + 2)
+      : this.currentPage + 1;
+    await this.persistWorkspaceViewState();
     await this.renderCurrentPage();
   }
 
@@ -1087,6 +1652,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   async goToPage(page: number): Promise<void> {
     if (!this.document || !Number.isInteger(page) || page < 1 || page > this.document.totalPages) return;
     this.currentPage = page;
+    await this.persistWorkspaceViewState();
     await this.renderCurrentPage();
   }
 
@@ -1388,7 +1954,11 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   private async renderThumbnail(document: LoadedPdfDocument, page: number): Promise<void> {
     try {
       const canvas = globalThis.document.createElement('canvas');
-      await this.pdfRenderService.renderPageToCanvas(document.bytes, page, canvas, { fitWidth: 120, fitHeight: 104 });
+      if (document.isEncrypted) {
+        await this.pdfRenderService.renderLoadedPageToCanvas(document.proxy, page, canvas, { fitWidth: 120, fitHeight: 104 });
+      } else {
+        await this.pdfRenderService.renderPageToCanvas(document.bytes, page, canvas, { fitWidth: 120, fitHeight: 104 });
+      }
       if (this.document?.id !== document.id) return;
       this.thumbnailSources.set(page, canvas.toDataURL());
       this.thumbnailRenderStates.set(page, 'ready');
@@ -1399,13 +1969,59 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
     }
   }
 
+  private async renderModePagesIfNeeded(): Promise<void> {
+    if (!this.document || this.loading || this.viewingMode === 'single') {
+      this.renderedModeKey = '';
+      return;
+    }
+    const pages = this.modeCanvasPages;
+    const key = [
+      this.document.id,
+      this.viewingMode,
+      pages.join(','),
+      this.zoom,
+      this.rotation,
+      this.darkPageRendering,
+    ].join(':');
+    if (key === this.renderedModeKey) return;
+    const canvases = this.modePageCanvases?.toArray() ?? [];
+    if (canvases.length !== pages.length) return;
+
+    this.renderedModeKey = key;
+    const document = this.document;
+    const host = this.multiPageView?.nativeElement;
+    const availableWidth = Math.max(240, (host?.clientWidth ?? 960) - 32);
+    const fitWidth = this.viewingMode === 'facing' ? Math.max(120, (availableWidth - 16) / 2) : availableWidth;
+    try {
+      for (let index = 0; index < pages.length; index += 1) {
+        if (this.document?.id !== document.id) return;
+        await this.pdfRenderService.renderLoadedPageToCanvas(
+          document.proxy,
+          pages[index],
+          canvases[index].nativeElement,
+          { fitWidth, zoom: this.zoom, rotation: this.rotation }
+        );
+      }
+      this.scrollToModePage(this.currentPage);
+    } catch (error) {
+      this.error = `Unable to render ${this.viewingMode} pages: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
+
+  private scrollToModePage(page: number): void {
+    const target = this.multiPageView?.nativeElement.querySelector<HTMLElement>(`[data-view-page="${page}"]`);
+    target?.scrollIntoView({ block: 'start', behavior: 'auto' });
+  }
+
   async zoomIn(): Promise<void> {
     this.zoom = Math.min(3, this.zoom + 0.1);
+    await this.persistWorkspaceViewState();
     await this.renderCurrentPage();
   }
 
   async zoomOut(): Promise<void> {
     this.zoom = Math.max(0.5, this.zoom - 0.1);
+    await this.persistWorkspaceViewState();
     await this.renderCurrentPage();
   }
 
@@ -1566,13 +2182,51 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   onKeydown(event: KeyboardEvent): void {
     const key = event.key.toLowerCase();
 
-    if (key === 'backspace' || key === 'delete') {
-      this.deleteSelection();
+    if (key === 'escape') {
+      if (this.passwordPrompt) this.cancelPasswordPrompt();
+      else if (this.signatureDialogOpen) this.closeSignatureDialog();
+      else if (this.metadataDialogOpen) this.metadataDialogOpen = false;
+      else if (this.protectionDialogOpen) this.closeProtectionDialog();
+      else if (this.cropMode || this.cropSelection) this.setCropMode(false);
+      else {
+        this.setAnnotationTool(null);
+        this.selectedObjectId = null;
+      }
       event.preventDefault();
       return;
     }
 
+    const target = event.target instanceof HTMLElement ? event.target : null;
+    if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
+
+    if (key === 'backspace' || key === 'delete') {
+      if (this.document && !this.document.isEncrypted && this.viewingMode === 'single' && this.selectedObjectId) {
+        this.deleteSelection();
+        event.preventDefault();
+      }
+      return;
+    }
+
+    if (event.ctrlKey || event.metaKey) {
+      if (this.document?.isEncrypted || this.viewingMode !== 'single') return;
+    } else if (target?.closest('button, a, [role="button"]')) {
+      return;
+    }
+
     if (!event.ctrlKey && !event.metaKey) {
+      if (!this.document || event.altKey) return;
+      if (key === 'pageup' || key === 'arrowleft') {
+        void this.previousPage();
+      } else if (key === 'pagedown' || key === 'arrowright') {
+        void this.nextPage();
+      } else if (key === '+' || key === '=') {
+        void this.zoomIn();
+      } else if (key === '-') {
+        void this.zoomOut();
+      } else {
+        return;
+      }
+      event.preventDefault();
       return;
     }
 
@@ -1638,12 +2292,12 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   }
 
   setAnnotationTool(tool: 'highlight' | 'comment' | 'draw' | null): void {
-    this.annotationTool = tool;
+    this.annotationTool = this.document?.isEncrypted ? null : tool;
     this.annotationDraft = null;
   }
 
   startAnnotation(event: MouseEvent): void {
-    if (!this.document || !this.annotationTool || event.button !== 0) return;
+    if (!this.document || this.document.isEncrypted || !this.annotationTool || event.button !== 0) return;
     event.preventDefault();
     const point = this.annotationPoint(event);
     const type: AnnotationType = this.annotationTool === 'comment' ? 'comment' : this.annotationTool;
@@ -1676,7 +2330,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
 
   finishAnnotation(): void {
     const draft = this.annotationDraft;
-    if (!draft || !this.document) return;
+    if (!draft || !this.document || this.document.isEncrypted) return;
     this.annotationDraft = null;
     if (draft.type === 'draw' ? draft.points.length < 2 : draft.rect.width < 3 || draft.rect.height < 3) return;
     let content = draft.content;
@@ -1704,6 +2358,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   }
 
   editAnnotation(annotation: Annotation): void {
+    if (!this.document || this.document.isEncrypted) return;
     const content = window.prompt('Edit annotation text:', annotation.content ?? '');
     if (content === null) return;
     this.annotationService.update(annotation.id, { content, style: { color: this.annotationColor, opacity: Number(this.annotationOpacity) } });
@@ -1711,6 +2366,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   }
 
   deleteAnnotation(annotation: Annotation): void {
+    if (!this.document || this.document.isEncrypted) return;
     this.annotationService.delete(annotation.id);
     this.refreshAnnotations();
   }
@@ -1780,8 +2436,11 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   }
 
   addLinkObject(): void {
-    const url = window.prompt('Enter link URL:', 'https://example.com') ?? '';
-    if (!url.trim()) {
+    const destinationInput = window.prompt('Enter an HTTP(S) URL or internal page (page:<number>):', 'https://example.com');
+    if (destinationInput === null || !destinationInput.trim()) return;
+    const destination = this.parseLinkDestination(destinationInput);
+    if (!destination) {
+      this.error = `Invalid link destination. Use an HTTP(S) URL or page:1 through page:${this.totalPages}.`;
       return;
     }
 
@@ -1792,7 +2451,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
       width: 220,
       height: 70,
       text,
-      url: url.trim(),
+      ...destination,
     });
 
     this.captureHistory('insert-link');
@@ -2024,8 +2683,12 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
       return;
     }
 
-    const nextUrl = window.prompt('Edit link URL:', selected.url ?? '');
-    if (nextUrl === null || !nextUrl.trim()) {
+    const currentDestination = selected.pageNumber ? `page:${selected.pageNumber}` : selected.url ?? '';
+    const nextDestination = window.prompt('Edit destination URL or internal page (page:<number>):', currentDestination);
+    if (nextDestination === null || !nextDestination.trim()) return;
+    const destination = this.parseLinkDestination(nextDestination);
+    if (!destination) {
+      this.error = `Invalid link destination. Use an HTTP(S) URL or page:1 through page:${this.totalPages}.`;
       return;
     }
     const nextText = window.prompt('Edit link label:', selected.text ?? selected.label);
@@ -2035,14 +2698,38 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
 
     this.captureHistory('edit-link');
     this.updateObject(selected.id, {
-      url: nextUrl.trim(),
+      url: destination.url,
+      pageNumber: destination.pageNumber,
       text: nextText,
       label: 'Link',
     });
   }
 
+  activateLink(event: MouseEvent, object: EditableObject): void {
+    event.stopPropagation();
+    if (!object.pageNumber) return;
+    event.preventDefault();
+    void this.goToPage(object.pageNumber);
+  }
+
+  private parseLinkDestination(input: string): { url?: string; pageNumber?: number } | null {
+    const pageMatch = /^page:\s*(\d+)$/i.exec(input.trim());
+    if (pageMatch) {
+      const pageNumber = Number(pageMatch[1]);
+      return Number.isInteger(pageNumber) && pageNumber >= 1 && pageNumber <= this.totalPages
+        ? { pageNumber }
+        : null;
+    }
+    try {
+      const url = new URL(input.trim());
+      return url.protocol === 'http:' || url.protocol === 'https:' ? { url: input.trim() } : null;
+    } catch {
+      return null;
+    }
+  }
+
   deleteSelection(): void {
-    if (!this.selectedObjectId) {
+    if (!this.selectedObjectId || this.document?.isEncrypted || this.viewingMode !== 'single') {
       return;
     }
 
@@ -2059,6 +2746,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
     text?: string;
     imageSrc?: string;
     url?: string;
+    pageNumber?: number;
   }): EditableObject {
     const nextId = `obj-${Date.now()}-${this.overlayObjects.length}`;
     const base = this.clampObject({
@@ -2072,6 +2760,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
       text: initial.text,
       imageSrc: initial.imageSrc,
       url: initial.url,
+      pageNumber: initial.pageNumber,
     });
 
     return base;
@@ -2167,6 +2856,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   }
 
   async undoEdit(): Promise<void> {
+    if (this.document?.isEncrypted || this.viewingMode !== 'single') return;
     if (this.document && this.pageTransformUndo.length) {
       const previousBytes = this.pageTransformUndo.pop()!;
       this.pageTransformRedo.push(this.document.bytes.slice());
@@ -2188,6 +2878,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   }
 
   async redoEdit(): Promise<void> {
+    if (this.document?.isEncrypted || this.viewingMode !== 'single') return;
     if (this.document && this.pageTransformRedo.length) {
       const nextBytes = this.pageTransformRedo.pop()!;
       this.pageTransformUndo.push(this.document.bytes.slice());
@@ -2209,7 +2900,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
   }
 
   async updateFormField(widget: FormWidget, value: string): Promise<void> {
-    if (!this.document || widget.readOnly) return;
+    if (!this.document || this.document.isEncrypted || widget.readOnly) return;
     try {
       const bytes = await this.pdfFormService.updateField(this.document.bytes, widget.name, value);
       await this.refreshDocumentAfterPageOperation(bytes, this.currentPage);
@@ -2442,7 +3133,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
           options: field.options,
           option: option || field.options[0] || '',
           date: type === 'text' && /date|dob|birth/i.test(annotation.fieldName),
-          readOnly: annotation.isReadonly === true,
+          readOnly: this.document?.isEncrypted === true || annotation.isReadonly === true,
           required: field.required,
         });
       });
@@ -2467,6 +3158,10 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
     if (!this.document) {
       return;
     }
+    if (this.viewingMode !== 'single') {
+      this.scrollToModePage(this.currentPage);
+      return;
+    }
 
     const canvas = this.viewerCanvas?.nativeElement;
     const host = this.viewerHost?.nativeElement;
@@ -2475,12 +3170,17 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy {
       return;
     }
 
-    await this.pdfRenderService.renderPageToCanvas(this.document.bytes, this.currentPage, canvas, {
+    const options = {
       fitWidth: Math.max(100, host.clientWidth - 32),
       fitHeight: Math.max(100, host.clientHeight - 32),
       zoom: this.zoom,
       rotation: this.rotation,
-    });
+    };
+    if (this.document.isEncrypted) {
+      await this.pdfRenderService.renderLoadedPageToCanvas(this.document.proxy, this.currentPage, canvas, options);
+    } else {
+      await this.pdfRenderService.renderPageToCanvas(this.document.bytes, this.currentPage, canvas, options);
+    }
 
     this.syncOverlayBounds(canvas);
     await this.loadFormWidgets();

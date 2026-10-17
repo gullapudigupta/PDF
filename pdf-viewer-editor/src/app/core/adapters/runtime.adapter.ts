@@ -1,6 +1,10 @@
 export interface RuntimeAdapter {
-  openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string }>;
-  saveFileDialog(defaultName: string, data: ArrayBuffer, mimeType?: 'application/pdf' | 'application/json'): Promise<{ canceled: boolean; filePath?: string }>;
+  openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string; filePath?: string }>;
+  saveFileDialog(
+    defaultName: string,
+    data: ArrayBuffer,
+    mimeType?: 'application/pdf' | 'application/json' | 'image/png' | 'image/jpeg' | 'image/svg+xml'
+  ): Promise<{ canceled: boolean; filePath?: string }>;
   readFile(filePath: string): Promise<ArrayBuffer>;
   writeFile(filePath: string, data: ArrayBuffer): Promise<void>;
   getPlatform(): 'desktop' | 'extension';
@@ -20,7 +24,7 @@ function arrayBufferToBase64(data: ArrayBuffer): string {
 }
 
 export class DesktopRuntimeAdapter implements RuntimeAdapter {
-  async openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string }> {
+  async openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string; filePath?: string }> {
     const result = await (window as any).electronAPI.openFile();
     
     if (result.canceled) {
@@ -30,10 +34,14 @@ export class DesktopRuntimeAdapter implements RuntimeAdapter {
     const uint8Array = Uint8Array.from(atob(result.fileData), c => c.charCodeAt(0));
     const file = new File([uint8Array], result.fileName, { type: 'application/pdf' });
     
-    return { canceled: false, file, fileName: result.fileName };
+    return { canceled: false, file, fileName: result.fileName, filePath: result.filePath };
   }
 
-  async saveFileDialog(defaultName: string, data: ArrayBuffer, mimeType: 'application/pdf' | 'application/json' = 'application/pdf'): Promise<{ canceled: boolean; filePath?: string }> {
+  async saveFileDialog(
+    defaultName: string,
+    data: ArrayBuffer,
+    mimeType: 'application/pdf' | 'application/json' | 'image/png' | 'image/jpeg' | 'image/svg+xml' = 'application/pdf'
+  ): Promise<{ canceled: boolean; filePath?: string }> {
     const base64 = arrayBufferToBase64(data);
     const result = await (window as any).electronAPI.saveFile(defaultName, base64, mimeType);
     
@@ -66,7 +74,7 @@ export class DesktopRuntimeAdapter implements RuntimeAdapter {
 }
 
 export class ExtensionRuntimeAdapter implements RuntimeAdapter {
-  async openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string }> {
+  async openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string; filePath?: string }> {
     return new Promise((resolve) => {
       const input = document.createElement('input');
       input.type = 'file';
@@ -89,7 +97,11 @@ export class ExtensionRuntimeAdapter implements RuntimeAdapter {
     });
   }
 
-  async saveFileDialog(defaultName: string, data: ArrayBuffer, mimeType: 'application/pdf' | 'application/json' = 'application/pdf'): Promise<{ canceled: boolean; filePath?: string }> {
+  async saveFileDialog(
+    defaultName: string,
+    data: ArrayBuffer,
+    mimeType: 'application/pdf' | 'application/json' | 'image/png' | 'image/jpeg' | 'image/svg+xml' = 'application/pdf'
+  ): Promise<{ canceled: boolean; filePath?: string }> {
     const extensionApi = (globalThis as any).chrome ?? (globalThis as any).browser;
 
     if (extensionApi?.runtime?.sendMessage) {

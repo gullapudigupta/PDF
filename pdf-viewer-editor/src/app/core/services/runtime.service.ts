@@ -14,14 +14,14 @@ export class RuntimeService implements RuntimeAdapter {
       : new ExtensionRuntimeAdapter();
   }
 
-  openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string }> {
+  openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string; filePath?: string }> {
     return this.adapter.openFileDialog();
   }
 
   saveFileDialog(
     defaultName: string,
     data: ArrayBuffer,
-    mimeType: 'application/pdf' | 'application/json' = 'application/pdf'
+    mimeType: 'application/pdf' | 'application/json' | 'image/png' | 'image/jpeg' | 'image/svg+xml' = 'application/pdf'
   ): Promise<{ canceled: boolean; filePath?: string }> {
     return this.adapter.saveFileDialog(defaultName, data, mimeType);
   }

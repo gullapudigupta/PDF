@@ -51,6 +51,10 @@ describe('PdfDocumentService', () => {
 
     expect(passwordProvider).toHaveBeenCalledWith(pdfjsLib.PasswordResponses.NEED_PASSWORD);
     expect(loaded.isEncrypted).toBeTrue();
+    expect(Object.prototype.hasOwnProperty.call(loaded, 'password')).toBeFalse();
+    service.closeCurrent();
+    expect(fakeProxy.destroy).toHaveBeenCalled();
+    expect(service.getCurrentDocument()).toBeNull();
   });
 
   it('cancels password-protected document loading without retrying as an unprotected PDF', async () => {

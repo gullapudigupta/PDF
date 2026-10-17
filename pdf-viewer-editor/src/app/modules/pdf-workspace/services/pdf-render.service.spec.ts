@@ -69,6 +69,26 @@ describe('PdfRenderService', () => {
     ).toBeRejectedWithError('Canvas 2D context unavailable');
   });
 
+  it('renders an already-authorized PDF document proxy without reopening its bytes', async () => {
+    const page = {
+      getViewport: jasmine.createSpy().and.callFake(({ scale }: { scale: number }) => ({
+        width: 100 * scale,
+        height: 140 * scale,
+      })),
+      render: jasmine.createSpy().and.returnValue({ promise: Promise.resolve() }),
+    };
+    const proxy = { getPage: jasmine.createSpy().and.resolveTo(page) };
+    const getDocument = spyOn<any>(service, 'getDocument');
+    const canvas = document.createElement('canvas');
+    spyOn(canvas, 'getContext').and.returnValue({ clearRect: jasmine.createSpy() } as any);
+
+    await service.renderLoadedPageToCanvas(proxy, 1, canvas);
+
+    expect(proxy.getPage).toHaveBeenCalledWith(1);
+    expect(getDocument).not.toHaveBeenCalled();
+    expect(page.render).toHaveBeenCalled();
+  });
+
   it('extracts text from page', async () => {
     const page = {
       getTextContent: jasmine.createSpy().and.resolveTo({ items: [{ str: 'A' }, { str: 'B' }] }),

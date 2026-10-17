@@ -20,7 +20,20 @@ export class PdfRenderService {
   ): Promise<void> {
     const doc = await this.getDocument({ data: bytes }).promise;
     const page = await doc.getPage(pageNumber);
+    await this.renderPage(page, canvas, options);
+  }
 
+  async renderLoadedPageToCanvas(
+    documentProxy: { getPage(pageNumber: number): Promise<any> },
+    pageNumber: number,
+    canvas: HTMLCanvasElement,
+    options: RenderOptions = {}
+  ): Promise<void> {
+    const page = await documentProxy.getPage(pageNumber);
+    await this.renderPage(page, canvas, options);
+  }
+
+  private async renderPage(page: any, canvas: HTMLCanvasElement, options: RenderOptions): Promise<void> {
     const rotation = options.rotation ?? 0;
     const baseViewport = page.getViewport({ scale: 1, rotation });
 

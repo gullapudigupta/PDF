@@ -92,7 +92,7 @@ export class PdfDocumentService {
 
     const previousDocument = this.currentDocument;
     this.currentDocument = loaded;
-    if (previousDocument && previousDocument.id !== loaded.id) previousDocument.proxy?.destroy();
+    if (previousDocument && previousDocument.proxy !== loaded.proxy) previousDocument.proxy?.destroy();
     return loaded;
   }
 
@@ -104,9 +104,7 @@ export class PdfDocumentService {
   async replaceCurrentDocumentBytes(bytes: Uint8Array): Promise<LoadedPdfDocument> {
     if (!this.currentDocument) throw new Error('No document loaded');
     const current = this.currentDocument;
-    const updated = await this.loadFromBytes(bytes, current.name, current.id);
-    current.proxy?.destroy();
-    return updated;
+    return this.loadFromBytes(bytes, current.name, current.id);
   }
 
   getCurrentDocument(): LoadedPdfDocument | null {

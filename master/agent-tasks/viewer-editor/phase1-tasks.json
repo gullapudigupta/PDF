@@ -730,7 +730,7 @@
     {
       "id": "P1-S9-001",
       "name": "Recent Files + Workspace Persistence",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 16,
       "value": null,
@@ -765,11 +765,31 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Added recent PDF history with pin, unpin, remove, desktop path-based reopen, and bounded unpinned history. Persisted and restored per-document page and zoom through the existing LocalStorage/IndexedDB settings backends; protected documents are opened without persisting PDF bytes. P1-S3-005 subsequently added per-document theme and viewing-mode restoration. The user selected keeping the existing backends rather than adding SQLite; SQLite is not implemented in this repository (desktop currently uses LocalStorage).",
+        "executedAt": "2026-10-17T13:10:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.ts",
+        "pdf-viewer-editor/src/app/core/services/runtime.service.ts",
+        "pdf-viewer-editor/src/app/core/services/persistence.service.ts",
+        "pdf-viewer-editor/src/app/core/services/persistence.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-render.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npx ng test --watch=false --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts --include=src/app/core/services/persistence.service.spec.ts --include=src/app/core/adapters/persistence.adapter.spec.ts"
+        ],
+        "summary": "All 46 selected tests passed, including recent-file recording, pinning/removal, restored and persisted page/zoom, protected-document in-memory rendering path, LocalStorage recent/settings behavior, and IndexedDB autosave behavior. SQLite itself remains unimplemented per the user's selected scope."
+      },
       "sprint": 9,
       "planningRequired": false,
       "source": {
@@ -804,7 +824,7 @@
     {
       "id": "P1-S9-002",
       "name": "Accessibility and Keyboard Pass",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -840,11 +860,26 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Added page up/down and arrow page navigation, plus/minus zoom, Escape dismissal, and safe undo/redo/delete shortcuts that do not hijack text-entry controls or mutate protected/multi-page documents. Added keyboard guidance, focusable and labeled page canvases, live page/zoom status, explicit labels for navigation and recent-file actions, and visible high-contrast focus outlines in light and dark themes.",
+        "executedAt": "2026-10-17T13:57:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npx ng test --watch=false --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+        ],
+        "summary": "All 47 workspace component tests passed, including keyboard page/zoom actions, text-entry shortcut isolation, undo/redo behavior, and accessible labels for the PDF page canvas and navigation controls."
+      },
       "sprint": 9,
       "planningRequired": false,
       "source": {
@@ -880,7 +915,7 @@
     {
       "id": "P1-S9-003",
       "name": "UI Customization and Localization Baseline",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "priority": "MEDIUM",
       "estimatedHours": 8,
       "value": null,
@@ -954,7 +989,7 @@
     {
       "id": "P1-S3-005",
       "name": "Viewing Modes and Dark Mode Rendering",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -990,11 +1025,26 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Added single-page, continuous, and facing-page layouts; continuous mode renders a five-page window around the active page to bound canvas memory. Added app-level and per-document light/dark theme, page color inversion, saved dark-page rendering preference, and page/zoom/layout/theme restoration. Multi-page modes explicitly disable editing until switching back to single-page mode.",
+        "executedAt": "2026-10-17T13:25:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npx ng test --watch=false"
+        ],
+        "summary": "All 102 application tests passed, including restored per-document viewing settings, theme and page-rendering preferences, facing-page spread state, continuous-mode bounded rendering, and existing PDF workflows."
+      },
       "sprint": 3,
       "planningRequired": false,
       "source": {
@@ -1019,7 +1069,7 @@
     {
       "id": "P1-S4-004",
       "name": "Link Add/Edit/Remove",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 12,
       "value": null,
@@ -1056,11 +1106,28 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Completed selected-region URL and internal page links. Link overlays can be added, edited, resized, moved, removed, and navigated; edits use the existing command history for undo/redo. PDF serialization writes HTTP(S) URI actions or validated internal page destinations, rejecting unsafe/missing destinations.",
+        "executedAt": "2026-10-17T13:36:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-edit-serialization.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-edit-serialization.service.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npx ng test --watch=false --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts --include=src/app/modules/pdf-workspace/services/pdf-edit-serialization.service.spec.ts"
+        ],
+        "summary": "All 45 selected tests passed, including link creation/edit/removal, internal navigation, undo/redo restoration, HTTP(S) action serialization, internal destination serialization, and invalid/missing destination validation."
+      },
       "sprint": 4,
       "planningRequired": false,
       "source": {

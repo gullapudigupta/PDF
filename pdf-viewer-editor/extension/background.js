@@ -10,7 +10,7 @@ function handleDownloadRequest(message, sendResponse) {
     return true;
   }
   const mimeType = message.mimeType || 'application/pdf';
-  if (!['application/pdf', 'application/json'].includes(mimeType) ||
+  if (!['application/pdf', 'application/json', 'image/png', 'image/jpeg', 'image/svg+xml'].includes(mimeType) ||
     (message.type === 'EXT_DOWNLOAD_PDF' && mimeType !== 'application/pdf')) {
     sendResponse({ success: false, error: 'Unsupported download file type' });
     return true;

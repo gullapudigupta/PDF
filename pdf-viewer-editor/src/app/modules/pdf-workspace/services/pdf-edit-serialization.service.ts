@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PDFDocument, PDFPage, PDFString, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, PDFName, PDFPage, PDFString, rgb, StandardFonts } from 'pdf-lib';
 import { Annotation } from '../models/annotation.model';
 
 export interface PdfEditableOverlay {
@@ -12,6 +12,7 @@ export interface PdfEditableOverlay {
   text?: string;
   imageSrc?: string;
   url?: string;
+  pageNumber?: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -59,25 +60,46 @@ export class PdfEditSerializationService {
             color: rgb(0.08, 0.16, 0.34),
           });
         }
-        if (overlay.type === 'link' && overlay.url) {
-          const url = new URL(overlay.url);
-          if (url.protocol !== 'http:' && url.protocol !== 'https:') {
-            throw new Error('PDF links must use HTTP or HTTPS');
+        if (overlay.type === 'link') {
+          if (overlay.pageNumber !== undefined) {
+            if (!Number.isInteger(overlay.pageNumber) || overlay.pageNumber < 1 || overlay.pageNumber > document.getPageCount()) {
+              throw new Error(`Invalid internal link page: ${overlay.pageNumber}`);
+            }
+            const annotation = document.context.register(document.context.obj({
+              Type: 'Annot',
+              Subtype: 'Link',
+              Rect: [x, y, x + width, y + height],
+              Border: [0, 0, 0],
+              Dest: [document.getPage(overlay.pageNumber - 1).ref, PDFName.of('Fit')],
+            }));
+            page.node.addAnnot(annotation);
+          } else if (overlay.url) {
+            let url: URL;
+            try {
+              url = new URL(overlay.url);
+            } catch {
+              throw new Error('PDF links must use HTTP or HTTPS');
+            }
+            if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+              throw new Error('PDF links must use HTTP or HTTPS');
+            }
+            page.drawLine({
+              start: { x, y: y + Math.max(1, height * 0.15) },
+              end: { x: x + width, y: y + Math.max(1, height * 0.15) },
+              thickness: Math.max(0.5, scaleY),
+              color: rgb(0.08, 0.16, 0.34),
+            });
+            const annotation = document.context.register(document.context.obj({
+              Type: 'Annot',
+              Subtype: 'Link',
+              Rect: [x, y, x + width, y + height],
+              Border: [0, 0, 0],
+              A: { S: 'URI', URI: PDFString.of(url.href) },
+            }));
+            page.node.addAnnot(annotation);
+          } else {
+            throw new Error('PDF link is missing a valid destination');
           }
-          page.drawLine({
-            start: { x, y: y + Math.max(1, height * 0.15) },
-            end: { x: x + width, y: y + Math.max(1, height * 0.15) },
-            thickness: Math.max(0.5, scaleY),
-            color: rgb(0.08, 0.16, 0.34),
-          });
-          const annotation = document.context.register(document.context.obj({
-            Type: 'Annot',
-            Subtype: 'Link',
-            Rect: [x, y, x + width, y + height],
-            Border: [0, 0, 0],
-            A: { S: 'URI', URI: PDFString.of(url.href) },
-          }));
-          page.node.addAnnot(annotation);
         }
       }
     }
