@@ -11,6 +11,15 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-014` (2026-10-16): MIG-004 completed: generated domain/phase indexes and full completion graph.
 - `GSEQ-015` (2026-10-16): MIG-005 completed: migration coverage, dependency DAG, rollups, and generated output validated.
 - `GSEQ-016` (2026-10-16): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-017` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-018` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-019` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-020` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-021` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-022` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-023` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-024` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-025` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -24,8 +33,9 @@ graph TD
     P1_S1_003["P1-S1-003: Architecture Skeleton<br/>COMPLETED - inherited, not reverified"]
     P1_S1_002 --> P1_S1_003
     style P1_S1_003 fill:#c8e6c9
-    P1_S1_004["P1-S1-004: Requirements Traceability Matrix<br/>PENDING"]
+    P1_S1_004["P1-S1-004: Requirements Traceability Matrix<br/>COMPLETED"]
     P1_S1_003 --> P1_S1_004
+    style P1_S1_004 fill:#c8e6c9
     P1_S2_001["P1-S2-001: Electron Secure IPC Layer<br/>COMPLETED - inherited, not reverified"]
     P1_S1_002 --> P1_S2_001
     style P1_S2_001 fill:#c8e6c9
@@ -38,24 +48,27 @@ graph TD
     P1_S2_004["P1-S2-004: NgRx Workspace Store Foundation<br/>COMPLETED - inherited, not reverified"]
     P1_S1_003 --> P1_S2_004
     style P1_S2_004 fill:#c8e6c9
-    P1_S3_001["P1-S3-001: PDF.js Integration<br/>COMPLETED - inherited, not reverified"]
+    P1_S3_001["P1-S3-001: PDF.js Integration<br/>COMPLETED"]
     P1_S2_001 --> P1_S3_001
     P1_S2_004 --> P1_S3_001
     style P1_S3_001 fill:#c8e6c9
-    P1_S3_002["P1-S3-002: Viewer + Toolbar Core<br/>COMPLETED - inherited, not reverified"]
+    P1_S3_002["P1-S3-002: Viewer + Toolbar Core<br/>COMPLETED"]
     P1_S3_001 --> P1_S3_002
     style P1_S3_002 fill:#c8e6c9
-    P1_S3_003["P1-S3-003: Navigation, Zoom, Rotation<br/>COMPLETED - inherited, not reverified"]
+    P1_S3_003["P1-S3-003: Navigation, Zoom, Rotation<br/>COMPLETED"]
     P1_S3_002 --> P1_S3_003
     style P1_S3_003 fill:#c8e6c9
     P1_S3_004["P1-S3-004: Thumbnails + Bookmarks Sidebar<br/>PENDING"]
     P1_S3_001 --> P1_S3_004
-    P1_S4_001["P1-S4-001: Editing Overlay and Selection Engine<br/>PENDING"]
+    P1_S4_001["P1-S4-001: Editing Overlay and Selection Engine<br/>COMPLETED"]
     P1_S3_002 --> P1_S4_001
-    P1_S4_002["P1-S4-002: Text and Image Editing (MVP Scope)<br/>PENDING"]
+    style P1_S4_001 fill:#c8e6c9
+    P1_S4_002["P1-S4-002: Text and Image Editing (MVP Scope)<br/>COMPLETED"]
     P1_S4_001 --> P1_S4_002
-    P1_S4_003["P1-S4-003: Undo/Redo Command History<br/>PENDING"]
+    style P1_S4_002 fill:#c8e6c9
+    P1_S4_003["P1-S4-003: Undo/Redo Command History<br/>COMPLETED"]
     P1_S4_001 --> P1_S4_003
+    style P1_S4_003 fill:#c8e6c9
     P1_S5_001["P1-S5-001: Annotation Data Models and Service<br/>PENDING"]
     P1_S2_004 --> P1_S5_001
     P1_S5_002["P1-S5-002: Highlight + Comment Tools<br/>PENDING"]
@@ -216,8 +229,10 @@ graph TD
     P2_S13_003["P2-S13-003: Search Across OCR Text<br/>PENDING"]
     P2_S13_001 --> P2_S13_003
     P1_S8_001 --> P2_S13_003
+    P1_S12_003 --> P2_S13_003
     P2_S13_004["P2-S13-004: Scanned PDF Image and Resolution Analysis<br/>PENDING"]
     P2_S13_001 --> P2_S13_004
+    P1_S12_003 --> P2_S13_004
     P2_S14_003["P2-S14-003: Stamp/Seal Library and Reusable Signature Assets<br/>PENDING"]
     P1_S7_003 --> P2_S14_003
     P1_S12_003 --> P2_S14_003
@@ -231,8 +246,10 @@ graph TD
     P1_S12_003 --> P2_S18_002
     P3_S21_002["P3-S21-002: Plugin SDK and Extension Points (OCR/Export/Annotation)<br/>PENDING"]
     P3_S21_001 --> P3_S21_002
+    P2_S18_001 --> P3_S21_002
     P3_S23_002["P3-S23-002: Consent-Gated External Sharing Policy<br/>PENDING"]
     P3_S23_001 --> P3_S23_002
+    P2_S18_001 --> P3_S23_002
     P3_S25_001["P3-S25-001: Extended Test Coverage (80%) and Final Release Validation<br/>PENDING"]
     P3_S24_001 --> P3_S25_001
     P3_S19_001 --> P3_S25_001
@@ -240,6 +257,7 @@ graph TD
     P3_S22_001 --> P3_S25_001
     P3_S21_002 --> P3_S25_001
     P3_S23_002 --> P3_S25_001
+    P2_S18_001 --> P3_S25_001
 ```
 
 ## Interpretation

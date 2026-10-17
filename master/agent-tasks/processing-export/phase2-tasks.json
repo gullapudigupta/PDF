@@ -186,7 +186,8 @@
       "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
       "dependencies": [
         "P2-S13-001",
-        "P1-S8-001"
+        "P1-S8-001",
+        "P1-S12-003"
       ],
       "deliverables": [
         "OCR text layer is included in full-text search",
@@ -241,6 +242,10 @@
           {
             "taskId": "P1-S8-001",
             "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
           }
         ]
       }
@@ -255,7 +260,8 @@
       "recommendedModel": [],
       "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
       "dependencies": [
-        "P2-S13-001"
+        "P2-S13-001",
+        "P1-S12-003"
       ],
       "deliverables": [
         "Report DPI, color mode, and skew per scanned page",
@@ -306,6 +312,10 @@
           {
             "taskId": "P2-S13-001",
             "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
           }
         ]
       }

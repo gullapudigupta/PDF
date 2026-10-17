@@ -73,7 +73,8 @@
       "recommendedModel": [],
       "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
       "dependencies": [
-        "P3-S23-001"
+        "P3-S23-001",
+        "P2-S18-001"
       ],
       "deliverables": [
         "Block any cloud upload or external sharing without explicit per-action consent",
@@ -124,6 +125,10 @@
           {
             "taskId": "P3-S23-001",
             "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P2-S18-001",
+            "reason": "Source execution rule: stable v1.0 acceptance sign-off before Phase 3."
           }
         ]
       }

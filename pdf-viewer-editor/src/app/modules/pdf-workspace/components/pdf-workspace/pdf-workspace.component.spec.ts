@@ -99,6 +99,27 @@ describe('PdfWorkspaceComponent', () => {
     expect(component.currentPage).toBe(2);
   });
 
+  it('bounds zoom and wraps rotation controls', async () => {
+    component.document = {
+      id: 'doc-1', name: 'doc.pdf', totalPages: 1, bytes: new Uint8Array([1]), proxy: {},
+    } as any;
+    component.zoom = 2.95;
+    component.rotation = 0;
+    fixture.detectChanges();
+    pdfRenderService.renderPageToCanvas.and.resolveTo();
+
+    await component.zoomIn();
+    expect(component.zoom).toBe(3);
+    component.zoom = 0.55;
+    await component.zoomOut();
+    expect(component.zoom).toBe(0.5);
+
+    await component.rotateLeft();
+    expect(component.rotation).toBe(270);
+    await component.rotateRight();
+    expect(component.rotation).toBe(0);
+  });
+
   it('forwards Save As to runtime with document bytes', async () => {
     const bytes = new Uint8Array([4, 5, 6]);
     component.document = {
@@ -285,6 +306,23 @@ describe('PdfWorkspaceComponent', () => {
     component.deleteSelection();
     expect(component.overlayObjects.length).toBe(0);
     expect(component.selectedObjectId).toBeNull();
+  });
+
+  it('supports undo and redo keyboard shortcuts', () => {
+    spyOn(window, 'prompt').and.returnValue('Keyboard edit');
+    component.overlayWidth = 600;
+    component.overlayHeight = 400;
+    component.addTextObject();
+
+    const undo = new KeyboardEvent('keydown', { key: 'z', ctrlKey: true, cancelable: true });
+    component.onKeydown(undo);
+    expect(undo.defaultPrevented).toBeTrue();
+    expect(component.overlayObjects.length).toBe(0);
+
+    const redo = new KeyboardEvent('keydown', { key: 'y', ctrlKey: true, cancelable: true });
+    component.onKeydown(redo);
+    expect(redo.defaultPrevented).toBeTrue();
+    expect(component.overlayObjects.length).toBe(1);
   });
 
   it('supports undo and redo for overlay changes', () => {

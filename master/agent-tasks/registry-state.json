@@ -6,7 +6,7 @@
     "MIG-004": true,
     "MIG-005": true
   },
-  "sequence": 16,
+  "sequence": 25,
   "history": [
     {
       "sequence": "GSEQ-011",
@@ -37,7 +37,52 @@
       "sequence": "GSEQ-016",
       "date": "2026-10-16",
       "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-017",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-018",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-019",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-020",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-021",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-022",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-023",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-024",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-025",
+      "date": "2026-10-17",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
     }
   ],
-  "lastDigest": "750ac6a8381d823152c19f4eb6b495f9b87307d1bef1806c726aa7d7a55ad643"
+  "lastDigest": "95218f152f4627bcad60a2d85ef84e44ff6eb7eb447ca44b30c0558011a2aba4"
 }

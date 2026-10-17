@@ -33,17 +33,40 @@ test('preserves all source definitions, checklists, and reported completion clai
 
 test('unknown backlog estimates and historical verification stay explicit', () => {
   const { tasks } = fixture();
-  for (const task of tasks.filter(task => task.phase > 1)) {
+  for (const task of tasks.filter(task => task.phase > 1 && task.source.file === 'TASKS.md')) {
     assert.equal(task.estimatedHours, null);
     assert.equal(task.priority, null);
     assert.equal(task.planningRequired, true);
   }
-  for (const task of tasks.filter(task => task.status === 'COMPLETED')) {
+  const inherited = tasks.filter(task => task.status === 'COMPLETED' && task.verification.status === 'not_reverified');
+  for (const task of inherited) {
     assert.equal(task.verification.status, 'not_reverified');
     assert.equal(task.executionResult.model, null);
     assert.deepEqual(task.verification.commands, []);
   }
-  assert.equal(summary(tasks.filter(task => !task.id.startsWith('EXEC'))).totalTasks, 55);
+  const freshlyVerified = tasks.filter(task => task.status === 'COMPLETED' && task.verification.status === 'passed' && !task.id.startsWith('EXEC'));
+  assert(freshlyVerified.length > 0);
+  for (const task of freshlyVerified) {
+    assert.equal(task.verification.status, 'passed');
+    assert(task.verification.commands.length > 0);
+    assert(task.executionResult.model && task.executionResult.provider);
+  }
+  assert.equal(tasks.filter(task => !task.id.startsWith('EXEC') && task.source.file === 'TASKS.md').length, 55);
+  assert.equal(summary(tasks.filter(task => !task.id.startsWith('EXEC'))).totalTasks, 70);
+});
+
+test('traceability matrix references canonical tasks and unique QA cases', () => {
+  const matrix = fs.readFileSync(path.resolve(__dirname, '..', '..', 'specs', 'pdf-viewer-editor', 'traceability.md'), 'utf8');
+  const { tasks } = fixture();
+  const known = new Set(tasks.map(task => task.id));
+  const references = [...matrix.matchAll(/\bP[123]-S\d+-\d+\b/g)].map(match => match[0]);
+  assert(references.length > 0);
+  for (const id of references) assert(known.has(id), 'Unknown traceability task ' + id);
+  const qaIds = [...matrix.matchAll(/QA-PDF-\d{3}/g)].map(match => match[0]);
+  assert(qaIds.length > 0);
+  assert.equal(new Set(qaIds).size, qaIds.length);
+  assert.match(matrix, /Planned/);
+  assert.match(matrix, /Existing/);
 });
 
 test('normalizes core-feature and release gates without losing declared dependencies', () => {

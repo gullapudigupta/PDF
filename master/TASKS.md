@@ -32,7 +32,7 @@ node .\master\tools\task-registry.cjs validate
 
 | Phase | Tasks | Completed (reported) | Pending | In progress | Blocked |
 |---|---:|---:|---:|---:|---:|
-| 1: MVP | 45 | 10 | 35 | 0 | 0 |
+| 1: MVP | 45 | 14 | 31 | 0 | 0 |
 | 2: Advanced Features | 16 | 0 | 16 | 0 | 0 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
 
@@ -46,18 +46,18 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P1-S1-001](agent-tasks/platform/phase1-tasks.json) | Environment Setup | platform | COMPLETED (inherited) | CRITICAL | 24 | None |
 | [P1-S1-002](agent-tasks/platform/phase1-tasks.json) | Workspace Initialization | platform | COMPLETED (inherited) | CRITICAL | 16 | P1-S1-001 |
 | [P1-S1-003](agent-tasks/platform/phase1-tasks.json) | Architecture Skeleton | platform | COMPLETED (inherited) | CRITICAL | 16 | P1-S1-002 |
-| [P1-S1-004](agent-tasks/platform/phase1-tasks.json) | Requirements Traceability Matrix | platform | PENDING | HIGH | 16 | P1-S1-003 |
+| [P1-S1-004](agent-tasks/platform/phase1-tasks.json) | Requirements Traceability Matrix | platform | COMPLETED | HIGH | 16 | P1-S1-003 |
 | [P1-S2-001](agent-tasks/platform/phase1-tasks.json) | Electron Secure IPC Layer | platform | COMPLETED (inherited) | CRITICAL | 16 | P1-S1-002 |
 | [P1-S2-002](agent-tasks/platform/phase1-tasks.json) | Browser Extension Runtime Baseline | platform | COMPLETED (inherited) | CRITICAL | 24 | P1-S1-002 |
 | [P1-S2-003](agent-tasks/platform/phase1-tasks.json) | No-Backend Persistence Layer | platform | COMPLETED (inherited) | CRITICAL | 24 | P1-S1-003 |
 | [P1-S2-004](agent-tasks/platform/phase1-tasks.json) | NgRx Workspace Store Foundation | platform | COMPLETED (inherited) | CRITICAL | 16 | P1-S1-003 |
-| [P1-S3-001](agent-tasks/viewer-editor/phase1-tasks.json) | PDF.js Integration | viewer-editor | COMPLETED (inherited) | CRITICAL | 24 | P1-S2-001, P1-S2-004 |
-| [P1-S3-002](agent-tasks/viewer-editor/phase1-tasks.json) | Viewer + Toolbar Core | viewer-editor | COMPLETED (inherited) | CRITICAL | 16 | P1-S3-001 |
-| [P1-S3-003](agent-tasks/viewer-editor/phase1-tasks.json) | Navigation, Zoom, Rotation | viewer-editor | COMPLETED (inherited) | CRITICAL | 16 | P1-S3-002 |
+| [P1-S3-001](agent-tasks/viewer-editor/phase1-tasks.json) | PDF.js Integration | viewer-editor | COMPLETED | CRITICAL | 24 | P1-S2-001, P1-S2-004 |
+| [P1-S3-002](agent-tasks/viewer-editor/phase1-tasks.json) | Viewer + Toolbar Core | viewer-editor | COMPLETED | CRITICAL | 16 | P1-S3-001 |
+| [P1-S3-003](agent-tasks/viewer-editor/phase1-tasks.json) | Navigation, Zoom, Rotation | viewer-editor | COMPLETED | CRITICAL | 16 | P1-S3-002 |
 | [P1-S3-004](agent-tasks/viewer-editor/phase1-tasks.json) | Thumbnails + Bookmarks Sidebar | viewer-editor | PENDING | HIGH | 16 | P1-S3-001 |
-| [P1-S4-001](agent-tasks/viewer-editor/phase1-tasks.json) | Editing Overlay and Selection Engine | viewer-editor | PENDING | CRITICAL | 24 | P1-S3-002 |
-| [P1-S4-002](agent-tasks/viewer-editor/phase1-tasks.json) | Text and Image Editing (MVP Scope) | viewer-editor | PENDING | CRITICAL | 24 | P1-S4-001 |
-| [P1-S4-003](agent-tasks/viewer-editor/phase1-tasks.json) | Undo/Redo Command History | viewer-editor | PENDING | CRITICAL | 16 | P1-S4-001 |
+| [P1-S4-001](agent-tasks/viewer-editor/phase1-tasks.json) | Editing Overlay and Selection Engine | viewer-editor | COMPLETED | CRITICAL | 24 | P1-S3-002 |
+| [P1-S4-002](agent-tasks/viewer-editor/phase1-tasks.json) | Text and Image Editing (MVP Scope) | viewer-editor | COMPLETED | CRITICAL | 24 | P1-S4-001 |
+| [P1-S4-003](agent-tasks/viewer-editor/phase1-tasks.json) | Undo/Redo Command History | viewer-editor | COMPLETED | CRITICAL | 16 | P1-S4-001 |
 | [P1-S5-001](agent-tasks/annotations/phase1-tasks.json) | Annotation Data Models and Service | annotations | PENDING | CRITICAL | 16 | P1-S2-004 |
 | [P1-S5-002](agent-tasks/annotations/phase1-tasks.json) | Highlight + Comment Tools | annotations | PENDING | CRITICAL | 16 | P1-S5-001 |
 | [P1-S5-003](agent-tasks/annotations/phase1-tasks.json) | Draw Tools + Annotation Panel | annotations | PENDING | HIGH | 16 | P1-S5-001 |
@@ -103,8 +103,8 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P2-S16-002](agent-tasks/security-compliance/phase2-tasks.json) | Irreversible apply + flatten verification | security-compliance | PENDING | Unplanned | Unknown | P1-S12-003 |
 | [P2-S17-001](agent-tasks/annotations/phase2-tasks.json) | Compare/review tools baseline | annotations | PENDING | Unplanned | Unknown | P1-S12-003 |
 | [P2-S18-001](agent-tasks/quality-delivery/phase2-tasks.json) | Stability + v1.0 release hardening | quality-delivery | PENDING | Unplanned | Unknown | P1-S12-003, P2-S13-003, P2-S13-004, P2-S14-003, P2-S14-004, P2-S14-005, P2-S18-002 |
-| [P2-S13-003](agent-tasks/processing-export/phase2-tasks.json) | Search Across OCR Text | processing-export | PENDING | HIGH | 16 | P2-S13-001, P1-S8-001 |
-| [P2-S13-004](agent-tasks/processing-export/phase2-tasks.json) | Scanned PDF Image and Resolution Analysis | processing-export | PENDING | MEDIUM | 16 | P2-S13-001 |
+| [P2-S13-003](agent-tasks/processing-export/phase2-tasks.json) | Search Across OCR Text | processing-export | PENDING | HIGH | 16 | P2-S13-001, P1-S8-001, P1-S12-003 |
+| [P2-S13-004](agent-tasks/processing-export/phase2-tasks.json) | Scanned PDF Image and Resolution Analysis | processing-export | PENDING | MEDIUM | 16 | P2-S13-001, P1-S12-003 |
 | [P2-S14-003](agent-tasks/forms-signatures/phase2-tasks.json) | Stamp/Seal Library and Reusable Signature Assets | forms-signatures | PENDING | MEDIUM | 24 | P1-S7-003, P1-S12-003 |
 | [P2-S14-004](agent-tasks/forms-signatures/phase2-tasks.json) | Advanced Form Data Export (CSV/JSON/XFDF) | forms-signatures | PENDING | MEDIUM | 16 | P1-S7-004, P1-S12-003 |
 | [P2-S14-005](agent-tasks/annotations/phase2-tasks.json) | Annotation Filter, Search and Style Presets | annotations | PENDING | MEDIUM | 16 | P1-S5-003, P1-S12-003 |
@@ -120,9 +120,9 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P3-S22-001](agent-tasks/processing-export/phase3-tasks.json) | Advanced conversion pipelines | processing-export | PENDING | Unplanned | Unknown | P2-S18-001 |
 | [P3-S23-001](agent-tasks/security-compliance/phase3-tasks.json) | Audit trail and compliance reporting | security-compliance | PENDING | Unplanned | Unknown | P2-S18-001 |
 | [P3-S24-001](agent-tasks/quality-delivery/phase3-tasks.json) | Enterprise performance and scale tuning | quality-delivery | PENDING | Unplanned | Unknown | P2-S18-001 |
-| [P3-S21-002](agent-tasks/platform/phase3-tasks.json) | Plugin SDK and Extension Points (OCR/Export/Annotation) | platform | PENDING | HIGH | 40 | P3-S21-001 |
-| [P3-S23-002](agent-tasks/security-compliance/phase3-tasks.json) | Consent-Gated External Sharing Policy | security-compliance | PENDING | HIGH | 24 | P3-S23-001 |
-| [P3-S25-001](agent-tasks/quality-delivery/phase3-tasks.json) | Extended Test Coverage (80%) and Final Release Validation | quality-delivery | PENDING | CRITICAL | 40 | P3-S24-001, P3-S19-001, P3-S20-001, P3-S22-001, P3-S21-002, P3-S23-002 |
+| [P3-S21-002](agent-tasks/platform/phase3-tasks.json) | Plugin SDK and Extension Points (OCR/Export/Annotation) | platform | PENDING | HIGH | 40 | P3-S21-001, P2-S18-001 |
+| [P3-S23-002](agent-tasks/security-compliance/phase3-tasks.json) | Consent-Gated External Sharing Policy | security-compliance | PENDING | HIGH | 24 | P3-S23-001, P2-S18-001 |
+| [P3-S25-001](agent-tasks/quality-delivery/phase3-tasks.json) | Extended Test Coverage (80%) and Final Release Validation | quality-delivery | PENDING | CRITICAL | 40 | P3-S24-001, P3-S19-001, P3-S20-001, P3-S22-001, P3-S21-002, P3-S23-002, P2-S18-001 |
 
 ## Historical Execution Log
 

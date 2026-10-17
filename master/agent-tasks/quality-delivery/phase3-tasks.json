@@ -78,7 +78,8 @@
         "P3-S20-001",
         "P3-S22-001",
         "P3-S21-002",
-        "P3-S23-002"
+        "P3-S23-002",
+        "P2-S18-001"
       ],
       "deliverables": [
         "Raise automated test coverage to 80%+",
@@ -149,6 +150,10 @@
           {
             "taskId": "P3-S23-002",
             "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P2-S18-001",
+            "reason": "Source execution rule: stable v1.0 acceptance sign-off before Phase 3."
           }
         ]
       }
