@@ -97,7 +97,11 @@ interface SignatureAsset {
     <div class="workspace-container" [class.dark-theme]="theme === 'dark'">
       <div class="toolbar">
         <div class="toolbar-left">
-          <h1 i18n="@@pdfWorkspaceTitle">PDF Viewer &amp; Editor</h1>
+          <div class="toolbar-brand">
+            <span class="brand-mark" aria-hidden="true">P</span>
+            <h1 i18n="@@pdfWorkspaceTitle">PDF Viewer &amp; Editor</h1>
+          </div>
+          <span class="active-document" *ngIf="document" [title]="document.name">{{ document.name }}</span>
           <details class="recent-files">
             <summary i18n="@@recentFiles">Recent</summary>
             <button type="button" title="Open a PDF file" i18n-title="@@openPdfTooltip" i18n="@@openPdf" (click)="openFile()">Open PDF</button>
@@ -118,7 +122,9 @@ interface SignatureAsset {
             <label><input type="checkbox" [ngModel]="toolbarVisibility.navigation" (ngModelChange)="setToolbarVisibility('navigation', $event)" /> <span i18n="@@showPageNavigation">Page navigation</span></label>
             <label><input type="checkbox" [ngModel]="toolbarVisibility.annotations" (ngModelChange)="setToolbarVisibility('annotations', $event)" /> <span i18n="@@showAnnotations">Annotations panel</span></label>
           </details>
-          <fieldset *ngIf="toolbarVisibility.editing" class="pdf-toolbar-actions" [disabled]="!!document?.isEncrypted || viewingMode !== 'single'">
+        </div>
+
+        <fieldset *ngIf="toolbarVisibility.editing" class="pdf-toolbar-actions" aria-label="PDF editing tools" [disabled]="!!document?.isEncrypted || viewingMode !== 'single'">
           <button i18n="@@savePdf" title="Save changes to this PDF" i18n-title="@@savePdfTooltip" [disabled]="!document || loading" (click)="saveFile()">Save</button>
           <button i18n="@@savePdfAs" title="Save a copy of this PDF" i18n-title="@@savePdfAsTooltip" [disabled]="!document || loading" (click)="saveFileAs()">Save As</button>
           <button *ngIf="document" (click)="openMetadataDialog()">Metadata</button>
@@ -174,8 +180,7 @@ interface SignatureAsset {
           <button [disabled]="!selectedObjectId" (click)="cutSelection()">Cut</button>
           <button [disabled]="!selectedObjectId" (click)="copySelection()">Copy</button>
           <button [disabled]="!clipboardObject" (click)="pasteClipboard()">Paste</button>
-          </fieldset>
-        </div>
+        </fieldset>
 
         <div class="toolbar-right" *ngIf="toolbarVisibility.search">
           <input
@@ -508,38 +513,75 @@ interface SignatureAsset {
   `,
   styles: [
     `
+      :host {
+        display: block;
+        flex: 1 1 auto;
+        min-width: 0;
+        min-height: 0;
+      }
+
       .workspace-container {
+        --surface: #fff;
+        --surface-muted: #f7f9fc;
+        --surface-raised: #fff;
+        --canvas-surface: #e9edf4;
+        --text-primary: #202938;
+        --text-muted: #687386;
+        --border: #dce2ea;
+        --accent: #2563eb;
+        --accent-strong: #1d4ed8;
+        --accent-soft: #eff6ff;
+        --shadow: 0 8px 24px rgba(28, 39, 56, .08);
         display: flex;
         flex-direction: column;
         height: 100%;
+        min-height: 0;
+        min-width: 0;
+        overflow: hidden;
+        color: var(--text-primary);
+        background: var(--surface-muted);
       }
 
       .workspace-container.dark-theme {
-        color: #f1f3f5;
-        background: #202124;
+        --surface: #1c2029;
+        --surface-muted: #151922;
+        --surface-raised: #242a35;
+        --canvas-surface: #10141c;
+        --text-primary: #edf1f7;
+        --text-muted: #a7b0bf;
+        --border: #3a4352;
+        --accent: #8ab4ff;
+        --accent-strong: #a8c7fa;
+        --accent-soft: #29384f;
+        --shadow: 0 8px 24px rgba(0, 0, 0, .24);
+        color: var(--text-primary);
+        background: var(--surface-muted);
       }
 
       .dark-theme .toolbar,
       .dark-theme .viewer-controls,
       .dark-theme .navigation-sidebar,
       .dark-theme .annotation-panel {
-        color: #f1f3f5;
-        background: #2b2d31;
-        border-color: #555;
+        color: var(--text-primary);
+        background: var(--surface);
+        border-color: var(--border);
       }
 
-      .dark-theme .content { background: #17181a; }
+      .dark-theme .content { background: var(--canvas-surface); }
       .dark-theme button,
       .dark-theme input,
-      .dark-theme select { color: #f1f3f5; background: #383a40; border-color: #666; }
-      .dark-theme .recent-files { color: #f1f3f5; background: #2b2d31; border-color: #666; }
-      .dark-theme .toolbar-customization { color: #f1f3f5; background: #2b2d31; border-color: #666; }
+      .dark-theme select { color: var(--text-primary); background: var(--surface-raised); border-color: var(--border); }
+      .dark-theme .recent-files,
+      .dark-theme .toolbar-customization { color: var(--text-primary); background: var(--surface-raised); border-color: var(--border); }
       .dark-theme .status,
       .dark-theme .search-result,
-      .dark-theme .search-results { color: #f1f3f5; background: #2b2d31; border-color: #555; }
+      .dark-theme .search-results { color: var(--text-primary); background: var(--surface); border-color: var(--border); }
       .dark-theme .error,
       .dark-theme .thumbnail-error { color: #ffb4ab; }
       .dark-theme mark { color: #202124; background: #f4c542; }
+      .dark-theme .thumbnail-preview { background: #151922; }
+      .dark-theme .page-stage canvas,
+      .dark-theme .mode-page canvas { border-color: #4a5362; }
 
       .multi-page-view {
         display: flex;
@@ -582,50 +624,57 @@ interface SignatureAsset {
       canvas.dark-page { filter: invert(1) hue-rotate(180deg); }
 
       .toolbar {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+        grid-template-areas:
+          "primary search"
+          "actions actions";
         align-items: center;
-        gap: 16px;
-        padding: 12px 16px;
-        background: #f5f5f5;
-        border-bottom: 1px solid #ddd;
+        gap: 10px 20px;
+        padding: 12px 20px 10px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
         position: relative;
+        z-index: 20;
+        box-shadow: 0 2px 8px rgba(28, 39, 56, .04);
       }
 
       .recent-files {
         position: absolute;
-        top: calc(100% + 4px);
-        left: 16px;
+        top: calc(100% + 8px);
+        left: 20px;
         z-index: 10;
         max-width: min(540px, calc(100vw - 32px));
-        padding: 8px;
-        border: 1px solid #c9c9c9;
-        border-radius: 4px;
-        background: white;
-        box-shadow: 0 4px 12px #0002;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface-raised);
+        box-shadow: var(--shadow);
       }
 
       .toolbar-customization {
         position: absolute;
-        top: calc(100% + 4px);
-        left: 120px;
+        top: calc(100% + 8px);
+        left: 150px;
         z-index: 10;
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        padding: 8px;
-        border: 1px solid #c9c9c9;
-        border-radius: 4px;
-        background: white;
-        box-shadow: 0 4px 12px #0002;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface-raised);
+        box-shadow: var(--shadow);
       }
 
-      .toolbar-customization label { display: flex; align-items: center; gap: 6px; }
+      .toolbar-customization label { display: flex; align-items: center; gap: 8px; color: var(--text-primary); }
+      .toolbar-customization input { accent-color: var(--accent); }
 
       .recent-files ol {
         max-height: 40vh;
         overflow-y: auto;
-        padding-left: 24px;
+        padding: 8px 0 0;
+        list-style: none;
       }
 
       .recent-files li {
@@ -633,32 +682,93 @@ interface SignatureAsset {
         align-items: center;
         gap: 6px;
         margin: 6px 0;
+        padding: 6px 0;
+        border-top: 1px solid var(--border);
       }
 
-      .toolbar-left,
-      .toolbar-right {
+      .toolbar-left {
+        grid-area: primary;
         display: flex;
         align-items: center;
+        min-width: 0;
+        gap: 12px;
+      }
+
+      .toolbar-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 0 0 auto;
+      }
+
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        color: #fff;
+        background: linear-gradient(145deg, #3478f6, #1d4ed8);
+        font-size: 18px;
+        font-weight: 750;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, .24);
+      }
+
+      .active-document {
+        min-width: 0;
+        max-width: min(280px, 24vw);
+        overflow: hidden;
+        color: var(--text-muted);
+        font-size: 12px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .toolbar-right {
+        grid-area: search;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
         gap: 8px;
+        min-width: 0;
       }
 
       .toolbar h1 {
-        margin-right: 8px;
-        font-size: 18px;
-        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -.02em;
+        white-space: nowrap;
       }
 
       button {
-        padding: 6px 12px;
-        border: 1px solid #c9c9c9;
-        border-radius: 4px;
-        background: white;
+        min-height: 34px;
+        padding: 7px 11px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-primary);
+        background: var(--surface-raised);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 550;
         cursor: pointer;
+        transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease, transform .15s ease;
+      }
+
+      button:hover:not(:disabled) {
+        border-color: #aebbd0;
+        background: var(--surface-muted);
+      }
+
+      button[aria-pressed="true"] {
+        color: var(--accent-strong);
+        border-color: var(--accent);
+        background: var(--accent-soft);
       }
 
       button:disabled {
         cursor: not-allowed;
-        opacity: 0.6;
+        opacity: .52;
       }
 
       button:focus-visible,
@@ -676,7 +786,7 @@ interface SignatureAsset {
       .dark-theme select:focus-visible,
       .dark-theme summary:focus-visible,
       .dark-theme canvas:focus-visible {
-        outline-color: #8ab4f8;
+        outline-color: #a8c7fa;
       }
 
       .visually-hidden {
@@ -690,39 +800,85 @@ interface SignatureAsset {
       }
 
       input {
-        padding: 6px 8px;
-        border: 1px solid #c9c9c9;
-        border-radius: 4px;
+        min-height: 34px;
+        padding: 7px 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-primary);
+        background: var(--surface-raised);
+        font: inherit;
+        font-size: 12px;
+      }
+
+      input[type="checkbox"],
+      input[type="radio"] {
+        min-height: 0;
+        accent-color: var(--accent);
       }
 
       .viewer-controls {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
         gap: 8px;
-        padding: 8px 16px;
-        border-bottom: 1px solid #e1e1e1;
-        background: #fafafa;
+        min-height: 54px;
+        padding: 8px 20px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+
+      .viewer-controls > span[role="status"] {
+        min-width: 88px;
+        padding: 7px 10px;
+        border-radius: 7px;
+        color: var(--text-primary);
+        background: var(--surface-muted);
+        font-size: 12px;
+        font-weight: 650;
+        text-align: center;
+      }
+
+      .viewer-controls label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--text-muted);
+        font-size: 12px;
       }
 
       .content {
         flex: 1;
         display: flex;
-        align-items: flex-start;
+        align-items: stretch;
         justify-content: flex-start;
         overflow: auto;
-        background: #e0e0e0;
-        padding: 16px;
+        min-height: 0;
+        min-width: 0;
+        gap: 18px;
+        background: var(--canvas-surface);
+        padding: 20px;
       }
 
-      .navigation-sidebar { flex: 0 0 190px; max-height: 100%; overflow: auto; margin-right: 16px; padding: 8px; background: #fff; }
-      .navigation-sidebar h2 { margin: 4px 0 8px; font-size: 14px; }
-      .thumbnail-viewport { height: 360px; overflow-y: auto; position: relative; border: 1px solid #ddd; }
+      .navigation-sidebar {
+        flex: 0 0 216px;
+        max-height: 100%;
+        overflow: auto;
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: 0 2px 8px rgba(28, 39, 56, .04);
+      }
+
+      .navigation-sidebar h2 { margin: 6px 0 10px; color: var(--text-primary); font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+      .thumbnail-viewport { height: min(42vh, 460px); overflow-y: auto; position: relative; border: 1px solid var(--border); border-radius: 9px; background: var(--surface-muted); }
       .thumbnail-spacer { position: relative; }
-      .thumbnail-item { position: absolute; left: 0; width: 100%; height: 136px; display: flex; flex-direction: column; align-items: center; padding: 4px; }
-      .thumbnail-item.active { outline: 2px solid #2059d0; outline-offset: -2px; }
-      .thumbnail-navigate { display: flex; flex-direction: column; align-items: center; padding: 0; }
-      .thumbnail-preview { width: 120px; height: 84px; object-fit: contain; background: #eee; }
-      .thumbnail-error { color: #b00020; font-size: 11px; }
+      .thumbnail-item { position: absolute; left: 0; width: 100%; height: 136px; display: flex; flex-direction: column; align-items: center; padding: 7px; }
+      .thumbnail-item.active { outline: 2px solid var(--accent); outline-offset: -2px; background: var(--accent-soft); }
+      .thumbnail-item > label { display: flex; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; }
+      .thumbnail-navigate { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; border-color: transparent; background: transparent; }
+      .thumbnail-preview { width: 120px; height: 84px; object-fit: contain; background: #edf1f6; box-shadow: 0 2px 6px rgba(28, 39, 56, .14); }
+      .thumbnail-error { color: #b42318; font-size: 11px; }
       .bookmark-list { list-style: none; padding: 0; margin: 0; }
       .bookmark-list button { width: 100%; text-align: left; }
 
@@ -730,11 +886,15 @@ interface SignatureAsset {
         position: relative;
         display: inline-block;
         margin: 0 auto;
+        max-width: 100%;
+        align-self: flex-start;
       }
 
       canvas {
-        background: white;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        max-width: 100%;
+        border: 1px solid #d8dee8;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(28, 39, 56, .16);
         display: block;
       }
 
@@ -759,7 +919,7 @@ interface SignatureAsset {
       .pdf-form-widget input[type='checkbox'], .pdf-form-widget input[type='radio'] { margin: auto; }
       .overlay-signature .overlay-text-content { font-family: cursive; font-style: italic; font-size: 24px; color: #17397e; }
       .signature-backdrop { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.45); }
-      .signature-dialog { width: min(520px, calc(100vw - 32px)); max-height: 90vh; overflow: auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,.3); }
+      .signature-dialog { width: min(520px, calc(100vw - 32px)); max-height: 90vh; overflow: auto; padding: 20px; color: var(--text-primary); background: var(--surface-raised); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); }
       .signature-dialog h2 { margin-top: 0; }
       .signature-modes, .signature-dialog-actions, .signature-reusable { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
       .signature-pad { display: block; width: 100%; height: 150px; border: 1px solid #777; background: #fff; touch-action: none; cursor: crosshair; }
@@ -776,8 +936,8 @@ interface SignatureAsset {
       .crop-handle { position: absolute; width: 8px; height: 8px; background: #fff; border: 1px solid #1b5e20; pointer-events: auto; }
       .crop-handle.nw { left: -5px; top: -5px; } .crop-handle.ne { right: -5px; top: -5px; }
       .crop-handle.sw { left: -5px; bottom: -5px; } .crop-handle.se { right: -5px; bottom: -5px; }
-      .annotation-panel { max-height: 180px; overflow: auto; padding: 8px 16px; border-top: 1px solid #ddd; background: #fff; }
-      .annotation-panel h2 { margin: 0 0 8px; font-size: 15px; }
+      .annotation-panel { max-height: 220px; overflow: auto; padding: 14px 20px; border-top: 1px solid var(--border); background: var(--surface); }
+      .annotation-panel h2 { margin: 0 0 8px; color: var(--text-primary); font-size: 13px; font-weight: 700; }
       .annotation-panel ul { list-style: none; margin: 8px 0 0; padding: 0; }
       .annotation-panel li { display: flex; gap: 6px; align-items: center; margin: 4px 0; }
       .annotation-panel .annotation-jump { flex: 1; text-align: left; }
@@ -862,9 +1022,15 @@ interface SignatureAsset {
       }
 
       .status {
-        padding: 12px;
-        background: white;
-        border-radius: 4px;
+        align-self: center;
+        max-width: min(640px, 100%);
+        margin: auto;
+        padding: 24px 30px;
+        color: var(--text-muted);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
       }
 
       .error {
@@ -872,24 +1038,217 @@ interface SignatureAsset {
       }
 
       .search-result {
-        padding: 8px 16px;
-        border-top: 1px solid #ddd;
-        background: #f9f9f9;
+        padding: 10px 20px;
+        border-top: 1px solid var(--border);
+        color: var(--text-primary);
+        background: var(--surface-muted);
       }
 
       .search-results {
         max-height: 180px;
         overflow: auto;
-        padding: 8px 16px;
-        border-top: 1px solid #ddd;
+        padding: 12px 20px;
+        border-top: 1px solid var(--border);
+        color: var(--text-primary);
+        background: var(--surface);
       }
 
       .pdf-toolbar-actions {
-        display: contents;
+        grid-area: actions;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-color: #b8c2d0 transparent;
+        scrollbar-width: thin;
         border: 0;
         margin: 0;
-        min-width: 0;
-        padding: 0;
+        padding: 2px 0 5px;
+      }
+
+      .pdf-toolbar-actions > button,
+      .pdf-toolbar-actions > label {
+        flex: 0 0 auto;
+      }
+
+      .pdf-toolbar-actions > button[title="Save changes to this PDF"] {
+        color: #fff;
+        border-color: var(--accent);
+        background: var(--accent);
+      }
+
+      .pdf-toolbar-actions > button[title="Save changes to this PDF"]:hover:not(:disabled) {
+        border-color: var(--accent-strong);
+        background: var(--accent-strong);
+      }
+
+      .toolbar-right > input[type="text"] {
+        flex: 1 1 120px;
+        min-width: 100px;
+      }
+
+      .toolbar-right > label {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        color: var(--text-muted);
+        font-size: 11px;
+        white-space: nowrap;
+      }
+
+      .toolbar-right > button {
+        color: #fff;
+        border-color: var(--accent);
+        background: var(--accent);
+      }
+
+      .thumbnail-navigate:hover:not(:disabled) {
+        border-color: var(--border);
+        background: var(--surface);
+      }
+
+      .bookmark-list li { margin: 4px 0; }
+      .bookmark-list button { min-height: 32px; color: var(--text-muted); }
+      .bookmark-list button:hover:not(:disabled) { color: var(--accent-strong); }
+
+      @media (max-width: 1100px) {
+        .toolbar {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-areas:
+            "primary"
+            "search"
+            "actions";
+        }
+
+        .toolbar-right {
+          justify-content: flex-start;
+        }
+
+        .navigation-sidebar {
+          flex-basis: 190px;
+        }
+      }
+
+      @media (max-width: 700px) {
+        .toolbar {
+          gap: 8px;
+          padding: 10px 12px 8px;
+        }
+
+        .toolbar-left {
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .toolbar-brand {
+          gap: 8px;
+        }
+
+        .brand-mark {
+          width: 32px;
+          height: 32px;
+        }
+
+        .toolbar h1 {
+          font-size: 14px;
+        }
+
+        .active-document {
+          max-width: min(220px, 60vw);
+        }
+
+        .recent-files {
+          left: 12px;
+          max-width: calc(100vw - 24px);
+        }
+
+        .toolbar-customization {
+          left: auto;
+          right: 12px;
+          max-width: calc(100vw - 24px);
+        }
+
+        .toolbar-right {
+          flex-wrap: wrap;
+          justify-content: flex-start;
+        }
+
+        .toolbar-right > input[type="text"] {
+          flex-basis: 100%;
+        }
+
+        .pdf-toolbar-actions {
+          gap: 6px;
+        }
+
+        .pdf-toolbar-actions > button {
+          min-height: 32px;
+          padding: 6px 9px;
+        }
+
+        .viewer-controls {
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          padding: 8px 12px;
+          scrollbar-width: thin;
+        }
+
+        .viewer-controls > * {
+          flex: 0 0 auto;
+        }
+
+        .content {
+          flex-direction: column;
+          gap: 12px;
+          padding: 12px;
+        }
+
+        .navigation-sidebar {
+          flex: 0 0 auto;
+          width: 100%;
+          max-height: 35vh;
+          padding: 12px;
+        }
+
+        .thumbnail-viewport {
+          height: min(24vh, 220px);
+        }
+
+        .page-stage {
+          align-self: center;
+          margin: 0 auto;
+          overflow: auto;
+        }
+
+        .page-stage canvas {
+          height: auto;
+        }
+
+        .multi-page-view {
+          width: 100%;
+        }
+
+        .multi-page-view canvas {
+          height: auto;
+        }
+
+        .facing-pages .page-placeholder {
+          width: min(42vw, 400px);
+        }
+
+        .annotation-panel {
+          max-height: 32vh;
+          padding: 12px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        button {
+          transition: none;
+        }
       }
     `,
   ],

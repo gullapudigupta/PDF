@@ -32,11 +32,11 @@ node .\master\tools\task-registry.cjs validate
 
 | Phase | Tasks | Completed (reported) | Pending | In progress | Blocked |
 |---|---:|---:|---:|---:|---:|
-| 1: MVP | 45 | 42 | 0 | 0 | 3 |
+| 1: MVP | 46 | 43 | 0 | 0 | 3 |
 | 2: Advanced Features | 16 | 0 | 0 | 0 | 16 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
 
-70 product tasks; 1 separate historical QA execution record.
+71 product tasks; 1 separate historical QA execution record.
 Historical QA is not counted as product delivery. Estimates use 8 planning hours/day where the source specified days; backlog estimates remain unknown.
 
 ## Phase 1 - MVP
@@ -81,7 +81,8 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P1-S11-003](agent-tasks/quality-delivery/phase1-tasks.json) | Performance and Reliability Pass | quality-delivery | COMPLETED | HIGH | 16 | P1-S11-002 |
 | [P1-S12-001](agent-tasks/quality-delivery/phase1-tasks.json) | Desktop Packaging | quality-delivery | BLOCKED | CRITICAL | 16 | P1-S11-003 |
 | [P1-S12-002](agent-tasks/quality-delivery/phase1-tasks.json) | Extension Packaging | quality-delivery | BLOCKED | CRITICAL | 16 | P1-S10-002, P1-S11-003 |
-| [P1-S12-003](agent-tasks/quality-delivery/phase1-tasks.json) | Release Readiness | quality-delivery | BLOCKED | CRITICAL | 16 | P1-S12-001, P1-S12-002 |
+| [P1-S12-004](agent-tasks/viewer-editor/phase1-tasks.json) | Modern PDF Editor Workspace UI | viewer-editor | COMPLETED | HIGH | 24 | P1-S3-002, P1-S9-002, P1-S11-003 |
+| [P1-S12-003](agent-tasks/quality-delivery/phase1-tasks.json) | Release Readiness | quality-delivery | BLOCKED | CRITICAL | 16 | P1-S12-001, P1-S12-002, P1-S12-004 |
 | [P1-S3-005](agent-tasks/viewer-editor/phase1-tasks.json) | Viewing Modes and Dark Mode Rendering | viewer-editor | COMPLETED | HIGH | 16 | P1-S3-003 |
 | [P1-S4-004](agent-tasks/viewer-editor/phase1-tasks.json) | Link Add/Edit/Remove | viewer-editor | COMPLETED | MEDIUM | 12 | P1-S4-001, P1-S4-003 |
 | [P1-S9-004](agent-tasks/viewer-editor/phase1-tasks.json) | Pinned Favorites and Per-Document View State | viewer-editor | COMPLETED | MEDIUM | 12 | P1-S9-001 |

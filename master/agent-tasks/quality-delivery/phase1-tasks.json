@@ -673,7 +673,8 @@
       "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
       "dependencies": [
         "P1-S12-001",
-        "P1-S12-002"
+        "P1-S12-002",
+        "P1-S12-004"
       ],
       "deliverables": [
         "Validate MVP acceptance checklist",
@@ -697,7 +698,7 @@
       ],
       "modelAssignment": null,
       "executionPlan": {
-        "order": 39,
+        "order": 40,
         "batch": 12,
         "band": "phase-1",
         "scriptable": false,
@@ -737,7 +738,12 @@
         "reportedStatus": "PENDING",
         "durationDays": 2,
         "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
-        "normalizedDependencies": []
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-004",
+            "reason": "User-requested modern workspace UI is an MVP acceptance improvement and must complete before release readiness."
+          }
+        ]
       }
     },
     {

@@ -74,6 +74,9 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-077` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-078` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-079` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-080` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-081` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-082` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -235,9 +238,15 @@ graph TD
     P1_S12_002["P1-S12-002: Extension Packaging<br/>BLOCKED"]
     P1_S10_002 --> P1_S12_002
     P1_S11_003 --> P1_S12_002
+    P1_S12_004["P1-S12-004: Modern PDF Editor Workspace UI<br/>COMPLETED"]
+    P1_S3_002 --> P1_S12_004
+    P1_S9_002 --> P1_S12_004
+    P1_S11_003 --> P1_S12_004
+    style P1_S12_004 fill:#c8e6c9
     P1_S12_003["P1-S12-003: Release Readiness<br/>BLOCKED"]
     P1_S12_001 --> P1_S12_003
     P1_S12_002 --> P1_S12_003
+    P1_S12_004 --> P1_S12_003
     P2_S13_001["P2-S13-001: OCR for scanned PDFs<br/>BLOCKED"]
     P1_S12_003 --> P2_S13_001
     P2_S13_002["P2-S13-002: OCR correction workflow and confidence UX<br/>BLOCKED"]

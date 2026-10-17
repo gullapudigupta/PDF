@@ -1251,6 +1251,118 @@
           }
         ]
       }
+    },
+    {
+      "id": "P1-S12-004",
+      "name": "Modern PDF Editor Workspace UI",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-002",
+        "P1-S9-002",
+        "P1-S11-003"
+      ],
+      "deliverables": [
+        "Modern light editor workspace with consistent toolbar, controls, sidebar, page stage, and panel styling",
+        "Responsive desktop and narrow extension-window layout without page-level horizontal overflow",
+        "Preserved accessibility, customization, localization, dark theme, and PDF workflows"
+      ],
+      "acceptanceCriteria": [
+        "At desktop width, product/document controls, search, action rail, viewer controls, navigation sidebar, and page canvas have clear visual hierarchy and consistent modern styling",
+        "At narrow extension widths, controls remain reachable, navigation and page content reflow, and the workspace does not create page-level horizontal overflow",
+        "Existing workspace component tests and PDF workflows pass without behavior changes",
+        "Keyboard focus indicators, accessible names, toolbar customization, localization markers, and both light and dark themes remain supported"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-12",
+        "improvement",
+        "ui"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [
+        "User chose a modern light visual direction and scoped the change to the main editor workspace as a Phase 1 MVP acceptance fix."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 39,
+        "batch": 12,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Not exposed by runtime",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented the modern light workspace, responsive toolbar/sidebar/page-stage layout, and scoped desktop/extension style budgets. The exact model identifier was not exposed by runtime metadata. Validated the rendered two-page demo PDF, thumbnail/sidebar layout, dark/light theme switch, and no page-level horizontal overflow at 1366px and 390px.",
+        "executedAt": "2026-10-17T11:26:18.855Z"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "master/REQUIREMENTS.md",
+        "master/DESIGN.md",
+        "pdf-viewer-editor/angular.json",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+          "npm run build:desktop",
+          "npm run extension:build:chrome"
+        ],
+        "summary": "All 53 focused workspace tests passed in Microsoft Edge 155. Desktop production and Chrome extension builds passed. A browser preview rendered the bundled two-page PDF with canvas and thumbnails; 1366px and 390px layouts had no document-level horizontal overflow, and dark/light theme switching worked."
+      },
+      "sprint": 12,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": null,
+        "originalText": "Improvement P1-S12-004: Modern PDF Editor Workspace UI (user-requested MVP acceptance improvement).",
+        "checklist": [
+          {
+            "completed": false,
+            "text": "Modern light editor workspace with a clear visual hierarchy"
+          },
+          {
+            "completed": false,
+            "text": "Responsive desktop and narrow extension-window layout"
+          },
+          {
+            "completed": false,
+            "text": "Preserve existing workspace functionality and accessibility"
+          }
+        ],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": 3,
+        "estimateBasis": "Planning estimate; 8 hours/day; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S3-002",
+            "reason": "The workspace shell and toolbar are established by the viewer core."
+          },
+          {
+            "taskId": "P1-S9-002",
+            "reason": "The visual update must preserve the accessibility baseline."
+          },
+          {
+            "taskId": "P1-S11-003",
+            "reason": "The layout change follows the performance and reliability baseline."
+          }
+        ]
+      }
     }
   ]
 }
