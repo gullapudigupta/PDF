@@ -17,7 +17,13 @@
       "recommendedModel": [],
       "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
       "dependencies": [
-        "P1-S12-003"
+        "P1-S12-003",
+        "P2-S13-003",
+        "P2-S13-004",
+        "P2-S14-003",
+        "P2-S14-004",
+        "P2-S14-005",
+        "P2-S18-002"
       ],
       "deliverables": [],
       "acceptanceCriteria": [],
@@ -59,6 +65,30 @@
           {
             "taskId": "P1-S12-003",
             "reason": "Source execution rule: MVP acceptance sign-off before Phase 2."
+          },
+          {
+            "taskId": "P2-S13-003",
+            "reason": "Improvement tasks must complete before v1.0 hardening."
+          },
+          {
+            "taskId": "P2-S13-004",
+            "reason": "Improvement tasks must complete before v1.0 hardening."
+          },
+          {
+            "taskId": "P2-S14-003",
+            "reason": "Improvement tasks must complete before v1.0 hardening."
+          },
+          {
+            "taskId": "P2-S14-004",
+            "reason": "Improvement tasks must complete before v1.0 hardening."
+          },
+          {
+            "taskId": "P2-S14-005",
+            "reason": "Improvement tasks must complete before v1.0 hardening."
+          },
+          {
+            "taskId": "P2-S18-002",
+            "reason": "Improvement tasks must complete before v1.0 hardening."
           }
         ]
       }

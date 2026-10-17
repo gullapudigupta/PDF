@@ -174,6 +174,141 @@
           }
         ]
       }
+    },
+    {
+      "id": "P2-S13-003",
+      "name": "Search Across OCR Text",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P2-S13-001",
+        "P1-S8-001"
+      ],
+      "deliverables": [
+        "OCR text layer is included in full-text search",
+        "Results highlight on scanned pages",
+        "Case-sensitive and regex modes work on OCR text"
+      ],
+      "acceptanceCriteria": [
+        "OCR text layer is included in full-text search",
+        "Results highlight on scanned pages",
+        "Case-sensitive and regex modes work on OCR text"
+      ],
+      "tags": [
+        "phase-2",
+        "sprint-13",
+        "improvement"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 63,
+        "batch": 13,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 13,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P2-S13-003: Search Across OCR Text (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P2-S13-001",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P1-S8-001",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P2-S13-004",
+      "name": "Scanned PDF Image and Resolution Analysis",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P2-S13-001"
+      ],
+      "deliverables": [
+        "Report DPI, color mode, and skew per scanned page",
+        "Flag low-quality pages likely to reduce OCR accuracy",
+        "Analysis result feeds OCR confidence UX"
+      ],
+      "acceptanceCriteria": [
+        "Report DPI, color mode, and skew per scanned page",
+        "Flag low-quality pages likely to reduce OCR accuracy",
+        "Analysis result feeds OCR confidence UX"
+      ],
+      "tags": [
+        "phase-2",
+        "sprint-13",
+        "improvement"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 64,
+        "batch": 13,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 13,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P2-S13-004: Scanned PDF Image and Resolution Analysis (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P2-S13-001",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }

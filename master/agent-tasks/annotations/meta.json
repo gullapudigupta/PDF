@@ -5,9 +5,9 @@
   "requirements": "../../REQUIREMENTS.md",
   "design": "../../DESIGN.md",
   "progressTracking": {
-    "totalTasks": 5,
+    "totalTasks": 6,
     "statusSummary": {
-      "pending": 5,
+      "pending": 6,
       "in_progress": 0,
       "completed": 0,
       "blocked": 0,
@@ -15,7 +15,7 @@
     },
     "completedTasks": 0,
     "completionPercentage": "0%",
-    "totalEstimatedHours": 48,
+    "totalEstimatedHours": 64,
     "unestimatedTasks": 2,
     "inheritedUnverifiedCompletions": 0,
     "taskIds": [
@@ -23,7 +23,8 @@
       "P1-S5-002",
       "P1-S5-003",
       "P2-S14-002",
-      "P2-S17-001"
+      "P2-S17-001",
+      "P2-S14-005"
     ]
   },
   "phases": [
@@ -52,9 +53,9 @@
     {
       "phase": "phase2",
       "file": "./phase2-tasks.json",
-      "totalTasks": 2,
+      "totalTasks": 3,
       "statusSummary": {
-        "pending": 2,
+        "pending": 3,
         "in_progress": 0,
         "completed": 0,
         "blocked": 0,
@@ -62,12 +63,13 @@
       },
       "completedTasks": 0,
       "completionPercentage": "0%",
-      "totalEstimatedHours": 0,
+      "totalEstimatedHours": 16,
       "unestimatedTasks": 2,
       "inheritedUnverifiedCompletions": 0,
       "taskIds": [
         "P2-S14-002",
-        "P2-S17-001"
+        "P2-S17-001",
+        "P2-S14-005"
       ]
     }
   ]

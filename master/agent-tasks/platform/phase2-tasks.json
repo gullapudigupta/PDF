@@ -1,0 +1,76 @@
+{
+  "phase": "phase2",
+  "name": "Phase 2 - Advanced Features",
+  "module": "platform",
+  "metadata": {
+    "requirements": "../../REQUIREMENTS.md",
+    "design": "../../DESIGN.md"
+  },
+  "tasks": [
+    {
+      "id": "P2-S18-002",
+      "name": "Local Diagnostics and Opt-in Crash Report Export",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S12-003"
+      ],
+      "deliverables": [
+        "Local diagnostic log with size limits and redaction of document content",
+        "User-initiated crash report export only",
+        "No data leaves the device without explicit consent"
+      ],
+      "acceptanceCriteria": [
+        "Local diagnostic log with size limits and redaction of document content",
+        "User-initiated crash report export only",
+        "No data leaves the device without explicit consent"
+      ],
+      "tags": [
+        "phase-2",
+        "sprint-18",
+        "improvement"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 68,
+        "batch": 18,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 18,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P2-S18-002: Local Diagnostics and Opt-in Crash Report Export (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
+    }
+  ]
+}

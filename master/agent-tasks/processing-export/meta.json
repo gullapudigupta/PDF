@@ -5,9 +5,9 @@
   "requirements": "../../REQUIREMENTS.md",
   "design": "../../DESIGN.md",
   "progressTracking": {
-    "totalTasks": 9,
+    "totalTasks": 12,
     "statusSummary": {
-      "pending": 9,
+      "pending": 12,
       "in_progress": 0,
       "completed": 0,
       "blocked": 0,
@@ -15,7 +15,7 @@
     },
     "completedTasks": 0,
     "completionPercentage": "0%",
-    "totalEstimatedHours": 80,
+    "totalEstimatedHours": 128,
     "unestimatedTasks": 5,
     "inheritedUnverifiedCompletions": 0,
     "taskIds": [
@@ -27,16 +27,19 @@
       "P2-S13-002",
       "P2-S15-001",
       "P3-S20-001",
-      "P3-S22-001"
+      "P3-S22-001",
+      "P1-S6-004",
+      "P2-S13-003",
+      "P2-S13-004"
     ]
   },
   "phases": [
     {
       "phase": "phase1",
       "file": "./phase1-tasks.json",
-      "totalTasks": 4,
+      "totalTasks": 5,
       "statusSummary": {
-        "pending": 4,
+        "pending": 5,
         "in_progress": 0,
         "completed": 0,
         "blocked": 0,
@@ -44,22 +47,23 @@
       },
       "completedTasks": 0,
       "completionPercentage": "0%",
-      "totalEstimatedHours": 80,
+      "totalEstimatedHours": 96,
       "unestimatedTasks": 0,
       "inheritedUnverifiedCompletions": 0,
       "taskIds": [
         "P1-S6-001",
         "P1-S6-002",
         "P1-S6-003",
-        "P1-S8-003"
+        "P1-S8-003",
+        "P1-S6-004"
       ]
     },
     {
       "phase": "phase2",
       "file": "./phase2-tasks.json",
-      "totalTasks": 3,
+      "totalTasks": 5,
       "statusSummary": {
-        "pending": 3,
+        "pending": 5,
         "in_progress": 0,
         "completed": 0,
         "blocked": 0,
@@ -67,13 +71,15 @@
       },
       "completedTasks": 0,
       "completionPercentage": "0%",
-      "totalEstimatedHours": 0,
+      "totalEstimatedHours": 32,
       "unestimatedTasks": 3,
       "inheritedUnverifiedCompletions": 0,
       "taskIds": [
         "P2-S13-001",
         "P2-S13-002",
-        "P2-S15-001"
+        "P2-S15-001",
+        "P2-S13-003",
+        "P2-S13-004"
       ]
     },
     {

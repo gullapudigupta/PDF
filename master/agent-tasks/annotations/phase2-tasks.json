@@ -118,6 +118,76 @@
           }
         ]
       }
+    },
+    {
+      "id": "P2-S14-005",
+      "name": "Annotation Filter, Search and Style Presets",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S5-003",
+        "P1-S12-003"
+      ],
+      "deliverables": [
+        "Filter annotation panel by type, author, color, and page",
+        "Search annotation text and comments",
+        "Save color/opacity/style presets"
+      ],
+      "acceptanceCriteria": [
+        "Filter annotation panel by type, author, color, and page",
+        "Search annotation text and comments",
+        "Save color/opacity/style presets"
+      ],
+      "tags": [
+        "phase-2",
+        "sprint-14",
+        "improvement"
+      ],
+      "module": "annotations",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 67,
+        "batch": 14,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 14,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P2-S14-005: Annotation Filter, Search and Style Presets (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S5-003",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }

@@ -62,6 +62,146 @@
           }
         ]
       }
+    },
+    {
+      "id": "P2-S14-003",
+      "name": "Stamp/Seal Library and Reusable Signature Assets",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S7-003",
+        "P1-S12-003"
+      ],
+      "deliverables": [
+        "Stamp and seal placement, move, resize, and removal",
+        "Save and reuse signature/initials assets locally",
+        "Appearance settings per signature asset"
+      ],
+      "acceptanceCriteria": [
+        "Stamp and seal placement, move, resize, and removal",
+        "Save and reuse signature/initials assets locally",
+        "Appearance settings per signature asset"
+      ],
+      "tags": [
+        "phase-2",
+        "sprint-14",
+        "improvement"
+      ],
+      "module": "forms-signatures",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 65,
+        "batch": 14,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 14,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P2-S14-003: Stamp/Seal Library and Reusable Signature Assets (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S7-003",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P2-S14-004",
+      "name": "Advanced Form Data Export (CSV/JSON/XFDF)",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S7-004",
+        "P1-S12-003"
+      ],
+      "deliverables": [
+        "Export form data as CSV, JSON, and XFDF",
+        "Import XFDF/JSON values into matching fields",
+        "Round-trip preserves field values and types"
+      ],
+      "acceptanceCriteria": [
+        "Export form data as CSV, JSON, and XFDF",
+        "Import XFDF/JSON values into matching fields",
+        "Round-trip preserves field values and types"
+      ],
+      "tags": [
+        "phase-2",
+        "sprint-14",
+        "improvement"
+      ],
+      "module": "forms-signatures",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 2,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 66,
+        "batch": 14,
+        "band": "phase-2",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 14,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P2-S14-004: Advanced Form Data Export (CSV/JSON/XFDF) (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S7-004",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P1-S12-003",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }

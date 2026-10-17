@@ -8,6 +8,29 @@
     {
       "phase": "phase1",
       "file": "./phase1-tasks.json",
+      "totalTasks": 4,
+      "statusSummary": {
+        "pending": 4,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 72,
+      "unestimatedTasks": 0,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P1-S7-001",
+        "P1-S7-002",
+        "P1-S7-003",
+        "P1-S7-004"
+      ]
+    },
+    {
+      "phase": "phase2",
+      "file": "./phase2-tasks.json",
       "totalTasks": 3,
       "statusSummary": {
         "pending": 3,
@@ -18,33 +41,13 @@
       },
       "completedTasks": 0,
       "completionPercentage": "0%",
-      "totalEstimatedHours": 56,
-      "unestimatedTasks": 0,
-      "inheritedUnverifiedCompletions": 0,
-      "taskIds": [
-        "P1-S7-001",
-        "P1-S7-002",
-        "P1-S7-003"
-      ]
-    },
-    {
-      "phase": "phase2",
-      "file": "./phase2-tasks.json",
-      "totalTasks": 1,
-      "statusSummary": {
-        "pending": 1,
-        "in_progress": 0,
-        "completed": 0,
-        "blocked": 0,
-        "cancelled": 0
-      },
-      "completedTasks": 0,
-      "completionPercentage": "0%",
-      "totalEstimatedHours": 0,
+      "totalEstimatedHours": 40,
       "unestimatedTasks": 1,
       "inheritedUnverifiedCompletions": 0,
       "taskIds": [
-        "P2-S14-001"
+        "P2-S14-001",
+        "P2-S14-003",
+        "P2-S14-004"
       ]
     },
     {
@@ -69,9 +72,9 @@
     }
   ],
   "progressTracking": {
-    "totalTasks": 5,
+    "totalTasks": 8,
     "statusSummary": {
-      "pending": 5,
+      "pending": 8,
       "in_progress": 0,
       "completed": 0,
       "blocked": 0,
@@ -79,7 +82,7 @@
     },
     "completedTasks": 0,
     "completionPercentage": "0%",
-    "totalEstimatedHours": 56,
+    "totalEstimatedHours": 112,
     "unestimatedTasks": 2,
     "inheritedUnverifiedCompletions": 0,
     "taskIds": [
@@ -87,7 +90,10 @@
       "P1-S7-002",
       "P1-S7-003",
       "P2-S14-001",
-      "P3-S19-001"
+      "P3-S19-001",
+      "P1-S7-004",
+      "P2-S14-003",
+      "P2-S14-004"
     ]
   },
   "tasks": [
@@ -110,6 +116,18 @@
     {
       "taskId": "P3-S19-001",
       "canonicalFile": "./phase3-tasks.json"
+    },
+    {
+      "taskId": "P1-S7-004",
+      "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P2-S14-003",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P2-S14-004",
+      "canonicalFile": "./phase2-tasks.json"
     }
   ]
 }

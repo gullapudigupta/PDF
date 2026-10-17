@@ -62,6 +62,96 @@
           }
         ]
       }
+    },
+    {
+      "id": "P3-S25-001",
+      "name": "Extended Test Coverage (80%) and Final Release Validation",
+      "status": "PENDING",
+      "priority": "CRITICAL",
+      "estimatedHours": 40,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P3-S24-001",
+        "P3-S19-001",
+        "P3-S20-001",
+        "P3-S22-001",
+        "P3-S21-002",
+        "P3-S23-002"
+      ],
+      "deliverables": [
+        "Raise automated test coverage to 80%+",
+        "Large-document performance tuning verified",
+        "Final desktop and extension release validation"
+      ],
+      "acceptanceCriteria": [
+        "Raise automated test coverage to 80%+",
+        "Large-document performance tuning verified",
+        "Final desktop and extension release validation"
+      ],
+      "tags": [
+        "phase-3",
+        "sprint-25",
+        "improvement"
+      ],
+      "module": "quality-delivery",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 3,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 71,
+        "batch": 25,
+        "band": "phase-3",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 25,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P3-S25-001: Extended Test Coverage (80%) and Final Release Validation (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P3-S24-001",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P3-S19-001",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P3-S20-001",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P3-S22-001",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P3-S21-002",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P3-S23-002",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }

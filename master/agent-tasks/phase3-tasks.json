@@ -5,9 +5,9 @@
     "noTaskCopies": true,
     "sourceOfTruth": "Canonical domain phase JSON only."
   },
-  "totalTasks": 6,
+  "totalTasks": 9,
   "statusSummary": {
-    "pending": 6,
+    "pending": 9,
     "in_progress": 0,
     "completed": 0,
     "blocked": 0,
@@ -15,7 +15,7 @@
   },
   "completedTasks": 0,
   "completionPercentage": "0%",
-  "totalEstimatedHours": 0,
+  "totalEstimatedHours": 104,
   "unestimatedTasks": 6,
   "inheritedUnverifiedCompletions": 0,
   "taskIds": [
@@ -24,7 +24,10 @@
     "P3-S21-001",
     "P3-S22-001",
     "P3-S23-001",
-    "P3-S24-001"
+    "P3-S24-001",
+    "P3-S21-002",
+    "P3-S23-002",
+    "P3-S25-001"
   ],
   "tasks": [
     {
@@ -64,6 +67,27 @@
     },
     {
       "taskId": "P3-S24-001",
+      "module": "quality-delivery",
+      "phase": 3,
+      "canonicalFile": "./quality-delivery/phase3-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P3-S21-002",
+      "module": "platform",
+      "phase": 3,
+      "canonicalFile": "./platform/phase3-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P3-S23-002",
+      "module": "security-compliance",
+      "phase": 3,
+      "canonicalFile": "./security-compliance/phase3-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P3-S25-001",
       "module": "quality-delivery",
       "phase": 3,
       "canonicalFile": "./quality-delivery/phase3-tasks.json",

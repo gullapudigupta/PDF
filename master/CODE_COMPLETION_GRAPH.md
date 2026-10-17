@@ -10,6 +10,7 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-013` (2026-10-16): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-014` (2026-10-16): MIG-004 completed: generated domain/phase indexes and full completion graph.
 - `GSEQ-015` (2026-10-16): MIG-005 completed: migration coverage, dependency DAG, rollups, and generated output validated.
+- `GSEQ-016` (2026-10-16): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -130,6 +131,12 @@ graph TD
     P1_S10_001 --> P1_S11_001
     P1_S10_002 --> P1_S11_001
     P1_S10_003 --> P1_S11_001
+    P1_S3_005 --> P1_S11_001
+    P1_S4_004 --> P1_S11_001
+    P1_S9_004 --> P1_S11_001
+    P1_S7_004 --> P1_S11_001
+    P1_S6_004 --> P1_S11_001
+    P1_S8_004 --> P1_S11_001
     P1_S11_002["P1-S11-002: Integration and Workflow Tests<br/>PENDING"]
     P1_S11_001 --> P1_S11_002
     P1_S11_003["P1-S11-003: Performance and Reliability Pass<br/>PENDING"]
@@ -162,6 +169,12 @@ graph TD
     P1_S12_003 --> P2_S17_001
     P2_S18_001["P2-S18-001: Stability + v1.0 release hardening<br/>PENDING"]
     P1_S12_003 --> P2_S18_001
+    P2_S13_003 --> P2_S18_001
+    P2_S13_004 --> P2_S18_001
+    P2_S14_003 --> P2_S18_001
+    P2_S14_004 --> P2_S18_001
+    P2_S14_005 --> P2_S18_001
+    P2_S18_002 --> P2_S18_001
     P3_S19_001["P3-S19-001: Digital signature verification and certificate workflows<br/>PENDING"]
     P2_S18_001 --> P3_S19_001
     P3_S20_001["P3-S20-001: Batch operations (bulk merge/split/convert/protect)<br/>PENDING"]
@@ -186,6 +199,47 @@ graph TD
     P1_S3_002 --> EXEC_2026_06_16_001
     P1_S3_003 --> EXEC_2026_06_16_001
     style EXEC_2026_06_16_001 fill:#c8e6c9
+    P1_S3_005["P1-S3-005: Viewing Modes and Dark Mode Rendering<br/>PENDING"]
+    P1_S3_003 --> P1_S3_005
+    P1_S4_004["P1-S4-004: Link Add/Edit/Remove<br/>PENDING"]
+    P1_S4_001 --> P1_S4_004
+    P1_S4_003 --> P1_S4_004
+    P1_S9_004["P1-S9-004: Pinned Favorites and Per-Document View State<br/>PENDING"]
+    P1_S9_001 --> P1_S9_004
+    P1_S7_004["P1-S7-004: Form Data Export/Import and Form Autosave<br/>PENDING"]
+    P1_S7_001 --> P1_S7_004
+    P1_S2_003 --> P1_S7_004
+    P1_S6_004["P1-S6-004: Page Rotate and Crop<br/>PENDING"]
+    P1_S6_001 --> P1_S6_004
+    P1_S8_004["P1-S8-004: Encrypted PDF Unlock and Secure Temp Storage<br/>PENDING"]
+    P1_S8_002 --> P1_S8_004
+    P2_S13_003["P2-S13-003: Search Across OCR Text<br/>PENDING"]
+    P2_S13_001 --> P2_S13_003
+    P1_S8_001 --> P2_S13_003
+    P2_S13_004["P2-S13-004: Scanned PDF Image and Resolution Analysis<br/>PENDING"]
+    P2_S13_001 --> P2_S13_004
+    P2_S14_003["P2-S14-003: Stamp/Seal Library and Reusable Signature Assets<br/>PENDING"]
+    P1_S7_003 --> P2_S14_003
+    P1_S12_003 --> P2_S14_003
+    P2_S14_004["P2-S14-004: Advanced Form Data Export (CSV/JSON/XFDF)<br/>PENDING"]
+    P1_S7_004 --> P2_S14_004
+    P1_S12_003 --> P2_S14_004
+    P2_S14_005["P2-S14-005: Annotation Filter, Search and Style Presets<br/>PENDING"]
+    P1_S5_003 --> P2_S14_005
+    P1_S12_003 --> P2_S14_005
+    P2_S18_002["P2-S18-002: Local Diagnostics and Opt-in Crash Report Export<br/>PENDING"]
+    P1_S12_003 --> P2_S18_002
+    P3_S21_002["P3-S21-002: Plugin SDK and Extension Points (OCR/Export/Annotation)<br/>PENDING"]
+    P3_S21_001 --> P3_S21_002
+    P3_S23_002["P3-S23-002: Consent-Gated External Sharing Policy<br/>PENDING"]
+    P3_S23_001 --> P3_S23_002
+    P3_S25_001["P3-S25-001: Extended Test Coverage (80%) and Final Release Validation<br/>PENDING"]
+    P3_S24_001 --> P3_S25_001
+    P3_S19_001 --> P3_S25_001
+    P3_S20_001 --> P3_S25_001
+    P3_S22_001 --> P3_S25_001
+    P3_S21_002 --> P3_S25_001
+    P3_S23_002 --> P3_S25_001
 ```
 
 ## Interpretation

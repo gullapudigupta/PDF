@@ -62,6 +62,71 @@
           }
         ]
       }
+    },
+    {
+      "id": "P3-S21-002",
+      "name": "Plugin SDK and Extension Points (OCR/Export/Annotation)",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 40,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P3-S21-001"
+      ],
+      "deliverables": [
+        "Typed SDK and plugin manifest format",
+        "Extension points for OCR, export, and annotation providers",
+        "Plugin permission model and sample plugin"
+      ],
+      "acceptanceCriteria": [
+        "Typed SDK and plugin manifest format",
+        "Extension points for OCR, export, and annotation providers",
+        "Plugin permission model and sample plugin"
+      ],
+      "tags": [
+        "phase-3",
+        "sprint-21",
+        "improvement"
+      ],
+      "module": "platform",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 3,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 69,
+        "batch": 21,
+        "band": "phase-3",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 21,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P3-S21-002: Plugin SDK and Extension Points (OCR/Export/Annotation) (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P3-S21-001",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }

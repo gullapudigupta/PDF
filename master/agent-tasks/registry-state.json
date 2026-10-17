@@ -6,7 +6,7 @@
     "MIG-004": true,
     "MIG-005": true
   },
-  "sequence": 15,
+  "sequence": 16,
   "history": [
     {
       "sequence": "GSEQ-011",
@@ -32,7 +32,12 @@
       "sequence": "GSEQ-015",
       "date": "2026-10-16",
       "note": "MIG-005 completed: migration coverage, dependency DAG, rollups, and generated output validated."
+    },
+    {
+      "sequence": "GSEQ-016",
+      "date": "2026-10-16",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
     }
   ],
-  "lastDigest": "c4dd7a7642563832e803b9a545b43ba31908f9540870b9021648b75ae44d3993"
+  "lastDigest": "750ac6a8381d823152c19f4eb6b495f9b87307d1bef1806c726aa7d7a55ad643"
 }

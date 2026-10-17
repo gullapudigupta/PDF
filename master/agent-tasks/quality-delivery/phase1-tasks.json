@@ -49,7 +49,13 @@
         "P1-S9-003",
         "P1-S10-001",
         "P1-S10-002",
-        "P1-S10-003"
+        "P1-S10-003",
+        "P1-S3-005",
+        "P1-S4-004",
+        "P1-S9-004",
+        "P1-S7-004",
+        "P1-S6-004",
+        "P1-S8-004"
       ],
       "deliverables": [
         "Service/reducer/selector coverage",
@@ -240,6 +246,30 @@
           {
             "taskId": "P1-S10-003",
             "reason": "Resolve source narrative gate: Core feature completion."
+          },
+          {
+            "taskId": "P1-S3-005",
+            "reason": "Improvement tasks must complete before MVP test expansion."
+          },
+          {
+            "taskId": "P1-S4-004",
+            "reason": "Improvement tasks must complete before MVP test expansion."
+          },
+          {
+            "taskId": "P1-S9-004",
+            "reason": "Improvement tasks must complete before MVP test expansion."
+          },
+          {
+            "taskId": "P1-S7-004",
+            "reason": "Improvement tasks must complete before MVP test expansion."
+          },
+          {
+            "taskId": "P1-S6-004",
+            "reason": "Improvement tasks must complete before MVP test expansion."
+          },
+          {
+            "taskId": "P1-S8-004",
+            "reason": "Improvement tasks must complete before MVP test expansion."
           }
         ]
       }

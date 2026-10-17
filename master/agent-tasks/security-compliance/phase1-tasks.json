@@ -80,6 +80,71 @@
         "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
         "normalizedDependencies": []
       }
+    },
+    {
+      "id": "P1-S8-004",
+      "name": "Encrypted PDF Unlock and Secure Temp Storage",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S8-002"
+      ],
+      "deliverables": [
+        "Prompt for password to unlock authorized encrypted PDFs",
+        "Never persist passwords or decrypted content outside secure temp storage",
+        "Temporary files cleaned on close and after crash recovery"
+      ],
+      "acceptanceCriteria": [
+        "Prompt for password to unlock authorized encrypted PDFs",
+        "Never persist passwords or decrypted content outside secure temp storage",
+        "Temporary files cleaned on close and after crash recovery"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-8",
+        "improvement"
+      ],
+      "module": "security-compliance",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 62,
+        "batch": 8,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 8,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P1-S8-004: Encrypted PDF Unlock and Secure Temp Storage (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S8-002",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }

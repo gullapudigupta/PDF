@@ -5,9 +5,9 @@
     "noTaskCopies": true,
     "sourceOfTruth": "Canonical domain phase JSON only."
   },
-  "totalTasks": 10,
+  "totalTasks": 16,
   "statusSummary": {
-    "pending": 10,
+    "pending": 16,
     "in_progress": 0,
     "completed": 0,
     "blocked": 0,
@@ -15,7 +15,7 @@
   },
   "completedTasks": 0,
   "completionPercentage": "0%",
-  "totalEstimatedHours": 0,
+  "totalEstimatedHours": 104,
   "unestimatedTasks": 10,
   "inheritedUnverifiedCompletions": 0,
   "taskIds": [
@@ -28,7 +28,13 @@
     "P2-S16-001",
     "P2-S16-002",
     "P2-S17-001",
-    "P2-S18-001"
+    "P2-S18-001",
+    "P2-S13-003",
+    "P2-S13-004",
+    "P2-S14-003",
+    "P2-S14-004",
+    "P2-S14-005",
+    "P2-S18-002"
   ],
   "tasks": [
     {
@@ -99,6 +105,48 @@
       "module": "quality-delivery",
       "phase": 2,
       "canonicalFile": "./quality-delivery/phase2-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P2-S13-003",
+      "module": "processing-export",
+      "phase": 2,
+      "canonicalFile": "./processing-export/phase2-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P2-S13-004",
+      "module": "processing-export",
+      "phase": 2,
+      "canonicalFile": "./processing-export/phase2-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P2-S14-003",
+      "module": "forms-signatures",
+      "phase": 2,
+      "canonicalFile": "./forms-signatures/phase2-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P2-S14-004",
+      "module": "forms-signatures",
+      "phase": 2,
+      "canonicalFile": "./forms-signatures/phase2-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P2-S14-005",
+      "module": "annotations",
+      "phase": 2,
+      "canonicalFile": "./annotations/phase2-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P2-S18-002",
+      "module": "platform",
+      "phase": 2,
+      "canonicalFile": "./platform/phase2-tasks.json",
       "modulePath": "../../pdf-viewer-editor/"
     }
   ]

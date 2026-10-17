@@ -302,6 +302,71 @@
         "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
         "normalizedDependencies": []
       }
+    },
+    {
+      "id": "P1-S6-004",
+      "name": "Page Rotate and Crop",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S6-001"
+      ],
+      "deliverables": [
+        "Rotate selected pages by 90/180/270 degrees",
+        "Crop page box with visual handles",
+        "Rotate and crop changes participate in undo/redo and save"
+      ],
+      "acceptanceCriteria": [
+        "Rotate selected pages by 90/180/270 degrees",
+        "Crop page box with visual handles",
+        "Rotate and crop changes participate in undo/redo and save"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-6",
+        "improvement"
+      ],
+      "module": "processing-export",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 61,
+        "batch": 6,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 6,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P1-S6-004: Page Rotate and Crop (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S6-001",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }

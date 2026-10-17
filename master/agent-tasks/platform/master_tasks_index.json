@@ -33,8 +33,8 @@
       ]
     },
     {
-      "phase": "phase3",
-      "file": "./phase3-tasks.json",
+      "phase": "phase2",
+      "file": "./phase2-tasks.json",
       "totalTasks": 1,
       "statusSummary": {
         "pending": 1,
@@ -45,26 +45,47 @@
       },
       "completedTasks": 0,
       "completionPercentage": "0%",
-      "totalEstimatedHours": 0,
+      "totalEstimatedHours": 16,
+      "unestimatedTasks": 0,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P2-S18-002"
+      ]
+    },
+    {
+      "phase": "phase3",
+      "file": "./phase3-tasks.json",
+      "totalTasks": 2,
+      "statusSummary": {
+        "pending": 2,
+        "in_progress": 0,
+        "completed": 0,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 0,
+      "completionPercentage": "0%",
+      "totalEstimatedHours": 40,
       "unestimatedTasks": 1,
       "inheritedUnverifiedCompletions": 0,
       "taskIds": [
-        "P3-S21-001"
+        "P3-S21-001",
+        "P3-S21-002"
       ]
     }
   ],
   "progressTracking": {
-    "totalTasks": 9,
+    "totalTasks": 11,
     "statusSummary": {
-      "pending": 2,
+      "pending": 4,
       "in_progress": 0,
       "completed": 7,
       "blocked": 0,
       "cancelled": 0
     },
     "completedTasks": 7,
-    "completionPercentage": "77%",
-    "totalEstimatedHours": 152,
+    "completionPercentage": "63%",
+    "totalEstimatedHours": 208,
     "unestimatedTasks": 1,
     "inheritedUnverifiedCompletions": 7,
     "taskIds": [
@@ -76,7 +97,9 @@
       "P1-S2-002",
       "P1-S2-003",
       "P1-S2-004",
-      "P3-S21-001"
+      "P3-S21-001",
+      "P2-S18-002",
+      "P3-S21-002"
     ]
   },
   "tasks": [
@@ -114,6 +137,14 @@
     },
     {
       "taskId": "P3-S21-001",
+      "canonicalFile": "./phase3-tasks.json"
+    },
+    {
+      "taskId": "P2-S18-002",
+      "canonicalFile": "./phase2-tasks.json"
+    },
+    {
+      "taskId": "P3-S21-002",
       "canonicalFile": "./phase3-tasks.json"
     }
   ]

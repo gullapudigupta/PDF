@@ -854,6 +854,206 @@
         "estimateBasis": "Original duration in days multiplied by 8 planning hours/day; not measured effort.",
         "normalizedDependencies": []
       }
+    },
+    {
+      "id": "P1-S3-005",
+      "name": "Viewing Modes and Dark Mode Rendering",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 16,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S3-003"
+      ],
+      "deliverables": [
+        "Single, continuous, and facing page viewing modes",
+        "Dark theme with accessible contrast, including dark page rendering option",
+        "Persist mode and theme per document and as app preference"
+      ],
+      "acceptanceCriteria": [
+        "Single, continuous, and facing page viewing modes",
+        "Dark theme with accessible contrast, including dark page rendering option",
+        "Persist mode and theme per document and as app preference"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-3",
+        "improvement"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 57,
+        "batch": 3,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 3,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P1-S3-005: Viewing Modes and Dark Mode Rendering (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S3-003",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P1-S4-004",
+      "name": "Link Add/Edit/Remove",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 12,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S4-001",
+        "P1-S4-003"
+      ],
+      "deliverables": [
+        "Add URL and internal page links on selected regions",
+        "Edit and remove existing links",
+        "Link changes participate in undo/redo"
+      ],
+      "acceptanceCriteria": [
+        "Add URL and internal page links on selected regions",
+        "Edit and remove existing links",
+        "Link changes participate in undo/redo"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-4",
+        "improvement"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 58,
+        "batch": 4,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 4,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P1-S4-004: Link Add/Edit/Remove (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S4-001",
+            "reason": "Improvement dependency."
+          },
+          {
+            "taskId": "P1-S4-003",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
+    },
+    {
+      "id": "P1-S9-004",
+      "name": "Pinned Favorites and Per-Document View State",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 12,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P1-S9-001"
+      ],
+      "deliverables": [
+        "Pin and unpin favorite documents",
+        "Store zoom, page, and window state per document",
+        "Restore per-document state on reopen"
+      ],
+      "acceptanceCriteria": [
+        "Pin and unpin favorite documents",
+        "Store zoom, page, and window state per document",
+        "Restore per-document state on reopen"
+      ],
+      "tags": [
+        "phase-1",
+        "sprint-9",
+        "improvement"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 1,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 59,
+        "batch": 9,
+        "band": "phase-1",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 9,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P1-S9-004: Pinned Favorites and Per-Document View State (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P1-S9-001",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }

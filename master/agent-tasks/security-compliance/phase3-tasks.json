@@ -62,6 +62,71 @@
           }
         ]
       }
+    },
+    {
+      "id": "P3-S23-002",
+      "name": "Consent-Gated External Sharing Policy",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 24,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Unassigned. Select an approved available model for actual execution; no historical model is known.",
+      "dependencies": [
+        "P3-S23-001"
+      ],
+      "deliverables": [
+        "Block any cloud upload or external sharing without explicit per-action consent",
+        "Record consent decisions in the audit trail",
+        "Admin policy to disable external sharing"
+      ],
+      "acceptanceCriteria": [
+        "Block any cloud upload or external sharing without explicit per-action consent",
+        "Record consent decisions in the audit trail",
+        "Admin policy to disable external sharing"
+      ],
+      "tags": [
+        "phase-3",
+        "sprint-23",
+        "improvement"
+      ],
+      "module": "security-compliance",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 3,
+      "userClarifications": [],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 70,
+        "batch": 23,
+        "band": "phase-3",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": null,
+      "jevRecommendation": null,
+      "completedDate": null,
+      "artifacts": [],
+      "verification": null,
+      "sprint": 23,
+      "planningRequired": false,
+      "source": {
+        "file": "REQUIREMENTS.md",
+        "line": null,
+        "snapshot": "../source-snapshot.json",
+        "originalText": "Improvement P3-S23-002: Consent-Gated External Sharing Policy (requirement gap identified from REQUIREMENTS.md and ROADMAP.md).",
+        "checklist": [],
+        "declaredDependencyText": null,
+        "declaredDependencies": [],
+        "reportedStatus": "PENDING",
+        "durationDays": null,
+        "estimateBasis": "Planning estimate; not measured effort.",
+        "normalizedDependencies": [
+          {
+            "taskId": "P3-S23-001",
+            "reason": "Improvement dependency."
+          }
+        ]
+      }
     }
   ]
 }
