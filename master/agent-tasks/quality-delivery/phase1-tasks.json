@@ -10,7 +10,7 @@
     {
       "id": "P1-S11-001",
       "name": "Unit Test Expansion (60% target)",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "priority": "CRITICAL",
       "estimatedHours": 24,
       "value": null,

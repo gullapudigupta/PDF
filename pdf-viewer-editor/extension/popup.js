@@ -1,14 +1,19 @@
-document.getElementById('openPdf').addEventListener('click', () => {
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = 'application/pdf';
+const openButton = document.getElementById('openPdf');
+const status = document.getElementById('status');
 
-  input.addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      console.log('PDF selected:', file.name);
-    }
-  });
+openButton.addEventListener('click', async () => {
+  const extensionApi = globalThis.browser ?? globalThis.chrome;
+  if (!extensionApi?.runtime?.getURL || !extensionApi?.tabs?.create) {
+    status.textContent = 'The browser extension API is unavailable.';
+    return;
+  }
 
-  input.click();
+  try {
+    await extensionApi.tabs.create({
+      url: extensionApi.runtime.getURL('viewer/index.html'),
+    });
+    window.close();
+  } catch (error) {
+    status.textContent = `Unable to open the PDF editor: ${error instanceof Error ? error.message : String(error)}`;
+  }
 });

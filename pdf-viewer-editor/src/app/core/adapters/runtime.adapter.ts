@@ -10,6 +10,18 @@ export interface RuntimeAdapter {
   getPlatform(): 'desktop' | 'extension';
 }
 
+interface ExtensionMessageResponse {
+  success?: boolean;
+  error?: string;
+  filePath?: string;
+}
+
+interface ExtensionMessagingApi {
+  runtime?: {
+    sendMessage?: (message: object) => Promise<ExtensionMessageResponse | undefined>;
+  };
+}
+
 function arrayBufferToBase64(data: ArrayBuffer): string {
   const bytes = new Uint8Array(data);
   const chunkSize = 0x8000;
@@ -102,7 +114,11 @@ export class ExtensionRuntimeAdapter implements RuntimeAdapter {
     data: ArrayBuffer,
     mimeType: 'application/pdf' | 'application/json' | 'image/png' | 'image/jpeg' | 'image/svg+xml' = 'application/pdf'
   ): Promise<{ canceled: boolean; filePath?: string }> {
-    const extensionApi = (globalThis as any).chrome ?? (globalThis as any).browser;
+    const extensionGlobal = globalThis as typeof globalThis & {
+      chrome?: ExtensionMessagingApi;
+      browser?: ExtensionMessagingApi;
+    };
+    const extensionApi = extensionGlobal.browser ?? extensionGlobal.chrome;
 
     if (extensionApi?.runtime?.sendMessage) {
       const payload = {
@@ -112,18 +128,11 @@ export class ExtensionRuntimeAdapter implements RuntimeAdapter {
         dataUrl: `data:${mimeType};base64,${arrayBufferToBase64(data)}`,
       };
 
-      try {
-        const response = await extensionApi.runtime.sendMessage(payload);
-        if (response?.success) {
-          return { canceled: false, filePath: response.filePath ?? defaultName };
-        }
-
-        if (response?.error) {
-          throw new Error(response.error);
-        }
-      } catch {
-        // Fall through to anchor-based download fallback below.
+      const response = await extensionApi.runtime.sendMessage(payload);
+      if (!response?.success) {
+        throw new Error(response?.error ?? 'The browser extension could not start the download.');
       }
+      return { canceled: false, filePath: response.filePath ?? defaultName };
     }
 
     const blob = new Blob([data], { type: mimeType });

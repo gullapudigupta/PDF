@@ -11,6 +11,7 @@
     "watch": "ng build --watch --configuration development",
     "install:tests": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-for-tests.ps1",
     "test": "ng test",
+    "test:extension": "node --test extension/extension-flow.test.js",
     "test:logged": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-tests-logged.ps1",
     "lint": "ng lint",
     "format": "prettier --write \"src/**/*.{ts,html,scss,json}\"",
@@ -19,9 +20,9 @@
     "electron:serve": "npm run build:dev && electron electron/main.js",
     "electron:build": "npm run build && electron-builder",
     "build:dev": "ng build --configuration development",
-    "extension:build:chrome": "node scripts/build-extension.js chrome",
-    "extension:build:firefox": "node scripts/build-extension.js firefox",
-    "extension:build": "npm run extension:build:chrome && npm run extension:build:firefox"
+    "extension:build:chrome": "ng build --configuration extension && node scripts/build-extension.js chrome",
+    "extension:build:firefox": "ng build --configuration extension && node scripts/build-extension.js firefox",
+    "extension:build": "ng build --configuration extension && node scripts/build-extension.js chrome && node scripts/build-extension.js firefox"
   },
   "dependencies": {
     "@angular/animations": "^22.0.0",

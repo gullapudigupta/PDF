@@ -32,7 +32,7 @@ node .\master\tools\task-registry.cjs validate
 
 | Phase | Tasks | Completed (reported) | Pending | In progress | Blocked |
 |---|---:|---:|---:|---:|---:|
-| 1: MVP | 45 | 34 | 10 | 1 | 0 |
+| 1: MVP | 45 | 39 | 5 | 1 | 0 |
 | 2: Advanced Features | 16 | 0 | 16 | 0 | 0 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
 
@@ -72,11 +72,11 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P1-S8-003](agent-tasks/processing-export/phase1-tasks.json) | Export Outputs | processing-export | COMPLETED | HIGH | 16 | P1-S6-003 |
 | [P1-S9-001](agent-tasks/viewer-editor/phase1-tasks.json) | Recent Files + Workspace Persistence | viewer-editor | COMPLETED | MEDIUM | 16 | P1-S2-003 |
 | [P1-S9-002](agent-tasks/viewer-editor/phase1-tasks.json) | Accessibility and Keyboard Pass | viewer-editor | COMPLETED | HIGH | 16 | P1-S5-003, P1-S8-001 |
-| [P1-S9-003](agent-tasks/viewer-editor/phase1-tasks.json) | UI Customization and Localization Baseline | viewer-editor | IN_PROGRESS | MEDIUM | 8 | P1-S3-002 |
-| [P1-S10-001](agent-tasks/browser-extension/phase1-tasks.json) | Extension PDF Open/Edit Flow | browser-extension | PENDING | CRITICAL | 24 | P1-S2-002, P1-S6-003 |
-| [P1-S10-002](agent-tasks/browser-extension/phase1-tasks.json) | Cross-Browser Compatibility Pass | browser-extension | PENDING | CRITICAL | 16 | P1-S10-001 |
-| [P1-S10-003](agent-tasks/browser-extension/phase1-tasks.json) | Extension Permission Hardening | browser-extension | PENDING | HIGH | 8 | P1-S10-001 |
-| [P1-S11-001](agent-tasks/quality-delivery/phase1-tasks.json) | Unit Test Expansion (60% target) | quality-delivery | PENDING | CRITICAL | 24 | P1-S1-001, P1-S1-002, P1-S1-003, P1-S1-004, P1-S2-001, P1-S2-002, P1-S2-003, P1-S2-004, P1-S3-001, P1-S3-002, P1-S3-003, P1-S3-004, P1-S4-001, P1-S4-002, P1-S4-003, P1-S5-001, P1-S5-002, P1-S5-003, P1-S6-001, P1-S6-002, P1-S6-003, P1-S7-001, P1-S7-002, P1-S7-003, P1-S8-001, P1-S8-002, P1-S8-003, P1-S9-001, P1-S9-002, P1-S9-003, P1-S10-001, P1-S10-002, P1-S10-003, P1-S3-005, P1-S4-004, P1-S9-004, P1-S7-004, P1-S6-004, P1-S8-004 |
+| [P1-S9-003](agent-tasks/viewer-editor/phase1-tasks.json) | UI Customization and Localization Baseline | viewer-editor | COMPLETED | MEDIUM | 8 | P1-S3-002 |
+| [P1-S10-001](agent-tasks/browser-extension/phase1-tasks.json) | Extension PDF Open/Edit Flow | browser-extension | COMPLETED | CRITICAL | 24 | P1-S2-002, P1-S6-003 |
+| [P1-S10-002](agent-tasks/browser-extension/phase1-tasks.json) | Cross-Browser Compatibility Pass | browser-extension | COMPLETED | CRITICAL | 16 | P1-S10-001 |
+| [P1-S10-003](agent-tasks/browser-extension/phase1-tasks.json) | Extension Permission Hardening | browser-extension | COMPLETED | HIGH | 8 | P1-S10-001 |
+| [P1-S11-001](agent-tasks/quality-delivery/phase1-tasks.json) | Unit Test Expansion (60% target) | quality-delivery | IN_PROGRESS | CRITICAL | 24 | P1-S1-001, P1-S1-002, P1-S1-003, P1-S1-004, P1-S2-001, P1-S2-002, P1-S2-003, P1-S2-004, P1-S3-001, P1-S3-002, P1-S3-003, P1-S3-004, P1-S4-001, P1-S4-002, P1-S4-003, P1-S5-001, P1-S5-002, P1-S5-003, P1-S6-001, P1-S6-002, P1-S6-003, P1-S7-001, P1-S7-002, P1-S7-003, P1-S8-001, P1-S8-002, P1-S8-003, P1-S9-001, P1-S9-002, P1-S9-003, P1-S10-001, P1-S10-002, P1-S10-003, P1-S3-005, P1-S4-004, P1-S9-004, P1-S7-004, P1-S6-004, P1-S8-004 |
 | [P1-S11-002](agent-tasks/quality-delivery/phase1-tasks.json) | Integration and Workflow Tests | quality-delivery | PENDING | HIGH | 16 | P1-S11-001 |
 | [P1-S11-003](agent-tasks/quality-delivery/phase1-tasks.json) | Performance and Reliability Pass | quality-delivery | PENDING | HIGH | 16 | P1-S11-002 |
 | [P1-S12-001](agent-tasks/quality-delivery/phase1-tasks.json) | Desktop Packaging | quality-delivery | PENDING | CRITICAL | 16 | P1-S11-003 |
@@ -84,7 +84,7 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P1-S12-003](agent-tasks/quality-delivery/phase1-tasks.json) | Release Readiness | quality-delivery | PENDING | CRITICAL | 16 | P1-S12-001, P1-S12-002 |
 | [P1-S3-005](agent-tasks/viewer-editor/phase1-tasks.json) | Viewing Modes and Dark Mode Rendering | viewer-editor | COMPLETED | HIGH | 16 | P1-S3-003 |
 | [P1-S4-004](agent-tasks/viewer-editor/phase1-tasks.json) | Link Add/Edit/Remove | viewer-editor | COMPLETED | MEDIUM | 12 | P1-S4-001, P1-S4-003 |
-| [P1-S9-004](agent-tasks/viewer-editor/phase1-tasks.json) | Pinned Favorites and Per-Document View State | viewer-editor | PENDING | MEDIUM | 12 | P1-S9-001 |
+| [P1-S9-004](agent-tasks/viewer-editor/phase1-tasks.json) | Pinned Favorites and Per-Document View State | viewer-editor | COMPLETED | MEDIUM | 12 | P1-S9-001 |
 | [P1-S7-004](agent-tasks/forms-signatures/phase1-tasks.json) | Form Data Export/Import and Form Autosave | forms-signatures | COMPLETED | HIGH | 16 | P1-S7-001, P1-S2-003 |
 | [P1-S6-004](agent-tasks/processing-export/phase1-tasks.json) | Page Rotate and Crop | processing-export | COMPLETED | HIGH | 16 | P1-S6-001 |
 | [P1-S8-004](agent-tasks/security-compliance/phase1-tasks.json) | Encrypted PDF Unlock and Secure Temp Storage | security-compliance | COMPLETED | HIGH | 16 | P1-S8-002 |

@@ -32,14 +32,14 @@
       "file": "./phase1-tasks.json",
       "totalTasks": 46,
       "statusSummary": {
-        "pending": 10,
+        "pending": 5,
         "in_progress": 1,
-        "completed": 35,
+        "completed": 40,
         "blocked": 0,
         "cancelled": 0
       },
-      "completedTasks": 35,
-      "completionPercentage": "76%",
+      "completedTasks": 40,
+      "completionPercentage": "86%",
       "totalEstimatedHours": 784,
       "unestimatedTasks": 1,
       "inheritedUnverifiedCompletions": 7,
@@ -161,14 +161,14 @@
   "progressTracking": {
     "totalTasks": 71,
     "statusSummary": {
-      "pending": 35,
+      "pending": 30,
       "in_progress": 1,
-      "completed": 35,
+      "completed": 40,
       "blocked": 0,
       "cancelled": 0
     },
-    "completedTasks": 35,
-    "completionPercentage": "49%",
+    "completedTasks": 40,
+    "completionPercentage": "56%",
     "totalEstimatedHours": 992,
     "unestimatedTasks": 17,
     "inheritedUnverifiedCompletions": 7,

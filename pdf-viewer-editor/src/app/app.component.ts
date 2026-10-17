@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
   template: `
     <div class="app-container">
       <nav class="app-nav">
-        <a routerLink="/mobile-gallery" routerLinkActive="active-link">Mobile Gallery</a>
+        <a *ngIf="showMobileGallery" routerLink="/mobile-gallery" routerLinkActive="active-link">Mobile Gallery</a>
         <a routerLink="/pdf-workspace" routerLinkActive="active-link">PDF Workspace</a>
       </nav>
       <router-outlet></router-outlet>
@@ -47,4 +48,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'PDF Viewer & Editor';
+  showMobileGallery = environment.runtime !== 'extension';
 }

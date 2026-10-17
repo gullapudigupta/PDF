@@ -87,7 +87,7 @@ export class IndexedDBPersistenceAdapter implements PersistenceAdapter {
       const request = store.get(key);
       
       request.onsuccess = () => {
-        resolve(request.result?.value || null);
+        resolve(request.result?.value ?? null);
       };
       
       request.onerror = () => reject(request.error);

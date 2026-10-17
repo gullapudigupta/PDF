@@ -10,7 +10,7 @@
     {
       "id": "P1-S10-001",
       "name": "Extension PDF Open/Edit Flow",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "CRITICAL",
       "estimatedHours": 24,
       "value": null,
@@ -46,11 +46,41 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Replaced the placeholder popup with an editor launcher, added a browser page context-menu entry, and packaged the Angular PDF workspace in an extension-specific build with hash routing and the extension runtime. The viewer opens local PDFs through the extension file picker and exports edited PDFs through the extension downloads handler. Download failures now surface instead of silently reporting fallback success.",
+        "executedAt": "2026-10-17T14:34:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/angular.json",
+        "pdf-viewer-editor/package.json",
+        "pdf-viewer-editor/scripts/build-extension.js",
+        "pdf-viewer-editor/src/app/app-routing.extension.module.ts",
+        "pdf-viewer-editor/src/app/app.component.ts",
+        "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.ts",
+        "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.spec.ts",
+        "pdf-viewer-editor/src/environments/environment.extension.ts",
+        "pdf-viewer-editor/extension/background.js",
+        "pdf-viewer-editor/extension/extension-flow.test.js",
+        "pdf-viewer-editor/extension/manifest.chrome.json",
+        "pdf-viewer-editor/extension/manifest.firefox.json",
+        "pdf-viewer-editor/extension/popup.html",
+        "pdf-viewer-editor/extension/popup.js"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "npm run extension:build:chrome",
+          "npm run test:extension",
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npx ng test --watch=false --include=src/app/core/adapters/runtime.adapter.spec.ts",
+          "Node syntax checks for extension/popup.js and extension/background.js; manifest JSON and packaged viewer entry-point smoke checks"
+        ],
+        "summary": "The Chrome extension viewer package built successfully, both Node extension-flow tests and both Angular download-adapter tests passed, and the generated package contains its manifest, popup, background worker, and Angular viewer entry point."
+      },
       "sprint": 10,
       "planningRequired": false,
       "source": {
@@ -86,7 +116,7 @@
     {
       "id": "P1-S10-002",
       "name": "Cross-Browser Compatibility Pass",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "CRITICAL",
       "estimatedHours": 16,
       "value": null,
@@ -121,11 +151,37 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Built the Chrome/Edge Manifest V3 package and Firefox Manifest V2 package from the same PDF workspace. Added explicit Promise-based Firefox versus callback-based Chromium handling for context-menu setup and downloads; popup tab launching and extension API selection work across the browser namespaces. Edge 155 and Firefox 158 are installed in the validation environment; no standalone Chrome binary is installed.",
+        "executedAt": "2026-10-17T14:45:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/angular.json",
+        "pdf-viewer-editor/package.json",
+        "pdf-viewer-editor/scripts/build-extension.js",
+        "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.ts",
+        "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.spec.ts",
+        "pdf-viewer-editor/extension/background.js",
+        "pdf-viewer-editor/extension/extension-flow.test.js",
+        "pdf-viewer-editor/extension/manifest.chrome.json",
+        "pdf-viewer-editor/extension/manifest.firefox.json",
+        "pdf-viewer-editor/extension/popup.js"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "npm run extension:build",
+          "npm run test:extension",
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npx ng test --watch=false --include=src/app/core/adapters/runtime.adapter.spec.ts",
+          "Node package smoke check for MV3/MV2 manifests and viewer entry points"
+        ],
+        "summary": "Chrome/Edge MV3 and Firefox MV2 extension packages build successfully. Three Node tests passed for Chrome and Firefox promise/callback APIs; both Angular runtime download-adapter tests passed. Edge 155 and Firefox 158 are installed; Firefox validation used its built package and browser-API test double rather than a live temporary installation."
+      },
       "sprint": 10,
       "planningRequired": false,
       "source": {
@@ -160,7 +216,7 @@
     {
       "id": "P1-S10-003",
       "name": "Extension Permission Hardening",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 8,
       "value": null,
@@ -193,11 +249,29 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Removed unused storage and file URL permissions from both browser manifests and removed Chrome file host access. The extension now requests only downloads and contextMenus: one to save user-requested exports and one to open the viewer from a page context menu. Added a permission-purpose inventory and pre-release audit checklist.",
+        "executedAt": "2026-10-17T14:49:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/extension/manifest.chrome.json",
+        "pdf-viewer-editor/extension/manifest.firefox.json",
+        "pdf-viewer-editor/extension/PERMISSIONS.md",
+        "pdf-viewer-editor/extension/extension-flow.test.js"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "npm run test:extension",
+          "npm run extension:build"
+        ],
+        "summary": "All four extension flow tests passed, including assertions that both manifests request exactly downloads and contextMenus with no host or file access. The Chrome/Edge MV3 and Firefox MV2 packages rebuilt successfully."
+      },
       "sprint": 10,
       "planningRequired": false,
       "source": {

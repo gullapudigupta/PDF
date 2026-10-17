@@ -9,6 +9,21 @@ describe('LocalStoragePersistenceAdapter', () => {
   });
 
   describe('IndexedDBPersistenceAdapter', () => {
+    it('preserves falsy settings and persists recent files', async () => {
+      const adapter = new IndexedDBPersistenceAdapter();
+      const dbName = `persistence-adapter-test-${Date.now()}-${Math.random()}`;
+      Object.defineProperty(adapter, 'dbName', { value: dbName });
+
+      await adapter.setSetting('feature-enabled', false);
+      expect(await adapter.getSetting('feature-enabled')).toBeFalse();
+      expect(await adapter.getRecentFiles()).toEqual([]);
+
+      await adapter.addRecentFile('one.pdf');
+      await adapter.addRecentFile('two.pdf');
+      await adapter.addRecentFile('one.pdf');
+      expect(await adapter.getRecentFiles()).toEqual(['one.pdf', 'two.pdf']);
+    });
+
     it('stores, recovers, and clears autosave bytes', async () => {
       const adapter = new IndexedDBPersistenceAdapter();
       const documentId = `autosave-test-${Date.now()}`;
@@ -26,6 +41,12 @@ describe('LocalStoragePersistenceAdapter', () => {
     const setting = await adapter.getSetting<{ mode: string }>('theme');
 
     expect(setting).toEqual({ mode: 'dark' });
+  });
+
+  it('returns empty defaults for missing local settings, recents, and autosaves', async () => {
+    expect(await adapter.getSetting('missing')).toBeNull();
+    expect(await adapter.getRecentFiles()).toEqual([]);
+    expect(await adapter.getAutosaveData('missing')).toBeNull();
   });
 
   it('maintains recent files uniqueness and max length', async () => {

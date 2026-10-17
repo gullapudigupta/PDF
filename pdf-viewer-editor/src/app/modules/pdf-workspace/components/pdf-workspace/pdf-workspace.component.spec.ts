@@ -230,6 +230,41 @@ describe('PdfWorkspaceComponent', () => {
     });
   });
 
+  it('restores saved per-document view state when reopening a recent PDF', async () => {
+    const recent = {
+      id: 'recent-doc',
+      name: 'recent.pdf',
+      path: 'C:\\documents\\recent.pdf',
+      lastOpenedAt: 1,
+      isPinned: true,
+    };
+    const loadedDoc = {
+      id: recent.id,
+      name: recent.name,
+      totalPages: 4,
+      bytes: new Uint8Array([1, 2]),
+      proxy: {},
+    };
+    runtimeService.isDesktop.and.returnValue(true);
+    runtimeService.readFile.and.resolveTo(new Uint8Array([1, 2]).buffer);
+    pdfDocumentService.loadFromBytes.and.resolveTo(loadedDoc as any);
+    pdfRenderService.renderLoadedPageToCanvas.and.resolveTo();
+    persistenceService.getSetting.and.callFake(async <T>(key: string): Promise<T | null> =>
+      key === 'workspaceView:recent-doc'
+        ? { page: 3, zoom: 1.75, viewingMode: 'single', theme: 'dark', darkPageRendering: true } as T
+        : null
+    );
+
+    await component.openRecentFile(recent);
+
+    expect(component.currentPage).toBe(3);
+    expect(component.zoom).toBe(1.75);
+    expect(component.theme).toBe('dark');
+    expect(component.darkPageRendering).toBeTrue();
+    expect(runtimeService.readFile).toHaveBeenCalledWith(recent.path);
+    expect(persistenceService.recordRecentFile).toHaveBeenCalledWith(jasmine.objectContaining({ path: recent.path }));
+  });
+
   it('persists viewing mode and theme preferences per app and document', async () => {
     component.document = {
       id: 'doc-views',
@@ -282,6 +317,22 @@ describe('PdfWorkspaceComponent', () => {
     expect(fixture.nativeElement.querySelector('.toolbar-right')).toBeNull();
     expect(fixture.nativeElement.querySelector('.pdf-toolbar-actions')).toBeNull();
     expect(fixture.nativeElement.querySelector('.toolbar-customization')).not.toBeNull();
+  });
+
+  it('restores saved toolbar visibility while retaining defaults for unspecified groups', async () => {
+    persistenceService.getSetting.and.resolveTo({
+      toolbarVisibility: { search: false, annotations: false },
+    });
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(component.toolbarVisibility).toEqual({
+      editing: true,
+      search: false,
+      navigation: true,
+      annotations: false,
+    });
   });
 
   it('renders a bounded window of pages in continuous mode', async () => {
