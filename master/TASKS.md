@@ -32,7 +32,7 @@ node .\master\tools\task-registry.cjs validate
 
 | Phase | Tasks | Completed (reported) | Pending | In progress | Blocked |
 |---|---:|---:|---:|---:|---:|
-| 1: MVP | 45 | 14 | 31 | 0 | 0 |
+| 1: MVP | 45 | 28 | 17 | 0 | 0 |
 | 2: Advanced Features | 16 | 0 | 16 | 0 | 0 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
 
@@ -50,25 +50,25 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P1-S2-001](agent-tasks/platform/phase1-tasks.json) | Electron Secure IPC Layer | platform | COMPLETED (inherited) | CRITICAL | 16 | P1-S1-002 |
 | [P1-S2-002](agent-tasks/platform/phase1-tasks.json) | Browser Extension Runtime Baseline | platform | COMPLETED (inherited) | CRITICAL | 24 | P1-S1-002 |
 | [P1-S2-003](agent-tasks/platform/phase1-tasks.json) | No-Backend Persistence Layer | platform | COMPLETED (inherited) | CRITICAL | 24 | P1-S1-003 |
-| [P1-S2-004](agent-tasks/platform/phase1-tasks.json) | NgRx Workspace Store Foundation | platform | COMPLETED (inherited) | CRITICAL | 16 | P1-S1-003 |
+| [P1-S2-004](agent-tasks/platform/phase1-tasks.json) | NgRx Workspace Store Foundation | platform | COMPLETED | CRITICAL | 16 | P1-S1-003 |
 | [P1-S3-001](agent-tasks/viewer-editor/phase1-tasks.json) | PDF.js Integration | viewer-editor | COMPLETED | CRITICAL | 24 | P1-S2-001, P1-S2-004 |
 | [P1-S3-002](agent-tasks/viewer-editor/phase1-tasks.json) | Viewer + Toolbar Core | viewer-editor | COMPLETED | CRITICAL | 16 | P1-S3-001 |
 | [P1-S3-003](agent-tasks/viewer-editor/phase1-tasks.json) | Navigation, Zoom, Rotation | viewer-editor | COMPLETED | CRITICAL | 16 | P1-S3-002 |
-| [P1-S3-004](agent-tasks/viewer-editor/phase1-tasks.json) | Thumbnails + Bookmarks Sidebar | viewer-editor | PENDING | HIGH | 16 | P1-S3-001 |
+| [P1-S3-004](agent-tasks/viewer-editor/phase1-tasks.json) | Thumbnails + Bookmarks Sidebar | viewer-editor | COMPLETED | HIGH | 16 | P1-S3-001 |
 | [P1-S4-001](agent-tasks/viewer-editor/phase1-tasks.json) | Editing Overlay and Selection Engine | viewer-editor | COMPLETED | CRITICAL | 24 | P1-S3-002 |
 | [P1-S4-002](agent-tasks/viewer-editor/phase1-tasks.json) | Text and Image Editing (MVP Scope) | viewer-editor | COMPLETED | CRITICAL | 24 | P1-S4-001 |
 | [P1-S4-003](agent-tasks/viewer-editor/phase1-tasks.json) | Undo/Redo Command History | viewer-editor | COMPLETED | CRITICAL | 16 | P1-S4-001 |
-| [P1-S5-001](agent-tasks/annotations/phase1-tasks.json) | Annotation Data Models and Service | annotations | PENDING | CRITICAL | 16 | P1-S2-004 |
-| [P1-S5-002](agent-tasks/annotations/phase1-tasks.json) | Highlight + Comment Tools | annotations | PENDING | CRITICAL | 16 | P1-S5-001 |
-| [P1-S5-003](agent-tasks/annotations/phase1-tasks.json) | Draw Tools + Annotation Panel | annotations | PENDING | HIGH | 16 | P1-S5-001 |
-| [P1-S6-001](agent-tasks/processing-export/phase1-tasks.json) | Page Insert/Delete/Reorder | processing-export | PENDING | CRITICAL | 24 | P1-S3-004, P1-S4-003 |
-| [P1-S6-002](agent-tasks/processing-export/phase1-tasks.json) | Page Extract/Split/Merge | processing-export | PENDING | HIGH | 16 | P1-S6-001 |
-| [P1-S6-003](agent-tasks/processing-export/phase1-tasks.json) | Save/Save As/Autosave/Recovery | processing-export | PENDING | CRITICAL | 24 | P1-S4-003, P1-S6-001, P1-S2-003 |
-| [P1-S7-001](agent-tasks/forms-signatures/phase1-tasks.json) | Interactive Form Fill Support | forms-signatures | PENDING | CRITICAL | 24 | P1-S3-001 |
-| [P1-S7-002](agent-tasks/forms-signatures/phase1-tasks.json) | Basic Form Field Authoring | forms-signatures | PENDING | HIGH | 16 | P1-S7-001 |
-| [P1-S7-003](agent-tasks/forms-signatures/phase1-tasks.json) | Signature and Initials Baseline | forms-signatures | PENDING | HIGH | 16 | P1-S4-001 |
-| [P1-S8-001](agent-tasks/viewer-editor/phase1-tasks.json) | Full Text Search | viewer-editor | PENDING | CRITICAL | 16 | P1-S3-001 |
-| [P1-S8-002](agent-tasks/security-compliance/phase1-tasks.json) | Metadata, Permissions, and Protection | security-compliance | PENDING | HIGH | 16 | P1-S6-003 |
+| [P1-S5-001](agent-tasks/annotations/phase1-tasks.json) | Annotation Data Models and Service | annotations | COMPLETED | CRITICAL | 16 | P1-S2-004 |
+| [P1-S5-002](agent-tasks/annotations/phase1-tasks.json) | Highlight + Comment Tools | annotations | COMPLETED | CRITICAL | 16 | P1-S5-001 |
+| [P1-S5-003](agent-tasks/annotations/phase1-tasks.json) | Draw Tools + Annotation Panel | annotations | COMPLETED | HIGH | 16 | P1-S5-001 |
+| [P1-S6-001](agent-tasks/processing-export/phase1-tasks.json) | Page Insert/Delete/Reorder | processing-export | COMPLETED | CRITICAL | 24 | P1-S3-004, P1-S4-003 |
+| [P1-S6-002](agent-tasks/processing-export/phase1-tasks.json) | Page Extract/Split/Merge | processing-export | COMPLETED | HIGH | 16 | P1-S6-001 |
+| [P1-S6-003](agent-tasks/processing-export/phase1-tasks.json) | Save/Save As/Autosave/Recovery | processing-export | COMPLETED | CRITICAL | 24 | P1-S4-003, P1-S6-001, P1-S2-003 |
+| [P1-S7-001](agent-tasks/forms-signatures/phase1-tasks.json) | Interactive Form Fill Support | forms-signatures | COMPLETED | CRITICAL | 24 | P1-S3-001 |
+| [P1-S7-002](agent-tasks/forms-signatures/phase1-tasks.json) | Basic Form Field Authoring | forms-signatures | COMPLETED | HIGH | 16 | P1-S7-001 |
+| [P1-S7-003](agent-tasks/forms-signatures/phase1-tasks.json) | Signature and Initials Baseline | forms-signatures | COMPLETED | HIGH | 16 | P1-S4-001 |
+| [P1-S8-001](agent-tasks/viewer-editor/phase1-tasks.json) | Full Text Search | viewer-editor | COMPLETED | CRITICAL | 16 | P1-S3-001 |
+| [P1-S8-002](agent-tasks/security-compliance/phase1-tasks.json) | Metadata, Permissions, and Protection | security-compliance | COMPLETED | HIGH | 16 | P1-S6-003 |
 | [P1-S8-003](agent-tasks/processing-export/phase1-tasks.json) | Export Outputs | processing-export | PENDING | HIGH | 16 | P1-S6-003 |
 | [P1-S9-001](agent-tasks/viewer-editor/phase1-tasks.json) | Recent Files + Workspace Persistence | viewer-editor | PENDING | MEDIUM | 16 | P1-S2-003 |
 | [P1-S9-002](agent-tasks/viewer-editor/phase1-tasks.json) | Accessibility and Keyboard Pass | viewer-editor | PENDING | HIGH | 16 | P1-S5-003, P1-S8-001 |
@@ -85,8 +85,8 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P1-S3-005](agent-tasks/viewer-editor/phase1-tasks.json) | Viewing Modes and Dark Mode Rendering | viewer-editor | PENDING | HIGH | 16 | P1-S3-003 |
 | [P1-S4-004](agent-tasks/viewer-editor/phase1-tasks.json) | Link Add/Edit/Remove | viewer-editor | PENDING | MEDIUM | 12 | P1-S4-001, P1-S4-003 |
 | [P1-S9-004](agent-tasks/viewer-editor/phase1-tasks.json) | Pinned Favorites and Per-Document View State | viewer-editor | PENDING | MEDIUM | 12 | P1-S9-001 |
-| [P1-S7-004](agent-tasks/forms-signatures/phase1-tasks.json) | Form Data Export/Import and Form Autosave | forms-signatures | PENDING | HIGH | 16 | P1-S7-001, P1-S2-003 |
-| [P1-S6-004](agent-tasks/processing-export/phase1-tasks.json) | Page Rotate and Crop | processing-export | PENDING | HIGH | 16 | P1-S6-001 |
+| [P1-S7-004](agent-tasks/forms-signatures/phase1-tasks.json) | Form Data Export/Import and Form Autosave | forms-signatures | COMPLETED | HIGH | 16 | P1-S7-001, P1-S2-003 |
+| [P1-S6-004](agent-tasks/processing-export/phase1-tasks.json) | Page Rotate and Crop | processing-export | COMPLETED | HIGH | 16 | P1-S6-001 |
 | [P1-S8-004](agent-tasks/security-compliance/phase1-tasks.json) | Encrypted PDF Unlock and Secure Temp Storage | security-compliance | PENDING | HIGH | 16 | P1-S8-002 |
 
 ## Phase 2 - Advanced Features

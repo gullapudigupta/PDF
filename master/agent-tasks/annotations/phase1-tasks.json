@@ -10,7 +10,7 @@
     {
       "id": "P1-S5-001",
       "name": "Annotation Data Models and Service",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "CRITICAL",
       "estimatedHours": 16,
       "value": null,
@@ -43,11 +43,27 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "claude-sonnet-5.5",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented typed annotation CRUD with per-document isolation, defensive copies, timestamps, validation, and document clearing; added service unit tests.",
+        "executedAt": "2026-10-17T05:19:51.413Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/models/annotation.model.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/annotation.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/annotation.service.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/services/annotation.service.spec.ts"
+        ],
+        "summary": "All 3 annotation service test cases passed in Microsoft Edge 155, covering CRUD, isolation, clearing, defaults, and invalid input."
+      },
       "sprint": 5,
       "planningRequired": false,
       "source": {
@@ -78,7 +94,7 @@
     {
       "id": "P1-S5-002",
       "name": "Highlight + Comment Tools",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "CRITICAL",
       "estimatedHours": 16,
       "value": null,
@@ -113,11 +129,27 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "claude-sonnet-5.5",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented page-region highlights and comments with configurable color and opacity, edit/delete actions, search and type filtering, and navigation to annotated pages. Added component regressions for highlight styling and comment lifecycle.",
+        "executedAt": "2026-10-17T10:55:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/annotation.service.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts"
+        ],
+        "summary": "All 37 PDF workspace tests passed in Microsoft Edge 155, including highlight create/style and comment create/edit/delete, search, and type-filter regressions."
+      },
       "sprint": 5,
       "planningRequired": false,
       "source": {
@@ -152,7 +184,7 @@
     {
       "id": "P1-S5-003",
       "name": "Draw Tools + Annotation Panel",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -187,11 +219,26 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "claude-sonnet-5.5",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented freehand annotation paths and an annotation panel with search, type filters, edit/delete controls, and jump-to-page navigation. Corrected reverse-direction freehand path coordinates and added component interaction regressions.",
+        "executedAt": "2026-10-17T10:56:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts"
+        ],
+        "summary": "All 37 PDF workspace tests passed in Microsoft Edge 155, including freehand path creation and jump-to-page, with annotation search/filter coverage."
+      },
       "sprint": 5,
       "planningRequired": false,
       "source": {

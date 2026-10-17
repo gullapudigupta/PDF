@@ -11,6 +11,7 @@ import { environment } from '@environments/environment';
 })
 export class PersistenceService implements PersistenceAdapter {
   private adapter: PersistenceAdapter;
+  private readonly autosaveAdapter = new IndexedDBPersistenceAdapter();
 
   constructor() {
     this.adapter = environment.runtime === 'desktop' 
@@ -35,14 +36,14 @@ export class PersistenceService implements PersistenceAdapter {
   }
 
   getAutosaveData(documentId: string): Promise<ArrayBuffer | null> {
-    return this.adapter.getAutosaveData(documentId);
+    return this.autosaveAdapter.getAutosaveData(documentId);
   }
 
   saveAutosave(documentId: string, data: ArrayBuffer): Promise<void> {
-    return this.adapter.saveAutosave(documentId, data);
+    return this.autosaveAdapter.saveAutosave(documentId, data);
   }
 
   clearAutosave(documentId: string): Promise<void> {
-    return this.adapter.clearAutosave(documentId);
+    return this.autosaveAdapter.clearAutosave(documentId);
   }
 }

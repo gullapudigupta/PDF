@@ -7,17 +7,17 @@
   },
   "totalTasks": 46,
   "statusSummary": {
-    "pending": 31,
+    "pending": 17,
     "in_progress": 0,
-    "completed": 15,
+    "completed": 29,
     "blocked": 0,
     "cancelled": 0
   },
-  "completedTasks": 15,
-  "completionPercentage": "32%",
+  "completedTasks": 29,
+  "completionPercentage": "63%",
   "totalEstimatedHours": 784,
   "unestimatedTasks": 1,
-  "inheritedUnverifiedCompletions": 8,
+  "inheritedUnverifiedCompletions": 7,
   "taskIds": [
     "P1-S1-001",
     "P1-S1-002",

@@ -1,6 +1,6 @@
 export interface RuntimeAdapter {
   openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string }>;
-  saveFileDialog(defaultName: string, data: ArrayBuffer): Promise<{ canceled: boolean; filePath?: string }>;
+  saveFileDialog(defaultName: string, data: ArrayBuffer, mimeType?: 'application/pdf' | 'application/json'): Promise<{ canceled: boolean; filePath?: string }>;
   readFile(filePath: string): Promise<ArrayBuffer>;
   writeFile(filePath: string, data: ArrayBuffer): Promise<void>;
   getPlatform(): 'desktop' | 'extension';
@@ -33,9 +33,9 @@ export class DesktopRuntimeAdapter implements RuntimeAdapter {
     return { canceled: false, file, fileName: result.fileName };
   }
 
-  async saveFileDialog(defaultName: string, data: ArrayBuffer): Promise<{ canceled: boolean; filePath?: string }> {
+  async saveFileDialog(defaultName: string, data: ArrayBuffer, mimeType: 'application/pdf' | 'application/json' = 'application/pdf'): Promise<{ canceled: boolean; filePath?: string }> {
     const base64 = arrayBufferToBase64(data);
-    const result = await (window as any).electronAPI.saveFile(defaultName, base64);
+    const result = await (window as any).electronAPI.saveFile(defaultName, base64, mimeType);
     
     return result;
   }
@@ -89,14 +89,15 @@ export class ExtensionRuntimeAdapter implements RuntimeAdapter {
     });
   }
 
-  async saveFileDialog(defaultName: string, data: ArrayBuffer): Promise<{ canceled: boolean; filePath?: string }> {
+  async saveFileDialog(defaultName: string, data: ArrayBuffer, mimeType: 'application/pdf' | 'application/json' = 'application/pdf'): Promise<{ canceled: boolean; filePath?: string }> {
     const extensionApi = (globalThis as any).chrome ?? (globalThis as any).browser;
 
     if (extensionApi?.runtime?.sendMessage) {
       const payload = {
-        type: 'EXT_DOWNLOAD_PDF',
+        type: mimeType === 'application/pdf' ? 'EXT_DOWNLOAD_PDF' : 'EXT_DOWNLOAD_FILE',
         fileName: defaultName,
-        dataUrl: `data:application/pdf;base64,${arrayBufferToBase64(data)}`,
+        mimeType,
+        dataUrl: `data:${mimeType};base64,${arrayBufferToBase64(data)}`,
       };
 
       try {
@@ -113,7 +114,7 @@ export class ExtensionRuntimeAdapter implements RuntimeAdapter {
       }
     }
 
-    const blob = new Blob([data], { type: 'application/pdf' });
+    const blob = new Blob([data], { type: mimeType });
     const url = URL.createObjectURL(blob);
 
     const a = document.createElement('a');

@@ -7,6 +7,11 @@ export interface AnnotationRect {
   height: number;
 }
 
+export interface AnnotationViewport {
+  width: number;
+  height: number;
+}
+
 export interface AnnotationStyle {
   color: string;
   opacity: number;
@@ -19,6 +24,7 @@ export interface Annotation {
   page: number;
   type: AnnotationType;
   rect: AnnotationRect;
+  viewport?: AnnotationViewport;
   style: AnnotationStyle;
   content?: string;
   author?: string;
@@ -31,6 +37,7 @@ export interface CreateAnnotationInput {
   page: number;
   type: AnnotationType;
   rect: AnnotationRect;
+  viewport?: AnnotationViewport;
   style?: Partial<AnnotationStyle>;
   content?: string;
   author?: string;
@@ -39,6 +46,7 @@ export interface CreateAnnotationInput {
 export interface UpdateAnnotationInput {
   page?: number;
   rect?: AnnotationRect;
+  viewport?: AnnotationViewport;
   style?: Partial<AnnotationStyle>;
   content?: string;
   author?: string;

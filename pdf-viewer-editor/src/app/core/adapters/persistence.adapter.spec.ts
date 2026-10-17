@@ -1,4 +1,4 @@
-import { LocalStoragePersistenceAdapter } from './persistence.adapter';
+import { IndexedDBPersistenceAdapter, LocalStoragePersistenceAdapter } from './persistence.adapter';
 
 describe('LocalStoragePersistenceAdapter', () => {
   let adapter: LocalStoragePersistenceAdapter;
@@ -6,6 +6,19 @@ describe('LocalStoragePersistenceAdapter', () => {
   beforeEach(() => {
     localStorage.clear();
     adapter = new LocalStoragePersistenceAdapter();
+  });
+
+  describe('IndexedDBPersistenceAdapter', () => {
+    it('stores, recovers, and clears autosave bytes', async () => {
+      const adapter = new IndexedDBPersistenceAdapter();
+      const documentId = `autosave-test-${Date.now()}`;
+      const bytes = new Uint8Array([3, 5, 8, 13]).buffer;
+
+      await adapter.saveAutosave(documentId, bytes);
+      expect(await adapter.getAutosaveData(documentId)).toEqual(bytes);
+      await adapter.clearAutosave(documentId);
+      expect(await adapter.getAutosaveData(documentId)).toBeNull();
+    });
   });
 
   it('stores and reads settings', async () => {

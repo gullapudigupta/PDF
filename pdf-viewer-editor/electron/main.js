@@ -66,10 +66,18 @@ ipcMain.handle('dialog:openFile', async () => {
   };
 });
 
-ipcMain.handle('dialog:saveFile', async (event, { defaultPath, data }) => {
+ipcMain.handle('dialog:saveFile', async (event, { defaultPath, data, mimeType = 'application/pdf' }) => {
+  const fileTypes = {
+    'application/pdf': { name: 'PDF Files', extensions: ['pdf'] },
+    'application/json': { name: 'JSON Files', extensions: ['json'] },
+  };
+  if (!Object.prototype.hasOwnProperty.call(fileTypes, mimeType)) {
+    throw new Error(`Unsupported save file type: ${mimeType}`);
+  }
+  const fileType = fileTypes[mimeType];
   const result = await dialog.showSaveDialog(mainWindow, {
     defaultPath,
-    filters: [{ name: 'PDF Files', extensions: ['pdf'] }],
+    filters: [fileType],
   });
 
   if (result.canceled) {

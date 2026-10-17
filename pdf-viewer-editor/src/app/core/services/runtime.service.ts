@@ -18,8 +18,12 @@ export class RuntimeService implements RuntimeAdapter {
     return this.adapter.openFileDialog();
   }
 
-  saveFileDialog(defaultName: string, data: ArrayBuffer): Promise<{ canceled: boolean; filePath?: string }> {
-    return this.adapter.saveFileDialog(defaultName, data);
+  saveFileDialog(
+    defaultName: string,
+    data: ArrayBuffer,
+    mimeType: 'application/pdf' | 'application/json' = 'application/pdf'
+  ): Promise<{ canceled: boolean; filePath?: string }> {
+    return this.adapter.saveFileDialog(defaultName, data, mimeType);
   }
 
   readFile(filePath: string): Promise<ArrayBuffer> {

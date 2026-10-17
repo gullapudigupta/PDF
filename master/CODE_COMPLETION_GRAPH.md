@@ -20,6 +20,26 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-023` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-024` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-025` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-026` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-027` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-028` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-029` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-030` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-031` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-032` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-033` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-034` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-035` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-036` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-037` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-038` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-039` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-040` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-041` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-042` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-043` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-044` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-045` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -45,7 +65,7 @@ graph TD
     P1_S2_003["P1-S2-003: No-Backend Persistence Layer<br/>COMPLETED - inherited, not reverified"]
     P1_S1_003 --> P1_S2_003
     style P1_S2_003 fill:#c8e6c9
-    P1_S2_004["P1-S2-004: NgRx Workspace Store Foundation<br/>COMPLETED - inherited, not reverified"]
+    P1_S2_004["P1-S2-004: NgRx Workspace Store Foundation<br/>COMPLETED"]
     P1_S1_003 --> P1_S2_004
     style P1_S2_004 fill:#c8e6c9
     P1_S3_001["P1-S3-001: PDF.js Integration<br/>COMPLETED"]
@@ -58,8 +78,9 @@ graph TD
     P1_S3_003["P1-S3-003: Navigation, Zoom, Rotation<br/>COMPLETED"]
     P1_S3_002 --> P1_S3_003
     style P1_S3_003 fill:#c8e6c9
-    P1_S3_004["P1-S3-004: Thumbnails + Bookmarks Sidebar<br/>PENDING"]
+    P1_S3_004["P1-S3-004: Thumbnails + Bookmarks Sidebar<br/>COMPLETED"]
     P1_S3_001 --> P1_S3_004
+    style P1_S3_004 fill:#c8e6c9
     P1_S4_001["P1-S4-001: Editing Overlay and Selection Engine<br/>COMPLETED"]
     P1_S3_002 --> P1_S4_001
     style P1_S4_001 fill:#c8e6c9
@@ -69,31 +90,42 @@ graph TD
     P1_S4_003["P1-S4-003: Undo/Redo Command History<br/>COMPLETED"]
     P1_S4_001 --> P1_S4_003
     style P1_S4_003 fill:#c8e6c9
-    P1_S5_001["P1-S5-001: Annotation Data Models and Service<br/>PENDING"]
+    P1_S5_001["P1-S5-001: Annotation Data Models and Service<br/>COMPLETED"]
     P1_S2_004 --> P1_S5_001
-    P1_S5_002["P1-S5-002: Highlight + Comment Tools<br/>PENDING"]
+    style P1_S5_001 fill:#c8e6c9
+    P1_S5_002["P1-S5-002: Highlight + Comment Tools<br/>COMPLETED"]
     P1_S5_001 --> P1_S5_002
-    P1_S5_003["P1-S5-003: Draw Tools + Annotation Panel<br/>PENDING"]
+    style P1_S5_002 fill:#c8e6c9
+    P1_S5_003["P1-S5-003: Draw Tools + Annotation Panel<br/>COMPLETED"]
     P1_S5_001 --> P1_S5_003
-    P1_S6_001["P1-S6-001: Page Insert/Delete/Reorder<br/>PENDING"]
+    style P1_S5_003 fill:#c8e6c9
+    P1_S6_001["P1-S6-001: Page Insert/Delete/Reorder<br/>COMPLETED"]
     P1_S3_004 --> P1_S6_001
     P1_S4_003 --> P1_S6_001
-    P1_S6_002["P1-S6-002: Page Extract/Split/Merge<br/>PENDING"]
+    style P1_S6_001 fill:#c8e6c9
+    P1_S6_002["P1-S6-002: Page Extract/Split/Merge<br/>COMPLETED"]
     P1_S6_001 --> P1_S6_002
-    P1_S6_003["P1-S6-003: Save/Save As/Autosave/Recovery<br/>PENDING"]
+    style P1_S6_002 fill:#c8e6c9
+    P1_S6_003["P1-S6-003: Save/Save As/Autosave/Recovery<br/>COMPLETED"]
     P1_S4_003 --> P1_S6_003
     P1_S6_001 --> P1_S6_003
     P1_S2_003 --> P1_S6_003
-    P1_S7_001["P1-S7-001: Interactive Form Fill Support<br/>PENDING"]
+    style P1_S6_003 fill:#c8e6c9
+    P1_S7_001["P1-S7-001: Interactive Form Fill Support<br/>COMPLETED"]
     P1_S3_001 --> P1_S7_001
-    P1_S7_002["P1-S7-002: Basic Form Field Authoring<br/>PENDING"]
+    style P1_S7_001 fill:#c8e6c9
+    P1_S7_002["P1-S7-002: Basic Form Field Authoring<br/>COMPLETED"]
     P1_S7_001 --> P1_S7_002
-    P1_S7_003["P1-S7-003: Signature and Initials Baseline<br/>PENDING"]
+    style P1_S7_002 fill:#c8e6c9
+    P1_S7_003["P1-S7-003: Signature and Initials Baseline<br/>COMPLETED"]
     P1_S4_001 --> P1_S7_003
-    P1_S8_001["P1-S8-001: Full Text Search<br/>PENDING"]
+    style P1_S7_003 fill:#c8e6c9
+    P1_S8_001["P1-S8-001: Full Text Search<br/>COMPLETED"]
     P1_S3_001 --> P1_S8_001
-    P1_S8_002["P1-S8-002: Metadata, Permissions, and Protection<br/>PENDING"]
+    style P1_S8_001 fill:#c8e6c9
+    P1_S8_002["P1-S8-002: Metadata, Permissions, and Protection<br/>COMPLETED"]
     P1_S6_003 --> P1_S8_002
+    style P1_S8_002 fill:#c8e6c9
     P1_S8_003["P1-S8-003: Export Outputs<br/>PENDING"]
     P1_S6_003 --> P1_S8_003
     P1_S9_001["P1-S9-001: Recent Files + Workspace Persistence<br/>PENDING"]
@@ -219,11 +251,13 @@ graph TD
     P1_S4_003 --> P1_S4_004
     P1_S9_004["P1-S9-004: Pinned Favorites and Per-Document View State<br/>PENDING"]
     P1_S9_001 --> P1_S9_004
-    P1_S7_004["P1-S7-004: Form Data Export/Import and Form Autosave<br/>PENDING"]
+    P1_S7_004["P1-S7-004: Form Data Export/Import and Form Autosave<br/>COMPLETED"]
     P1_S7_001 --> P1_S7_004
     P1_S2_003 --> P1_S7_004
-    P1_S6_004["P1-S6-004: Page Rotate and Crop<br/>PENDING"]
+    style P1_S7_004 fill:#c8e6c9
+    P1_S6_004["P1-S6-004: Page Rotate and Crop<br/>COMPLETED"]
     P1_S6_001 --> P1_S6_004
+    style P1_S6_004 fill:#c8e6c9
     P1_S8_004["P1-S8-004: Encrypted PDF Unlock and Secure Temp Storage<br/>PENDING"]
     P1_S8_002 --> P1_S8_004
     P2_S13_003["P2-S13-003: Search Across OCR Text<br/>PENDING"]

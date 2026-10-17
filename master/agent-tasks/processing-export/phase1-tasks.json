@@ -10,7 +10,7 @@
     {
       "id": "P1-S6-001",
       "name": "Page Insert/Delete/Reorder",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "CRITICAL",
       "estimatedHours": 24,
       "value": null,
@@ -46,11 +46,29 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "claude-sonnet-5.5",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented PDF page deletion with confirmation, drag-and-drop thumbnail reordering, and insertion of all pages from a selected PDF after the current page. Added pdf-lib operations with page-boundary validation, reload of the updated PDF.js document, and service/component regression coverage.",
+        "executedAt": "2026-10-17T11:05:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-page-operations.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-page-operations.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-document.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts"
+        ],
+        "summary": "All 47 PDF workspace tests passed in Microsoft Edge 155, including page deletion, insertion, reordering, confirmation, updated-document reload, invalid bounds, thumbnail virtualization, and bookmarks."
+      },
       "sprint": 6,
       "planningRequired": false,
       "source": {
@@ -86,7 +104,7 @@
     {
       "id": "P1-S6-002",
       "name": "Page Extract/Split/Merge",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -121,11 +139,28 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "claude-sonnet-5.5",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented validated page-range extraction, PDF merging, and splitting to multiple PDFs with pdf-lib, plus workspace flows for choosing ranges/files and saving outputs. Added service tests for ordering, page counts, and invalid ranges, and component tests for export workflows.",
+        "executedAt": "2026-10-17T11:06:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-page-operations.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-page-operations.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts"
+        ],
+        "summary": "All 52 PDF workspace tests passed in Microsoft Edge 155, covering page-range extraction, merge ordering, multiple split outputs, invalid ranges, and component save flows."
+      },
       "sprint": 6,
       "planningRequired": false,
       "source": {
@@ -160,7 +195,7 @@
     {
       "id": "P1-S6-003",
       "name": "Save/Save As/Autosave/Recovery",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "CRITICAL",
       "estimatedHours": 24,
       "value": null,
@@ -197,11 +232,34 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "claude-sonnet-5.5",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented Save/Save As with pdf-lib flattening for text/image/link overlays and page annotations, explicit indexed autosave snapshots, and stable file IDs for recovery prompts. IndexedDB now stores autosaves regardless of runtime to avoid localStorage size limits; added serialization, persistence, save, and recovery coverage.",
+        "executedAt": "2026-10-17T11:13:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-edit-serialization.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-edit-serialization.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-document.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-document.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/models/annotation.model.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/annotation.service.ts",
+        "pdf-viewer-editor/src/app/core/services/persistence.service.ts",
+        "pdf-viewer-editor/src/app/core/adapters/persistence.adapter.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/**/*.spec.ts"
+        ],
+        "summary": "All 66 app unit tests passed in Microsoft Edge 155, including pdf-lib edit serialization, Save/Save As, autosave bytes, stable document identity, recovery prompts, and IndexedDB snapshot persistence."
+      },
       "sprint": 6,
       "planningRequired": false,
       "source": {
@@ -306,7 +364,7 @@
     {
       "id": "P1-S6-004",
       "name": "Page Rotate and Crop",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -342,11 +400,28 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented page selection and 90/180/270-degree rotation, interactive crop selection with resizable visual handles, rotation-aware crop-box coordinate conversion, and page-transform undo/redo. Updated PDF bytes reload into the viewer and flow through the existing save/autosave serialization. Added component and service regression coverage.",
+        "executedAt": "2026-10-17T05:49:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-page-operations.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-page-operations.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/services/pdf-page-operations.service.spec.ts --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+        ],
+        "summary": "All 38 focused page-operation and workspace component tests passed in Microsoft Edge 155. Verified rotation of selected pages, crop mapping on rotated pages, crop handle resizing, and transform undo/redo."
+      },
       "sprint": 6,
       "planningRequired": false,
       "source": {

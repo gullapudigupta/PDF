@@ -283,7 +283,7 @@
     {
       "id": "P1-S3-004",
       "name": "Thumbnails + Bookmarks Sidebar",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -318,11 +318,26 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "claude-sonnet-5.5",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented PDF.js thumbnail generation for a custom virtualized page list, page navigation from thumbnails, and flattened nested PDF outline bookmarks with direct/named destination resolution and page navigation. Added regression coverage for large-document windowing and nested bookmarks.",
+        "executedAt": "2026-10-17T11:03:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts"
+        ],
+        "summary": "All 41 PDF workspace tests passed in Microsoft Edge 155, including virtualized thumbnail generation/navigation and nested PDF bookmark loading/navigation."
+      },
       "sprint": 3,
       "planningRequired": false,
       "source": {
@@ -626,7 +641,7 @@
     {
       "id": "P1-S8-001",
       "name": "Full Text Search",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "CRITICAL",
       "estimatedHours": 16,
       "value": null,
@@ -661,11 +676,26 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "claude-sonnet-5.5",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Implemented per-document extracted-text indexing, case-sensitive literal and regular-expression search, match counts and highlighted excerpts, invalid-regex/error reporting, and next/previous/page navigation. Added component regressions for indexing reuse, case mode, regex mode, and invalid patterns.",
+        "executedAt": "2026-10-17T10:58:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts"
+        ],
+        "summary": "All 39 PDF workspace tests passed in Microsoft Edge 155, including text-index reuse, result highlighting/navigation, case-sensitive matching, regex matching, and invalid-regex handling."
+      },
       "sprint": 8,
       "planningRequired": false,
       "source": {

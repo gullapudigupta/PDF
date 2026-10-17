@@ -10,7 +10,7 @@
     {
       "id": "P1-S8-002",
       "name": "Metadata, Permissions, and Protection",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -45,11 +45,33 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Added PDF metadata read/edit support and AES-256 password-protected PDF export with distinct user and owner passwords, eight-character minimums, confirmation checks, and view/print/forms/unrestricted permission presets. Existing PDFs can be opened with password retry prompts; encrypted documents are treated as read-only and excluded from editing saves/autosave. Retained the existing pdf-lib dependency for established page/edit workflows and isolated @cantoo/pdf-lib to the new security service.",
+        "executedAt": "2026-10-17T12:45:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/package.json",
+        "pdf-viewer-editor/pnpm-lock.yaml",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-security.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-security.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-document.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-document.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/services/pdf-security.service.spec.ts --include=src/app/modules/pdf-workspace/services/pdf-document.service.spec.ts --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts --include=src/app/modules/pdf-workspace/services/pdf-page-operations.service.spec.ts",
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/**/*.spec.ts"
+        ],
+        "summary": "The focused security, password-opening, component, and existing page-operation tests passed (57 tests). All 91 app unit tests passed. The production build remains blocked by the existing unresolved @mobile-gallery-view module imports; Angular also reports the PDF workspace component inline-style budget warning."
+      },
       "sprint": 8,
       "planningRequired": false,
       "source": {

@@ -1,12 +1,18 @@
 console.log('PDF Viewer & Editor - Background Service Worker');
 
 function handleDownloadRequest(message, sendResponse) {
-  if (!message || message.type !== 'EXT_DOWNLOAD_PDF') {
+  if (!message || !['EXT_DOWNLOAD_PDF', 'EXT_DOWNLOAD_FILE'].includes(message.type)) {
     return false;
   }
 
   if (!message.dataUrl || !message.fileName) {
     sendResponse({ success: false, error: 'Invalid download payload' });
+    return true;
+  }
+  const mimeType = message.mimeType || 'application/pdf';
+  if (!['application/pdf', 'application/json'].includes(mimeType) ||
+    (message.type === 'EXT_DOWNLOAD_PDF' && mimeType !== 'application/pdf')) {
+    sendResponse({ success: false, error: 'Unsupported download file type' });
     return true;
   }
 
