@@ -63,6 +63,12 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-066` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-067` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-068` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-069` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-070` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-071` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-072` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-073` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-074` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -172,7 +178,7 @@ graph TD
     P1_S10_003["P1-S10-003: Extension Permission Hardening<br/>COMPLETED"]
     P1_S10_001 --> P1_S10_003
     style P1_S10_003 fill:#c8e6c9
-    P1_S11_001["P1-S11-001: Unit Test Expansion (60% target)<br/>IN_PROGRESS"]
+    P1_S11_001["P1-S11-001: Unit Test Expansion (60% target)<br/>COMPLETED"]
     P1_S1_001 --> P1_S11_001
     P1_S1_002 --> P1_S11_001
     P1_S1_003 --> P1_S11_001
@@ -212,11 +218,14 @@ graph TD
     P1_S7_004 --> P1_S11_001
     P1_S6_004 --> P1_S11_001
     P1_S8_004 --> P1_S11_001
-    P1_S11_002["P1-S11-002: Integration and Workflow Tests<br/>PENDING"]
+    style P1_S11_001 fill:#c8e6c9
+    P1_S11_002["P1-S11-002: Integration and Workflow Tests<br/>COMPLETED"]
     P1_S11_001 --> P1_S11_002
-    P1_S11_003["P1-S11-003: Performance and Reliability Pass<br/>PENDING"]
+    style P1_S11_002 fill:#c8e6c9
+    P1_S11_003["P1-S11-003: Performance and Reliability Pass<br/>COMPLETED"]
     P1_S11_002 --> P1_S11_003
-    P1_S12_001["P1-S12-001: Desktop Packaging<br/>PENDING"]
+    style P1_S11_003 fill:#c8e6c9
+    P1_S12_001["P1-S12-001: Desktop Packaging<br/>IN_PROGRESS"]
     P1_S11_003 --> P1_S12_001
     P1_S12_002["P1-S12-002: Extension Packaging<br/>PENDING"]
     P1_S10_002 --> P1_S12_002

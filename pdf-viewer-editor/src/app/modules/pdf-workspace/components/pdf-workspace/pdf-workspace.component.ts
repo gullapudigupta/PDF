@@ -429,6 +429,8 @@ interface SignatureAsset {
         <div class="multi-page-view" *ngIf="document && !loading && viewingMode !== 'single'"
           #multiPageView [class.facing-pages]="viewingMode === 'facing'"
           (scroll)="onMultiPageScroll($event)" [attr.aria-label]="viewingMode === 'continuous' ? 'Continuous PDF pages' : 'Facing PDF pages'">
+          <div *ngIf="viewingMode === 'continuous'" class="page-window-spacer"
+            [style.height.px]="continuousTopSpacerHeight" aria-hidden="true"></div>
           <div class="mode-page" *ngFor="let page of viewingPages; trackBy: trackPageNumber"
             [attr.data-view-page]="page">
             <canvas *ngIf="shouldRenderModePage(page)" #modePageCanvas tabindex="0" role="img"
@@ -438,6 +440,8 @@ interface SignatureAsset {
               [style.height.px]="estimatedPageHeight" [attr.aria-label]="'PDF page ' + page"></div>
             <span>Page {{ page }}</span>
           </div>
+          <div *ngIf="viewingMode === 'continuous'" class="page-window-spacer"
+            [style.height.px]="continuousBottomSpacerHeight" aria-hidden="true"></div>
         </div>
       </div>
 
@@ -559,6 +563,12 @@ interface SignatureAsset {
         flex-direction: column;
         align-items: center;
         gap: 4px;
+      }
+
+      .page-window-spacer {
+        flex: none;
+        width: 1px;
+        pointer-events: none;
       }
 
       .mode-page canvas { max-width: 100%; }
@@ -1232,7 +1242,10 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
 
   get viewingPages(): number[] {
     if (this.viewingMode === 'continuous') {
-      return Array.from({ length: this.totalPages }, (_, index) => index + 1);
+      if (!this.totalPages) return [];
+      const first = Math.max(1, this.currentPage - 2);
+      const last = Math.min(this.totalPages, this.currentPage + 2);
+      return Array.from({ length: last - first + 1 }, (_, index) => first + index);
     }
     if (this.viewingMode === 'facing') {
       const firstPage = this.getFacingStart(this.currentPage);
@@ -1252,6 +1265,21 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     const availableWidth = Math.max(240, (this.multiPageView?.nativeElement.clientWidth ?? 960) - 32);
     const pageWidth = this.viewingMode === 'facing' ? Math.max(120, (availableWidth - 16) / 2) : availableWidth;
     return Math.ceil(pageWidth * 1.3);
+  }
+
+  get continuousTopSpacerHeight(): number {
+    const firstPage = this.viewingPages[0] ?? 1;
+    return Math.max(0, (firstPage - 1) * this.continuousPageStride - 20);
+  }
+
+  get continuousBottomSpacerHeight(): number {
+    const pages = this.viewingPages;
+    const lastPage = pages[pages.length - 1] ?? 0;
+    return Math.max(0, (this.totalPages - lastPage) * this.continuousPageStride - 20);
+  }
+
+  private get continuousPageStride(): number {
+    return this.estimatedPageHeight + 42;
   }
 
   shouldRenderModePage(page: number): boolean {
@@ -1309,15 +1337,12 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
   onMultiPageScroll(event: Event): void {
     if (this.viewingMode !== 'continuous') return;
     const container = event.currentTarget as HTMLElement;
-    const containerTop = container.getBoundingClientRect().top;
-    const visiblePages = Array.from(container.querySelectorAll<HTMLElement>('[data-view-page]'));
-    const current = visiblePages.reduce<{ page: number; distance: number } | null>((nearest, element) => {
-      const page = Number(element.dataset['viewPage']);
-      const distance = Math.abs(element.getBoundingClientRect().top - containerTop);
-      return !nearest || distance < nearest.distance ? { page, distance } : nearest;
-    }, null);
-    if (!current || current.page === this.currentPage) return;
-    this.currentPage = current.page;
+    const currentPage = Math.min(
+      this.totalPages,
+      Math.max(1, Math.floor(container.scrollTop / this.continuousPageStride) + 1)
+    );
+    if (currentPage === this.currentPage) return;
+    this.currentPage = currentPage;
     this.scheduleWorkspaceViewStateSave();
   }
 
@@ -1926,6 +1951,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
   updateThumbnailWindow(scrollTop: number, viewportHeight: number): void {
     if (!this.totalPages) {
       this.visibleThumbnailPages = [];
+      this.trimThumbnailCache();
       return;
     }
     const first = Math.max(0, Math.floor(scrollTop / this.thumbnailItemHeight) - 2);
@@ -1934,6 +1960,17 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       Math.ceil((scrollTop + Math.max(viewportHeight, this.thumbnailItemHeight)) / this.thumbnailItemHeight) + 2
     );
     this.visibleThumbnailPages = Array.from({ length: last - first }, (_, index) => first + index + 1);
+    this.trimThumbnailCache();
+  }
+
+  private trimThumbnailCache(): void {
+    const visiblePages = new Set(this.visibleThumbnailPages);
+    for (const page of this.thumbnailSources.keys()) {
+      if (!visiblePages.has(page)) this.thumbnailSources.delete(page);
+    }
+    for (const page of this.thumbnailRenderStates.keys()) {
+      if (!visiblePages.has(page)) this.thumbnailRenderStates.delete(page);
+    }
   }
 
   private renderVisibleThumbnails(): void {
@@ -1944,7 +1981,9 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       this.thumbnailRenderScheduled.add(page);
       queueMicrotask(() => {
         this.thumbnailRenderScheduled.delete(page);
-        if (this.document?.id !== document.id || this.thumbnailRenderStates.has(page)) return;
+        if (this.document?.id !== document.id
+          || this.thumbnailRenderStates.has(page)
+          || !this.visibleThumbnailPages.includes(page)) return;
         this.thumbnailRenderStates.set(page, 'loading');
         void this.renderThumbnail(document, page);
       });
@@ -1959,11 +1998,11 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       } else {
         await this.pdfRenderService.renderPageToCanvas(document.bytes, page, canvas, { fitWidth: 120, fitHeight: 104 });
       }
-      if (this.document?.id !== document.id) return;
+      if (this.document?.id !== document.id || !this.visibleThumbnailPages.includes(page)) return;
       this.thumbnailSources.set(page, canvas.toDataURL());
       this.thumbnailRenderStates.set(page, 'ready');
     } catch (error) {
-      if (this.document?.id !== document.id) return;
+      if (this.document?.id !== document.id || !this.visibleThumbnailPages.includes(page)) return;
       this.thumbnailRenderStates.set(page, 'error');
       this.thumbnailError = `Unable to render thumbnail for page ${page}: ${error instanceof Error ? error.message : String(error)}`;
     }

@@ -32,7 +32,7 @@ node .\master\tools\task-registry.cjs validate
 
 | Phase | Tasks | Completed (reported) | Pending | In progress | Blocked |
 |---|---:|---:|---:|---:|---:|
-| 1: MVP | 45 | 39 | 5 | 1 | 0 |
+| 1: MVP | 45 | 42 | 2 | 1 | 0 |
 | 2: Advanced Features | 16 | 0 | 16 | 0 | 0 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
 
@@ -76,10 +76,10 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P1-S10-001](agent-tasks/browser-extension/phase1-tasks.json) | Extension PDF Open/Edit Flow | browser-extension | COMPLETED | CRITICAL | 24 | P1-S2-002, P1-S6-003 |
 | [P1-S10-002](agent-tasks/browser-extension/phase1-tasks.json) | Cross-Browser Compatibility Pass | browser-extension | COMPLETED | CRITICAL | 16 | P1-S10-001 |
 | [P1-S10-003](agent-tasks/browser-extension/phase1-tasks.json) | Extension Permission Hardening | browser-extension | COMPLETED | HIGH | 8 | P1-S10-001 |
-| [P1-S11-001](agent-tasks/quality-delivery/phase1-tasks.json) | Unit Test Expansion (60% target) | quality-delivery | IN_PROGRESS | CRITICAL | 24 | P1-S1-001, P1-S1-002, P1-S1-003, P1-S1-004, P1-S2-001, P1-S2-002, P1-S2-003, P1-S2-004, P1-S3-001, P1-S3-002, P1-S3-003, P1-S3-004, P1-S4-001, P1-S4-002, P1-S4-003, P1-S5-001, P1-S5-002, P1-S5-003, P1-S6-001, P1-S6-002, P1-S6-003, P1-S7-001, P1-S7-002, P1-S7-003, P1-S8-001, P1-S8-002, P1-S8-003, P1-S9-001, P1-S9-002, P1-S9-003, P1-S10-001, P1-S10-002, P1-S10-003, P1-S3-005, P1-S4-004, P1-S9-004, P1-S7-004, P1-S6-004, P1-S8-004 |
-| [P1-S11-002](agent-tasks/quality-delivery/phase1-tasks.json) | Integration and Workflow Tests | quality-delivery | PENDING | HIGH | 16 | P1-S11-001 |
-| [P1-S11-003](agent-tasks/quality-delivery/phase1-tasks.json) | Performance and Reliability Pass | quality-delivery | PENDING | HIGH | 16 | P1-S11-002 |
-| [P1-S12-001](agent-tasks/quality-delivery/phase1-tasks.json) | Desktop Packaging | quality-delivery | PENDING | CRITICAL | 16 | P1-S11-003 |
+| [P1-S11-001](agent-tasks/quality-delivery/phase1-tasks.json) | Unit Test Expansion (60% target) | quality-delivery | COMPLETED | CRITICAL | 24 | P1-S1-001, P1-S1-002, P1-S1-003, P1-S1-004, P1-S2-001, P1-S2-002, P1-S2-003, P1-S2-004, P1-S3-001, P1-S3-002, P1-S3-003, P1-S3-004, P1-S4-001, P1-S4-002, P1-S4-003, P1-S5-001, P1-S5-002, P1-S5-003, P1-S6-001, P1-S6-002, P1-S6-003, P1-S7-001, P1-S7-002, P1-S7-003, P1-S8-001, P1-S8-002, P1-S8-003, P1-S9-001, P1-S9-002, P1-S9-003, P1-S10-001, P1-S10-002, P1-S10-003, P1-S3-005, P1-S4-004, P1-S9-004, P1-S7-004, P1-S6-004, P1-S8-004 |
+| [P1-S11-002](agent-tasks/quality-delivery/phase1-tasks.json) | Integration and Workflow Tests | quality-delivery | COMPLETED | HIGH | 16 | P1-S11-001 |
+| [P1-S11-003](agent-tasks/quality-delivery/phase1-tasks.json) | Performance and Reliability Pass | quality-delivery | COMPLETED | HIGH | 16 | P1-S11-002 |
+| [P1-S12-001](agent-tasks/quality-delivery/phase1-tasks.json) | Desktop Packaging | quality-delivery | IN_PROGRESS | CRITICAL | 16 | P1-S11-003 |
 | [P1-S12-002](agent-tasks/quality-delivery/phase1-tasks.json) | Extension Packaging | quality-delivery | PENDING | CRITICAL | 16 | P1-S10-002, P1-S11-003 |
 | [P1-S12-003](agent-tasks/quality-delivery/phase1-tasks.json) | Release Readiness | quality-delivery | PENDING | CRITICAL | 16 | P1-S12-001, P1-S12-002 |
 | [P1-S3-005](agent-tasks/viewer-editor/phase1-tasks.json) | Viewing Modes and Dark Mode Rendering | viewer-editor | COMPLETED | HIGH | 16 | P1-S3-003 |

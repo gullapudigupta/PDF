@@ -15,6 +15,7 @@ import { PdfFormService } from '../../services/pdf-form.service';
 import { PdfSecurityService } from '../../services/pdf-security.service';
 import { PdfPageExportService } from '../../services/pdf-page-export.service';
 import { PersistenceService } from '@core/services/persistence.service';
+import { ExtensionRuntimeAdapter } from '@core/adapters/runtime.adapter';
 
 describe('PdfWorkspaceComponent', () => {
   let fixture: ComponentFixture<PdfWorkspaceComponent>;
@@ -681,6 +682,96 @@ describe('PdfWorkspaceComponent', () => {
     expect(runtimeService.writeFile).toHaveBeenCalledWith('C:\\docs\\doc.pdf', jasmine.any(ArrayBuffer));
   });
 
+  it('completes a desktop open-edit-save workflow', async () => {
+    const file = new File([new Uint8Array([1, 2])], 'workflow.pdf', { type: 'application/pdf' });
+    const sourceBytes = new Uint8Array([1, 2]);
+    const editedBytes = new Uint8Array([3, 4, 5]);
+    const filePath = 'C:\\documents\\workflow.pdf';
+    runtimeService.isDesktop.and.returnValue(true);
+    runtimeService.openFileDialog.and.resolveTo({ canceled: false, file, filePath });
+    runtimeService.saveFileDialog.and.resolveTo({ canceled: false, filePath });
+    runtimeService.writeFile.and.resolveTo();
+    pdfDocumentService.loadFromFile.and.resolveTo({
+      id: 'workflow-doc',
+      name: file.name,
+      totalPages: 1,
+      bytes: sourceBytes,
+      proxy: {},
+    } as any);
+    pdfEditSerializationService.flattenEdits.and.resolveTo(editedBytes);
+    pdfRenderService.renderPageToCanvas.and.resolveTo();
+    spyOn(window, 'prompt').and.returnValue('Desktop workflow edit');
+
+    await component.openFile();
+    component.overlayWidth = 400;
+    component.overlayHeight = 600;
+    component.addTextObject();
+    await component.saveFileAs();
+    await component.saveFile();
+
+    expect(component.document?.id).toBe('workflow-doc');
+    expect(component.overlayObjects[0].text).toBe('Desktop workflow edit');
+    expect(pdfEditSerializationService.flattenEdits).toHaveBeenCalledWith(
+      sourceBytes,
+      1,
+      400,
+      600,
+      component.overlayObjects,
+      component.annotations
+    );
+    expect(runtimeService.saveFileDialog).toHaveBeenCalledWith('workflow.pdf', jasmine.any(ArrayBuffer));
+    expect(runtimeService.writeFile).toHaveBeenCalledWith(filePath, jasmine.any(ArrayBuffer));
+  });
+
+  it('completes an extension open-edit-download workflow through the extension runtime', async () => {
+    const extensionGlobal = globalThis as typeof globalThis & {
+      browser?: { runtime?: { sendMessage?: jasmine.Spy } };
+    };
+    const previousBrowser = extensionGlobal.browser;
+    const sendMessage = jasmine.createSpy('sendMessage').and.resolveTo({
+      success: true,
+      filePath: 'browser-workflow.pdf',
+    });
+    extensionGlobal.browser = { runtime: { sendMessage } };
+    const file = new File([new Uint8Array([1, 2])], 'browser-workflow.pdf', { type: 'application/pdf' });
+    const sourceBytes = new Uint8Array([1, 2]);
+    runtimeService.isDesktop.and.returnValue(false);
+    runtimeService.openFileDialog.and.resolveTo({ canceled: false, file });
+    runtimeService.saveFileDialog.and.callFake((name, data, mimeType) =>
+      new ExtensionRuntimeAdapter().saveFileDialog(name, data, mimeType)
+    );
+    pdfDocumentService.loadFromFile.and.resolveTo({
+      id: 'browser-workflow-doc',
+      name: file.name,
+      totalPages: 1,
+      bytes: sourceBytes,
+      proxy: {},
+    } as any);
+    pdfEditSerializationService.flattenEdits.and.resolveTo(new Uint8Array([3, 4, 5]));
+    pdfRenderService.renderPageToCanvas.and.resolveTo();
+    spyOn(window, 'prompt').and.returnValue('Extension workflow edit');
+
+    try {
+      await component.openFile();
+      component.overlayWidth = 400;
+      component.overlayHeight = 600;
+      component.addTextObject();
+      await component.saveFile();
+
+      expect(component.document?.id).toBe('browser-workflow-doc');
+      expect(component.overlayObjects[0].text).toBe('Extension workflow edit');
+      expect(sendMessage).toHaveBeenCalledWith(jasmine.objectContaining({
+        type: 'EXT_DOWNLOAD_PDF',
+        fileName: 'browser-workflow.pdf',
+        mimeType: 'application/pdf',
+        dataUrl: 'data:application/pdf;base64,AwQF',
+      }));
+    } finally {
+      if (previousBrowser === undefined) delete extensionGlobal.browser;
+      else extensionGlobal.browser = previousBrowser;
+    }
+  });
+
   it('stores autosave snapshots and offers crash recovery for a reopened document', async () => {
     const sourceBytes = new Uint8Array([1]);
     const snapshotBytes = new Uint8Array([9, 8, 7]);
@@ -803,16 +894,29 @@ describe('PdfWorkspaceComponent', () => {
     expect(pdfDocumentService.extractText).not.toHaveBeenCalled();
   });
 
-  it('renders thumbnails for a virtualized window and navigates from a page preview', async () => {
+  it('bounds thumbnail memory for large documents', async () => {
     const bytes = new Uint8Array([1]);
-    component.document = { id: 'doc-thumbnails', name: 'large.pdf', totalPages: 80, bytes, proxy: {} } as any;
-    component.totalPages = 80;
+    component.document = { id: 'doc-thumbnails', name: 'large.pdf', totalPages: 5000, bytes, proxy: {} } as any;
+    component.totalPages = 5000;
     component.updateThumbnailWindow(0, 360);
+    component.viewingMode = 'continuous';
+    component.currentPage = 2500;
     pdfRenderService.renderPageToCanvas.and.resolveTo();
+    pdfRenderService.renderLoadedPageToCanvas.and.resolveTo();
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(component.visibleThumbnailPages.length).toBeLessThan(80);
+    expect(component.viewingPages.length).toBe(5);
+    expect(fixture.nativeElement.querySelectorAll('[data-view-page]').length).toBe(5);
+    expect(pdfRenderService.renderLoadedPageToCanvas.calls.count()).toBe(5);
+
+    component.onMultiPageScroll({
+      currentTarget: { scrollTop: 3500 * (component.estimatedPageHeight + 42) },
+    } as unknown as Event);
+    expect(component.currentPage).toBe(3501);
+    expect(component.viewingPages).toContain(3501);
+
+    expect(component.visibleThumbnailPages.length).toBeLessThan(20);
     expect(component.thumbnailSources.size).toBeGreaterThan(0);
     expect(pdfRenderService.renderPageToCanvas).toHaveBeenCalledWith(
       bytes,
@@ -830,6 +934,17 @@ describe('PdfWorkspaceComponent', () => {
 
     await component.goToPage(37);
     expect(component.currentPage).toBe(37);
+
+    viewport.scrollTop = 4000 * component.thumbnailItemHeight;
+    viewport.dispatchEvent(new Event('scroll'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const visiblePages = new Set(component.visibleThumbnailPages);
+    expect(component.visibleThumbnailPages).toContain(4001);
+    expect([...component.thumbnailSources.keys()].every(page => visiblePages.has(page))).toBeTrue();
+    expect([...component.thumbnailRenderStates.keys()].every(page => visiblePages.has(page))).toBeTrue();
+    expect(component.thumbnailSources.size).toBeLessThanOrEqual(component.visibleThumbnailPages.length);
   });
 
   it('loads nested named and direct PDF bookmarks and navigates to their pages', async () => {

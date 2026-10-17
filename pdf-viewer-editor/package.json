@@ -11,6 +11,7 @@
     "watch": "ng build --watch --configuration development",
     "install:tests": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install-for-tests.ps1",
     "test": "ng test",
+    "test:coverage": "ng test --watch=false --code-coverage",
     "test:extension": "node --test extension/extension-flow.test.js",
     "test:logged": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-tests-logged.ps1",
     "lint": "ng lint",
@@ -18,7 +19,11 @@
     "format:check": "prettier --check \"src/**/*.{ts,html,scss,json}\"",
     "postinstall": "node scripts/copy-pdfjs-worker.js",
     "electron:serve": "npm run build:dev && electron electron/main.js",
-    "electron:build": "npm run build && electron-builder",
+    "build:desktop": "ng build --configuration production,desktop",
+    "electron:build": "npm run build:desktop && electron-builder",
+    "electron:build:win": "npm run build:desktop && electron-builder --win nsis zip",
+    "electron:build:mac": "npm run build:desktop && electron-builder --mac dmg zip",
+    "electron:build:linux": "npm run build:desktop && electron-builder --linux AppImage",
     "build:dev": "ng build --configuration development",
     "extension:build:chrome": "ng build --configuration extension && node scripts/build-extension.js chrome",
     "extension:build:firefox": "ng build --configuration extension && node scripts/build-extension.js firefox",
@@ -73,7 +78,6 @@
   "build": {
     "appId": "com.pdfviewer.editor",
     "productName": "PDF Viewer Editor",
-    "electronDist": ".cache/electron-dist",
     "directories": {
       "output": "dist/electron"
     },
@@ -83,8 +87,43 @@
       "package.json"
     ],
     "win": {
-      "target": "dir",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64"]
+        }
+      ],
       "signAndEditExecutable": false
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Office"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
     }
   }
 }

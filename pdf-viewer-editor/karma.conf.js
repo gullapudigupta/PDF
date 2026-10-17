@@ -24,6 +24,11 @@ module.exports = function (config) {
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/pdf-viewer-editor'),
       subdir: '.',
+      check: {
+        global: {
+          statements: 60
+        }
+      },
       reporters: [
         { type: 'html' },
         { type: 'text-summary' }

@@ -7,14 +7,14 @@
   },
   "totalTasks": 46,
   "statusSummary": {
-    "pending": 5,
+    "pending": 2,
     "in_progress": 1,
-    "completed": 40,
+    "completed": 43,
     "blocked": 0,
     "cancelled": 0
   },
-  "completedTasks": 40,
-  "completionPercentage": "86%",
+  "completedTasks": 43,
+  "completionPercentage": "93%",
   "totalEstimatedHours": 784,
   "unestimatedTasks": 1,
   "inheritedUnverifiedCompletions": 7,

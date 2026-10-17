@@ -10,7 +10,7 @@
     {
       "id": "P1-S11-001",
       "name": "Unit Test Expansion (60% target)",
-      "status": "IN_PROGRESS",
+      "status": "COMPLETED",
       "priority": "CRITICAL",
       "estimatedHours": 24,
       "value": null,
@@ -83,11 +83,35 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Expanded service/reducer/selector, persistence-adapter, runtime-adapter, and extension-bridge tests. Added IndexedDB falsy-setting regression coverage and corrected null handling. Enforced a 60% global statement-coverage threshold. Full suite now reports 77.66% statements, 82.77% lines, and 85.85% functions; branch coverage is 57.82% and remains below 60%.",
+        "executedAt": "2026-10-17T14:52:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/karma.conf.js",
+        "pdf-viewer-editor/package.json",
+        "pdf-viewer-editor/src/app/core/adapters/persistence.adapter.ts",
+        "pdf-viewer-editor/src/app/core/adapters/persistence.adapter.spec.ts",
+        "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.spec.ts",
+        "pdf-viewer-editor/src/app/core/services/persistence.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/store/workspace.effects.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/store/workspace.reducer.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/store/workspace.selectors.spec.ts",
+        "pdf-viewer-editor/extension/extension-flow.test.js"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npm run test:coverage",
+          "npm run test:extension"
+        ],
+        "summary": "All 124 Angular tests passed and the global statement-coverage threshold passed at 77.66% (lines 82.77%, functions 85.85%, branches 57.82%). The extension bridge tests passed separately."
+      },
       "sprint": 11,
       "planningRequired": false,
       "source": {
@@ -277,7 +301,7 @@
     {
       "id": "P1-S11-002",
       "name": "Integration and Workflow Tests",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -312,11 +336,25 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Added integrated desktop open-edit-save and extension open-edit-download tests. The tests verify document loading, text editing, edit serialization, desktop file writing, and the extension runtime download message. The same workspace suite also exercises form field editing/import and signature creation/placement/reuse workflows.",
+        "executedAt": "2026-10-17T15:00:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npm test -- --watch=false --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+        ],
+        "summary": "All 53 PDF workspace component tests passed in Edge 155. The passing suite includes the new desktop and extension workflows and existing form and signature workflows."
+      },
       "sprint": 11,
       "planningRequired": false,
       "source": {
@@ -351,7 +389,7 @@
     {
       "id": "P1-S11-003",
       "name": "Performance and Reliability Pass",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 16,
       "value": null,
@@ -384,11 +422,28 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Continuous view now virtualizes large documents with five page nodes/canvases and proportional spacers; thumbnail source and render-state caches are evicted outside the visible virtualized window, and off-window renders are discarded. A 5,000-page structural resource test verifies the bounds, page-window navigation, and thumbnail cache eviction. Existing autosave/crash-recovery workflow tests also pass. This is structural resource profiling, not a real-world heap or latency benchmark.",
+        "executedAt": "2026-10-17T15:11:00Z"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-17",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npm test -- --watch=false --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npm run test:coverage",
+          "npm run test:extension"
+        ],
+        "summary": "The focused PDF workspace suite passed all 53 tests. The full Angular suite passed all 126 tests with 78.39% statement, 83.50% line, and 86.66% function coverage (branch coverage 58.28%). All four extension tests passed. Large-document tests verified a five-page continuous render window and thumbnail caches constrained to the visible window; autosave recovery coverage passed."
+      },
       "sprint": 11,
       "planningRequired": false,
       "source": {
@@ -419,7 +474,7 @@
     {
       "id": "P1-S12-001",
       "name": "Desktop Packaging",
-      "status": "PENDING",
+      "status": "IN_PROGRESS",
       "priority": "CRITICAL",
       "estimatedHours": 16,
       "value": null,

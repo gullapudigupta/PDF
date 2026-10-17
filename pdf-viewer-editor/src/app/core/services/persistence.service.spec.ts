@@ -1,4 +1,5 @@
 import { PersistenceService, RecentFileRecord } from './persistence.service';
+import { IndexedDBPersistenceAdapter } from '../adapters/persistence.adapter';
 
 describe('PersistenceService recent-file records', () => {
   let service: PersistenceService;
@@ -62,5 +63,46 @@ describe('PersistenceService recent-file records', () => {
       lastOpenedAt: 1,
       isPinned: false,
     }]);
+  });
+
+  it('returns an empty list when the recent-file setting is not an array', async () => {
+    settings.set('recentFileRecords', { malformed: true });
+    expect(await service.listRecentFileRecords()).toEqual([]);
+  });
+
+  it('pins, unpins, and removes recent records and reports missing pin targets', async () => {
+    const records: RecentFileRecord[] = [
+      { id: 'older', name: 'older.pdf', path: null, lastOpenedAt: 1, isPinned: false },
+      { id: 'newer', name: 'newer.pdf', path: null, lastOpenedAt: 2, isPinned: false },
+    ];
+    settings.set('recentFileRecords', records);
+
+    await service.setRecentFilePinned('older', true);
+    expect((settings.get('recentFileRecords') as RecentFileRecord[])[0].id).toBe('older');
+    await service.setRecentFilePinned('older', false);
+    expect((settings.get('recentFileRecords') as RecentFileRecord[])[0].id).toBe('newer');
+    await expectAsync(service.setRecentFilePinned('missing', true)).toBeRejectedWithError(
+      'Recent PDF not found: missing'
+    );
+
+    await service.removeRecentFileRecord('newer');
+    expect(await service.listRecentFileRecords()).toEqual([
+      { id: 'older', name: 'older.pdf', path: null, lastOpenedAt: 1, isPinned: false },
+    ]);
+  });
+
+  it('delegates autosave reads, writes, and deletes to IndexedDB persistence', async () => {
+    const bytes = new Uint8Array([2, 4, 6]).buffer;
+    const getAutosaveData = spyOn(IndexedDBPersistenceAdapter.prototype, 'getAutosaveData').and.resolveTo(bytes);
+    const saveAutosave = spyOn(IndexedDBPersistenceAdapter.prototype, 'saveAutosave').and.resolveTo();
+    const clearAutosave = spyOn(IndexedDBPersistenceAdapter.prototype, 'clearAutosave').and.resolveTo();
+
+    expect(await service.getAutosaveData('doc-1')).toBe(bytes);
+    await service.saveAutosave('doc-1', bytes);
+    await service.clearAutosave('doc-1');
+
+    expect(getAutosaveData).toHaveBeenCalledWith('doc-1');
+    expect(saveAutosave).toHaveBeenCalledWith('doc-1', bytes);
+    expect(clearAutosave).toHaveBeenCalledWith('doc-1');
   });
 });
