@@ -10,7 +10,7 @@
     {
       "id": "P2-S14-002",
       "name": "Advanced annotation set (shapes, underline, strikethrough)",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": null,
       "estimatedHours": null,
       "value": null,
@@ -66,7 +66,7 @@
     {
       "id": "P2-S17-001",
       "name": "Compare/review tools baseline",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": null,
       "estimatedHours": null,
       "value": null,
@@ -122,7 +122,7 @@
     {
       "id": "P2-S14-005",
       "name": "Annotation Filter, Search and Style Presets",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": "MEDIUM",
       "estimatedHours": 16,
       "value": null,

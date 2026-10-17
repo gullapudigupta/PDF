@@ -69,6 +69,11 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-072` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-073` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-074` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-075` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-076` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-077` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-078` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-079` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -225,33 +230,33 @@ graph TD
     P1_S11_003["P1-S11-003: Performance and Reliability Pass<br/>COMPLETED"]
     P1_S11_002 --> P1_S11_003
     style P1_S11_003 fill:#c8e6c9
-    P1_S12_001["P1-S12-001: Desktop Packaging<br/>IN_PROGRESS"]
+    P1_S12_001["P1-S12-001: Desktop Packaging<br/>BLOCKED"]
     P1_S11_003 --> P1_S12_001
-    P1_S12_002["P1-S12-002: Extension Packaging<br/>PENDING"]
+    P1_S12_002["P1-S12-002: Extension Packaging<br/>BLOCKED"]
     P1_S10_002 --> P1_S12_002
     P1_S11_003 --> P1_S12_002
-    P1_S12_003["P1-S12-003: Release Readiness<br/>PENDING"]
+    P1_S12_003["P1-S12-003: Release Readiness<br/>BLOCKED"]
     P1_S12_001 --> P1_S12_003
     P1_S12_002 --> P1_S12_003
-    P2_S13_001["P2-S13-001: OCR for scanned PDFs<br/>PENDING"]
+    P2_S13_001["P2-S13-001: OCR for scanned PDFs<br/>BLOCKED"]
     P1_S12_003 --> P2_S13_001
-    P2_S13_002["P2-S13-002: OCR correction workflow and confidence UX<br/>PENDING"]
+    P2_S13_002["P2-S13-002: OCR correction workflow and confidence UX<br/>BLOCKED"]
     P1_S12_003 --> P2_S13_002
-    P2_S14_001["P2-S14-001: Advanced form designer (conditional/formula/payment)<br/>PENDING"]
+    P2_S14_001["P2-S14-001: Advanced form designer (conditional/formula/payment)<br/>BLOCKED"]
     P1_S12_003 --> P2_S14_001
-    P2_S14_002["P2-S14-002: Advanced annotation set (shapes, underline, strikethrough)<br/>PENDING"]
+    P2_S14_002["P2-S14-002: Advanced annotation set (shapes, underline, strikethrough)<br/>BLOCKED"]
     P1_S12_003 --> P2_S14_002
-    P2_S15_001["P2-S15-001: Advanced watermark/header/footer templates<br/>PENDING"]
+    P2_S15_001["P2-S15-001: Advanced watermark/header/footer templates<br/>BLOCKED"]
     P1_S12_003 --> P2_S15_001
-    P2_S15_002["P2-S15-002: Metadata/security enhancements<br/>PENDING"]
+    P2_S15_002["P2-S15-002: Metadata/security enhancements<br/>BLOCKED"]
     P1_S12_003 --> P2_S15_002
-    P2_S16_001["P2-S16-001: Redaction suite (text/image/signature)<br/>PENDING"]
+    P2_S16_001["P2-S16-001: Redaction suite (text/image/signature)<br/>BLOCKED"]
     P1_S12_003 --> P2_S16_001
-    P2_S16_002["P2-S16-002: Irreversible apply + flatten verification<br/>PENDING"]
+    P2_S16_002["P2-S16-002: Irreversible apply + flatten verification<br/>BLOCKED"]
     P1_S12_003 --> P2_S16_002
-    P2_S17_001["P2-S17-001: Compare/review tools baseline<br/>PENDING"]
+    P2_S17_001["P2-S17-001: Compare/review tools baseline<br/>BLOCKED"]
     P1_S12_003 --> P2_S17_001
-    P2_S18_001["P2-S18-001: Stability + v1.0 release hardening<br/>PENDING"]
+    P2_S18_001["P2-S18-001: Stability + v1.0 release hardening<br/>BLOCKED"]
     P1_S12_003 --> P2_S18_001
     P2_S13_003 --> P2_S18_001
     P2_S13_004 --> P2_S18_001
@@ -303,23 +308,23 @@ graph TD
     P1_S8_004["P1-S8-004: Encrypted PDF Unlock and Secure Temp Storage<br/>COMPLETED"]
     P1_S8_002 --> P1_S8_004
     style P1_S8_004 fill:#c8e6c9
-    P2_S13_003["P2-S13-003: Search Across OCR Text<br/>PENDING"]
+    P2_S13_003["P2-S13-003: Search Across OCR Text<br/>BLOCKED"]
     P2_S13_001 --> P2_S13_003
     P1_S8_001 --> P2_S13_003
     P1_S12_003 --> P2_S13_003
-    P2_S13_004["P2-S13-004: Scanned PDF Image and Resolution Analysis<br/>PENDING"]
+    P2_S13_004["P2-S13-004: Scanned PDF Image and Resolution Analysis<br/>BLOCKED"]
     P2_S13_001 --> P2_S13_004
     P1_S12_003 --> P2_S13_004
-    P2_S14_003["P2-S14-003: Stamp/Seal Library and Reusable Signature Assets<br/>PENDING"]
+    P2_S14_003["P2-S14-003: Stamp/Seal Library and Reusable Signature Assets<br/>BLOCKED"]
     P1_S7_003 --> P2_S14_003
     P1_S12_003 --> P2_S14_003
-    P2_S14_004["P2-S14-004: Advanced Form Data Export (CSV/JSON/XFDF)<br/>PENDING"]
+    P2_S14_004["P2-S14-004: Advanced Form Data Export (CSV/JSON/XFDF)<br/>BLOCKED"]
     P1_S7_004 --> P2_S14_004
     P1_S12_003 --> P2_S14_004
-    P2_S14_005["P2-S14-005: Annotation Filter, Search and Style Presets<br/>PENDING"]
+    P2_S14_005["P2-S14-005: Annotation Filter, Search and Style Presets<br/>BLOCKED"]
     P1_S5_003 --> P2_S14_005
     P1_S12_003 --> P2_S14_005
-    P2_S18_002["P2-S18-002: Local Diagnostics and Opt-in Crash Report Export<br/>PENDING"]
+    P2_S18_002["P2-S18-002: Local Diagnostics and Opt-in Crash Report Export<br/>BLOCKED"]
     P1_S12_003 --> P2_S18_002
     P3_S21_002["P3-S21-002: Plugin SDK and Extension Points (OCR/Export/Annotation)<br/>PENDING"]
     P3_S21_001 --> P3_S21_002

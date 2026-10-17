@@ -10,7 +10,7 @@
     {
       "id": "P2-S18-002",
       "name": "Local Diagnostics and Opt-in Crash Report Export",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": "MEDIUM",
       "estimatedHours": 16,
       "value": null,

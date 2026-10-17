@@ -1,0 +1,36 @@
+{
+  "name": "PDF Viewer & Editor",
+  "shortDescription": "Open, annotate, edit, and download PDF documents locally in your browser.",
+  "description": "Open a PDF from your device and use the supported viewing, annotation, form, signature, and page-editing tools. Save changes through your browser's download flow. Documents are processed locally; the extension does not send document contents to a remote service.",
+  "category": "productivity",
+  "supportedBrowsers": ["Chrome", "Edge", "Firefox"],
+  "privacyDisclosure": {
+    "dataCollection": "No analytics or personal data collection.",
+    "documentProcessing": "PDFs selected by the user are processed locally in the extension.",
+    "localStorage": "Preferences, recent-file metadata, and autosave data remain in browser-local storage.",
+    "permissions": {
+      "downloads": "Save the edited PDF through the browser download manager.",
+      "contextMenus": "Add an explicit menu item to open a selected PDF in the editor."
+    }
+  },
+  "storeAssets": {
+    "icon128": {
+      "path": "icons/icon128.png",
+      "status": "Neutral draft created for publisher review."
+    },
+    "screenshots": [
+      {
+        "path": "store-assets/screenshot-01.png",
+        "status": "Captured from the packaged Chrome viewer with the neutral two-page demo PDF (page 1). Publisher review required."
+      },
+      {
+        "path": "store-assets/screenshot-02.png",
+        "status": "Captured from the packaged Chrome viewer with the neutral two-page demo PDF (page 2). Publisher review required."
+      }
+    ]
+  },
+  "signing": {
+    "chromeAndEdge": "Submit the ZIP package through the respective extension stores; store distribution signs the listing package.",
+    "firefox": "Submit the XPI package through addons.mozilla.org; Mozilla signs approved add-ons."
+  }
+}

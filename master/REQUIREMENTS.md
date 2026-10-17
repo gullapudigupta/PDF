@@ -191,6 +191,13 @@ This model covers all PDF-related entries in the provided master list.
 - Preferences
 - About/help
 
+### 4.3 Modern PDF Editor Workspace (P1-S12-004)
+- Present the workspace with a modern, professional light theme using restrained blue accents, clear spacing, and consistent control styling.
+- Keep document identity, recent-file/customization controls, search, and editing actions in a compact, clearly ordered toolbar; all actions remain reachable when the toolbar is wider than the viewport.
+- Give page thumbnails/bookmarks a distinct navigation surface and center the PDF page on a quiet, neutral canvas stage.
+- Keep navigation, page/zoom controls, annotations, and document content legible and usable at desktop and narrow extension-window sizes without page-level horizontal overflow.
+- Preserve existing toolbar customization, light/dark themes, keyboard operation, focus indicators, accessible labels, localization hooks, and every PDF workflow; this is a presentation-only change.
+
 ---
 
 ## 5. DATA & STORAGE REQUIREMENTS

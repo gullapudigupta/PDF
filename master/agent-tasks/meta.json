@@ -9,10 +9,10 @@
   "progressTracking": {
     "totalTasks": 71,
     "statusSummary": {
-      "pending": 27,
-      "in_progress": 1,
+      "pending": 9,
+      "in_progress": 0,
       "completed": 43,
-      "blocked": 0,
+      "blocked": 19,
       "cancelled": 0
     },
     "completedTasks": 43,
@@ -101,10 +101,10 @@
       "file": "./phase1-tasks.json",
       "totalTasks": 46,
       "statusSummary": {
-        "pending": 2,
-        "in_progress": 1,
+        "pending": 0,
+        "in_progress": 0,
         "completed": 43,
-        "blocked": 0,
+        "blocked": 3,
         "cancelled": 0
       },
       "completedTasks": 43,
@@ -167,10 +167,10 @@
       "file": "./phase2-tasks.json",
       "totalTasks": 16,
       "statusSummary": {
-        "pending": 16,
+        "pending": 0,
         "in_progress": 0,
         "completed": 0,
-        "blocked": 0,
+        "blocked": 16,
         "cancelled": 0
       },
       "completedTasks": 0,
@@ -230,10 +230,10 @@
   "productProgress": {
     "totalTasks": 70,
     "statusSummary": {
-      "pending": 27,
-      "in_progress": 1,
+      "pending": 9,
+      "in_progress": 0,
       "completed": 42,
-      "blocked": 0,
+      "blocked": 19,
       "cancelled": 0
     },
     "completedTasks": 42,
@@ -319,10 +319,10 @@
       "module": "annotations",
       "totalTasks": 6,
       "statusSummary": {
-        "pending": 3,
+        "pending": 0,
         "in_progress": 0,
         "completed": 3,
-        "blocked": 0,
+        "blocked": 3,
         "cancelled": 0
       },
       "completedTasks": 3,
@@ -364,10 +364,10 @@
       "module": "forms-signatures",
       "totalTasks": 8,
       "statusSummary": {
-        "pending": 4,
+        "pending": 1,
         "in_progress": 0,
         "completed": 4,
-        "blocked": 0,
+        "blocked": 3,
         "cancelled": 0
       },
       "completedTasks": 4,
@@ -390,10 +390,10 @@
       "module": "platform",
       "totalTasks": 11,
       "statusSummary": {
-        "pending": 3,
+        "pending": 2,
         "in_progress": 0,
         "completed": 8,
-        "blocked": 0,
+        "blocked": 1,
         "cancelled": 0
       },
       "completedTasks": 8,
@@ -419,10 +419,10 @@
       "module": "processing-export",
       "totalTasks": 12,
       "statusSummary": {
-        "pending": 7,
+        "pending": 2,
         "in_progress": 0,
         "completed": 5,
-        "blocked": 0,
+        "blocked": 5,
         "cancelled": 0
       },
       "completedTasks": 5,
@@ -449,10 +449,10 @@
       "module": "quality-delivery",
       "totalTasks": 10,
       "statusSummary": {
-        "pending": 5,
-        "in_progress": 1,
+        "pending": 2,
+        "in_progress": 0,
         "completed": 4,
-        "blocked": 0,
+        "blocked": 4,
         "cancelled": 0
       },
       "completedTasks": 4,
@@ -477,10 +477,10 @@
       "module": "security-compliance",
       "totalTasks": 7,
       "statusSummary": {
-        "pending": 5,
+        "pending": 2,
         "in_progress": 0,
         "completed": 2,
-        "blocked": 0,
+        "blocked": 3,
         "cancelled": 0
       },
       "completedTasks": 2,

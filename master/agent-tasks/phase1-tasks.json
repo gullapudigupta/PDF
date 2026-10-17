@@ -7,10 +7,10 @@
   },
   "totalTasks": 46,
   "statusSummary": {
-    "pending": 2,
-    "in_progress": 1,
+    "pending": 0,
+    "in_progress": 0,
     "completed": 43,
-    "blocked": 0,
+    "blocked": 3,
     "cancelled": 0
   },
   "completedTasks": 43,

@@ -102,6 +102,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^7.0.0
         version: 7.18.0(eslint@8.57.1(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
+      archiver:
+        specifier: 5.3.2
+        version: 5.3.2
       electron:
         specifier: ^27.3.11
         version: 27.3.11(supports-color@8.1.1)

@@ -32,10 +32,10 @@
       "file": "./phase1-tasks.json",
       "totalTasks": 46,
       "statusSummary": {
-        "pending": 2,
-        "in_progress": 1,
+        "pending": 0,
+        "in_progress": 0,
         "completed": 43,
-        "blocked": 0,
+        "blocked": 3,
         "cancelled": 0
       },
       "completedTasks": 43,
@@ -98,10 +98,10 @@
       "file": "./phase2-tasks.json",
       "totalTasks": 16,
       "statusSummary": {
-        "pending": 16,
+        "pending": 0,
         "in_progress": 0,
         "completed": 0,
-        "blocked": 0,
+        "blocked": 16,
         "cancelled": 0
       },
       "completedTasks": 0,
@@ -161,10 +161,10 @@
   "progressTracking": {
     "totalTasks": 71,
     "statusSummary": {
-      "pending": 27,
-      "in_progress": 1,
+      "pending": 9,
+      "in_progress": 0,
       "completed": 43,
-      "blocked": 0,
+      "blocked": 19,
       "cancelled": 0
     },
     "completedTasks": 43,

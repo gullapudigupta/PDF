@@ -7,10 +7,10 @@
   "progressTracking": {
     "totalTasks": 8,
     "statusSummary": {
-      "pending": 4,
+      "pending": 1,
       "in_progress": 0,
       "completed": 4,
-      "blocked": 0,
+      "blocked": 3,
       "cancelled": 0
     },
     "completedTasks": 4,
@@ -58,10 +58,10 @@
       "file": "./phase2-tasks.json",
       "totalTasks": 3,
       "statusSummary": {
-        "pending": 3,
+        "pending": 0,
         "in_progress": 0,
         "completed": 0,
-        "blocked": 0,
+        "blocked": 3,
         "cancelled": 0
       },
       "completedTasks": 0,

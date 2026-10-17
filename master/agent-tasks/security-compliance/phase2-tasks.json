@@ -10,7 +10,7 @@
     {
       "id": "P2-S15-002",
       "name": "Metadata/security enhancements",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": null,
       "estimatedHours": null,
       "value": null,
@@ -66,7 +66,7 @@
     {
       "id": "P2-S16-001",
       "name": "Redaction suite (text/image/signature)",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": null,
       "estimatedHours": null,
       "value": null,
@@ -122,7 +122,7 @@
     {
       "id": "P2-S16-002",
       "name": "Irreversible apply + flatten verification",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": null,
       "estimatedHours": null,
       "value": null,

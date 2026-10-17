@@ -426,23 +426,27 @@
         "model": "Not exposed in execution context",
         "provider": "GitHub Copilot",
         "confidenceScore": null,
-        "executionNotes": "Continuous view now virtualizes large documents with five page nodes/canvases and proportional spacers; thumbnail source and render-state caches are evicted outside the visible virtualized window, and off-window renders are discarded. A 5,000-page structural resource test verifies the bounds, page-window navigation, and thumbnail cache eviction. Existing autosave/crash-recovery workflow tests also pass. This is structural resource profiling, not a real-world heap or latency benchmark.",
-        "executedAt": "2026-10-17T15:11:00Z"
+        "executionNotes": "Continuous view now virtualizes large documents with five page nodes/canvases and proportional spacers; thumbnail source and render-state caches are evicted outside the visible virtualized window, and off-window renders are discarded. A 5,000-page structural resource test verifies the bounds, page-window navigation, and thumbnail cache eviction. Existing autosave/crash-recovery workflow tests also pass. During packaged-viewer validation, fixed a PDF.js buffer-ownership regression by passing copies to render and text-extraction workers; this prevents preview work from detaching the retained document bytes used by form parsing. Focused regression tests pass, and the packaged viewer opens the sample document with page previews and no user-facing errors. This is structural resource profiling, not a real-world heap or latency benchmark.",
+        "executedAt": "2026-10-17T10:58:20Z"
       },
       "jevRecommendation": null,
       "completedDate": "2026-10-17",
       "artifacts": [
         "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
-        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts"
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-render.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-render.service.spec.ts"
       ],
       "verification": {
         "status": "passed",
         "commands": [
           "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npm test -- --watch=false --include=src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+          "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npm run test -- --watch=false --include=src/app/modules/pdf-workspace/services/pdf-render.service.spec.ts",
           "With PATH prefixed by C:\\Program Files\\nodejs and CHROME_BIN set to Microsoft Edge: npm run test:coverage",
-          "npm run test:extension"
+          "npm run test:extension",
+          "npm run extension:build"
         ],
-        "summary": "The focused PDF workspace suite passed all 53 tests. The full Angular suite passed all 126 tests with 78.39% statement, 83.50% line, and 86.66% function coverage (branch coverage 58.28%). All four extension tests passed. Large-document tests verified a five-page continuous render window and thumbnail caches constrained to the visible window; autosave recovery coverage passed."
+        "summary": "The focused PDF workspace suite passed all 53 tests. The full Angular suite passed all 126 tests with 78.39% statement, 83.50% line, and 86.66% function coverage (branch coverage 58.28%). The focused PDF render service suite passed all four tests, including checks that PDF.js receives cloned bytes and leaves the source buffer intact. All four extension tests passed. The Chrome ZIP and Firefox XPI rebuilt successfully, and packaged-viewer validation confirmed the sample PDF rendered with page previews and no user-facing errors. Large-document tests verified a five-page continuous render window and thumbnail caches constrained to the visible window; autosave recovery coverage passed."
       },
       "sprint": 11,
       "planningRequired": false,
@@ -474,7 +478,7 @@
     {
       "id": "P1-S12-001",
       "name": "Desktop Packaging",
-      "status": "IN_PROGRESS",
+      "status": "BLOCKED",
       "priority": "CRITICAL",
       "estimatedHours": 16,
       "value": null,
@@ -507,11 +511,26 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Added a production desktop Angular configuration, Windows NSIS/ZIP, macOS DMG/ZIP, and Linux AppImage targets, plus a native-OS GitHub Actions artifact matrix. The Windows x64 installer and ZIP were built successfully. macOS requires a macOS runner; the Linux AppImage attempt on this Windows host failed because the process lacks symlink privileges. The native macOS/Linux matrix has not yet run, so the cross-platform artifact acceptance criterion remains blocked.",
+        "executedAt": "2026-10-17T15:20:00Z"
+      },
       "jevRecommendation": null,
       "completedDate": null,
       "artifacts": [],
-      "verification": null,
+      "verification": {
+        "status": "partial",
+        "commands": [
+          "npm run build:desktop",
+          "npm run electron:build:win",
+          "npx electron-builder --linux AppImage deb (blocked by Windows symlink privilege)",
+          "corepack pnpm install --frozen-lockfile"
+        ],
+        "summary": "Desktop renderer and Windows artifacts passed. macOS/Linux artifacts require native CI runners; Linux AppImage could not be built on the current Windows host."
+      },
       "sprint": 12,
       "planningRequired": false,
       "source": {
@@ -542,7 +561,7 @@
     {
       "id": "P1-S12-002",
       "name": "Extension Packaging",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": "CRITICAL",
       "estimatedHours": 16,
       "value": null,
@@ -578,11 +597,39 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Not exposed in execution context",
+        "provider": "GitHub Copilot",
+        "confidenceScore": null,
+        "executionNotes": "Added ZIP/XPI archive generation, store listing/privacy metadata, and submission instructions. Chrome/Edge ZIP and Firefox XPI bundles were built; required manifest, background, popup, viewer, and icon files were verified, and all four extension tests passed. With user approval, generated neutral draft branding plus two genuine screenshots of the packaged Chrome viewer using the local two-page demo PDF; the listing records those images as captured and publisher-review-required. The packages remain unsigned and the artwork is not publisher-approved. Store signing and publisher review still require the publisher's accounts, so this task remains blocked.",
+        "executedAt": "2026-10-17T10:59:23Z"
+      },
       "jevRecommendation": null,
       "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "artifacts": [
+        "pdf-viewer-editor/extension/dist/pdf-viewer-editor-chrome-0.1.0.zip",
+        "pdf-viewer-editor/extension/dist/pdf-viewer-editor-firefox-0.1.0.xpi",
+        "pdf-viewer-editor/extension/store-listing.json",
+        "pdf-viewer-editor/extension/STORE_SUBMISSION.md",
+        "pdf-viewer-editor/extension/icons/icon.svg",
+        "pdf-viewer-editor/extension/icons/icon128.png",
+        "pdf-viewer-editor/extension/icons/icon48.png",
+        "pdf-viewer-editor/extension/icons/icon16.png",
+        "pdf-viewer-editor/extension/store-assets/demo-document.pdf",
+        "pdf-viewer-editor/extension/store-assets/screenshot-01.png",
+        "pdf-viewer-editor/extension/store-assets/screenshot-02.png"
+      ],
+      "verification": {
+        "status": "partial",
+        "commands": [
+          "npm run extension:build",
+          "tar -tf extension/dist/pdf-viewer-editor-chrome-0.1.0.zip",
+          "tar -tf extension/dist/pdf-viewer-editor-firefox-0.1.0.xpi",
+          "npm run test:extension",
+          "Packaged viewer smoke check: opened demo-document.pdf; confirmed Page 1 / 2 and Page 2 / 2 render without UI alerts."
+        ],
+        "summary": "Chrome ZIP and Firefox XPI contain the required manifest, background, popup, viewer, and icon files; all four extension tests passed. Two genuine packaged-viewer screenshots were captured with the neutral sample PDF and listing metadata now points to them. Neutral artwork and screenshots still require publisher review, and the official signed packages remain unavailable without store submission."
+      },
       "sprint": 12,
       "planningRequired": false,
       "source": {
@@ -618,7 +665,7 @@
     {
       "id": "P1-S12-003",
       "name": "Release Readiness",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": "CRITICAL",
       "estimatedHours": 16,
       "value": null,
@@ -645,7 +692,9 @@
       "module": "quality-delivery",
       "modulePath": "../../../pdf-viewer-editor/",
       "phase": 1,
-      "userClarifications": [],
+      "userClarifications": [
+        "User confirms MVP acceptance is not satisfied; native macOS/Linux artifacts and publisher extension review/signing evidence will be provided later."
+      ],
       "modelAssignment": null,
       "executionPlan": {
         "order": 39,

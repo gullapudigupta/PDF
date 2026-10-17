@@ -334,6 +334,14 @@ interface WorkspaceState {
 ### CI Pipeline
 lint → test → desktop build → extension build → package → release artifacts
 
+## 12. Modern Editor Workspace UI (P1-S12-004)
+
+- Use a viewport-height workspace shell with a compact two-row command toolbar: product/document controls and search above a horizontally scrollable action rail.
+- Keep navigation controls visually distinct from the command toolbar. Use a restrained blue accent, light neutral surfaces, clear borders, consistent radii, and subtle elevation; keep the dark theme as an explicit matching variant.
+- Place thumbnails and bookmarks in a bounded navigation sidebar, with the rendered page centered in a flexible, neutral canvas stage. Keep annotation and result panels visually grouped and independently scrollable.
+- At tablet/narrow widths, allow toolbar controls to wrap or scroll, stack the sidebar ahead of the page stage, and prevent the document body from gaining horizontal overflow.
+- Preserve existing Angular bindings, handlers, ARIA labels, keyboard focus styles, localization markers, and runtime behavior. Implement the revamp in the existing workspace component styles without adding a UI dependency or moving PDF logic into presentation code.
+
 ---
 
 **Design Version**: 3.0  

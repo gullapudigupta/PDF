@@ -18,7 +18,7 @@ export class PdfRenderService {
     canvas: HTMLCanvasElement,
     options: RenderOptions = {}
   ): Promise<void> {
-    const doc = await this.getDocument({ data: bytes }).promise;
+    const doc = await this.getDocument({ data: bytes.slice() }).promise;
     const page = await doc.getPage(pageNumber);
     await this.renderPage(page, canvas, options);
   }
@@ -59,7 +59,7 @@ export class PdfRenderService {
   }
 
   async extractText(bytes: Uint8Array, pageNumber: number): Promise<string> {
-    const doc = await this.getDocument({ data: bytes }).promise;
+    const doc = await this.getDocument({ data: bytes.slice() }).promise;
     const page = await doc.getPage(pageNumber);
     const textContent = await page.getTextContent();
 

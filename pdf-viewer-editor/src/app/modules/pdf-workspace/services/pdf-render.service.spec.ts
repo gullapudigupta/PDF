@@ -27,7 +27,9 @@ describe('PdfRenderService', () => {
       getPage: jasmine.createSpy().and.resolveTo(page),
     };
 
-    spyOn<any>(service, 'getDocument').and.returnValue({ promise: Promise.resolve(doc as any) } as any);
+    const getDocumentSpy = spyOn<any>(service, 'getDocument').and.returnValue({
+      promise: Promise.resolve(doc as any),
+    } as any);
 
     const canvas = document.createElement('canvas');
     const context = {
@@ -35,13 +37,17 @@ describe('PdfRenderService', () => {
     } as any;
     spyOn(canvas, 'getContext').and.returnValue(context);
 
-    await service.renderPageToCanvas(new Uint8Array([1, 2, 3]), 1, canvas, {
+    const bytes = new Uint8Array([1, 2, 3]);
+    await service.renderPageToCanvas(bytes, 1, canvas, {
       fitWidth: 300,
       fitHeight: 300,
       zoom: 2,
       rotation: 90,
     });
 
+    const pdfJsBytes = (getDocumentSpy.calls.mostRecent().args[0] as { data: Uint8Array }).data;
+    expect(pdfJsBytes).not.toBe(bytes);
+    expect(Array.from(bytes)).toEqual([1, 2, 3]);
     expect(doc.getPage).toHaveBeenCalledWith(1);
     expect(canvas.width).toBe(300);
     expect(canvas.height).toBe(600);
@@ -100,9 +106,15 @@ describe('PdfRenderService', () => {
       getPage: jasmine.createSpy().and.resolveTo(page),
     };
 
-    spyOn<any>(service, 'getDocument').and.returnValue({ promise: Promise.resolve(doc as any) } as any);
+    const bytes = new Uint8Array([1]);
+    const getDocument = spyOn<any>(service, 'getDocument').and.returnValue({
+      promise: Promise.resolve(doc as any),
+    } as any);
 
-    const text = await service.extractText(new Uint8Array([1]), 1);
+    const text = await service.extractText(bytes, 1);
+    const pdfJsBytes = (getDocument.calls.mostRecent().args[0] as { data: Uint8Array }).data;
+    expect(pdfJsBytes).not.toBe(bytes);
+    expect(Array.from(bytes)).toEqual([1]);
     expect(text).toBe('A B');
   });
 });

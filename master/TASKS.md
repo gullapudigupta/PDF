@@ -32,8 +32,8 @@ node .\master\tools\task-registry.cjs validate
 
 | Phase | Tasks | Completed (reported) | Pending | In progress | Blocked |
 |---|---:|---:|---:|---:|---:|
-| 1: MVP | 45 | 42 | 2 | 1 | 0 |
-| 2: Advanced Features | 16 | 0 | 16 | 0 | 0 |
+| 1: MVP | 45 | 42 | 0 | 0 | 3 |
+| 2: Advanced Features | 16 | 0 | 0 | 0 | 16 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
 
 70 product tasks; 1 separate historical QA execution record.
@@ -79,9 +79,9 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P1-S11-001](agent-tasks/quality-delivery/phase1-tasks.json) | Unit Test Expansion (60% target) | quality-delivery | COMPLETED | CRITICAL | 24 | P1-S1-001, P1-S1-002, P1-S1-003, P1-S1-004, P1-S2-001, P1-S2-002, P1-S2-003, P1-S2-004, P1-S3-001, P1-S3-002, P1-S3-003, P1-S3-004, P1-S4-001, P1-S4-002, P1-S4-003, P1-S5-001, P1-S5-002, P1-S5-003, P1-S6-001, P1-S6-002, P1-S6-003, P1-S7-001, P1-S7-002, P1-S7-003, P1-S8-001, P1-S8-002, P1-S8-003, P1-S9-001, P1-S9-002, P1-S9-003, P1-S10-001, P1-S10-002, P1-S10-003, P1-S3-005, P1-S4-004, P1-S9-004, P1-S7-004, P1-S6-004, P1-S8-004 |
 | [P1-S11-002](agent-tasks/quality-delivery/phase1-tasks.json) | Integration and Workflow Tests | quality-delivery | COMPLETED | HIGH | 16 | P1-S11-001 |
 | [P1-S11-003](agent-tasks/quality-delivery/phase1-tasks.json) | Performance and Reliability Pass | quality-delivery | COMPLETED | HIGH | 16 | P1-S11-002 |
-| [P1-S12-001](agent-tasks/quality-delivery/phase1-tasks.json) | Desktop Packaging | quality-delivery | IN_PROGRESS | CRITICAL | 16 | P1-S11-003 |
-| [P1-S12-002](agent-tasks/quality-delivery/phase1-tasks.json) | Extension Packaging | quality-delivery | PENDING | CRITICAL | 16 | P1-S10-002, P1-S11-003 |
-| [P1-S12-003](agent-tasks/quality-delivery/phase1-tasks.json) | Release Readiness | quality-delivery | PENDING | CRITICAL | 16 | P1-S12-001, P1-S12-002 |
+| [P1-S12-001](agent-tasks/quality-delivery/phase1-tasks.json) | Desktop Packaging | quality-delivery | BLOCKED | CRITICAL | 16 | P1-S11-003 |
+| [P1-S12-002](agent-tasks/quality-delivery/phase1-tasks.json) | Extension Packaging | quality-delivery | BLOCKED | CRITICAL | 16 | P1-S10-002, P1-S11-003 |
+| [P1-S12-003](agent-tasks/quality-delivery/phase1-tasks.json) | Release Readiness | quality-delivery | BLOCKED | CRITICAL | 16 | P1-S12-001, P1-S12-002 |
 | [P1-S3-005](agent-tasks/viewer-editor/phase1-tasks.json) | Viewing Modes and Dark Mode Rendering | viewer-editor | COMPLETED | HIGH | 16 | P1-S3-003 |
 | [P1-S4-004](agent-tasks/viewer-editor/phase1-tasks.json) | Link Add/Edit/Remove | viewer-editor | COMPLETED | MEDIUM | 12 | P1-S4-001, P1-S4-003 |
 | [P1-S9-004](agent-tasks/viewer-editor/phase1-tasks.json) | Pinned Favorites and Per-Document View State | viewer-editor | COMPLETED | MEDIUM | 12 | P1-S9-001 |
@@ -93,22 +93,22 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 
 | Task | Name | Domain | Status | Priority | Hours | Dependencies |
 |---|---|---|---|---|---:|---|
-| [P2-S13-001](agent-tasks/processing-export/phase2-tasks.json) | OCR for scanned PDFs | processing-export | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S13-002](agent-tasks/processing-export/phase2-tasks.json) | OCR correction workflow and confidence UX | processing-export | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S14-001](agent-tasks/forms-signatures/phase2-tasks.json) | Advanced form designer (conditional/formula/payment) | forms-signatures | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S14-002](agent-tasks/annotations/phase2-tasks.json) | Advanced annotation set (shapes, underline, strikethrough) | annotations | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S15-001](agent-tasks/processing-export/phase2-tasks.json) | Advanced watermark/header/footer templates | processing-export | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S15-002](agent-tasks/security-compliance/phase2-tasks.json) | Metadata/security enhancements | security-compliance | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S16-001](agent-tasks/security-compliance/phase2-tasks.json) | Redaction suite (text/image/signature) | security-compliance | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S16-002](agent-tasks/security-compliance/phase2-tasks.json) | Irreversible apply + flatten verification | security-compliance | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S17-001](agent-tasks/annotations/phase2-tasks.json) | Compare/review tools baseline | annotations | PENDING | Unplanned | Unknown | P1-S12-003 |
-| [P2-S18-001](agent-tasks/quality-delivery/phase2-tasks.json) | Stability + v1.0 release hardening | quality-delivery | PENDING | Unplanned | Unknown | P1-S12-003, P2-S13-003, P2-S13-004, P2-S14-003, P2-S14-004, P2-S14-005, P2-S18-002 |
-| [P2-S13-003](agent-tasks/processing-export/phase2-tasks.json) | Search Across OCR Text | processing-export | PENDING | HIGH | 16 | P2-S13-001, P1-S8-001, P1-S12-003 |
-| [P2-S13-004](agent-tasks/processing-export/phase2-tasks.json) | Scanned PDF Image and Resolution Analysis | processing-export | PENDING | MEDIUM | 16 | P2-S13-001, P1-S12-003 |
-| [P2-S14-003](agent-tasks/forms-signatures/phase2-tasks.json) | Stamp/Seal Library and Reusable Signature Assets | forms-signatures | PENDING | MEDIUM | 24 | P1-S7-003, P1-S12-003 |
-| [P2-S14-004](agent-tasks/forms-signatures/phase2-tasks.json) | Advanced Form Data Export (CSV/JSON/XFDF) | forms-signatures | PENDING | MEDIUM | 16 | P1-S7-004, P1-S12-003 |
-| [P2-S14-005](agent-tasks/annotations/phase2-tasks.json) | Annotation Filter, Search and Style Presets | annotations | PENDING | MEDIUM | 16 | P1-S5-003, P1-S12-003 |
-| [P2-S18-002](agent-tasks/platform/phase2-tasks.json) | Local Diagnostics and Opt-in Crash Report Export | platform | PENDING | MEDIUM | 16 | P1-S12-003 |
+| [P2-S13-001](agent-tasks/processing-export/phase2-tasks.json) | OCR for scanned PDFs | processing-export | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S13-002](agent-tasks/processing-export/phase2-tasks.json) | OCR correction workflow and confidence UX | processing-export | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S14-001](agent-tasks/forms-signatures/phase2-tasks.json) | Advanced form designer (conditional/formula/payment) | forms-signatures | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S14-002](agent-tasks/annotations/phase2-tasks.json) | Advanced annotation set (shapes, underline, strikethrough) | annotations | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S15-001](agent-tasks/processing-export/phase2-tasks.json) | Advanced watermark/header/footer templates | processing-export | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S15-002](agent-tasks/security-compliance/phase2-tasks.json) | Metadata/security enhancements | security-compliance | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S16-001](agent-tasks/security-compliance/phase2-tasks.json) | Redaction suite (text/image/signature) | security-compliance | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S16-002](agent-tasks/security-compliance/phase2-tasks.json) | Irreversible apply + flatten verification | security-compliance | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S17-001](agent-tasks/annotations/phase2-tasks.json) | Compare/review tools baseline | annotations | BLOCKED | Unplanned | Unknown | P1-S12-003 |
+| [P2-S18-001](agent-tasks/quality-delivery/phase2-tasks.json) | Stability + v1.0 release hardening | quality-delivery | BLOCKED | Unplanned | Unknown | P1-S12-003, P2-S13-003, P2-S13-004, P2-S14-003, P2-S14-004, P2-S14-005, P2-S18-002 |
+| [P2-S13-003](agent-tasks/processing-export/phase2-tasks.json) | Search Across OCR Text | processing-export | BLOCKED | HIGH | 16 | P2-S13-001, P1-S8-001, P1-S12-003 |
+| [P2-S13-004](agent-tasks/processing-export/phase2-tasks.json) | Scanned PDF Image and Resolution Analysis | processing-export | BLOCKED | MEDIUM | 16 | P2-S13-001, P1-S12-003 |
+| [P2-S14-003](agent-tasks/forms-signatures/phase2-tasks.json) | Stamp/Seal Library and Reusable Signature Assets | forms-signatures | BLOCKED | MEDIUM | 24 | P1-S7-003, P1-S12-003 |
+| [P2-S14-004](agent-tasks/forms-signatures/phase2-tasks.json) | Advanced Form Data Export (CSV/JSON/XFDF) | forms-signatures | BLOCKED | MEDIUM | 16 | P1-S7-004, P1-S12-003 |
+| [P2-S14-005](agent-tasks/annotations/phase2-tasks.json) | Annotation Filter, Search and Style Presets | annotations | BLOCKED | MEDIUM | 16 | P1-S5-003, P1-S12-003 |
+| [P2-S18-002](agent-tasks/platform/phase2-tasks.json) | Local Diagnostics and Opt-in Crash Report Export | platform | BLOCKED | MEDIUM | 16 | P1-S12-003 |
 
 ## Phase 3 - Enterprise
 

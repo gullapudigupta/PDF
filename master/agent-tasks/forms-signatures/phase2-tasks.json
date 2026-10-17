@@ -10,7 +10,7 @@
     {
       "id": "P2-S14-001",
       "name": "Advanced form designer (conditional/formula/payment)",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": null,
       "estimatedHours": null,
       "value": null,
@@ -66,7 +66,7 @@
     {
       "id": "P2-S14-003",
       "name": "Stamp/Seal Library and Reusable Signature Assets",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": "MEDIUM",
       "estimatedHours": 24,
       "value": null,
@@ -136,7 +136,7 @@
     {
       "id": "P2-S14-004",
       "name": "Advanced Form Data Export (CSV/JSON/XFDF)",
-      "status": "PENDING",
+      "status": "BLOCKED",
       "priority": "MEDIUM",
       "estimatedHours": 16,
       "value": null,
