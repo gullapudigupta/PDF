@@ -1,5 +1,16 @@
+export interface OpenedPdfFile {
+  file: File;
+  filePath?: string;
+}
+
+export interface MultiplePdfSelection {
+  canceled: boolean;
+  files: OpenedPdfFile[];
+}
+
 export interface RuntimeAdapter {
   openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string; filePath?: string }>;
+  openMultipleFileDialog(): Promise<MultiplePdfSelection>;
   saveFileDialog(
     defaultName: string,
     data: ArrayBuffer,
@@ -36,6 +47,28 @@ function arrayBufferToBase64(data: ArrayBuffer): string {
 }
 
 export class DesktopRuntimeAdapter implements RuntimeAdapter {
+  async openMultipleFileDialog(): Promise<MultiplePdfSelection> {
+    const desktop = window as Window & {
+      electronAPI?: {
+        openFiles(): Promise<{
+          canceled: boolean;
+          files: { fileName: string; filePath: string; fileData: string }[];
+        }>;
+      };
+    };
+    if (!desktop.electronAPI) throw new Error('The desktop file picker is unavailable. Open the app in Electron.');
+    const result = await desktop.electronAPI.openFiles();
+    if (result.canceled) return { canceled: true, files: [] };
+    if (!result.files?.length) throw new Error('The desktop PDF picker returned no files.');
+    return {
+      canceled: false,
+      files: result.files.map(selected => ({
+        file: new File([Uint8Array.from(atob(selected.fileData), character => character.charCodeAt(0))], selected.fileName, { type: 'application/pdf' }),
+        filePath: selected.filePath,
+      })),
+    };
+  }
+
   async openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string; filePath?: string }> {
     const result = await (window as any).electronAPI.openFile();
     
@@ -87,25 +120,33 @@ export class DesktopRuntimeAdapter implements RuntimeAdapter {
 
 export class ExtensionRuntimeAdapter implements RuntimeAdapter {
   async openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string; filePath?: string }> {
-    return new Promise((resolve) => {
+    const result = await this.pickFiles(false);
+    if (result.canceled) return { canceled: true };
+    const file = result.files[0].file;
+    return { canceled: false, file, fileName: file.name };
+  }
+
+  openMultipleFileDialog(): Promise<MultiplePdfSelection> {
+    return this.pickFiles(true);
+  }
+
+  private pickFiles(multiple: boolean): Promise<MultiplePdfSelection> {
+    return new Promise((resolve, reject) => {
       const input = document.createElement('input');
       input.type = 'file';
       input.accept = 'application/pdf';
-      
-      input.onchange = (e: any) => {
-        const file = e.target.files[0];
-        if (file) {
-          resolve({ canceled: false, file, fileName: file.name });
-        } else {
-          resolve({ canceled: true });
-        }
+      input.multiple = multiple;
+
+      input.onchange = () => {
+        const files = Array.from(input.files ?? []).map(file => ({ file }));
+        resolve({ canceled: !files.length, files });
       };
-      
-      input.oncancel = () => {
-        resolve({ canceled: true });
-      };
-      
-      input.click();
+      input.oncancel = () => resolve({ canceled: true, files: [] });
+      try {
+        input.click();
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 

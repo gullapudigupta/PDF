@@ -14,7 +14,8 @@ const fields = [
   'userClarifications', 'modelAssignment', 'executionPlan', 'executionResult',
   'jevRecommendation', 'completedDate', 'artifacts', 'verification'
 ];
-const phaseNames = { 1: 'MVP', 2: 'Advanced Features', 3: 'Enterprise' };
+const phaseNames = { 1: 'MVP', 2: 'Advanced Features', 3: 'Enterprise', 4: 'AI Workspace MVP' };
+const phases = Object.keys(phaseNames).map(Number);
 const read = file => fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, '');
 const json = file => JSON.parse(read(file));
 const hash = text => crypto.createHash('sha256').update(text).digest('hex');
@@ -220,7 +221,7 @@ function validateCanonical(groups, tasks, snapshot) {
       assert.equal(`phase${task.phase}-tasks.json`, path.basename(file), `${task.id}: wrong phase file`);
       assert.equal(data.phase, `phase${task.phase}`, `${task.id}: wrong phase wrapper`);
       assert.equal(data.module, task.module, `${task.id}: wrong module wrapper`);
-      assert([1, 2, 3].includes(task.phase), `${task.id}: unsupported phase`);
+      assert(phases.includes(task.phase), `${task.id}: unsupported phase`);
       assert.equal(path.resolve(path.dirname(file), task.modulePath), path.resolve(master, '..', 'pdf-viewer-editor'));
       for (const field of ['dependencies', 'deliverables', 'acceptanceCriteria', 'tags', 'recommendedModel', 'artifacts', 'userClarifications']) {
         assert(Array.isArray(task[field]), `${task.id}: ${field} must be an array`);
@@ -329,7 +330,7 @@ function taskMarkdown(tasks, state) {
     '## Product Progress', '',
     '| Phase | Tasks | Completed (reported) | Pending | In progress | Blocked |',
     '|---|---:|---:|---:|---:|---:|',
-    ...[1, 2, 3].map(phase => {
+    ...phases.map(phase => {
       const selected = product.filter(task => task.phase === phase);
       const totals = counts(selected);
       return `| ${phase}: ${phaseNames[phase]} | ${selected.length} | ${totals.completed} | ${totals.pending} | ${totals.in_progress} | ${totals.blocked} |`;
@@ -337,7 +338,7 @@ function taskMarkdown(tasks, state) {
     `${product.length} product tasks; ${tasks.length - product.length} separate historical QA execution record.`,
     'Historical QA is not counted as product delivery. Estimates use 8 planning hours/day where the source specified days; backlog estimates remain unknown.', ''
   ];
-  for (const phase of [1, 2, 3]) {
+  for (const phase of phases) {
     lines.push(`## Phase ${phase} - ${phaseNames[phase]}`, '',
       '| Task | Name | Domain | Status | Priority | Hours | Dependencies |',
       '|---|---|---|---|---|---:|---|');
@@ -392,8 +393,8 @@ function outputs(groups, tasks, state) {
     taskId: task.id, module: task.module, phase: task.phase,
     canonicalFile: `./${canonicalFile(task)}`, modulePath: '../../pdf-viewer-editor/'
   });
-  const phaseFiles = Object.fromEntries([1, 2, 3].map(phase => [`phase${phase}`, `./phase${phase}-tasks.json`]));
-  const phaseSummaries = [1, 2, 3].map(phase => ({
+  const phaseFiles = Object.fromEntries(phases.map(phase => [`phase${phase}`, `./phase${phase}-tasks.json`]));
+  const phaseSummaries = phases.map(phase => ({
     phase: `phase${phase}`, name: phaseNames[phase], file: phaseFiles[`phase${phase}`],
     ...summary(tasks.filter(task => task.phase === phase))
   }));
@@ -414,11 +415,11 @@ function outputs(groups, tasks, state) {
       validationTool: '../tools/task-registry.cjs validate',
       executionEntryPoint: '../TASKS.md'
     },
-    activePhase: [1, 2, 3].find(phase => tasks.some(task => task.phase === phase && !['COMPLETED', 'CANCELLED'].includes(task.status))) ?? null,
+    activePhase: phases.find(phase => tasks.some(task => task.phase === phase && !['COMPLETED', 'CANCELLED'].includes(task.status))) ?? null,
     phaseFiles, moduleFolders: Object.fromEntries(modules.map(module => [module, `./${module}`])),
     phases: phaseSummaries, progressTracking: summary(tasks), tasks: tasks.map(reference)
   });
-  for (const phase of [1, 2, 3]) add(`phase${phase}-tasks.json`, {
+  for (const phase of phases) add(`phase${phase}-tasks.json`, {
     phase: `phase${phase}`, name: phaseNames[phase],
     metadata: { noTaskCopies: true, sourceOfTruth: 'Canonical domain phase JSON only.' },
     ...summary(tasks.filter(task => task.phase === phase)),
@@ -466,7 +467,7 @@ function validate() {
   assert.equal(state.lastDigest, hash(JSON.stringify({ tasks, migration: state.migration })), 'Unsynchronized task state');
   for (const [file, expected] of outputs(groups, tasks, state)) assert.equal(read(file), expected, `Stale generated output: ${file}`);
   const known = new Set(tasks.map(task => task.id));
-  const phaseReferences = [1, 2, 3].flatMap(phase =>
+  const phaseReferences = phases.flatMap(phase =>
     json(path.join(root, `phase${phase}-tasks.json`)).tasks);
   assert.equal(phaseReferences.length, tasks.length, 'Phase reference count mismatch');
   assert.equal(new Set(phaseReferences.map(reference => reference.taskId)).size, tasks.length, 'Repeated phase reference');

@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { PasswordResponses } from 'pdfjs-dist';
 
 import { PdfWorkspaceComponent } from './pdf-workspace.component';
+import { AiChatComponent } from '../ai-chat/ai-chat.component';
 import { RuntimeService } from '@core/services/runtime.service';
 import { PdfDocumentService } from '../../services/pdf-document.service';
 import { PdfRenderService } from '../../services/pdf-render.service';
@@ -103,7 +104,7 @@ describe('PdfWorkspaceComponent', () => {
     persistenceService.removeRecentFileRecord.and.resolveTo();
     await TestBed.configureTestingModule({
       declarations: [PdfWorkspaceComponent],
-      imports: [FormsModule],
+      imports: [FormsModule, AiChatComponent],
       providers: [
         { provide: RuntimeService, useValue: runtimeService },
         { provide: PdfDocumentService, useValue: pdfDocumentService },
@@ -162,6 +163,70 @@ describe('PdfWorkspaceComponent', () => {
     persistenceService.saveAutosave.calls.reset();
     persistenceService.clearAutosave.calls.reset();
     store.dispatch.calls.reset();
+  });
+
+  it('shows the existing editing and search controls in the left tools menu and chat on the right', () => {
+    component.toolsOpen = true;
+    component.chatOpen = true;
+    fixture.detectChanges();
+    const tools: HTMLElement = fixture.nativeElement.querySelector('#workspace-tools');
+    const chat: HTMLElement = fixture.nativeElement.querySelector('#workspace-chat');
+    expect(tools.querySelector('.pdf-toolbar-actions')).not.toBeNull();
+    expect(tools.querySelector('[aria-label="Search text"]')).not.toBeNull();
+    expect(chat.querySelector('app-ai-chat')).not.toBeNull();
+    expect(tools.hidden).toBeFalse();
+    expect(chat.hidden).toBeFalse();
+  });
+
+  it('opens one compact drawer at a time, closes with Escape, and returns focus', () => {
+    spyOnProperty(window, 'innerWidth').and.returnValue(768);
+    component.compactLayout = true;
+    component.toolsOpen = false;
+    component.chatOpen = false;
+    fixture.detectChanges();
+    component.togglePanel('tools');
+    expect(component.toolsOpen).toBeTrue();
+    expect(component.chatOpen).toBeFalse();
+    component.togglePanel('chat');
+    expect(component.toolsOpen).toBeFalse();
+    expect(component.chatOpen).toBeTrue();
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(component.chatOpen).toBeFalse();
+    expect(document.activeElement).toBe(component.chatToggle?.nativeElement ?? null);
+  });
+
+  it('keeps chat mounted with its session key when hidden, and cancels pending chat on close', () => {
+    fixture.detectChanges();
+    const chat = component.aiChat;
+    expect(chat).toBeDefined();
+    if (!chat) return;
+    chat.apiKey = 'ephemeral';
+    chat.busy = true;
+    const cancel = spyOn(chat, 'cancel').and.callThrough();
+    component.closePanel('chat');
+    fixture.detectChanges();
+    expect(cancel).toHaveBeenCalled();
+    expect(component.aiChat).toBe(chat);
+    expect(chat.apiKey).toBe('ephemeral');
+    expect(persistenceService.setSetting).not.toHaveBeenCalledWith(jasmine.anything(), 'ephemeral');
+  });
+
+  it('does not intercept native copy of AI response text', () => {
+    fixture.detectChanges();
+    const response = document.createElement('div');
+    fixture.nativeElement.querySelector('app-ai-chat').appendChild(response);
+    const event = new KeyboardEvent('keydown', { key: 'c', ctrlKey: true, bubbles: true, cancelable: true });
+    response.dispatchEvent(event);
+    expect(event.defaultPrevented).toBeFalse();
+  });
+
+  it('dismisses compact tools before opening an editor dialog', () => {
+    component.compactLayout = true;
+    component.toolsOpen = true;
+    component.document = { id: 'doc', name: 'doc.pdf', totalPages: 1, bytes: new Uint8Array([1]), proxy: null };
+    component.openProtectionDialog();
+    expect(component.toolsOpen).toBeFalse();
+    expect(component.protectionDialogOpen).toBeTrue();
   });
 
   it('loads and renders first page when opening a file', async () => {

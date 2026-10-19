@@ -52,7 +52,8 @@ test('unknown backlog estimates and historical verification stay explicit', () =
     assert(task.executionResult.model && task.executionResult.provider);
   }
   assert.equal(tasks.filter(task => !task.id.startsWith('EXEC') && task.source.file === 'TASKS.md').length, 55);
-  assert.equal(summary(tasks.filter(task => !task.id.startsWith('EXEC'))).totalTasks, 70);
+  assert.equal(summary(tasks.filter(task => !task.id.startsWith('EXEC') && task.source.file === 'TASKS.md')).totalTasks, 55);
+  assert.equal(summary(tasks.filter(task => task.phase === 4)).totalTasks, 7);
 });
 
 test('traceability matrix references canonical tasks and unique QA cases', () => {
@@ -124,7 +125,7 @@ test('phase indexes contain only references and graph contains every node and ed
   const { groups, tasks } = fixture();
   const state = readJson(path.join(root, 'registry-state.json'));
   const generated = outputs(groups, tasks, state);
-  for (const phase of [1, 2, 3]) {
+  for (const phase of [1, 2, 3, 4]) {
     const index = JSON.parse(generated.get(path.join(root, `phase${phase}-tasks.json`)));
     assert.equal(index.metadata.noTaskCopies, true);
     assert.equal(index.tasks.length, tasks.filter(task => task.phase === phase).length);

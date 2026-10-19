@@ -1,0 +1,151 @@
+<section aria-labelledby="ai-chat-title">
+  <h2 id="ai-chat-title">AI writing assistant</h2>
+  <p>
+    Your API key stays in memory until you clear it or leave this workspace. A ChatGPT subscription
+    does not include API access. Provider charges may apply.
+  </p>
+  <details open>
+    <summary>Provider settings</summary>
+    <fieldset [disabled]="busy || extracting">
+      <label
+        >Provider
+        <select
+          [ngModel]="provider"
+          (ngModelChange)="changeProvider($event)"
+          aria-label="AI provider"
+        >
+          <option value="openai">OpenAI GPT (primary)</option>
+          <option value="other">Other (OpenAI-compatible)</option>
+        </select>
+      </label>
+      <p *ngIf="provider === 'openai'">{{ openAiUrl }}</p>
+      <label *ngIf="provider === 'other'"
+        >Full chat-completions URL
+        <input
+          type="url"
+          [(ngModel)]="endpoint"
+          (ngModelChange)="consent = false"
+          placeholder="https://provider.example/v1/chat/completions"
+          aria-label="AI endpoint URL"
+        />
+      </label>
+      <label
+        >API key
+        <input
+          type="password"
+          [(ngModel)]="apiKey"
+          aria-label="AI API key"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+      </label>
+      <label
+        >Model
+        <input
+          [(ngModel)]="model"
+          maxlength="200"
+          aria-label="AI model"
+          placeholder="Provider model identifier"
+        />
+      </label>
+      <p *ngIf="provider === 'other'">
+        The endpoint must accept OpenAI chat-completions JSON and allow browser requests (CORS).
+        Only use a provider you trust with your key and text.
+      </p>
+    </fieldset>
+    <button type="button" (click)="clearKey()" [disabled]="!apiKey">Clear API key</button>
+  </details>
+
+  <div class="source-actions" role="group" aria-label="PDF text preview">
+    <button type="button" [disabled]="!document || busy || extracting" (click)="loadSource('page')">
+      Preview current page
+    </button>
+    <button
+      type="button"
+      [disabled]="!document || busy || extracting"
+      (click)="loadSource('document')"
+    >
+      Preview entire PDF
+    </button>
+  </div>
+  <label
+    >Source text preview (editable, {{ sourceText.length }} / {{ maxSource }})
+    <textarea
+      [(ngModel)]="sourceText"
+      (ngModelChange)="consent = false"
+      [disabled]="busy || extracting"
+      rows="5"
+      aria-label="AI source text preview"
+      placeholder="Preview PDF text or paste your own text. Nothing is sent until you click Send."
+    ></textarea>
+  </label>
+  <p *ngIf="extracting" role="status">Extracting text locally for preview...</p>
+  <p>
+    Text only; scanned pages need pasted text. No PDF file is uploaded or automatically changed.
+    Each request sends this source text and the displayed conversation. Clear chat to start fresh.
+  </p>
+
+  <div
+    class="messages"
+    role="log"
+    aria-label="AI conversation"
+    aria-live="polite"
+    [attr.aria-busy]="busy"
+  >
+    <article *ngFor="let message of messages">
+      <h3>{{ message.role === 'user' ? 'You' : 'Assistant' }}</h3>
+      <div class="message-text" tabindex="0">{{ message.content }}</div>
+      <button
+        *ngIf="message.role === 'assistant'"
+        type="button"
+        (click)="copyResponse(message.content)"
+      >
+        Copy response
+      </button>
+    </article>
+  </div>
+
+  <form (ngSubmit)="send()">
+    <fieldset [disabled]="busy || extracting">
+      <label
+        >Action
+        <select name="action" [(ngModel)]="action" aria-label="AI action">
+          <option value="summarize">Summarize</option>
+          <option value="suggest">Generate suggestions</option>
+          <option value="format">Format content</option>
+          <option value="tone">Change tone</option>
+          <option value="question">Ask a question</option>
+        </select>
+      </label>
+      <label *ngIf="action === 'tone'"
+        >Desired tone
+        <input name="tone" [(ngModel)]="tone" maxlength="100" aria-label="Desired tone" />
+      </label>
+      <label
+        >Instructions or question
+        <textarea
+          name="prompt"
+          [(ngModel)]="prompt"
+          rows="3"
+          maxlength="8000"
+          aria-label="AI instructions"
+        ></textarea>
+      </label>
+      <label class="consent">
+        <input type="checkbox" name="consent" [(ngModel)]="consent" />
+        I authorize sending the displayed text and conversation to the selected external AI
+        provider.
+      </label>
+      <button type="submit">Send to AI</button>
+    </fieldset>
+    <button type="button" *ngIf="busy || extracting" (click)="cancel()">Cancel</button>
+    <button type="button" (click)="clearConversation()">Clear chat and source</button>
+  </form>
+  <p *ngIf="busy" role="status">Waiting for AI response...</p>
+  <p *ngIf="error" class="error" role="alert">{{ error }}</p>
+  <p *ngIf="notice" role="status">{{ notice }}</p>
+  <p>
+    Review AI output for accuracy. Copy it, open Tools &gt; Add Text or Edit, and paste it yourself.
+  </p>
+</section>

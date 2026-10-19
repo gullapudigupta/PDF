@@ -7,7 +7,7 @@ Start execution only through [TASKS.md](../TASKS.md), after reading
 
 - Domain directories hold canonical `phaseN-tasks.json` records, domain
   `meta.json`, `master_tasks_index.json`, and a navigation README.
-- Root `phase1-tasks.json` through `phase3-tasks.json` contain references only.
+- Root `phase1-tasks.json` through `phase4-tasks.json` contain references only.
 - [Master index](master_tasks_index.json) and [metadata](meta.json) contain
   generated project/domain/phase totals.
 - [Schema contract](task-schema.json) lists required task fields and the
@@ -76,6 +76,6 @@ The structure follows the external `model-master/agent-tasks` registry and
 `tools/agent-task-template.json`. Its PowerShell validator cannot be applied
 unchanged: it requires phases 0-5, unrelated product documentation folders,
 and passing evidence for all historical completions. This project preserves
-its own phases 1-3 and links each logical domain to the existing shared product.
+its original phases 1-3 plus the Phase 4 AI workspace MVP and links each logical domain to the existing shared product.
 The local tool validates those explicit compatibility decisions rather than
 fabricating data to satisfy the external project's assumptions.

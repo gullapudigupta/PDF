@@ -24,8 +24,14 @@ reference registry's canonical-domain/reference-only-index architecture:
 The local zero-dependency Node tool uses the reference schema's fields but does
 not run the external initializer/synchronizer: those scripts hard-code six phases,
 unrelated product directories, and requirements paths. This project has three
-product phases and logical task domains sharing the existing implementation.
+original product phases plus the additive Phase 4 AI workspace MVP, and logical
+task domains sharing the existing implementation.
 `modulePath` therefore points to the actual `pdf-viewer-editor` implementation.
+
+Phase 4's transport, ephemeral chat state, explicit preview/consent, and responsive
+left-tools/right-chat layout are defined in the
+[AI workspace design](../specs/pdf-viewer-editor/design.md). Its canonical records
+are in [viewer-editor/phase4-tasks.json](agent-tasks/viewer-editor/phase4-tasks.json).
 
 Import preserves completed status with `verification.status = not_reverified`;
 the old documentation is evidence of a claim, not a new passing test run.

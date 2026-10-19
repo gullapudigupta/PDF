@@ -1,0 +1,81 @@
+{
+  "phase": "phase4",
+  "name": "AI Workspace MVP",
+  "metadata": {
+    "noTaskCopies": true,
+    "sourceOfTruth": "Canonical domain phase JSON only."
+  },
+  "totalTasks": 7,
+  "statusSummary": {
+    "pending": 0,
+    "in_progress": 2,
+    "completed": 5,
+    "blocked": 0,
+    "cancelled": 0
+  },
+  "completedTasks": 5,
+  "completionPercentage": "71%",
+  "totalEstimatedHours": 27,
+  "unestimatedTasks": 0,
+  "inheritedUnverifiedCompletions": 0,
+  "taskIds": [
+    "P4-AI-001",
+    "P4-AI-002",
+    "P4-AI-003",
+    "P4-UI-001",
+    "P4-UI-002",
+    "P4-UI-003",
+    "P4-QA-001"
+  ],
+  "tasks": [
+    {
+      "taskId": "P4-AI-001",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-AI-002",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-AI-003",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-UI-001",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-UI-002",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-UI-003",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-QA-001",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    }
+  ]
+}

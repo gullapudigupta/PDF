@@ -11,6 +11,7 @@ import { PdfEditSerializationService } from '../../services/pdf-edit-serializati
 import { PdfFormField, PdfFormFieldPlacement, PdfFormService } from '../../services/pdf-form.service';
 import { PdfMetadata, PdfPermissionPreset, PdfSecurityService } from '../../services/pdf-security.service';
 import { PdfPageExportService, PdfPageImageFormat } from '../../services/pdf-page-export.service';
+import { AiChatComponent } from '../ai-chat/ai-chat.component';
 import { PersistenceService, RecentFileRecord } from '@core/services/persistence.service';
 import { Annotation, AnnotationType } from '../../models/annotation.model';
 import { recordEditCommand, redoEditCommand, undoEditCommand } from '../../store/workspace.actions';
@@ -95,6 +96,7 @@ interface SignatureAsset {
   standalone: false,
   template: `
     <div class="workspace-container" [class.dark-theme]="theme === 'dark'">
+      <ng-template #workspaceTools>
       <div class="toolbar">
         <div class="toolbar-left">
           <div class="toolbar-brand">
@@ -195,6 +197,26 @@ interface SignatureAsset {
           <button [disabled]="!document || loading || searching" (click)="searchInDocument()">Search</button>
         </div>
       </div>
+      </ng-template>
+
+      <header class="workspace-header">
+        <button #toolsToggle type="button" (click)="togglePanel('tools')" aria-controls="workspace-tools"
+          [attr.aria-expanded]="toolsOpen" i18n="@@workspaceToolsToggle">Tools</button>
+        <span class="workspace-heading">PDF Viewer &amp; Editor</span>
+        <span class="workspace-document" *ngIf="document" [title]="document.name">{{ document.name }}</span>
+        <button #chatToggle type="button" (click)="togglePanel('chat')" aria-controls="workspace-chat"
+          [attr.aria-expanded]="chatOpen" i18n="@@workspaceChatToggle">AI chat</button>
+      </header>
+      <div class="workspace-body">
+        <button *ngIf="compactLayout && (toolsOpen || chatOpen)" class="drawer-backdrop"
+          type="button" aria-label="Close side menu" (click)="closePanels()"></button>
+        <aside #toolsPanel id="workspace-tools" class="tools-panel" [hidden]="!toolsOpen"
+          aria-label="All PDF tools" tabindex="-1">
+          <div class="panel-heading"><h2>PDF tools</h2><button type="button" (click)="closePanel('tools')" aria-label="Close tools">Close</button></div>
+          <ng-container *ngTemplateOutlet="workspaceTools"></ng-container>
+          <ng-container *ngTemplateOutlet="pageControls"></ng-container>
+        </aside>
+        <main class="workspace-main" [attr.inert]="compactLayout && (toolsOpen || chatOpen) ? '' : null">
 
       <p *ngIf="document?.isEncrypted" role="status">
         This password-protected PDF is open in read-only mode. Editing and autosave are disabled.
@@ -247,6 +269,7 @@ interface SignatureAsset {
         </form>
       </section>
 
+      <ng-template #pageControls>
       <div class="viewer-controls" *ngIf="document && toolbarVisibility.navigation">
         <button aria-label="Previous page" title="Go to the previous page" i18n-title="@@previousPageTooltip" i18n="@@previousPage" (click)="previousPage()" [disabled]="atFirstViewingSpread || loading">Previous</button>
         <span role="status" aria-live="polite" i18n="@@pageCount">Page {{ currentPage }} / {{ totalPages }}</span>
@@ -281,6 +304,7 @@ interface SignatureAsset {
         </details>
         <button type="button" (click)="closeDocument()" [disabled]="loading">Close PDF</button>
       </div>
+      </ng-template>
 
       <div class="content" #viewerHost>
         <span id="viewer-keyboard-help" class="visually-hidden">
@@ -508,6 +532,13 @@ interface SignatureAsset {
           </div>
           <p *ngIf="signatureError" class="error" role="alert">{{ signatureError }}</p>
         </section>
+      </div>
+        </main>
+        <aside #chatPanel id="workspace-chat" class="chat-panel" [hidden]="!chatOpen"
+          aria-label="AI chat" tabindex="-1">
+          <div class="panel-heading"><h2>AI chat</h2><button type="button" (click)="closePanel('chat')" aria-label="Close AI chat">Close</button></div>
+          <app-ai-chat [document]="document" [currentPage]="currentPage"></app-ai-chat>
+        </aside>
       </div>
     </div>
   `,
@@ -1245,6 +1276,48 @@ interface SignatureAsset {
         }
       }
 
+      .workspace-header {
+        display: flex;
+        flex: 0 0 auto;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--border);
+        background: var(--surface);
+      }
+      .workspace-heading { font-weight: 700; }
+      .workspace-document { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .workspace-header > button:last-child { margin-left: auto; }
+      .workspace-body { position: relative; display: flex; flex: 1; min-height: 0; min-width: 0; overflow: hidden; }
+      .workspace-main { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; overflow: hidden; }
+      .tools-panel, .chat-panel { flex: 0 0 300px; width: 300px; min-width: 0; overflow: auto; background: var(--surface); border-right: 1px solid var(--border); }
+      .chat-panel { flex-basis: 360px; width: 360px; border-right: 0; border-left: 1px solid var(--border); }
+      .tools-panel[hidden], .chat-panel[hidden] { display: none; }
+      .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px; }
+      .panel-heading h2 { margin: 0; font-size: 15px; }
+      .tools-panel .toolbar { display: flex; flex-direction: column; align-items: stretch; gap: 12px; padding: 12px; box-shadow: none; z-index: auto; }
+      .tools-panel .toolbar-left { flex-wrap: wrap; }
+      .tools-panel .toolbar-brand { display: none; }
+      .tools-panel .active-document { max-width: 100%; }
+      .tools-panel .recent-files, .tools-panel .toolbar-customization { position: static; width: 100%; max-width: 100%; box-shadow: none; padding: 8px; }
+      .tools-panel .recent-files li { flex-wrap: wrap; overflow-wrap: anywhere; }
+      .tools-panel .toolbar-right { flex-wrap: wrap; justify-content: flex-start; }
+      .tools-panel .toolbar-right > input[type="text"] { flex-basis: 100%; }
+      .tools-panel .pdf-toolbar-actions { flex-wrap: wrap; overflow: visible; }
+      .tools-panel .pdf-toolbar-actions > label { max-width: 100%; flex-wrap: wrap; }
+      .tools-panel select { max-width: 100%; }
+      .tools-panel .viewer-controls { flex-wrap: wrap; overflow: visible; padding: 12px; }
+      .tools-panel button, .workspace-header button, .panel-heading button { min-height: 40px; }
+      .drawer-backdrop { position: absolute; inset: 0; z-index: 29; width: 100%; height: 100%; border: 0; border-radius: 0; background: rgba(0, 0, 0, .4); }
+      @media (max-width: 1023px) {
+        .tools-panel, .chat-panel { position: absolute; top: 0; bottom: 0; z-index: 30; width: min(380px, calc(100% - 24px)); max-width: 100%; box-shadow: var(--shadow); }
+        .tools-panel { left: 0; }
+        .chat-panel { right: 0; }
+        .workspace-header { gap: 8px; padding: 8px; }
+        .workspace-heading { font-size: 12px; }
+        .workspace-document { display: none; }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         button {
           transition: none;
@@ -1255,12 +1328,22 @@ interface SignatureAsset {
 })
 export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnInit {
   @ViewChild('viewerCanvas') viewerCanvas?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('toolsToggle') toolsToggle?: ElementRef<HTMLButtonElement>;
+  @ViewChild('chatToggle') chatToggle?: ElementRef<HTMLButtonElement>;
+  @ViewChild('toolsPanel') toolsPanel?: ElementRef<HTMLElement>;
+  @ViewChild('chatPanel') chatPanel?: ElementRef<HTMLElement>;
+  @ViewChild(AiChatComponent) aiChat?: AiChatComponent;
   @ViewChild('viewerHost') viewerHost?: ElementRef<HTMLDivElement>;
   @ViewChild('stageHost') stageHost?: ElementRef<HTMLDivElement>;
   @ViewChild('annotationLayer') annotationLayer?: ElementRef<HTMLDivElement>;
   @ViewChild('multiPageView') multiPageView?: ElementRef<HTMLDivElement>;
   @ViewChildren('modePageCanvas') modePageCanvases?: QueryList<ElementRef<HTMLCanvasElement>>;
   @ViewChild('signatureCanvas') signatureCanvas?: ElementRef<HTMLCanvasElement>;
+
+  compactLayout = window.innerWidth < 1024;
+  toolsOpen = !this.compactLayout;
+  chatOpen = !this.compactLayout;
+  private panelLayoutFrame: number | null = null;
 
   document: LoadedPdfDocument | null = null;
   loading = false;
@@ -1395,6 +1478,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   ngOnDestroy(): void {
+    if (this.panelLayoutFrame !== null) cancelAnimationFrame(this.panelLayoutFrame);
     if (this.viewStateSaveTimer) clearTimeout(this.viewStateSaveTimer);
     this.cancelPasswordPrompt();
     if (this.autosaveTimer) {
@@ -1794,6 +1878,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
 
   openMetadataDialog(): void {
     if (!this.document || this.document.isEncrypted) return;
+    if (this.compactLayout) this.closePanels();
     this.error = null;
     void this.pdfSecurityService.getMetadata(this.document.bytes).then(
       metadata => {
@@ -1825,6 +1910,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
 
   openProtectionDialog(): void {
     if (!this.document || this.document.isEncrypted) return;
+    if (this.compactLayout) this.closePanels();
     this.protectionUserPassword = '';
     this.protectionUserPasswordConfirm = '';
     this.protectionOwnerPassword = '';
@@ -1896,6 +1982,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   private requestPdfPassword(reason: number): Promise<string | null> {
+    if (this.compactLayout) this.closePanels();
     if (this.passwordResolver) this.passwordResolver(null);
     this.passwordPromptMessage = reason === PasswordResponses.INCORRECT_PASSWORD
       ? 'The password was incorrect. Try again.'
@@ -2544,8 +2631,54 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     }
   }
 
+  togglePanel(panel: 'tools' | 'chat'): void {
+    const open = panel === 'tools' ? !this.toolsOpen : !this.chatOpen;
+    if (this.compactLayout && open) {
+      this.toolsOpen = false;
+      this.chatOpen = false;
+    }
+    if (panel === 'tools') this.toolsOpen = open;
+    else this.chatOpen = open;
+    if (!this.chatOpen && (this.aiChat?.busy || this.aiChat?.extracting)) this.aiChat.cancel();
+    this.cdr.detectChanges();
+    if (open) (panel === 'tools' ? this.toolsPanel : this.chatPanel)?.nativeElement.focus();
+    else (panel === 'tools' ? this.toolsToggle : this.chatToggle)?.nativeElement.focus();
+    this.schedulePanelRender();
+  }
+
+  closePanel(panel: 'tools' | 'chat'): void {
+    if (panel === 'tools') this.toolsOpen = false;
+    else {
+      this.chatOpen = false;
+      if (this.aiChat?.busy || this.aiChat?.extracting) this.aiChat.cancel();
+    }
+    (panel === 'tools' ? this.toolsToggle : this.chatToggle)?.nativeElement.focus();
+    this.schedulePanelRender();
+  }
+
+  closePanels(): void {
+    const panel = this.chatOpen ? 'chat' : 'tools';
+    this.toolsOpen = false;
+    this.chatOpen = false;
+    if (this.aiChat?.busy || this.aiChat?.extracting) this.aiChat.cancel();
+    (panel === 'chat' ? this.chatToggle : this.toolsToggle)?.nativeElement.focus();
+  }
+
+  private schedulePanelRender(): void {
+    if (this.panelLayoutFrame !== null) cancelAnimationFrame(this.panelLayoutFrame);
+    this.panelLayoutFrame = requestAnimationFrame(() => {
+      this.panelLayoutFrame = null;
+      void this.onResize();
+    });
+  }
+
   @HostListener('window:resize')
   async onResize(): Promise<void> {
+    const compact = window.innerWidth < 1024;
+    if (compact !== this.compactLayout) {
+      this.compactLayout = compact;
+      if (compact) this.closePanels();
+    }
     if (this.document && !this.loading) {
       await this.renderCurrentPage();
     }
@@ -2585,6 +2718,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       else if (this.signatureDialogOpen) this.closeSignatureDialog();
       else if (this.metadataDialogOpen) this.metadataDialogOpen = false;
       else if (this.protectionDialogOpen) this.closeProtectionDialog();
+      else if (this.compactLayout && (this.toolsOpen || this.chatOpen)) this.closePanels();
       else if (this.cropMode || this.cropSelection) this.setCropMode(false);
       else {
         this.setAnnotationTool(null);
@@ -2595,6 +2729,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     }
 
     const target = event.target instanceof HTMLElement ? event.target : null;
+    if (target?.closest('app-ai-chat')) return;
     if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
 
     if (key === 'backspace' || key === 'delete') {
@@ -2858,6 +2993,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
   }
 
   async openSignatureDialog(kind: SignatureAsset['kind']): Promise<void> {
+    if (this.compactLayout) this.closePanels();
     this.signatureKind = kind;
     this.signatureMode = 'draw';
     this.signatureText = '';

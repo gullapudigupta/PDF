@@ -77,6 +77,13 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-080` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-081` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-082` (2026-10-17): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-083` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-084` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-085` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-086` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-087` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-088` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-089` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -349,6 +356,24 @@ graph TD
     P3_S21_002 --> P3_S25_001
     P3_S23_002 --> P3_S25_001
     P2_S18_001 --> P3_S25_001
+    P4_AI_001["P4-AI-001: Register AI workspace MVP and Phase 4 dependency graph<br/>COMPLETED"]
+    style P4_AI_001 fill:#c8e6c9
+    P4_AI_002["P4-AI-002: Implement user-key OpenAI-compatible transport<br/>COMPLETED"]
+    P4_AI_001 --> P4_AI_002
+    style P4_AI_002 fill:#c8e6c9
+    P4_AI_003["P4-AI-003: Implement separate AI chat with PDF preview and copy<br/>COMPLETED"]
+    P4_AI_002 --> P4_AI_003
+    style P4_AI_003 fill:#c8e6c9
+    P4_UI_001["P4-UI-001: Integrate responsive left tools and right AI chat<br/>COMPLETED"]
+    P4_AI_003 --> P4_UI_001
+    style P4_UI_001 fill:#c8e6c9
+    P4_UI_002["P4-UI-002: Add browser and desktop multiple PDF pickers<br/>COMPLETED"]
+    P4_UI_001 --> P4_UI_002
+    style P4_UI_002 fill:#c8e6c9
+    P4_UI_003["P4-UI-003: Add clickable PDF empty state and state-preserving document tabs<br/>IN_PROGRESS"]
+    P4_UI_002 --> P4_UI_003
+    P4_QA_001["P4-QA-001: Verify and document AI workspace MVP<br/>IN_PROGRESS"]
+    P4_UI_003 --> P4_QA_001
 ```
 
 ## Interpretation

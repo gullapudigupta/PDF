@@ -35,8 +35,9 @@ node .\master\tools\task-registry.cjs validate
 | 1: MVP | 46 | 43 | 0 | 0 | 3 |
 | 2: Advanced Features | 16 | 0 | 0 | 0 | 16 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
+| 4: AI Workspace MVP | 7 | 5 | 0 | 2 | 0 |
 
-71 product tasks; 1 separate historical QA execution record.
+78 product tasks; 1 separate historical QA execution record.
 Historical QA is not counted as product delivery. Estimates use 8 planning hours/day where the source specified days; backlog estimates remain unknown.
 
 ## Phase 1 - MVP
@@ -124,6 +125,18 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P3-S21-002](agent-tasks/platform/phase3-tasks.json) | Plugin SDK and Extension Points (OCR/Export/Annotation) | platform | PENDING | HIGH | 40 | P3-S21-001, P2-S18-001 |
 | [P3-S23-002](agent-tasks/security-compliance/phase3-tasks.json) | Consent-Gated External Sharing Policy | security-compliance | PENDING | HIGH | 24 | P3-S23-001, P2-S18-001 |
 | [P3-S25-001](agent-tasks/quality-delivery/phase3-tasks.json) | Extended Test Coverage (80%) and Final Release Validation | quality-delivery | PENDING | CRITICAL | 40 | P3-S24-001, P3-S19-001, P3-S20-001, P3-S22-001, P3-S21-002, P3-S23-002, P2-S18-001 |
+
+## Phase 4 - AI Workspace MVP
+
+| Task | Name | Domain | Status | Priority | Hours | Dependencies |
+|---|---|---|---|---|---:|---|
+| [P4-AI-001](agent-tasks/viewer-editor/phase4-tasks.json) | Register AI workspace MVP and Phase 4 dependency graph | viewer-editor | COMPLETED | HIGH | 2 | None |
+| [P4-AI-002](agent-tasks/viewer-editor/phase4-tasks.json) | Implement user-key OpenAI-compatible transport | viewer-editor | COMPLETED | HIGH | 4 | P4-AI-001 |
+| [P4-AI-003](agent-tasks/viewer-editor/phase4-tasks.json) | Implement separate AI chat with PDF preview and copy | viewer-editor | COMPLETED | HIGH | 6 | P4-AI-002 |
+| [P4-UI-001](agent-tasks/viewer-editor/phase4-tasks.json) | Integrate responsive left tools and right AI chat | viewer-editor | COMPLETED | HIGH | 5 | P4-AI-003 |
+| [P4-UI-002](agent-tasks/viewer-editor/phase4-tasks.json) | Add browser and desktop multiple PDF pickers | viewer-editor | COMPLETED | HIGH | 2 | P4-UI-001 |
+| [P4-UI-003](agent-tasks/viewer-editor/phase4-tasks.json) | Add clickable PDF empty state and state-preserving document tabs | viewer-editor | IN_PROGRESS | HIGH | 5 | P4-UI-002 |
+| [P4-QA-001](agent-tasks/viewer-editor/phase4-tasks.json) | Verify and document AI workspace MVP | viewer-editor | IN_PROGRESS | HIGH | 3 | P4-UI-003 |
 
 ## Historical Execution Log
 

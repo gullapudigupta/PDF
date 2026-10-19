@@ -38,20 +38,46 @@
         "P1-S9-004",
         "P1-S12-004"
       ]
+    },
+    {
+      "phase": "phase4",
+      "file": "./phase4-tasks.json",
+      "totalTasks": 7,
+      "statusSummary": {
+        "pending": 0,
+        "in_progress": 2,
+        "completed": 5,
+        "blocked": 0,
+        "cancelled": 0
+      },
+      "completedTasks": 5,
+      "completionPercentage": "71%",
+      "totalEstimatedHours": 27,
+      "unestimatedTasks": 0,
+      "inheritedUnverifiedCompletions": 0,
+      "taskIds": [
+        "P4-AI-001",
+        "P4-AI-002",
+        "P4-AI-003",
+        "P4-UI-001",
+        "P4-QA-001",
+        "P4-UI-002",
+        "P4-UI-003"
+      ]
     }
   ],
   "progressTracking": {
-    "totalTasks": 15,
+    "totalTasks": 22,
     "statusSummary": {
       "pending": 0,
-      "in_progress": 0,
-      "completed": 15,
+      "in_progress": 2,
+      "completed": 20,
       "blocked": 0,
       "cancelled": 0
     },
-    "completedTasks": 15,
-    "completionPercentage": "100%",
-    "totalEstimatedHours": 256,
+    "completedTasks": 20,
+    "completionPercentage": "90%",
+    "totalEstimatedHours": 283,
     "unestimatedTasks": 0,
     "inheritedUnverifiedCompletions": 0,
     "taskIds": [
@@ -69,7 +95,14 @@
       "P1-S12-004",
       "P1-S3-005",
       "P1-S4-004",
-      "P1-S9-004"
+      "P1-S9-004",
+      "P4-AI-001",
+      "P4-AI-002",
+      "P4-AI-003",
+      "P4-UI-001",
+      "P4-UI-002",
+      "P4-UI-003",
+      "P4-QA-001"
     ]
   },
   "tasks": [
@@ -132,6 +165,34 @@
     {
       "taskId": "P1-S9-004",
       "canonicalFile": "./phase1-tasks.json"
+    },
+    {
+      "taskId": "P4-AI-001",
+      "canonicalFile": "./phase4-tasks.json"
+    },
+    {
+      "taskId": "P4-AI-002",
+      "canonicalFile": "./phase4-tasks.json"
+    },
+    {
+      "taskId": "P4-AI-003",
+      "canonicalFile": "./phase4-tasks.json"
+    },
+    {
+      "taskId": "P4-UI-001",
+      "canonicalFile": "./phase4-tasks.json"
+    },
+    {
+      "taskId": "P4-UI-002",
+      "canonicalFile": "./phase4-tasks.json"
+    },
+    {
+      "taskId": "P4-UI-003",
+      "canonicalFile": "./phase4-tasks.json"
+    },
+    {
+      "taskId": "P4-QA-001",
+      "canonicalFile": "./phase4-tasks.json"
     }
   ]
 }

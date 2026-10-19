@@ -66,6 +66,22 @@ ipcMain.handle('dialog:openFile', async () => {
   };
 });
 
+ipcMain.handle('dialog:openFiles', async () => {
+  const result = await dialog.showOpenDialog(mainWindow, {
+    properties: ['openFile', 'multiSelections'],
+    filters: [{ name: 'PDF Files', extensions: ['pdf'] }],
+  });
+  if (result.canceled) return { canceled: true, files: [] };
+  return {
+    canceled: false,
+    files: result.filePaths.map(filePath => ({
+      filePath,
+      fileName: path.basename(filePath),
+      fileData: fs.readFileSync(filePath).toString('base64'),
+    })),
+  };
+});
+
 ipcMain.handle('dialog:saveFile', async (event, { defaultPath, data, mimeType = 'application/pdf' }) => {
   const fileTypes = {
     'application/pdf': { name: 'PDF Files', extensions: ['pdf'] },

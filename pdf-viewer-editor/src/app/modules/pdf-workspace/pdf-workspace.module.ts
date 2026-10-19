@@ -8,6 +8,7 @@ import { SharedModule } from '@shared/shared.module';
 import { PdfWorkspaceComponent } from './components/pdf-workspace/pdf-workspace.component';
 import { workspaceReducer } from './store/workspace.reducer';
 import { WorkspaceEffects } from './store/workspace.effects';
+import { AiChatComponent } from './components/ai-chat/ai-chat.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     SharedModule,
+    AiChatComponent,
     RouterModule.forChild(routes),
     StoreModule.forFeature('workspace', workspaceReducer),
     EffectsModule.forFeature([WorkspaceEffects]),

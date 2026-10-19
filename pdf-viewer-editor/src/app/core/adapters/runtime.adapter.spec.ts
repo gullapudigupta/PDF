@@ -10,6 +10,7 @@ describe('ExtensionRuntimeAdapter', () => {
   const desktopWindow = window as Window & {
     electronAPI?: {
       openFile: jasmine.Spy;
+      openFiles: jasmine.Spy;
       saveFile: jasmine.Spy;
       readFile: jasmine.Spy;
       writeFile: jasmine.Spy;
@@ -47,6 +48,7 @@ describe('ExtensionRuntimeAdapter', () => {
   function createDesktopApi() {
     return {
       openFile: jasmine.createSpy('openFile').and.resolveTo({ canceled: true }),
+      openFiles: jasmine.createSpy('openFiles').and.resolveTo({ canceled: true, files: [] }),
       saveFile: jasmine.createSpy('saveFile').and.resolveTo({ canceled: true }),
       readFile: jasmine.createSpy('readFile').and.resolveTo({ success: true, data: '' }),
       writeFile: jasmine.createSpy('writeFile').and.resolveTo({ success: true }),
@@ -99,6 +101,47 @@ describe('ExtensionRuntimeAdapter', () => {
     await expectAsync(adapter.writeFile('saved.pdf', bytes)).toBeRejectedWithError('Write denied');
   });
 
+  it('decodes every desktop multi-selection and handles cancellation and invalid results', async () => {
+      const api = createDesktopApi();
+      desktopWindow.electronAPI = api;
+      const adapter = new DesktopRuntimeAdapter();
+      api.openFiles.and.resolveTo({
+        canceled: false,
+        files: [
+          { fileName: 'one.pdf', filePath: 'C:\\docs\\one.pdf', fileData: 'AQI=' },
+          { fileName: 'two.pdf', filePath: 'C:\\docs\\two.pdf', fileData: 'AwQ=' },
+        ],
+      });
+      const result = await adapter.openMultipleFileDialog();
+      expect(result.canceled).toBeFalse();
+      expect(result.files.map(selected => selected.file.name)).toEqual(['one.pdf', 'two.pdf']);
+      expect(result.files[1].filePath).toBe('C:\\docs\\two.pdf');
+      expect(Array.from(new Uint8Array(await result.files[1].file.arrayBuffer()))).toEqual([3, 4]);
+      api.openFiles.and.resolveTo({ canceled: true, files: [] });
+      expect(await adapter.openMultipleFileDialog()).toEqual({ canceled: true, files: [] });
+      api.openFiles.and.resolveTo({ canceled: false, files: [] });
+      await expectAsync(adapter.openMultipleFileDialog()).toBeRejectedWithError(/returned no files/);
+    });
+
+    it('opens multiple browser PDFs without merging and reports cancellation', async () => {
+      const adapter = new ExtensionRuntimeAdapter();
+      const createElement = spyOn(document, 'createElement').and.callThrough();
+      spyOn(HTMLInputElement.prototype, 'click').and.stub();
+      const pending = adapter.openMultipleFileDialog();
+      const input = createElement.calls.mostRecent().returnValue as HTMLInputElement;
+      expect(input.multiple).toBeTrue();
+      const transfer = new DataTransfer();
+      transfer.items.add(new File(['one'], 'one.pdf', { type: 'application/pdf' }));
+      transfer.items.add(new File(['two'], 'two.pdf', { type: 'application/pdf' }));
+      input.files = transfer.files;
+      input.dispatchEvent(new Event('change'));
+      const result = await pending;
+      expect(result.files.map(selected => selected.file.name)).toEqual(['one.pdf', 'two.pdf']);
+      const cancelled = adapter.openMultipleFileDialog();
+      const cancelledInput = createElement.calls.mostRecent().returnValue as HTMLInputElement;
+      cancelledInput.dispatchEvent(new Event('cancel'));
+      expect(await cancelled).toEqual({ canceled: true, files: [] });
+    });
   it('sends exported files to the extension download handler', async () => {
     const sendMessage = jasmine.createSpy('sendMessage').and.resolveTo({
       success: true,

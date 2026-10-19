@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RuntimeAdapter, DesktopRuntimeAdapter, ExtensionRuntimeAdapter } from '../adapters/runtime.adapter';
+import { RuntimeAdapter, DesktopRuntimeAdapter, ExtensionRuntimeAdapter, MultiplePdfSelection } from '../adapters/runtime.adapter';
 import { environment } from '@environments/environment';
 
 @Injectable({
@@ -16,6 +16,10 @@ export class RuntimeService implements RuntimeAdapter {
 
   openFileDialog(): Promise<{ canceled: boolean; file?: File; fileName?: string; filePath?: string }> {
     return this.adapter.openFileDialog();
+  }
+
+  openMultipleFileDialog(): Promise<MultiplePdfSelection> {
+    return this.adapter.openMultipleFileDialog();
   }
 
   saveFileDialog(

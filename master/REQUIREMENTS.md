@@ -1,3 +1,12 @@
+## Phase 4 AI Workspace MVP (2026-10-19)
+
+The additive basic-MVP scope is defined in
+[AI requirements](../specs/pdf-viewer-editor/requirements.md) and
+[AI design](../specs/pdf-viewer-editor/design.md). Execute through
+[TASKS.md](TASKS.md); Phase 4 adds user-key GPT/OpenAI-compatible chat,
+explicit PDF text preview, copy-only responses, and responsive side menus.
+It does not require completing unrelated enterprise backlog.
+
 ## Task Registry Migration Requirements (2026-10-16)
 
 - Migrate every task definition and the execution log from the original
