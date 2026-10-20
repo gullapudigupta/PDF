@@ -1,6 +1,7 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { RuntimeService } from '@core/services/runtime.service';
+import { OpenedPdfFile } from '@core/adapters/runtime.adapter';
 import { PasswordResponses } from 'pdfjs-dist';
 import { PdfDocumentService, LoadedPdfDocument, PdfPasswordCancelledError } from '../../services/pdf-document.service';
 import { PdfRenderService } from '../../services/pdf-render.service';
@@ -9,9 +10,10 @@ import { AnnotationService } from '../../services/annotation.service';
 import { PdfPageOperationsService } from '../../services/pdf-page-operations.service';
 import { PdfEditSerializationService } from '../../services/pdf-edit-serialization.service';
 import { PdfFormField, PdfFormFieldPlacement, PdfFormService } from '../../services/pdf-form.service';
-import { PdfMetadata, PdfPermissionPreset, PdfSecurityService } from '../../services/pdf-security.service';
+import { PdfMetadata, PdfProtectionOptions, PdfSecurityService } from '../../services/pdf-security.service';
 import { PdfPageExportService, PdfPageImageFormat } from '../../services/pdf-page-export.service';
 import { AiChatComponent } from '../ai-chat/ai-chat.component';
+import { ActionStatus, ActionStatusKind } from '../action-status/action-status.component';
 import { PersistenceService, RecentFileRecord } from '@core/services/persistence.service';
 import { Annotation, AnnotationType } from '../../models/annotation.model';
 import { recordEditCommand, redoEditCommand, undoEditCommand } from '../../store/workspace.actions';
@@ -21,6 +23,11 @@ type EditableObjectType = 'text' | 'image' | 'link';
 type ViewingMode = 'single' | 'continuous' | 'facing';
 type WorkspaceTheme = 'light' | 'dark';
 type ToolbarGroup = 'editing' | 'search' | 'navigation' | 'annotations';
+
+export interface WorkspaceOpenRequest {
+  multiple: boolean;
+  recent?: RecentFileRecord;
+}
 
 interface ToolbarVisibility {
   editing: boolean;
@@ -104,9 +111,10 @@ interface SignatureAsset {
             <h1 i18n="@@pdfWorkspaceTitle">PDF Viewer &amp; Editor</h1>
           </div>
           <span class="active-document" *ngIf="document" [title]="document.name">{{ document.name }}</span>
+          <button type="button" title="Open a PDF file" i18n-title="@@openPdfTooltip" i18n="@@openPdf" (click)="openFile()">Open PDF</button>
+          <button type="button" (click)="openRequested.emit({ multiple: true })">Open multiple PDFs</button>
           <details class="recent-files">
             <summary i18n="@@recentFiles">Recent</summary>
-            <button type="button" title="Open a PDF file" i18n-title="@@openPdfTooltip" i18n="@@openPdf" (click)="openFile()">Open PDF</button>
             <p *ngIf="!recentFiles.length">No recent PDFs.</p>
             <ol>
               <li *ngFor="let recent of recentFiles">
@@ -199,18 +207,21 @@ interface SignatureAsset {
       </div>
       </ng-template>
 
-      <header class="workspace-header">
-        <button #toolsToggle type="button" (click)="togglePanel('tools')" aria-controls="workspace-tools"
+      <header class="workspace-header" [class.managed-header]="tabManaged">
+        <button #toolsToggle type="button" (click)="togglePanel('tools')" [attr.aria-controls]="toolsPanelId"
           [attr.aria-expanded]="toolsOpen" i18n="@@workspaceToolsToggle">Tools</button>
-        <span class="workspace-heading">PDF Viewer &amp; Editor</span>
-        <span class="workspace-document" *ngIf="document" [title]="document.name">{{ document.name }}</span>
-        <button #chatToggle type="button" (click)="togglePanel('chat')" aria-controls="workspace-chat"
+        <ng-container *ngTemplateOutlet="commandTemplate"></ng-container>
+        <ng-container *ngIf="!tabManaged">
+          <span class="workspace-heading">PDF Viewer &amp; Editor</span>
+          <span class="workspace-document" *ngIf="document" [title]="document.name">{{ document.name }}</span>
+        </ng-container>
+        <button #chatToggle type="button" (click)="togglePanel('chat')" [attr.aria-controls]="chatPanelId"
           [attr.aria-expanded]="chatOpen" i18n="@@workspaceChatToggle">AI chat</button>
       </header>
       <div class="workspace-body">
         <button *ngIf="compactLayout && (toolsOpen || chatOpen)" class="drawer-backdrop"
           type="button" aria-label="Close side menu" (click)="closePanels()"></button>
-        <aside #toolsPanel id="workspace-tools" class="tools-panel" [hidden]="!toolsOpen"
+        <aside #toolsPanel [id]="toolsPanelId" class="tools-panel" [hidden]="!toolsOpen"
           aria-label="All PDF tools" tabindex="-1">
           <div class="panel-heading"><h2>PDF tools</h2><button type="button" (click)="closePanel('tools')" aria-label="Close tools">Close</button></div>
           <ng-container *ngTemplateOutlet="workspaceTools"></ng-container>
@@ -235,39 +246,11 @@ interface SignatureAsset {
         </form>
       </section>
 
-      <section *ngIf="metadataDialogOpen" role="dialog" aria-modal="true" aria-labelledby="pdf-metadata-title">
-        <form (ngSubmit)="saveMetadata()">
-          <h2 id="pdf-metadata-title">PDF metadata</h2>
-          <label>Title <input name="metadataTitle" [(ngModel)]="metadata.title" /></label>
-          <label>Author <input name="metadataAuthor" [(ngModel)]="metadata.author" /></label>
-          <label>Subject <input name="metadataSubject" [(ngModel)]="metadata.subject" /></label>
-          <label>Keywords <input name="metadataKeywords" [(ngModel)]="metadata.keywords" /></label>
-          <button type="submit" [disabled]="loading">Save metadata</button>
-          <button type="button" (click)="metadataDialogOpen = false">Cancel</button>
-        </form>
-      </section>
+      <app-pdf-metadata-dialog *ngIf="metadataDialogOpen" [metadata]="metadata" [fileName]="document?.name || ''"
+        [busy]="actionBusy" [error]="dialogError" (save)="saveMetadata($event)" (cancel)="closeMetadataDialog()"></app-pdf-metadata-dialog>
 
-      <section *ngIf="protectionDialogOpen" role="dialog" aria-modal="true" aria-labelledby="pdf-protection-title">
-        <form (ngSubmit)="protectCurrentPdf()">
-          <h2 id="pdf-protection-title">Protect PDF</h2>
-          <label>User password <input type="password" name="userPassword" [(ngModel)]="protectionUserPassword" autocomplete="new-password" /></label>
-          <label>Confirm user password <input type="password" name="confirmUserPassword" [(ngModel)]="protectionUserPasswordConfirm" autocomplete="new-password" /></label>
-          <label>Owner password <input type="password" name="ownerPassword" [(ngModel)]="protectionOwnerPassword" autocomplete="new-password" /></label>
-          <label>Confirm owner password <input type="password" name="confirmOwnerPassword" [(ngModel)]="protectionOwnerPasswordConfirm" autocomplete="new-password" /></label>
-          <label>
-            Permissions
-            <select name="permissionPreset" [(ngModel)]="permissionPreset">
-              <option value="view">View only</option>
-              <option value="print">Allow printing</option>
-              <option value="forms">Allow form filling</option>
-              <option value="unrestricted">Unrestricted</option>
-            </select>
-          </label>
-          <p>Passwords must be at least 8 characters and must not match. The protected copy uses AES-256 encryption.</p>
-          <button type="submit" [disabled]="loading">Create protected copy</button>
-          <button type="button" (click)="closeProtectionDialog()">Cancel</button>
-        </form>
-      </section>
+      <app-pdf-protect-dialog *ngIf="protectionDialogOpen" [fileName]="document?.name || ''"
+        [busy]="actionBusy" [error]="dialogError" (protect)="protectCurrentPdf($event)" (cancel)="closeProtectionDialog()"></app-pdf-protect-dialog>
 
       <ng-template #pageControls>
       <div class="viewer-controls" *ngIf="document && toolbarVisibility.navigation">
@@ -310,9 +293,13 @@ interface SignatureAsset {
         <span id="viewer-keyboard-help" class="visually-hidden">
           Use Page Up and Page Down to navigate pages, plus and minus to zoom, and Control or Command with Z to undo.
         </span>
+        <app-action-status [status]="actionStatus" (dismiss)="dismissActionStatus()"></app-action-status>
         <div class="status" *ngIf="loading">Loading PDF...</div>
         <div class="status error" *ngIf="!loading && error">{{ error }}</div>
-        <div class="status" *ngIf="!loading && !document && !error">Open a PDF to start.</div>
+        <div class="status" *ngIf="!loading && !document && !error">
+          <button type="button" class="empty-open" (click)="openFile()">Open a PDF to start</button>
+          <button type="button" (click)="openRequested.emit({ multiple: true })">Open multiple PDFs</button>
+        </div>
         <div class="status" *ngIf="document && viewingMode !== 'single'" role="status">
           Multi-page viewing is read-only. Switch to Single page to edit this PDF.
         </div>
@@ -328,7 +315,8 @@ interface SignatureAsset {
                 role="group">
                 <label><input type="checkbox" [checked]="selectedPages.includes(page)" (change)="togglePageSelection(page, $any($event.target).checked)" /> Select</label>
                 <button type="button" class="thumbnail-navigate" (click)="goToPage(page)">
-                  <img class="thumbnail-preview" [src]="thumbnailSources.get(page) || ''" [alt]="'Preview of page ' + page" />
+                  <img *ngIf="thumbnailSources.get(page) as source; else thumbnailPending" class="thumbnail-preview" [src]="source" [alt]="'Preview of page ' + page" />
+                  <ng-template #thumbnailPending><span class="thumbnail-preview thumbnail-pending" aria-hidden="true"></span></ng-template>
                   <span>Page {{ page }}</span>
                   <span class="thumbnail-error" *ngIf="thumbnailRenderStates.get(page) === 'error'">Preview unavailable</span>
                 </button>
@@ -534,7 +522,7 @@ interface SignatureAsset {
         </section>
       </div>
         </main>
-        <aside #chatPanel id="workspace-chat" class="chat-panel" [hidden]="!chatOpen"
+        <aside #chatPanel [id]="chatPanelId" class="chat-panel" [hidden]="!chatOpen"
           aria-label="AI chat" tabindex="-1">
           <div class="panel-heading"><h2>AI chat</h2><button type="button" (click)="closePanel('chat')" aria-label="Close AI chat">Close</button></div>
           <app-ai-chat [document]="document" [currentPage]="currentPage"></app-ai-chat>
@@ -559,9 +547,9 @@ interface SignatureAsset {
         --text-primary: #202938;
         --text-muted: #687386;
         --border: #dce2ea;
-        --accent: #2563eb;
-        --accent-strong: #1d4ed8;
-        --accent-soft: #eff6ff;
+        --accent: var(--brand-peacock, #006b63);
+        --accent-strong: #00564f;
+        --accent-soft: #e7f5f2;
         --shadow: 0 8px 24px rgba(28, 39, 56, .08);
         display: flex;
         flex-direction: column;
@@ -581,9 +569,9 @@ interface SignatureAsset {
         --text-primary: #edf1f7;
         --text-muted: #a7b0bf;
         --border: #3a4352;
-        --accent: #8ab4ff;
-        --accent-strong: #a8c7fa;
-        --accent-soft: #29384f;
+        --accent: #80cbc0;
+        --accent-strong: #a4e4d9;
+        --accent-soft: #213e3b;
         --shadow: 0 8px 24px rgba(0, 0, 0, .24);
         color: var(--text-primary);
         background: var(--surface-muted);
@@ -780,8 +768,8 @@ interface SignatureAsset {
         color: var(--text-primary);
         background: var(--surface-raised);
         font: inherit;
-        font-size: 12px;
-        font-weight: 550;
+        font-size: 13px;
+        font-weight: 600;
         cursor: pointer;
         transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease, transform .15s ease;
       }
@@ -909,6 +897,7 @@ interface SignatureAsset {
       .thumbnail-item > label { display: flex; align-items: center; gap: 4px; color: var(--text-muted); font-size: 11px; }
       .thumbnail-navigate { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px; border-color: transparent; background: transparent; }
       .thumbnail-preview { width: 120px; height: 84px; object-fit: contain; background: #edf1f6; box-shadow: 0 2px 6px rgba(28, 39, 56, .14); }
+      .thumbnail-pending { display: block; margin: 0 auto; }
       .thumbnail-error { color: #b42318; font-size: 11px; }
       .bookmark-list { list-style: none; padding: 0; margin: 0; }
       .bookmark-list button { width: 100%; text-align: left; }
@@ -944,7 +933,7 @@ interface SignatureAsset {
       .overlay-layer.form-authoring-mode { pointer-events: auto; cursor: crosshair; }
       .pdf-form-widget input:not([type='checkbox']):not([type='radio']), .pdf-form-widget select {
         width: 100%; min-width: 0; height: 100%; box-sizing: border-box; padding: 1px 3px;
-        border: 1px solid rgba(32, 89, 208, .8); background: rgba(255, 255, 255, .88);
+        border: 1px solid rgba(32, 89, 208, .8); background: #fff;
         font: inherit; font-size: 12px;
       }
       .pdf-form-widget input[type='checkbox'], .pdf-form-widget input[type='radio'] { margin: auto; }
@@ -1288,6 +1277,8 @@ interface SignatureAsset {
       .workspace-heading { font-weight: 700; }
       .workspace-document { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .workspace-header > button:last-child { margin-left: auto; }
+      .managed-header { min-height: 52px; gap: 8px; padding: 6px 10px; }
+      .managed-header > button { flex: 0 0 auto; }
       .workspace-body { position: relative; display: flex; flex: 1; min-height: 0; min-width: 0; overflow: hidden; }
       .workspace-main { display: flex; flex-direction: column; flex: 1; min-width: 0; min-height: 0; overflow: hidden; }
       .tools-panel, .chat-panel { flex: 0 0 300px; width: 300px; min-width: 0; overflow: auto; background: var(--surface); border-right: 1px solid var(--border); }
@@ -1317,6 +1308,10 @@ interface SignatureAsset {
         .workspace-heading { font-size: 12px; }
         .workspace-document { display: none; }
       }
+      @media (max-width: 600px) {
+        .managed-header { flex-wrap: wrap; row-gap: 6px; }
+        .managed-header > button:last-child { order: 1; }
+      }
 
       @media (prefers-reduced-motion: reduce) {
         button {
@@ -1326,7 +1321,17 @@ interface SignatureAsset {
     `,
   ],
 })
-export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnInit {
+export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDestroy, OnInit {
+  @Input() tabManaged = false;
+  @Input() workspaceId = '';
+  @Input() commandTemplate: TemplateRef<unknown> | null = null;
+  @Input() active = true;
+  @Input() initialFile: OpenedPdfFile | null = null;
+  @Output() openRequested = new EventEmitter<WorkspaceOpenRequest>();
+  @Output() closeRequested = new EventEmitter<void>();
+
+  get toolsPanelId(): string { return this.workspaceId ? `${this.workspaceId}-tools` : 'workspace-tools'; }
+  get chatPanelId(): string { return this.workspaceId ? `${this.workspaceId}-chat` : 'workspace-chat'; }
   @ViewChild('viewerCanvas') viewerCanvas?: ElementRef<HTMLCanvasElement>;
   @ViewChild('toolsToggle') toolsToggle?: ElementRef<HTMLButtonElement>;
   @ViewChild('chatToggle') chatToggle?: ElementRef<HTMLButtonElement>;
@@ -1380,11 +1385,10 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
   metadataDialogOpen = false;
   metadata: PdfMetadata = { title: '', author: '', subject: '', keywords: '' };
   protectionDialogOpen = false;
-  protectionUserPassword = '';
-  protectionUserPasswordConfirm = '';
-  protectionOwnerPassword = '';
-  protectionOwnerPasswordConfirm = '';
-  permissionPreset: PdfPermissionPreset = 'view';
+  dialogError: string | null = null;
+  actionStatus: ActionStatus | null = null;
+  actionBusy = false;
+  private actionStatusTimer: ReturnType<typeof setTimeout> | null = null;
   pageExportFormat: PdfPageImageFormat = 'png';
   recentFiles: RecentFileRecord[] = [];
   toolbarVisibility: ToolbarVisibility = {
@@ -1472,12 +1476,22 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     void this.loadWorkspacePreferences();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialFile'] && this.initialFile) {
+      void this.openFile(this.initialFile.file, this.initialFile.filePath);
+    }
+    if (changes['active'] && this.active) this.schedulePanelRender();
+    if (changes['active'] && !this.active && (this.aiChat?.busy || this.aiChat?.extracting)) this.aiChat.cancel();
+  }
+
   ngAfterViewChecked(): void {
+    if (!this.active) return;
     this.renderVisibleThumbnails();
     void this.renderModePagesIfNeeded();
   }
 
   ngOnDestroy(): void {
+    if (this.actionStatusTimer) clearTimeout(this.actionStatusTimer);
     if (this.panelLayoutFrame !== null) cancelAnimationFrame(this.panelLayoutFrame);
     if (this.viewStateSaveTimer) clearTimeout(this.viewStateSaveTimer);
     this.cancelPasswordPrompt();
@@ -1489,7 +1503,11 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     this.pdfDocumentService.closeCurrent();
   }
 
-  async openFile(): Promise<void> {
+  async openFile(file?: File, filePath?: string): Promise<void> {
+    if (!file && this.tabManaged) {
+      this.openRequested.emit({ multiple: false });
+      return;
+    }
     try {
       if (this.autosaveTimer) {
         clearTimeout(this.autosaveTimer);
@@ -1501,7 +1519,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       this.searchMessage = '';
       this.searchIndex = null;
 
-      const result = await this.runtimeService.openFileDialog();
+      const result = file ? { canceled: false, file, filePath } : await this.runtimeService.openFileDialog();
       if (result.canceled || !result.file) {
         this.loading = false;
         return;
@@ -1518,10 +1536,16 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
         ? null
         : err instanceof Error ? err.message : 'Failed to open PDF';
       this.loading = false;
+    } finally {
+      this.cdr.markForCheck();
     }
   }
 
   async openRecentFile(recent: RecentFileRecord): Promise<void> {
+    if (this.tabManaged) {
+      this.openRequested.emit({ multiple: false, recent });
+      return;
+    }
     if (!this.runtimeService.isDesktop() || !recent.path) {
       await this.openFile();
       return;
@@ -1569,7 +1593,11 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     }
   }
 
-  async closeDocument(): Promise<void> {
+  async closeDocument(force = false): Promise<void> {
+    if (this.tabManaged && !force) {
+      this.closeRequested.emit();
+      return;
+    }
     if (this.autosaveTimer) {
       clearTimeout(this.autosaveTimer);
       this.autosaveTimer = null;
@@ -1866,6 +1894,67 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     }, 250);
   }
 
+  setActionStatus(kind: ActionStatusKind, message: string): void {
+    if (this.actionStatusTimer) {
+      clearTimeout(this.actionStatusTimer);
+      this.actionStatusTimer = null;
+    }
+    this.actionStatus = { kind, message };
+    if (kind === 'success' || kind === 'info') {
+      this.actionStatusTimer = setTimeout(() => {
+        this.actionStatusTimer = null;
+        this.actionStatus = null;
+        this.cdr.markForCheck();
+      }, 6000);
+    }
+    this.cdr.markForCheck();
+  }
+
+  dismissActionStatus(): void {
+    if (this.actionStatusTimer) clearTimeout(this.actionStatusTimer);
+    this.actionStatusTimer = null;
+    this.actionStatus = null;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Runs a user-triggered document action and reports each stage: progress while
+   * running, success (work returns a message), cancellation (work returns null), or failure.
+   */
+  private async runAction(
+    progress: string,
+    failure: string,
+    work: () => Promise<string | null>,
+    cancelled = 'Action cancelled. No changes were saved.'
+  ): Promise<boolean> {
+    if (this.actionBusy) {
+      this.setActionStatus('info', 'Please wait for the current action to finish.');
+      return false;
+    }
+    this.actionBusy = true;
+    this.setActionStatus('progress', progress);
+    try {
+      const result = await work();
+      if (result === null) this.setActionStatus('info', cancelled);
+      else this.setActionStatus('success', result);
+      return result !== null;
+    } catch (error) {
+      this.setActionStatus('error', `${failure}: ${error instanceof Error ? error.message : String(error)}`);
+      return false;
+    } finally {
+      this.actionBusy = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  private isPdfFile(file: File): boolean {
+    return file.type === 'application/pdf' || /\.pdf$/i.test(file.name);
+  }
+
+  private pluralize(count: number, word: string): string {
+    return `${count} ${word}${count === 1 ? '' : 's'}`;
+  }
+
   async saveFile(): Promise<void> {
     if (!this.document || this.document.isEncrypted) return;
     await this.saveCurrentPdf(false);
@@ -1880,105 +1969,105 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     if (!this.document || this.document.isEncrypted) return;
     if (this.compactLayout) this.closePanels();
     this.error = null;
+    this.dialogError = null;
+    this.protectionDialogOpen = false;
     void this.pdfSecurityService.getMetadata(this.document.bytes).then(
       metadata => {
         this.metadata = metadata;
         this.metadataDialogOpen = true;
+        this.cdr.markForCheck();
       },
       error => {
         this.error = `Unable to read PDF metadata: ${error instanceof Error ? error.message : String(error)}`;
+        this.cdr.markForCheck();
       }
     );
   }
 
-  async saveMetadata(): Promise<void> {
+  closeMetadataDialog(): void {
+    this.metadataDialogOpen = false;
+    this.dialogError = null;
+  }
+
+  async saveMetadata(metadata: PdfMetadata = this.metadata): Promise<void> {
     if (!this.document || this.document.isEncrypted) return;
-    this.loading = true;
+    this.actionBusy = true;
+    this.dialogError = null;
     try {
-      const updatedBytes = await this.pdfSecurityService.updateMetadata(this.document.bytes, this.metadata);
+      const updatedBytes = await this.pdfSecurityService.updateMetadata(this.document.bytes, metadata);
       this.document = await this.pdfDocumentService.replaceCurrentDocumentBytes(updatedBytes);
+      this.metadata = { ...metadata };
       this.metadataDialogOpen = false;
       await this.renderCurrentPage();
       this.scheduleAutosave();
       this.error = null;
+      this.setActionStatus('success', 'Document properties updated. Save the PDF to keep them in the file.');
     } catch (error) {
-      this.error = `Unable to update PDF metadata: ${error instanceof Error ? error.message : String(error)}`;
+      this.dialogError = `Unable to update PDF metadata: ${error instanceof Error ? error.message : String(error)}`;
     } finally {
-      this.loading = false;
+      this.actionBusy = false;
+      this.cdr.markForCheck();
     }
   }
 
   openProtectionDialog(): void {
     if (!this.document || this.document.isEncrypted) return;
     if (this.compactLayout) this.closePanels();
-    this.protectionUserPassword = '';
-    this.protectionUserPasswordConfirm = '';
-    this.protectionOwnerPassword = '';
-    this.protectionOwnerPasswordConfirm = '';
-    this.permissionPreset = 'view';
     this.error = null;
+    this.dialogError = null;
+    this.metadataDialogOpen = false;
     this.protectionDialogOpen = true;
   }
 
   closeProtectionDialog(): void {
     this.protectionDialogOpen = false;
-    this.protectionUserPassword = '';
-    this.protectionUserPasswordConfirm = '';
-    this.protectionOwnerPassword = '';
-    this.protectionOwnerPasswordConfirm = '';
+    this.dialogError = null;
   }
 
-  async protectCurrentPdf(): Promise<void> {
+  async protectCurrentPdf(options: PdfProtectionOptions): Promise<void> {
     if (!this.document || this.document.isEncrypted) return;
-    if (this.protectionUserPassword !== this.protectionUserPasswordConfirm ||
-      this.protectionOwnerPassword !== this.protectionOwnerPasswordConfirm) {
-      this.error = 'Password confirmation does not match';
-      return;
-    }
-
-    this.loading = true;
+    this.actionBusy = true;
+    this.dialogError = null;
+    this.setActionStatus('progress', 'Encrypting a protected copy of the PDF...');
     try {
       const bytes = await this.serializeCurrentDocument();
-      const protectedBytes = await this.pdfSecurityService.protect(bytes, {
-        userPassword: this.protectionUserPassword,
-        ownerPassword: this.protectionOwnerPassword,
-        permissionPreset: this.permissionPreset,
-      });
+      const protectedBytes = await this.pdfSecurityService.protect(bytes, options);
       const name = `${this.document.name.replace(/\.pdf$/i, '')}-protected.pdf`;
       const result = await this.runtimeService.saveFileDialog(name, this.toArrayBuffer(protectedBytes));
       if (!result.canceled) {
         this.protectionDialogOpen = false;
         this.error = null;
+        this.setActionStatus('success', `Protected copy saved as ${this.savedName(result, name)}. The open document is unchanged.`);
+      } else {
+        this.setActionStatus('info', 'Save cancelled. The protected copy was not saved.');
       }
     } catch (error) {
-      this.error = `Unable to protect PDF: ${error instanceof Error ? error.message : String(error)}`;
+      this.dialogError = `Unable to protect PDF: ${error instanceof Error ? error.message : String(error)}`;
+      this.setActionStatus('error', this.dialogError);
     } finally {
-      this.loading = false;
-      this.protectionUserPassword = '';
-      this.protectionUserPasswordConfirm = '';
-      this.protectionOwnerPassword = '';
-      this.protectionOwnerPasswordConfirm = '';
+      this.actionBusy = false;
+      this.cdr.markForCheck();
     }
   }
 
   async exportCurrentPage(): Promise<void> {
     if (!this.document || this.document.isEncrypted) return;
-    this.loading = true;
-    try {
-      const exported = await this.pdfPageExportService.exportPage(
-        this.document.bytes,
-        this.currentPage,
-        this.pageExportFormat
-      );
-      const baseName = this.document.name.replace(/\.pdf$/i, '');
-      const name = `${baseName}-page-${this.currentPage}.${exported.extension}`;
-      await this.runtimeService.saveFileDialog(name, exported.bytes, exported.mimeType);
-      this.error = null;
-    } catch (error) {
-      this.error = `Unable to export page: ${error instanceof Error ? error.message : String(error)}`;
-    } finally {
-      this.loading = false;
-    }
+    const document = this.document;
+    const page = this.currentPage;
+    const format = this.pageExportFormat.toUpperCase();
+    await this.runAction(`Exporting page ${page} as ${format}...`, 'Unable to export page', async () => {
+      const exported = await this.pdfPageExportService.exportPage(document.bytes, page, this.pageExportFormat);
+      const baseName = document.name.replace(/\.pdf$/i, '');
+      const name = `${baseName}-page-${page}.${exported.extension}`;
+      const result = await this.runtimeService.saveFileDialog(name, exported.bytes, exported.mimeType);
+      if (result?.canceled) return null;
+      return `Page ${page} exported as ${this.savedName(result, name)}.`;
+    }, 'Export cancelled. No file was saved.');
+  }
+
+  private savedName(result: { filePath?: string } | undefined, fallback: string): string {
+    const path = result?.filePath;
+    return path ? path.split(/[\\/]/).pop() || fallback : fallback;
   }
 
   private requestPdfPassword(reason: number): Promise<string | null> {
@@ -2033,30 +2122,28 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       this.autosaveTimer = null;
     }
     const documentId = this.document.id;
-    let saved = false;
-    try {
+    const documentName = this.document.name;
+    await this.runAction(saveAs ? 'Choose where to save a copy of the PDF...' : 'Saving PDF...', 'Save failed', async () => {
       const bytes = await this.serializeCurrentDocument();
       const data = this.toArrayBuffer(bytes);
+      let savedName = documentName;
       if (!saveAs && this.savedFilePath && this.runtimeService.isDesktop()) {
         await this.runtimeService.writeFile(this.savedFilePath, data);
+        savedName = this.savedName({ filePath: this.savedFilePath }, documentName);
       } else {
-        const result = await this.runtimeService.saveFileDialog(this.document.name, data);
-        if (result.canceled) return;
+        const result = await this.runtimeService.saveFileDialog(documentName, data);
+        if (result.canceled) return null;
         this.savedFilePath = this.runtimeService.isDesktop() ? result.filePath ?? null : null;
+        savedName = this.savedName(result, documentName);
       }
-      saved = true;
-    } catch (error) {
-      this.error = `Save failed: ${error instanceof Error ? error.message : String(error)}`;
-      return;
-    }
-    if (saved) {
+      this.error = null;
       try {
         await this.persistenceService.clearAutosave(documentId);
-        this.error = null;
       } catch (error) {
-        this.error = `PDF saved, but its recovery snapshot could not be cleared: ${error instanceof Error ? error.message : String(error)}`;
+        return `Saved ${savedName}, but its recovery snapshot could not be cleared: ${error instanceof Error ? error.message : String(error)}`;
       }
-    }
+      return `Saved ${savedName}.`;
+    }, 'Save cancelled. Your changes are still open and unsaved.');
   }
 
   private async serializeCurrentDocument(): Promise<Uint8Array> {
@@ -2166,83 +2253,112 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
 
   async deleteCurrentPage(): Promise<void> {
     if (!this.document || this.totalPages <= 1) return;
-    if (!window.confirm(`Delete page ${this.currentPage}?`)) return;
-    try {
-      const bytes = await this.pageOperationsService.deletePage(this.document.bytes, this.currentPage);
-      await this.refreshDocumentAfterPageOperation(bytes, Math.min(this.currentPage, this.totalPages - 1));
-    } catch (error) {
-      this.error = `Unable to delete page: ${error instanceof Error ? error.message : String(error)}`;
-    }
+    const page = this.currentPage;
+    if (!window.confirm(`Delete page ${page}? This cannot be undone, but the original file is unchanged until you save.`)) return;
+    const document = this.document;
+    await this.runAction(`Deleting page ${page}...`, 'Unable to delete page', async () => {
+      const bytes = await this.pageOperationsService.deletePage(document.bytes, page);
+      await this.refreshDocumentAfterPageOperation(bytes, Math.min(page, this.totalPages - 1));
+      return `Page ${page} deleted. The document now has ${this.pluralize(this.totalPages, 'page')}.`;
+    });
   }
 
   async insertPagesFromFile(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
+    input.value = '';
     if (!this.document || !file) return;
-    try {
-      const sourceBytes = new Uint8Array(await file.arrayBuffer());
-      const bytes = await this.pageOperationsService.insertPages(
-        this.document.bytes,
-        sourceBytes,
-        this.currentPage
-      );
-      await this.refreshDocumentAfterPageOperation(bytes, this.currentPage + 1);
-    } catch (error) {
-      this.error = `Unable to insert PDF pages: ${error instanceof Error ? error.message : String(error)}`;
-    } finally {
-      input.value = '';
+    if (!this.isPdfFile(file)) {
+      this.setActionStatus('error', `Unable to insert pages: ${file.name} is not a PDF file.`);
+      return;
     }
+    const document = this.document;
+    const afterPage = this.currentPage;
+    await this.runAction(`Inserting pages from ${file.name}...`, 'Unable to insert PDF pages', async () => {
+      const sourceBytes = new Uint8Array(await file.arrayBuffer());
+      const previousTotal = this.totalPages;
+      const bytes = await this.pageOperationsService.insertPages(document.bytes, sourceBytes, afterPage);
+      await this.refreshDocumentAfterPageOperation(bytes, afterPage + 1);
+      const added = Math.max(0, this.totalPages - previousTotal);
+      return `Inserted ${this.pluralize(added, 'page')} from ${file.name} after page ${afterPage}.`;
+    });
   }
 
   async extractSelectedPages(): Promise<void> {
     if (!this.document) return;
-    const selection = window.prompt('Page range to extract (for example, 1-3,5):');
-    if (selection === null) return;
-    try {
-      const bytes = await this.pageOperationsService.extractPages(this.document.bytes, selection);
-      await this.savePdfBytes(`${this.document.name.replace(/\.pdf$/i, '')}-extracted.pdf`, bytes);
-      this.error = null;
-    } catch (error) {
-      this.error = `Unable to extract pages: ${error instanceof Error ? error.message : String(error)}`;
+    const selection = window.prompt(`Page range to extract (for example, 1-3,5). This PDF has ${this.pluralize(this.totalPages || this.document.totalPages, 'page')}:`);
+    if (selection === null) {
+      this.setActionStatus('info', 'Extract cancelled.');
+      return;
     }
+    if (!selection.trim()) {
+      this.setActionStatus('error', 'Unable to extract pages: enter at least one page or range.');
+      return;
+    }
+    const document = this.document;
+    const name = `${document.name.replace(/\.pdf$/i, '')}-extracted.pdf`;
+    await this.runAction(`Extracting pages ${selection.trim()}...`, 'Unable to extract pages', async () => {
+      const bytes = await this.pageOperationsService.extractPages(document.bytes, selection);
+      const result = await this.savePdfBytes(name, bytes);
+      if (result.canceled) return null;
+      return `Extracted pages ${selection.trim()} to ${this.savedName(result, name)}.`;
+    }, 'Save cancelled. The extracted PDF was not saved.');
   }
 
   async mergePdfsFromFiles(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     const files = Array.from(input.files ?? []);
+    input.value = '';
     if (!this.document || !files.length) return;
-    try {
-      const sources = await Promise.all(files.map(async file => new Uint8Array(await file.arrayBuffer())));
-      const bytes = await this.pageOperationsService.mergePdfs([this.document.bytes, ...sources]);
-      await this.savePdfBytes(`${this.document.name.replace(/\.pdf$/i, '')}-merged.pdf`, bytes);
-      this.error = null;
-    } catch (error) {
-      this.error = `Unable to merge PDFs: ${error instanceof Error ? error.message : String(error)}`;
-    } finally {
-      input.value = '';
+    const invalid = files.filter(file => !this.isPdfFile(file));
+    if (invalid.length) {
+      this.setActionStatus('error', `Unable to merge PDFs: ${invalid.map(file => file.name).join(', ')} ${invalid.length === 1 ? 'is not a PDF file' : 'are not PDF files'}.`);
+      return;
     }
+    const document = this.document;
+    const name = `${document.name.replace(/\.pdf$/i, '')}-merged.pdf`;
+    const total = files.length + 1;
+    await this.runAction(`Merging ${total} PDFs (${document.name} first)...`, 'Unable to merge PDFs', async () => {
+      const sources = await Promise.all(files.map(async file => new Uint8Array(await file.arrayBuffer())));
+      const bytes = await this.pageOperationsService.mergePdfs([document.bytes, ...sources]);
+      this.setActionStatus('progress', `Merged ${total} PDFs. Choose where to save ${name}...`);
+      const result = await this.savePdfBytes(name, bytes);
+      if (result.canceled) return null;
+      return `Merged ${total} PDFs into ${this.savedName(result, name)}. The open document is unchanged.`;
+    }, 'Save cancelled. The merged PDF was not saved.');
   }
 
   async splitSelectedPages(): Promise<void> {
     if (!this.document) return;
     const selection = window.prompt('Page ranges for separate PDFs (for example, 1-3,4-6):');
-    if (selection === null) return;
-    try {
-      const parts = await this.pageOperationsService.splitByPageRanges(this.document.bytes, selection);
-      const baseName = this.document.name.replace(/\.pdf$/i, '') || 'document';
-      for (let index = 0; index < parts.length; index++) {
-        await this.savePdfBytes(`${baseName}-part-${index + 1}.pdf`, parts[index]);
-      }
-      this.error = null;
-    } catch (error) {
-      this.error = `Unable to split PDF: ${error instanceof Error ? error.message : String(error)}`;
+    if (selection === null) {
+      this.setActionStatus('info', 'Split cancelled.');
+      return;
     }
+    if (!selection.trim()) {
+      this.setActionStatus('error', 'Unable to split PDF: enter at least one page range.');
+      return;
+    }
+    const document = this.document;
+    await this.runAction('Splitting PDF...', 'Unable to split PDF', async () => {
+      const parts = await this.pageOperationsService.splitByPageRanges(document.bytes, selection);
+      const baseName = document.name.replace(/\.pdf$/i, '') || 'document';
+      let saved = 0;
+      for (let index = 0; index < parts.length; index++) {
+        this.setActionStatus('progress', `Saving part ${index + 1} of ${parts.length}...`);
+        const result = await this.savePdfBytes(`${baseName}-part-${index + 1}.pdf`, parts[index]);
+        if (!result.canceled) saved++;
+      }
+      if (!saved) return null;
+      return saved === parts.length
+        ? `Split into ${this.pluralize(parts.length, 'PDF')} and saved all parts.`
+        : `Split into ${this.pluralize(parts.length, 'PDF')}; saved ${saved}, skipped ${parts.length - saved}.`;
+    }, 'Save cancelled. No split PDFs were saved.');
   }
 
-  private async savePdfBytes(name: string, bytes: Uint8Array): Promise<void> {
-    const data = new ArrayBuffer(bytes.byteLength);
-    new Uint8Array(data).set(bytes);
-    await this.runtimeService.saveFileDialog(name, data);
+  private async savePdfBytes(name: string, bytes: Uint8Array): Promise<{ canceled: boolean; filePath?: string }> {
+    const result = await this.runtimeService.saveFileDialog(name, this.toArrayBuffer(bytes));
+    return result ?? { canceled: false };
   }
 
   startPageDrag(event: DragEvent, page: number): void {
@@ -2263,12 +2379,12 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     const sourcePage = this.draggedPage;
     this.draggedPage = null;
     if (!this.document || sourcePage === null || sourcePage === targetPage) return;
-    try {
-      const bytes = await this.pageOperationsService.reorderPage(this.document.bytes, sourcePage, targetPage);
+    const document = this.document;
+    await this.runAction(`Moving page ${sourcePage} to position ${targetPage}...`, 'Unable to reorder pages', async () => {
+      const bytes = await this.pageOperationsService.reorderPage(document.bytes, sourcePage, targetPage);
       await this.refreshDocumentAfterPageOperation(bytes, targetPage);
-    } catch (error) {
-      this.error = `Unable to reorder pages: ${error instanceof Error ? error.message : String(error)}`;
-    }
+      return `Moved page ${sourcePage} to position ${targetPage}.`;
+    });
   }
 
   togglePageSelection(page: number, selected: boolean): void {
@@ -2280,19 +2396,27 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
   async rotateSelectedPages(rotation: 90 | 180 | 270): Promise<void> {
     if (!this.document) return;
     const pageNumbers = this.selectedPages.length ? this.selectedPages : [this.currentPage];
-    try {
-      const bytes = await this.pageOperationsService.rotatePages(this.document.bytes, pageNumbers, rotation);
+    const document = this.document;
+    const label = pageNumbers.length === 1 ? `page ${pageNumbers[0]}` : `${pageNumbers.length} pages`;
+    await this.runAction(`Rotating ${label} by ${rotation}°...`, 'Unable to rotate pages', async () => {
+      const bytes = await this.pageOperationsService.rotatePages(document.bytes, pageNumbers, rotation);
       await this.recordPageTransformation(bytes, this.currentPage);
-    } catch (error) {
-      this.error = `Unable to rotate pages: ${error instanceof Error ? error.message : String(error)}`;
-    }
+      return `Rotated ${label} by ${rotation}°. Press Ctrl+Z to undo.`;
+    });
   }
 
   setCropMode(enabled: boolean): void {
+    const wasCropping = this.cropMode || !!this.cropSelection;
     this.cropMode = enabled;
     this.cropDraft = null;
     this.cropSelection = null;
-    if (enabled) this.setAnnotationTool(null);
+    if (enabled) {
+      this.setAnnotationTool(null);
+      this.formAuthoringType = null;
+      this.setActionStatus('info', `Drag on page ${this.currentPage} to select the area to keep, then choose Apply Crop. Press Escape to cancel.`);
+    } else if (wasCropping) {
+      this.setActionStatus('info', 'Crop cancelled. The page was not changed.');
+    }
   }
 
   startCrop(event: MouseEvent): void {
@@ -2345,20 +2469,22 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
 
   async applyCropSelection(): Promise<void> {
     if (!this.document || !this.cropSelection) return;
-    try {
+    const document = this.document;
+    const page = this.currentPage;
+    const selection = this.cropSelection;
+    await this.runAction(`Cropping page ${page}...`, 'Unable to crop page', async () => {
       const bytes = await this.pageOperationsService.cropPage(
-        this.document.bytes,
-        this.currentPage,
+        document.bytes,
+        page,
         this.overlayWidth,
         this.overlayHeight,
-        this.cropSelection
+        selection
       );
-      await this.recordPageTransformation(bytes, this.currentPage);
+      await this.recordPageTransformation(bytes, page);
       this.cropSelection = null;
       this.cropMode = false;
-    } catch (error) {
-      this.error = `Unable to crop page: ${error instanceof Error ? error.message : String(error)}`;
-    }
+      return `Page ${page} cropped. Press Ctrl+Z to undo.`;
+    });
   }
 
   private async recordPageTransformation(bytes: Uint8Array, selectedPage: number): Promise<void> {
@@ -2447,10 +2573,12 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       if (this.document?.id !== document.id || !this.visibleThumbnailPages.includes(page)) return;
       this.thumbnailSources.set(page, canvas.toDataURL());
       this.thumbnailRenderStates.set(page, 'ready');
+      this.cdr.markForCheck();
     } catch (error) {
       if (this.document?.id !== document.id || !this.visibleThumbnailPages.includes(page)) return;
       this.thumbnailRenderStates.set(page, 'error');
       this.thumbnailError = `Unable to render thumbnail for page ${page}: ${error instanceof Error ? error.message : String(error)}`;
+      this.cdr.markForCheck();
     }
   }
 
@@ -2679,14 +2807,14 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       this.compactLayout = compact;
       if (compact) this.closePanels();
     }
-    if (this.document && !this.loading) {
+    if (this.active && this.document && !this.loading) {
       await this.renderCurrentPage();
     }
   }
 
   @HostListener('window:mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
-    if (!this.dragState) {
+    if (!this.active || !this.dragState) {
       return;
     }
 
@@ -2711,15 +2839,20 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
 
   @HostListener('window:keydown', ['$event'])
   onKeydown(event: KeyboardEvent): void {
+    if (!this.active) return;
     const key = event.key.toLowerCase();
 
     if (key === 'escape') {
       if (this.passwordPrompt) this.cancelPasswordPrompt();
       else if (this.signatureDialogOpen) this.closeSignatureDialog();
-      else if (this.metadataDialogOpen) this.metadataDialogOpen = false;
+      else if (this.metadataDialogOpen) this.closeMetadataDialog();
       else if (this.protectionDialogOpen) this.closeProtectionDialog();
       else if (this.compactLayout && (this.toolsOpen || this.chatOpen)) this.closePanels();
       else if (this.cropMode || this.cropSelection) this.setCropMode(false);
+      else if (this.formAuthoringType) {
+        this.setActionStatus('info', `Stopped adding the ${this.formFieldLabel(this.formAuthoringType)}. Nothing was added.`);
+        this.formAuthoringType = null;
+      }
       else {
         this.setAnnotationTool(null);
         this.selectedObjectId = null;
@@ -3396,6 +3529,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       this.pageTransformRedo.push(this.document.bytes.slice());
       await this.refreshDocumentAfterPageOperation(previousBytes, this.currentPage);
       this.syncHistoryState();
+      this.setActionStatus('info', 'Undid the last page change. Press Ctrl+Y to redo.');
       return;
     }
     const previous = this.historyService.undo(this.cloneOverlayObjects(this.overlayObjects));
@@ -3418,6 +3552,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
       this.pageTransformUndo.push(this.document.bytes.slice());
       await this.refreshDocumentAfterPageOperation(nextBytes, this.currentPage);
       this.syncHistoryState();
+      this.setActionStatus('info', 'Redid the last page change.');
       return;
     }
     const next = this.historyService.redo(this.cloneOverlayObjects(this.overlayObjects));
@@ -3445,14 +3580,15 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
 
   async exportFormData(): Promise<void> {
     if (!this.document) return;
-    try {
-      const serialized = await this.pdfFormService.exportFormData(this.document.bytes);
+    const document = this.document;
+    const name = `${document.name.replace(/\.pdf$/i, '')}-form-data.json`;
+    await this.runAction('Exporting form data...', 'Unable to export form data', async () => {
+      const serialized = await this.pdfFormService.exportFormData(document.bytes);
       const data = await new Blob([serialized], { type: 'application/json' }).arrayBuffer();
-      const name = `${this.document.name.replace(/\.pdf$/i, '')}-form-data.json`;
-      await this.runtimeService.saveFileDialog(name, data, 'application/json');
-    } catch (error) {
-      this.error = `Unable to export form data: ${error instanceof Error ? error.message : String(error)}`;
-    }
+      const result = await this.runtimeService.saveFileDialog(name, data, 'application/json');
+      if (result?.canceled) return null;
+      return `Form data exported to ${this.savedName(result, name)}.`;
+    }, 'Export cancelled. No form data file was saved.');
   }
 
   async importFormDataFile(event: Event): Promise<void> {
@@ -3461,16 +3597,18 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     if (!file || !this.document) return;
     input.value = '';
     if (file.size > 5 * 1024 * 1024) {
-      this.error = 'Form data files must be 5 MB or smaller.';
+      this.setActionStatus('error', 'Unable to import form data: form data files must be 5 MB or smaller.');
       return;
     }
-    try {
+    const document = this.document;
+    await this.runAction(`Importing form data from ${file.name}...`, 'Unable to import form data', async () => {
       const serialized = await file.text();
-      const bytes = await this.pdfFormService.importFormData(this.document.bytes, serialized);
+      const bytes = await this.pdfFormService.importFormData(document.bytes, serialized);
+      const count = (JSON.parse(serialized) as { fields: unknown[] }).fields.length;
+      if (!count) return null;
       await this.refreshDocumentAfterPageOperation(bytes, this.currentPage);
-    } catch (error) {
-      this.error = `Unable to import form data: ${error instanceof Error ? error.message : String(error)}`;
-    }
+      return `Imported ${this.pluralize(count, 'form field value')} from ${file.name}. Save the PDF to keep them.`;
+    }, `${file.name} contains no form field values. Nothing was changed.`);
   }
 
   beginFormFieldAuthoring(type: PdfFormFieldPlacement['type']): void {
@@ -3479,6 +3617,11 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
     this.cropSelection = null;
     this.cropDraft = null;
     this.setAnnotationTool(null);
+    this.setActionStatus('info', `Click on page ${this.currentPage} where the ${this.formFieldLabel(type)} should go. Press Escape to cancel.`);
+  }
+
+  private formFieldLabel(type: PdfFormFieldPlacement['type']): string {
+    return type === 'checkbox' ? 'checkbox' : type === 'dropdown' ? 'dropdown field' : 'text field';
   }
 
   selectFormField(widget: FormWidget): void {
@@ -3488,38 +3631,51 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnDestroy, OnIni
   async startFormFieldPlacement(event: MouseEvent): Promise<void> {
     if (!this.document || !this.formAuthoringType || event.target !== this.annotationLayer?.nativeElement) return;
     event.preventDefault();
-    const name = window.prompt('Enter a name for the form field');
-    if (name === null || !name.trim()) return;
+    const type = this.formAuthoringType;
+    const label = this.formFieldLabel(type);
+    const name = window.prompt(`Enter a name for the ${label}`);
+    if (name === null || !name.trim()) {
+      this.setActionStatus('info', `No name entered, so no ${label} was added. Click on the page to try again or press Escape to stop.`);
+      return;
+    }
+    if (this.formWidgets.some(widget => widget.name === name.trim())) {
+      this.setActionStatus('error', `Unable to add ${label}: a field named "${name.trim()}" already exists. Choose a different name.`);
+      return;
+    }
     let options: string[] | undefined;
-    if (this.formAuthoringType === 'dropdown') {
+    if (type === 'dropdown') {
       const enteredOptions = window.prompt('Enter dropdown options separated by commas', 'Option 1, Option 2');
-      if (enteredOptions === null) return;
+      if (enteredOptions === null) {
+        this.setActionStatus('info', 'Dropdown field cancelled. Nothing was added.');
+        return;
+      }
       options = enteredOptions.split(',').map(option => option.trim()).filter(Boolean);
     }
     const point = this.annotationPoint(event);
-    const [width, height] = this.formAuthoringType === 'checkbox' ? [20, 20] : [140, 24];
+    const [width, height] = type === 'checkbox' ? [20, 20] : [140, 24];
     const rect = {
       x: Math.min(point.x, Math.max(0, this.overlayWidth - width)),
       y: Math.min(point.y, Math.max(0, this.overlayHeight - height)),
       width: Math.min(width, this.overlayWidth),
       height: Math.min(height, this.overlayHeight),
     };
-    try {
-      const bytes = await this.pdfFormService.createField(this.document.bytes, {
+    const document = this.document;
+    const page = this.currentPage;
+    await this.runAction(`Adding ${label} "${name.trim()}"...`, `Unable to add ${label}`, async () => {
+      const bytes = await this.pdfFormService.createField(document.bytes, {
         name,
-        type: this.formAuthoringType,
-        pageNumber: this.currentPage,
+        type,
+        pageNumber: page,
         viewportWidth: this.overlayWidth,
         viewportHeight: this.overlayHeight,
         rect,
         options,
       });
       this.formAuthoringType = null;
-      await this.refreshDocumentAfterPageOperation(bytes, this.currentPage);
+      await this.refreshDocumentAfterPageOperation(bytes, page);
       this.selectedFormFieldName = name.trim();
-    } catch (error) {
-      this.error = `Unable to create form field: ${error instanceof Error ? error.message : String(error)}`;
-    }
+      return `Added ${label} "${name.trim()}" on page ${page}. Save the PDF to keep it.`;
+    });
   }
 
   async toggleSelectedFieldRequired(): Promise<void> {

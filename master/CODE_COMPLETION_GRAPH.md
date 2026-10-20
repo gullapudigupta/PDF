@@ -84,6 +84,19 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-087` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-088` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-089` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-090` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-091` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-092` (2026-10-19): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-093` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-094` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-095` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-096` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-097` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-098` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-099` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-100` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-101` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-102` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -370,10 +383,51 @@ graph TD
     P4_UI_002["P4-UI-002: Add browser and desktop multiple PDF pickers<br/>COMPLETED"]
     P4_UI_001 --> P4_UI_002
     style P4_UI_002 fill:#c8e6c9
-    P4_UI_003["P4-UI-003: Add clickable PDF empty state and state-preserving document tabs<br/>IN_PROGRESS"]
+    P4_UI_003["P4-UI-003: Add clickable PDF empty state and state-preserving document tabs<br/>COMPLETED"]
     P4_UI_002 --> P4_UI_003
+    style P4_UI_003 fill:#c8e6c9
+    P4_UI_004["P4-UI-004: Add professional Anirdeshya branding and palette<br/>COMPLETED"]
+    P4_UI_003 --> P4_UI_004
+    style P4_UI_004 fill:#c8e6c9
+    P4_EDIT_001["P4-EDIT-001: Add professional point-size and bold PDF text controls<br/>PENDING"]
+    P4_UI_003 --> P4_EDIT_001
+    P4_UI_005["P4-UI-005: Consolidate PDF commands into one compact header row<br/>COMPLETED"]
+    P4_UI_004 --> P4_UI_005
+    style P4_UI_005 fill:#c8e6c9
+    P4_UI_006["P4-UI-006: Create a working blank New PDF document command<br/>COMPLETED"]
+    P4_UI_005 --> P4_UI_006
+    style P4_UI_006 fill:#c8e6c9
+    P4_UI_007["P4-UI-007: Separate modal components for Metadata and Protect PDF<br/>COMPLETED"]
+    P4_UI_006 --> P4_UI_007
+    style P4_UI_007 fill:#c8e6c9
+    P4_AI_004["P4-AI-004: Visual &quot;How to get an API key&quot; guide in AI assistant<br/>COMPLETED"]
+    P4_AI_003 --> P4_AI_004
+    style P4_AI_004 fill:#c8e6c9
+    P4_AI_005["P4-AI-005: AI key storage notice<br/>COMPLETED"]
+    P4_AI_004 --> P4_AI_005
+    style P4_AI_005 fill:#c8e6c9
+    P4_UI_008["P4-UI-008: Verify all PDF actions with staged status messages<br/>COMPLETED"]
+    P4_UI_007 --> P4_UI_008
+    style P4_UI_008 fill:#c8e6c9
+    P4_RES_001["P4-RES-001: Resume builder with four ATS templates and per-section AI drafting<br/>COMPLETED"]
+    P4_UI_008 --> P4_RES_001
+    P4_AI_005 --> P4_RES_001
+    style P4_RES_001 fill:#c8e6c9
     P4_QA_001["P4-QA-001: Verify and document AI workspace MVP<br/>IN_PROGRESS"]
-    P4_UI_003 --> P4_QA_001
+    P4_UI_005 --> P4_QA_001
+    P4_UI_006 --> P4_QA_001
+    P4_UI_007 --> P4_QA_001
+    P4_UI_008 --> P4_QA_001
+    P4_AI_004 --> P4_QA_001
+    P4_AI_005 --> P4_QA_001
+    P4_EDIT_001 --> P4_QA_001
+    P4_RES_001 --> P4_QA_001
+    P4_UI_009 --> P4_QA_001
+    P4_SEO_001["P4-SEO-001: Approval-gated search engine discoverability kit (blocked until owner approval)<br/>COMPLETED"]
+    P4_RES_001 --> P4_SEO_001
+    style P4_SEO_001 fill:#c8e6c9
+    P4_UI_009["P4-UI-009: Verification follow-up: placement-mode guidance and form-field/import result messages<br/>PENDING"]
+    P4_UI_008 --> P4_UI_009
 ```
 
 ## Interpretation

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- IIS / Azure App Service: merge into the site's web.config while indexing is BLOCKED.
+     Remove the X-Robots-Tag entry after the owner approves indexing. -->
+<configuration>
+  <system.webServer>
+    <httpProtocol>
+      <customHeaders>
+        <add name="X-Robots-Tag" value="noindex, nofollow, noarchive" />
+      </customHeaders>
+    </httpProtocol>
+  </system.webServer>
+</configuration>

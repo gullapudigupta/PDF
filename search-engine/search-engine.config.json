@@ -1,0 +1,35 @@
+{
+  "$comment": "Search engine settings for the hosted web build. Indexing stays BLOCKED until the owner runs `node search-engine/seo.cjs approve --by <name> --site-url <https url>`.",
+  "siteUrl": "https://example.com",
+  "siteName": "PDF | Anirdeshya Innovation Private Limited",
+  "organization": "Anirdeshya Innovation Private Limited",
+  "description": "Free online PDF viewer and editor from Anirdeshya Innovation Private Limited. Open multiple PDFs, edit text, annotate, merge, split, protect, fill forms, build an ATS-friendly resume and use your own AI key to summarise or rewrite content.",
+  "keywords": [
+    "PDF editor",
+    "PDF viewer",
+    "edit PDF online",
+    "merge PDF",
+    "split PDF",
+    "protect PDF",
+    "PDF form filler",
+    "resume builder",
+    "AI PDF summary",
+    "Anirdeshya Innovation"
+  ],
+  "language": "en",
+  "themeColor": "#006b63",
+  "socialImage": "",
+  "routes": [
+    { "path": "/", "changefreq": "weekly", "priority": 1.0 }
+  ],
+  "verification": {
+    "google": "",
+    "bing": "",
+    "indexNowKey": ""
+  },
+  "indexing": {
+    "approved": false,
+    "approvedBy": "",
+    "approvedAt": ""
+  }
+}

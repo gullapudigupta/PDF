@@ -53,7 +53,7 @@ test('unknown backlog estimates and historical verification stay explicit', () =
   }
   assert.equal(tasks.filter(task => !task.id.startsWith('EXEC') && task.source.file === 'TASKS.md').length, 55);
   assert.equal(summary(tasks.filter(task => !task.id.startsWith('EXEC') && task.source.file === 'TASKS.md')).totalTasks, 55);
-  assert.equal(summary(tasks.filter(task => task.phase === 4)).totalTasks, 7);
+  assert.equal(summary(tasks.filter(task => task.phase === 4)).totalTasks, 18);
 });
 
 test('traceability matrix references canonical tasks and unique QA cases', () => {

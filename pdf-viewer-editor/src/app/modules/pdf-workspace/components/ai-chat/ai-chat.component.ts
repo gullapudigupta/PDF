@@ -2,12 +2,15 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
   OnChanges,
   OnDestroy,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AiKeyGuideComponent } from './ai-key-guide.component';
 import {
   AiChatService,
   AiMessage,
@@ -23,7 +26,7 @@ type AiAction = 'question' | 'summarize' | 'suggest' | 'format' | 'tone';
 @Component({
   selector: 'app-ai-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AiKeyGuideComponent],
   templateUrl: './ai-chat.component.html',
   styleUrls: ['./ai-chat.component.scss'],
 })
@@ -45,6 +48,8 @@ export class AiChatComponent implements OnChanges, OnDestroy {
   extracting = false;
   error = '';
   notice = '';
+  keyGuideOpen = false;
+  @ViewChild('keyGuideButton') keyGuideButton?: ElementRef<HTMLButtonElement>;
   readonly maxSource = MAX_AI_SOURCE;
   readonly openAiUrl = OPENAI_CHAT_URL;
   private controller: AbortController | null = null;
@@ -90,6 +95,12 @@ export class AiChatComponent implements OnChanges, OnDestroy {
     this.consent = false;
     this.error = '';
     this.notice = '';
+  }
+
+  closeKeyGuide(): void {
+    this.keyGuideOpen = false;
+    this.cdr.markForCheck();
+    setTimeout(() => this.keyGuideButton?.nativeElement.focus());
   }
 
   clearKey(): void {

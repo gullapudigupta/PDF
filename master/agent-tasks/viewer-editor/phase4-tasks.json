@@ -17,22 +17,57 @@
       "recommendedModel": [],
       "modelRationale": "Use the current Copilot session; no model override.",
       "dependencies": [],
-      "deliverables": ["Phase 4 registry support", "Requirements, design, tasks, generated graph and indexes"],
-      "acceptanceCriteria": ["Phase 4 is validated and generated without altering historical tasks", "Registry tests pass"],
-      "tags": ["phase-4", "ai-mvp"],
+      "deliverables": [
+        "Phase 4 registry support",
+        "Requirements, design, tasks, generated graph and indexes"
+      ],
+      "acceptanceCriteria": [
+        "Phase 4 is validated and generated without altering historical tasks",
+        "Registry tests pass"
+      ],
+      "tags": [
+        "phase-4",
+        "ai-mvp"
+      ],
       "module": "viewer-editor",
       "modulePath": "../../../pdf-viewer-editor/",
       "phase": 4,
-      "userClarifications": ["OpenAI-compatible custom APIs only; explicit current-page or whole-document text preview."],
+      "userClarifications": [
+        "OpenAI-compatible custom APIs only; explicit current-page or whole-document text preview."
+      ],
       "modelAssignment": null,
-      "executionPlan": {"order": 100, "batch": 4, "band": "phase-4", "scriptable": false, "estimatedCostUsd": null},
-      "executionResult": {"model": "Copilot SDK session (model identifier not exposed)", "provider": "GitHub Copilot", "executionNotes": "Added Phase 4 support using the existing Node dependency-DAG generator; preserved all source tasks and tested generated references.", "executedAt": "2026-10-19"},
+      "executionPlan": {
+        "order": 100,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Added Phase 4 support using the existing Node dependency-DAG generator; preserved all source tasks and tested generated references.",
+        "executedAt": "2026-10-19"
+      },
       "jevRecommendation": null,
       "completedDate": "2026-10-19",
-      "artifacts": ["master/tools/task-registry.cjs", "specs/pdf-viewer-editor/tasks.md"],
-      "verification": {"status": "passed", "commands": ["node master/tools/task-registry.cjs validate", "node --test master/tools/task-registry.test.cjs"], "summary": "77 records validated and all 8 registry tests passed."},
+      "artifacts": [
+        "master/tools/task-registry.cjs",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "node master/tools/task-registry.cjs validate",
+          "node --test master/tools/task-registry.test.cjs"
+        ],
+        "summary": "77 records validated and all 8 registry tests passed."
+      },
       "planningRequired": false,
-      "source": {"file": "specs/pdf-viewer-editor/tasks.md", "declaredDependencies": []}
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": []
+      }
     },
     {
       "id": "P4-AI-002",
@@ -43,23 +78,58 @@
       "value": null,
       "recommendedModel": [],
       "modelRationale": "Use the current Copilot session; no model override.",
-      "dependencies": ["P4-AI-001"],
-      "deliverables": ["Typed AI transport service and unit tests"],
-      "acceptanceCriteria": ["Validate URL, key, model and payload", "Handle API, network, malformed response, timeout and cancellation without exposing credentials"],
-      "tags": ["phase-4", "ai-mvp"],
+      "dependencies": [
+        "P4-AI-001"
+      ],
+      "deliverables": [
+        "Typed AI transport service and unit tests"
+      ],
+      "acceptanceCriteria": [
+        "Validate URL, key, model and payload",
+        "Handle API, network, malformed response, timeout and cancellation without exposing credentials"
+      ],
+      "tags": [
+        "phase-4",
+        "ai-mvp"
+      ],
       "module": "viewer-editor",
       "modulePath": "../../../pdf-viewer-editor/",
       "phase": 4,
       "userClarifications": [],
       "modelAssignment": null,
-      "executionPlan": {"order": 101, "batch": 4, "band": "phase-4", "scriptable": false, "estimatedCostUsd": null},
-      "executionResult": {"model": "Copilot SDK session (model identifier not exposed)", "provider": "GitHub Copilot", "executionNotes": "Implemented validated HTTPS OpenAI-compatible fetch transport, bounded typed messages, sanitized errors and AbortSignal cancellation.", "executedAt": "2026-10-19"},
+      "executionPlan": {
+        "order": 101,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Implemented validated HTTPS OpenAI-compatible fetch transport, bounded typed messages, sanitized errors and AbortSignal cancellation.",
+        "executedAt": "2026-10-19"
+      },
       "jevRecommendation": null,
       "completedDate": "2026-10-19",
-      "artifacts": ["pdf-viewer-editor/src/app/modules/pdf-workspace/services/ai-chat.service.ts", "pdf-viewer-editor/src/app/modules/pdf-workspace/services/ai-chat.service.spec.ts"],
-      "verification": {"status": "passed", "commands": ["corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/services/ai-chat.service.spec.ts"], "summary": "All 7 AI transport tests passed in headless Edge, without live API calls."},
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/ai-chat.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/ai-chat.service.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/services/ai-chat.service.spec.ts"
+        ],
+        "summary": "All 7 AI transport tests passed in headless Edge, without live API calls."
+      },
       "planningRequired": false,
-      "source": {"file": "specs/pdf-viewer-editor/tasks.md", "declaredDependencies": ["P4-AI-001"]}
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-AI-001"
+        ]
+      }
     },
     {
       "id": "P4-AI-003",
@@ -70,23 +140,60 @@
       "value": null,
       "recommendedModel": [],
       "modelRationale": "Use the current Copilot session; no model override.",
-      "dependencies": ["P4-AI-002"],
-      "deliverables": ["Chat component with provider settings, actions, preview, consent and copy", "Chat unit tests"],
-      "acceptanceCriteria": ["No PDF bytes are uploaded and no PDF is automatically modified", "Keys remain in memory and document changes clear context", "Loading, cancellation and copy errors are visible"],
-      "tags": ["phase-4", "ai-mvp"],
+      "dependencies": [
+        "P4-AI-002"
+      ],
+      "deliverables": [
+        "Chat component with provider settings, actions, preview, consent and copy",
+        "Chat unit tests"
+      ],
+      "acceptanceCriteria": [
+        "No PDF bytes are uploaded and no PDF is automatically modified",
+        "Keys remain in memory and document changes clear context",
+        "Loading, cancellation and copy errors are visible"
+      ],
+      "tags": [
+        "phase-4",
+        "ai-mvp"
+      ],
       "module": "viewer-editor",
       "modulePath": "../../../pdf-viewer-editor/",
       "phase": 4,
       "userClarifications": [],
       "modelAssignment": null,
-      "executionPlan": {"order": 102, "batch": 4, "band": "phase-4", "scriptable": false, "estimatedCostUsd": null},
-      "executionResult": {"model": "Copilot SDK session (model identifier not exposed)", "provider": "GitHub Copilot", "executionNotes": "Built ephemeral standalone chat with editable page/document preview, consent, all writing actions, copy-only output, cancellation and timeout. Document changes invalidate stale work.", "executedAt": "2026-10-19"},
+      "executionPlan": {
+        "order": 102,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Built ephemeral standalone chat with editable page/document preview, consent, all writing actions, copy-only output, cancellation and timeout. Document changes invalidate stale work.",
+        "executedAt": "2026-10-19"
+      },
       "jevRecommendation": null,
       "completedDate": "2026-10-19",
-      "artifacts": ["pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.ts", "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.spec.ts"],
-      "verification": {"status": "passed", "commands": ["corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.spec.ts"], "summary": "All 11 chat tests passed in headless Edge; covered preview, consent, actions, stale operations, timeout, copy and plain-text rendering."},
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.spec.ts"
+        ],
+        "summary": "All 11 chat tests passed in headless Edge; covered preview, consent, actions, stale operations, timeout, copy and plain-text rendering."
+      },
       "planningRequired": false,
-      "source": {"file": "specs/pdf-viewer-editor/tasks.md", "declaredDependencies": ["P4-AI-002"]}
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-AI-002"
+        ]
+      }
     },
     {
       "id": "P4-UI-001",
@@ -97,23 +204,648 @@
       "value": null,
       "recommendedModel": [],
       "modelRationale": "Use the current Copilot session; no model override.",
-      "dependencies": ["P4-AI-003"],
-      "deliverables": ["Responsive workspace shell and integration tests"],
-      "acceptanceCriteria": ["Existing tools reuse original handlers and disabled states", "Desktop panels and phone/tablet drawers fit 360, 768 and 1440px", "Keyboard shortcuts do not intercept chat typing"],
-      "tags": ["phase-4", "ai-mvp", "responsive"],
+      "dependencies": [
+        "P4-AI-003"
+      ],
+      "deliverables": [
+        "Responsive workspace shell and integration tests"
+      ],
+      "acceptanceCriteria": [
+        "Existing tools reuse original handlers and disabled states",
+        "Desktop panels and phone/tablet drawers fit 360, 768 and 1440px",
+        "Keyboard shortcuts do not intercept chat typing"
+      ],
+      "tags": [
+        "phase-4",
+        "ai-mvp",
+        "responsive"
+      ],
       "module": "viewer-editor",
       "modulePath": "../../../pdf-viewer-editor/",
       "phase": 4,
       "userClarifications": [],
       "modelAssignment": null,
-      "executionPlan": {"order": 103, "batch": 4, "band": "phase-4", "scriptable": false, "estimatedCostUsd": null},
-      "executionResult": {"model": "Copilot SDK session (model identifier not exposed)", "provider": "GitHub Copilot", "executionNotes": "Reused existing toolbar/navigation templates in the left menu and mounted ephemeral right chat. Added compact exclusive drawers, focus return, dialog dismissal, cancellation on close and native-copy protection. Raised desktop/extension component style budget to 18kB for the measured 16.83kB combined shell.", "executedAt": "2026-10-19"},
+      "executionPlan": {
+        "order": 103,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Reused existing toolbar/navigation templates in the left menu and mounted ephemeral right chat. Added compact exclusive drawers, focus return, dialog dismissal, cancellation on close and native-copy protection. Raised desktop/extension component style budget to 18kB for the measured 16.83kB combined shell.",
+        "executedAt": "2026-10-19"
+      },
       "jevRecommendation": null,
       "completedDate": "2026-10-19",
-      "artifacts": ["pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts", "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts", "pdf-viewer-editor/angular.json"],
-      "verification": {"status": "passed", "commands": ["corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts", "corepack pnpm exec ng build --configuration production,desktop", "corepack pnpm exec ng build --configuration extension", "Integrated browser Playwright responsive assertions at 360, 768 and 1440 CSS pixels"], "summary": "All 127 workspace tests passed; optimized desktop and extension builds passed. Browser measured no root or panel horizontal overflow and mutually exclusive compact drawers at 360/768px, both side panels at 1440px."},
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+        "pdf-viewer-editor/angular.json"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts",
+          "corepack pnpm exec ng build --configuration production,desktop",
+          "corepack pnpm exec ng build --configuration extension",
+          "Integrated browser Playwright responsive assertions at 360, 768 and 1440 CSS pixels"
+        ],
+        "summary": "All 127 workspace tests passed; optimized desktop and extension builds passed. Browser measured no root or panel horizontal overflow and mutually exclusive compact drawers at 360/768px, both side panels at 1440px."
+      },
       "planningRequired": false,
-      "source": {"file": "specs/pdf-viewer-editor/tasks.md", "declaredDependencies": ["P4-AI-003"]}
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-AI-003"
+        ]
+      }
+    },
+    {
+      "id": "P4-UI-006",
+      "name": "Create a working blank New PDF document command",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 1.5,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-005"
+      ],
+      "deliverables": [
+        "New PDF button creating a blank A4 PDF tab",
+        "Empty placeholder tab relabelled",
+        "Tab shell tests"
+      ],
+      "acceptanceCriteria": [
+        "New PDF creates a one-page A4 PDF in an editable tab (reusing an empty tab)",
+        "Each new document gets a unique Untitled-N.pdf name",
+        "Existing open/multi-open behavior is unchanged"
+      ],
+      "tags": [
+        "phase-4",
+        "tabs",
+        "new-document"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User reported New PDF button not working and chose: create a new blank PDF (one A4 page) in a new tab that can be edited and saved."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 111.5,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "New PDF creates blank A4 Untitled-N.pdf via pdf-lib in a new/empty tab; placeholder relabelled Empty.",
+        "executedAt": "2026-10-20"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-20",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tabs.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tabs.component.spec.ts",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "ng test --include=src/app/modules/pdf-workspace/components/**/*.spec.ts --include=src/app/app.component.spec.ts",
+          "ng build --configuration production,desktop",
+          "ng build --configuration extension"
+        ],
+        "summary": "93 component/app tests passed; desktop and extension production builds succeeded. Responsive browser verification is tracked in P4-QA-001 (browser automation unavailable in this session)."
+      },
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-005"
+        ]
+      }
+    },
+    {
+      "id": "P4-UI-007",
+      "name": "Separate modal components for Metadata and Protect PDF",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 2.5,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-006"
+      ],
+      "deliverables": [
+        "PdfMetadataDialogComponent",
+        "PdfProtectDialogComponent",
+        "Workspace integration and tests"
+      ],
+      "acceptanceCriteria": [
+        "Dialogs open only on demand as overlays, never inline in the page",
+        "Grouped fields, password visibility toggle, inline validation, Escape/Cancel/backdrop close",
+        "Responsive at 360/768/1440px"
+      ],
+      "tags": [
+        "phase-4",
+        "dialogs",
+        "security",
+        "metadata"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "Protect PDF and metadata appear in main page when clicked; reorganize, improve UI and add separate components."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 111.7,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Metadata and Protect PDF moved into standalone modal dialog components with shared responsive styles and local validation.",
+        "executedAt": "2026-10-20"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-20",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-dialogs/pdf-metadata-dialog.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-dialogs/pdf-protect-dialog.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-dialogs/pdf-dialog.styles.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-dialogs/pdf-dialogs.component.spec.ts",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "ng test --include=src/app/modules/pdf-workspace/components/**/*.spec.ts --include=src/app/app.component.spec.ts",
+          "ng build --configuration production,desktop",
+          "ng build --configuration extension"
+        ],
+        "summary": "93 component/app tests passed; desktop and extension production builds succeeded. Responsive browser verification is tracked in P4-QA-001 (browser automation unavailable in this session)."
+      },
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-006"
+        ]
+      }
+    },
+    {
+      "id": "P4-AI-004",
+      "name": "Visual \"How to get an API key\" guide in AI assistant",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 2,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-AI-003"
+      ],
+      "deliverables": [
+        "AiKeyGuideComponent with illustrated steps",
+        "How to get an API key button in AI chat",
+        "Component tests"
+      ],
+      "acceptanceCriteria": [
+        "Button beside the API key notice opens a modal visual guide",
+        "Illustrated numbered steps with Previous/Next and official API keys link",
+        "Escape/backdrop/Close return focus; responsive at 360/768/1440px; never touches the key"
+      ],
+      "tags": [
+        "phase-4",
+        "ai-mvp",
+        "onboarding"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "Add a button in the AI assistant showing how to get a ChatGPT/OpenAI account API key in visual image form when clicked."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 111.8,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Six-step illustrated API key guide modal (CSS mockups, official link, keyboard navigation).",
+        "executedAt": "2026-10-20"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-20",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-key-guide.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-key-guide.component.spec.ts",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "ng test --include=src/app/modules/pdf-workspace/components/**/*.spec.ts --include=src/app/app.component.spec.ts",
+          "ng build --configuration production,desktop",
+          "ng build --configuration extension"
+        ],
+        "summary": "93 component/app tests passed; desktop and extension production builds succeeded. Responsive browser verification is tracked in P4-QA-001 (browser automation unavailable in this session)."
+      },
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-AI-003"
+        ]
+      }
+    },
+    {
+      "id": "P4-AI-005",
+      "name": "AI key storage notice",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 0.5,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-AI-004"
+      ],
+      "deliverables": [
+        "Key storage callout in AI chat",
+        "Test"
+      ],
+      "acceptanceCriteria": [
+        "States key is held only in this tab memory and never saved to disk/localStorage/sessionStorage/cookies/PDF",
+        "States when it is erased and where it is sent"
+      ],
+      "tags": [
+        "phase-4",
+        "ai-mvp",
+        "privacy"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "Show message whether the user key will be saved anywhere or only in browser session."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 111.85,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Key-storage callout: memory of this tab only, never persisted, sent only to selected provider.",
+        "executedAt": "2026-10-20"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-20",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.html",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ai-chat/ai-chat.component.scss",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "ng test --include=src/app/modules/pdf-workspace/components/**/*.spec.ts --include=src/app/app.component.spec.ts",
+          "ng build --configuration production,desktop",
+          "ng build --configuration extension"
+        ],
+        "summary": "93 component/app tests passed; desktop and extension production builds succeeded. Responsive browser verification is tracked in P4-QA-001 (browser automation unavailable in this session)."
+      },
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-AI-004"
+        ]
+      }
+    },
+    {
+      "id": "P4-UI-008",
+      "name": "Verify all PDF actions with staged status messages",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 4,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-007"
+      ],
+      "deliverables": [
+        "ActionStatus banner and runAction helper",
+        "Progress/success/cancel/error messages for all PDF actions",
+        "Browser verification of each action button"
+      ],
+      "acceptanceCriteria": [
+        "Merge and every other action shows in-progress, success-with-details, cancelled and error messages",
+        "Buttons disabled while running; invalid inputs explained",
+        "Success auto-dismisses; errors persist until dismissed"
+      ],
+      "tags": [
+        "phase-4",
+        "ux",
+        "feedback"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "Verify merge PDF and all other buttons for professional usage; show proper messages at all stages of each action."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 111.9,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "ActionStatus toast + runAction helper: progress/success/cancelled/error for save, export, protect, metadata, delete/insert/extract/merge/split/rotate/crop/reorder and form import/export; non-PDF validation; busy guard.",
+        "executedAt": "2026-10-20"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-20",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/action-status/action-status.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "ng test --include=src/app/modules/pdf-workspace/components/**/*.spec.ts --include=src/app/app.component.spec.ts",
+          "ng build --configuration production,desktop",
+          "ng build --configuration extension"
+        ],
+        "summary": "93 component/app tests passed; desktop and extension production builds succeeded. Responsive browser verification is tracked in P4-QA-001 (browser automation unavailable in this session)."
+      },
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-007"
+        ]
+      }
+    },
+    {
+      "id": "P4-RES-001",
+      "name": "Resume builder with four ATS templates and per-section AI drafting",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 10,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-008",
+        "P4-AI-005"
+      ],
+      "deliverables": [
+        "components/resume-builder (model, draft service, PDF service, AI prompts, builder component, specs)",
+        "Resume builder button in document command row",
+        "AiChatService optional systemPrompt"
+      ],
+      "acceptanceCriteria": [
+        "Classic, Modern, Professional and Compact single-column ATS templates with live preview",
+        "Contact, summary, experience, education, skills, certifications and projects sections; add/remove/reorder entries",
+        "Per-section Draft with AI using BYOK with consent, memory-only key notice and accept/discard of suggestions",
+        "Best-practice checklist",
+        "Download PDF and Open in editor with staged status messages",
+        "Usable at 360/768/1440px; tests and production builds pass"
+      ],
+      "tags": [
+        "resume",
+        "ai",
+        "templates",
+        "pdf-generation",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: add a top option for a resume builder with 4 standard templates, AI-assisted text for each section, following industry best practices."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 112,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-008",
+          "P4-AI-005"
+        ]
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Top-bar Resume builder: Classic/Modern/Professional/Compact ATS templates, structured sections, live preview, per-section Draft with AI (BYOK, consent, memory-only key, Replace/Add below/Discard), 8-point best-practice checklist, text PDF export (A4/Letter, metadata, WinAnsi sanitising, page breaks), staged download status and open-in-editor tab.",
+        "executedAt": "2026-10-20"
+      },
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "ng test --include=src/app/modules/pdf-workspace/components/**/*.spec.ts --include=src/app/app.component.spec.ts",
+          "ng build --configuration production,desktop",
+          "ng build --configuration extension"
+        ],
+        "summary": "102 component/app tests passed (new resume model/prompt/PDF/component specs and tabs integration); desktop and extension production builds succeeded. Responsive browser verification is tracked in P4-QA-001."
+      },
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/resume-builder/resume.model.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/resume-builder/resume-ai.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/resume-builder/resume-pdf.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/resume-builder/resume-draft.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/resume-builder/resume-builder.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/resume-builder/resume-builder.component.html",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/resume-builder/resume-builder.component.scss",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/resume-builder/resume-builder.component.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tabs.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/pdf-workspace.module.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/ai-chat.service.ts"
+      ],
+      "completedDate": "2026-10-20"
+    },
+    {
+      "id": "P4-SEO-001",
+      "name": "Approval-gated search engine discoverability kit (blocked until owner approval)",
+      "status": "COMPLETED",
+      "priority": "MEDIUM",
+      "estimatedHours": 4,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-RES-001"
+      ],
+      "deliverables": [
+        "search-engine/search-engine.config.json (indexing.approved=false)",
+        "search-engine/seo.cjs status/apply/approve/revoke",
+        "search-engine/hosting X-Robots-Tag snippets",
+        "search-engine/README.md",
+        "search-engine/seo.test.cjs"
+      ],
+      "acceptanceCriteria": [
+        "Default and invalid approval produce deny-all robots.txt, noindex meta and X-Robots-Tag; no sitemap/OG/verification output",
+        "Approval requires approver name, ISO date and real https site URL; revoke restores blocked mode",
+        "Approved apply emits robots allow + sitemap, sitemap.xml, canonical/description/OG/Twitter/JSON-LD and optional Google/Bing/IndexNow verification",
+        "apply is idempotent, escapes values and never edits app source",
+        "README documents approval and Google Search Console / Bing Webmaster onboarding; node tests pass"
+      ],
+      "tags": [
+        "seo",
+        "search-engine",
+        "robots",
+        "approval-gate",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: make this app discoverable for Google, Bing and other search providers; until given approval no search provider should search this application; save this in search-engine folder only."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 114,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/search-engine/tasks.md",
+        "declaredDependencies": [
+          "P4-RES-001"
+        ]
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Approval-gated SEO kit in search-engine/: fail-closed approval gate (approved flag + approver + ISO date + real https URL); apply post-processes the web build (blocked: deny-all robots.txt, noindex meta, X-Robots-Tag _headers; approved: robots allow + sitemap, sitemap.xml, description/keywords/canonical/OG/Twitter/theme/JSON-LD, Google/Bing verification, BingSiteAuth.xml, IndexNow key); idempotent marked block and file manifest; approve/revoke/status CLI; hosting header snippets; README with Search Console/Bing onboarding. App source untouched; shipped state BLOCKED.",
+        "executedAt": "2026-10-20"
+      },
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "node --test search-engine/seo.test.cjs",
+          "node search-engine/seo.cjs status",
+          "node search-engine/seo.cjs apply <copy of dist/extension-app> (run twice)"
+        ],
+        "summary": "7 node tests passed; status reports BLOCKED; apply on a real built index.html injected exactly one noindex block and wrote robots.txt/_headers idempotently."
+      },
+      "artifacts": [
+        "search-engine/README.md",
+        "search-engine/search-engine.config.json",
+        "search-engine/seo.cjs",
+        "search-engine/seo.test.cjs",
+        "search-engine/hosting/_headers",
+        "search-engine/hosting/nginx-noindex.conf",
+        "search-engine/hosting/web.config.noindex.xml",
+        "specs/search-engine/requirements.md",
+        "specs/search-engine/design.md",
+        "specs/search-engine/tasks.md"
+      ],
+      "completedDate": "2026-10-20"
+    },
+    {
+      "id": "P4-UI-009",
+      "name": "Verification follow-up: placement-mode guidance and form-field/import result messages",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 2,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-008"
+      ],
+      "deliverables": [
+        "Crop and form-field placement instructions",
+        "Form-field create success/cancel/error status",
+        "Form-data import field count and empty-file info"
+      ],
+      "acceptanceCriteria": [
+        "Crop Page and Add Text/Checkbox/Dropdown Field show an instruction",
+        "Form field creation reports success, cancellation or failure in the action status",
+        "Import reports applied field count; empty fields array reports nothing changed",
+        "Workspace tests pass"
+      ],
+      "tags": [
+        "ux",
+        "status-messages",
+        "verification",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: verify all (browser verification found silent placement modes and an ambiguous empty form-data import)."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 115,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-008"
+        ]
+      },
+      "executionResult": null,
+      "verification": null,
+      "artifacts": [],
+      "completedDate": null
     },
     {
       "id": "P4-QA-001",
@@ -124,23 +856,62 @@
       "value": null,
       "recommendedModel": [],
       "modelRationale": "Use the current Copilot session; no model override.",
-      "dependencies": ["P4-UI-003"],
-      "deliverables": ["Usage documentation and verified task evidence"],
-      "acceptanceCriteria": ["Workspace regression tests and production build pass", "Responsive browser checks pass without live API calls", "Task checklist, graph sequence and indexes are synchronized"],
-      "tags": ["phase-4", "ai-mvp", "qa"],
+      "dependencies": [
+        "P4-UI-005",
+        "P4-UI-006",
+        "P4-UI-007",
+        "P4-UI-008",
+        "P4-AI-004",
+        "P4-AI-005",
+        "P4-EDIT-001",
+        "P4-RES-001",
+        "P4-UI-009"
+      ],
+      "deliverables": [
+        "Usage documentation and verified task evidence"
+      ],
+      "acceptanceCriteria": [
+        "Workspace regression tests and production build pass",
+        "Responsive browser checks pass without live API calls",
+        "Task checklist, graph sequence and indexes are synchronized"
+      ],
+      "tags": [
+        "phase-4",
+        "ai-mvp",
+        "qa"
+      ],
       "module": "viewer-editor",
       "modulePath": "../../../pdf-viewer-editor/",
       "phase": 4,
       "userClarifications": [],
       "modelAssignment": null,
-      "executionPlan": {"order": 107, "batch": 4, "band": "phase-4", "scriptable": false, "estimatedCostUsd": null},
+      "executionPlan": {
+        "order": 113,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
       "executionResult": null,
       "jevRecommendation": null,
       "completedDate": null,
       "artifacts": [],
       "verification": null,
       "planningRequired": false,
-      "source": {"file": "specs/pdf-viewer-editor/tasks.md", "declaredDependencies": ["P4-UI-003"]}
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-005",
+          "P4-UI-006",
+          "P4-UI-007",
+          "P4-UI-008",
+          "P4-AI-004",
+          "P4-AI-005",
+          "P4-EDIT-001",
+          "P4-RES-001",
+          "P4-UI-009"
+        ]
+      }
     },
     {
       "id": "P4-UI-002",
@@ -151,50 +922,329 @@
       "value": null,
       "recommendedModel": [],
       "modelRationale": "Use the current Copilot session; no model override.",
-      "dependencies": ["P4-UI-001"],
-      "deliverables": ["Multiple-file runtime adapter, service and Electron IPC", "Picker regression tests"],
-      "acceptanceCriteria": ["Browser chooser permits multiple PDFs", "Desktop chooser returns all selected PDF files", "Single-file API and cancellation behavior remain unchanged"],
-      "tags": ["phase-4", "multi-pdf"],
+      "dependencies": [
+        "P4-UI-001"
+      ],
+      "deliverables": [
+        "Multiple-file runtime adapter, service and Electron IPC",
+        "Picker regression tests"
+      ],
+      "acceptanceCriteria": [
+        "Browser chooser permits multiple PDFs",
+        "Desktop chooser returns all selected PDF files",
+        "Single-file API and cancellation behavior remain unchanged"
+      ],
+      "tags": [
+        "phase-4",
+        "multi-pdf"
+      ],
       "module": "viewer-editor",
       "modulePath": "../../../pdf-viewer-editor/",
       "phase": 4,
-      "userClarifications": ["Open separate documents with a switcher and preserve edits when switching."],
+      "userClarifications": [
+        "Open separate documents with a switcher and preserve edits when switching."
+      ],
       "modelAssignment": null,
-      "executionPlan": {"order": 105, "batch": 4, "band": "phase-4", "scriptable": false, "estimatedCostUsd": null},
-      "executionResult": {"model": "Copilot SDK session (model identifier not exposed)", "provider": "GitHub Copilot", "executionNotes": "Added typed multiple-file results, browser multi-select, runtime forwarding and Electron preload/IPC while retaining the existing single-file contract.", "executedAt": "2026-10-19"},
+      "executionPlan": {
+        "order": 105,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Added typed multiple-file results, browser multi-select, runtime forwarding and Electron preload/IPC while retaining the existing single-file contract.",
+        "executedAt": "2026-10-19"
+      },
       "jevRecommendation": null,
       "completedDate": "2026-10-19",
-      "artifacts": ["pdf-viewer-editor/src/app/core/adapters/runtime.adapter.ts", "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.spec.ts", "pdf-viewer-editor/electron/main.js", "pdf-viewer-editor/electron/preload.js"],
-      "verification": {"status": "passed", "commands": ["corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/core/adapters/runtime.adapter.spec.ts", "node --check pdf-viewer-editor/electron/main.js", "node --check pdf-viewer-editor/electron/preload.js"], "summary": "All 9 adapter tests passed in headless Edge; Electron main/preload syntax checks passed. Native OS dialogs were not launched."},
+      "artifacts": [
+        "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.ts",
+        "pdf-viewer-editor/src/app/core/adapters/runtime.adapter.spec.ts",
+        "pdf-viewer-editor/electron/main.js",
+        "pdf-viewer-editor/electron/preload.js"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/core/adapters/runtime.adapter.spec.ts",
+          "node --check pdf-viewer-editor/electron/main.js",
+          "node --check pdf-viewer-editor/electron/preload.js"
+        ],
+        "summary": "All 9 adapter tests passed in headless Edge; Electron main/preload syntax checks passed. Native OS dialogs were not launched."
+      },
       "planningRequired": false,
-      "source": {"file": "specs/pdf-viewer-editor/tasks.md", "declaredDependencies": ["P4-UI-001"]}
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-001"
+        ]
+      }
     },
     {
       "id": "P4-UI-003",
       "name": "Add clickable PDF empty state and state-preserving document tabs",
-      "status": "IN_PROGRESS",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 5,
       "value": null,
       "recommendedModel": [],
       "modelRationale": "Use the current Copilot session; no model override.",
-      "dependencies": ["P4-UI-002"],
-      "deliverables": ["Document tabs and isolated workspace hosts", "Clickable empty-state open button", "Tab isolation and editor state regression tests"],
-      "acceptanceCriteria": ["Selected PDFs open separately, never merge automatically", "Unsaved editor state survives tab switches", "Only the active document receives global shortcuts", "Closing tabs requires confirmation"],
-      "tags": ["phase-4", "multi-pdf", "responsive"],
+      "dependencies": [
+        "P4-UI-002"
+      ],
+      "deliverables": [
+        "Document tabs and isolated workspace hosts",
+        "Clickable empty-state open button",
+        "Tab isolation and editor state regression tests"
+      ],
+      "acceptanceCriteria": [
+        "Selected PDFs open separately, never merge automatically",
+        "Unsaved editor state survives tab switches",
+        "Only the active document receives global shortcuts",
+        "Closing tabs requires confirmation"
+      ],
+      "tags": [
+        "phase-4",
+        "multi-pdf",
+        "responsive"
+      ],
       "module": "viewer-editor",
       "modulePath": "../../../pdf-viewer-editor/",
       "phase": 4,
-      "userClarifications": ["Open separate documents with a switcher and preserve edits when switching."],
+      "userClarifications": [
+        "Open separate documents with a switcher and preserve edits when switching."
+      ],
       "modelAssignment": null,
-      "executionPlan": {"order": 106, "batch": 4, "band": "phase-4", "scriptable": false, "estimatedCostUsd": null},
+      "executionPlan": {
+        "order": 106,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Added accessible empty-state open buttons and independently scoped, retained workspace tabs. Existing open documents are reused, inactive shortcuts/rendering are gated, recent files open separately and closing confirms/flushes autosave.",
+        "executedAt": "2026-10-19"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-19",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tabs.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tab.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tabs.component.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/**/*.spec.ts --include=src/app/core/adapters/runtime.adapter.spec.ts",
+          "Integrated browser synthetic-PDF empty-state/multi-picker/tab-switch/unsaved-text assertions"
+        ],
+        "summary": "All 146 workspace/adapter tests passed. Browser confirmed empty-state chooser, multi-file picker, two independent documents, duplicate reuse and unsaved text retained on switching with no edit leakage."
+      },
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-002"
+        ]
+      }
+    },
+    {
+      "id": "P4-UI-004",
+      "name": "Add professional Anirdeshya branding and palette",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 2,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-003"
+      ],
+      "deliverables": [
+        "Responsive company header and professional typography",
+        "Peacock green and lotus rose theme accents"
+      ],
+      "acceptanceCriteria": [
+        "Show PDF from Anirdeshya Innovation Private Limited at the top",
+        "No invented logo or remote font dependency",
+        "Branding stays readable at phone/tablet/desktop widths"
+      ],
+      "tags": [
+        "phase-4",
+        "branding",
+        "responsive"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "Company spelling: Anirdeshya Innovation Private Limited. Official logo will be provided later."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 108,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Added a text-only company lockup with professional system-font hierarchy and peacock green/lotus rose tokens. The official logo remains deferred as requested.",
+        "executedAt": "2026-10-19"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-19",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/app.component.ts",
+        "pdf-viewer-editor/src/app/app.component.spec.ts",
+        "pdf-viewer-editor/src/styles.scss",
+        "pdf-viewer-editor/src/index.html"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/app.component.spec.ts",
+          "Integrated browser branding assertions at 360, 768 and 1440 CSS pixels"
+        ],
+        "summary": "All 3 app tests passed. Browser confirmed company name, 800-weight PDF heading, requested RGB palette and no root overflow at 360/768/1440px."
+      },
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-003"
+        ]
+      }
+    },
+    {
+      "id": "P4-UI-005",
+      "name": "Consolidate PDF commands into one compact header row",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 2,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-004"
+      ],
+      "deliverables": [
+        "Single-row file menu, tab switcher and side-panel controls",
+        "Responsive header regression checks"
+      ],
+      "acceptanceCriteria": [
+        "Do not repeat the editor title or stack separate command bars",
+        "Open PDF and multiple opening remain reachable from the file menu",
+        "Header remains one row at 360/768/1440px"
+      ],
+      "tags": [
+        "phase-4",
+        "header",
+        "responsive"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "Reorganize Open PDF, Open multiple PDFs, New PDF, Tools and repeated PDF Viewer & Editor to reduce top space."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 110,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Single compact header row: file menu, tabs, Tools and AI chat beneath branding; NG5002 template fix.",
+        "executedAt": "2026-10-20"
+      },
+      "jevRecommendation": null,
+      "completedDate": "2026-10-20",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tabs.component.ts",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "ng test --include=src/app/modules/pdf-workspace/components/**/*.spec.ts --include=src/app/app.component.spec.ts",
+          "ng build --configuration production,desktop",
+          "ng build --configuration extension"
+        ],
+        "summary": "93 component/app tests passed; desktop and extension production builds succeeded. Responsive browser verification is tracked in P4-QA-001 (browser automation unavailable in this session)."
+      },
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-004"
+        ]
+      }
+    },
+    {
+      "id": "P4-EDIT-001",
+      "name": "Add professional point-size and bold PDF text controls",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 4,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-003"
+      ],
+      "deliverables": [
+        "Text-overlay size/bold controls",
+        "Matching preview and exported Helvetica typography",
+        "Typography regression tests"
+      ],
+      "acceptanceCriteria": [
+        "Use exact PDF point sizes and selectable bold for new or selected text",
+        "Keep original PDF text and legacy overlay behavior unchanged",
+        "Undo/redo, copy/paste and save retain typography"
+      ],
+      "tags": [
+        "phase-4",
+        "pdf-text"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "Professional UI styling plus font size and bold controls for newly added PDF text."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 109,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
       "executionResult": null,
       "jevRecommendation": null,
       "completedDate": null,
       "artifacts": [],
       "verification": null,
       "planningRequired": false,
-      "source": {"file": "specs/pdf-viewer-editor/tasks.md", "declaredDependencies": ["P4-UI-002"]}
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-003"
+        ]
+      }
     }
   ]
 }

@@ -1,9 +1,19 @@
 <section aria-labelledby="ai-chat-title">
   <h2 id="ai-chat-title">AI writing assistant</h2>
-  <p>
-    Your API key stays in memory until you clear it or leave this workspace. A ChatGPT subscription
-    does not include API access. Provider charges may apply.
-  </p>
+  <div class="key-storage" role="note" aria-labelledby="ai-key-storage-title">
+    <h3 id="ai-key-storage-title"><span aria-hidden="true">&#128274;</span> Where is my API key stored?</h3>
+    <ul>
+      <li><strong>Never saved.</strong> Not on disk, in localStorage, sessionStorage, cookies, autosave or your PDF.</li>
+      <li>Held only in <strong>this browser tab's memory</strong> while you use the assistant.</li>
+      <li>Erased when you click <em>Clear API key</em>, reload, or close this tab or workspace.</li>
+      <li>Sent only to the provider endpoint you select, when you click Send.</li>
+    </ul>
+    <p>A ChatGPT subscription does not include API access. Provider charges may apply.</p>
+    <button #keyGuideButton type="button" class="key-guide-button" (click)="keyGuideOpen = true">
+      How to get an API key
+    </button>
+  </div>
+  <app-ai-key-guide *ngIf="keyGuideOpen" (close)="closeKeyGuide()"></app-ai-key-guide>
   <details open>
     <summary>Provider settings</summary>
     <fieldset [disabled]="busy || extracting">

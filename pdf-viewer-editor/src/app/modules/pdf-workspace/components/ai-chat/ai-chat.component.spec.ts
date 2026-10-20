@@ -35,6 +35,26 @@ describe('AiChatComponent', () => {
     component.apiKey = 'session-secret';
   });
 
+  it('explains that the API key is kept only in tab memory and opens the visual key guide', async () => {
+    const text = fixture.nativeElement.querySelector('.key-storage').textContent;
+    expect(text).toContain('Never saved');
+    expect(text).toContain("this browser tab's memory");
+    expect(text).toContain('sessionStorage');
+    const button = fixture.nativeElement.querySelector('.key-guide-button') as HTMLButtonElement;
+    button.click();
+    fixture.detectChanges();
+    const guide = fixture.nativeElement.querySelector('app-ai-key-guide [role="dialog"]');
+    expect(guide).not.toBeNull();
+    expect(guide.querySelector('a').getAttribute('href')).toBe('https://platform.openai.com/api-keys');
+    expect(guide.querySelector('a').getAttribute('rel')).toContain('noopener');
+    (guide.querySelector('.icon-close') as HTMLButtonElement).click();
+    fixture.detectChanges();
+    await new Promise(resolve => setTimeout(resolve));
+    expect(fixture.nativeElement.querySelector('app-ai-key-guide')).toBeNull();
+    expect(window.document.activeElement).toBe(button);
+    expect(component.apiKey).toBe('session-secret');
+  });
+
   it('previews the current page or full document locally, without sending', async () => {
     component.currentPage = 2;
     await component.loadSource('page');

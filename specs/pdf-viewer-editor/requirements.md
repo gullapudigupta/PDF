@@ -17,6 +17,57 @@
   authentication, rate-limit, network/CORS, timeout, and malformed-response errors.
   Support cancellation, prevent duplicate requests, and bound input/history size.
   Scanned PDFs without a text layer require manually pasted text (no OCR in this MVP).
+- AI-06: Next to the API-key notice, provide a "How to get an API key" button that
+  opens a visual, step-by-step illustrated guide (separate component, modal):
+  sign in to the OpenAI platform, add billing (ChatGPT Plus is separate), open
+  API keys, create a secret key, copy it once and paste it here. Include an
+  external link to the official API keys page and key-safety advice. The guide
+  never reads or transmits the key and is usable at 360/768/1440px.
+- AI-07: Show a prominent "Where is my API key stored?" notice beside the key
+  field stating the truth: the key is never saved to disk, localStorage,
+  sessionStorage, cookies, autosave or the PDF; it is held only in this browser
+  tab's memory and is erased on Clear, reload, closing the tab or the workspace,
+  and is sent only to the selected provider endpoint.
+- UI-08: Every PDF action (open, new, save/save as, metadata, protect, export
+  page, delete/insert/extract/merge/split/rotate/crop pages, form import/export,
+  signatures) reports its stage in a visible, accessible status area: in
+  progress ("Merging 3 PDFs..."), success with result details ("Merged 3 PDFs -
+  12 pages total"), cancelled (picker dismissed) and failure with the reason.
+  Success messages auto-dismiss; errors stay until dismissed. Buttons are
+  disabled while an action runs and invalid inputs (non-PDF files, nothing
+  selected) produce clear messages.
+- UI-09 (verification follow-up): Modes that wait for a click or drag on the
+  page (Crop Page, Add Text/Checkbox/Dropdown Field) show an instruction when
+  started; creating a form field reports success, cancellation (no name) or the
+  failure in the same status area; form-data import reports how many field
+  values were applied and says "nothing changed" for a file with no fields.
+  Page thumbnails always appear once rendered (no broken-image placeholder),
+  and filled form-field inputs hide the PDF's own field appearance beneath them.
+- RES-01: A "Resume builder" button in the top command row opens a full-screen,
+  responsive (360/768/1440px) resume builder without leaving the workspace.
+- RES-02: Offer four standard, ATS-friendly templates - Classic, Modern,
+  Professional and Compact - all single-column, real selectable text, standard
+  fonts, standard section headings (Professional Summary, Experience,
+  Education, Skills, Certifications, Projects), no tables/images/icons for
+  content, consistent date alignment, Letter or A4 page size, 0.6-0.75in
+  margins. A live preview reflects the chosen template.
+- RES-03: Structured sections: contact (name, headline, email, phone,
+  location, links), summary, repeatable experience (title, company, location,
+  dates, bullets), education, skills, certifications and projects; experience
+  and education are listed in reverse-chronological order as entered; entries
+  can be added, removed and reordered. A best-practice checklist (length,
+  quantified bullets, action verbs, contact completeness, no first-person
+  pronouns, 1-2 pages) guides the user.
+- RES-04: Each section has a "Draft with AI" action using the user's own
+  provider key (same BYOK rules, validation, and memory-only key notice as
+  AI-01..AI-07, and the API-key guide). Prompts follow industry practice
+  (action verbs, quantified impact, job-description keywords, concise,
+  no invented facts - placeholders like [X%] when a number is unknown). AI
+  output is shown as a suggestion the user explicitly accepts, edits or
+  discards; nothing is sent without consent to share the resume text.
+- RES-05: Export the resume as a PDF via the platform save dialog and/or open
+  it in a new editor tab; the draft stays in memory for the session only (not
+  persisted), with staged status messages for export.
 - UI-01: All existing file, editing, search, navigation, appearance, annotation,
   form, and signature options remain available in a scrollable left tools menu.
   Reuse existing handlers, disabled states, and toolbar visibility preferences.
@@ -30,6 +81,29 @@
   chat when switching. Only the active workspace responds to global shortcuts.
   Scope PDF document, annotation and undo services per document. Confirm closing
   document tabs so edits are never silently discarded.
+- BRAND-01: Display "PDF" and "from Anirdeshya Innovation Private Limited" at the
+  top of every workspace. Use a professional system font, bold hierarchy, peacock
+  green and lotus rose accents, with responsive readable sizing and contrast.
+  Do not invent a company logo; the official logo will be supplied later.
+- UI-05: Consolidate file opening, document tabs, Tools and AI chat into a single
+  compact command row beneath the company branding. Use an Open PDF menu for
+  single/multiple opening instead of repeating full-width command bars. Do not
+  repeat the editor title. Keep the command row on one line even on phones;
+  document tabs may scroll horizontally within their own region.
+- UI-06: Provide a working "New PDF" command that creates a blank one-page A4
+  PDF in its own document tab (reusing an empty tab) and opens it for editing.
+  Each new document gets a unique "Untitled-N.pdf" name and is saved through the
+  existing Save/Save As or download flow. The empty placeholder tab must not
+  look like a "New PDF" action.
+- UI-07: Metadata and Protect PDF must open only on demand as separate modal
+  dialog components over the workspace (backdrop, centered card, labelled grouped
+  fields, show/hide password, inline validation, Escape/Cancel/backdrop close,
+  focus moved into the dialog). They must never render inline in the page body
+  and must remain usable at 360/768/1440px.
+- TEXT-01: Provide font size (PDF points) and bold controls for newly added or
+  selected text overlays. Use professional Helvetica regular/bold in exports.
+  Preview size and saved PDF size must match at different zoom levels.
+  Preserve legacy overlays and existing PDF text; never restyle original content.
 - QA-01: Verify provider payloads/errors, cancellation, explicit text preview,
   copy/manual-edit behavior, responsive layout, existing workspace tests, production
   compilation, and registry graph/index generation without live billable API calls.

@@ -6,6 +6,9 @@ import { PasswordResponses } from 'pdfjs-dist';
 
 import { PdfWorkspaceComponent } from './pdf-workspace.component';
 import { AiChatComponent } from '../ai-chat/ai-chat.component';
+import { PdfMetadataDialogComponent } from '../pdf-dialogs/pdf-metadata-dialog.component';
+import { PdfProtectDialogComponent } from '../pdf-dialogs/pdf-protect-dialog.component';
+import { ActionStatusComponent } from '../action-status/action-status.component';
 import { RuntimeService } from '@core/services/runtime.service';
 import { PdfDocumentService } from '../../services/pdf-document.service';
 import { PdfRenderService } from '../../services/pdf-render.service';
@@ -104,7 +107,7 @@ describe('PdfWorkspaceComponent', () => {
     persistenceService.removeRecentFileRecord.and.resolveTo();
     await TestBed.configureTestingModule({
       declarations: [PdfWorkspaceComponent],
-      imports: [FormsModule, AiChatComponent],
+      imports: [FormsModule, AiChatComponent, PdfMetadataDialogComponent, PdfProtectDialogComponent, ActionStatusComponent],
       providers: [
         { provide: RuntimeService, useValue: runtimeService },
         { provide: PdfDocumentService, useValue: pdfDocumentService },
@@ -124,7 +127,9 @@ describe('PdfWorkspaceComponent', () => {
     component = fixture.componentInstance;
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await component.closeDocument(true);
+    fixture.destroy();
     runtimeService.openFileDialog.calls.reset();
     runtimeService.saveFileDialog.calls.reset();
     pdfDocumentService.loadFromFile.calls.reset();
@@ -227,6 +232,43 @@ describe('PdfWorkspaceComponent', () => {
     component.openProtectionDialog();
     expect(component.toolsOpen).toBeFalse();
     expect(component.protectionDialogOpen).toBeTrue();
+  });
+
+  it('opens a PDF from the empty-state button and offers multiple PDFs', () => {
+    component.tabManaged = true;
+    component.toolsOpen = false;
+    fixture.detectChanges();
+    const requests = spyOn(component.openRequested, 'emit');
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector('.empty-open');
+    expect(button.textContent).toContain('Open a PDF to start');
+    button.click();
+    expect(requests).toHaveBeenCalledWith({ multiple: false });
+    const multiple: HTMLButtonElement = Array.from(fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>)
+      .find(item => item.textContent?.trim() === 'Open multiple PDFs' && item.closest('.status'))!;
+    multiple.click();
+    expect(requests).toHaveBeenCalledWith({ multiple: true });
+  });
+
+  it('does not change an inactive document from global keyboard shortcuts', () => {
+    component.active = false;
+    const undo = spyOn(component, 'undoEdit');
+    const navigate = spyOn(component, 'nextPage');
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'z', ctrlKey: true }));
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    expect(undo).not.toHaveBeenCalled();
+    expect(navigate).not.toHaveBeenCalled();
+  });
+
+  it('routes open and close actions to the document shell without replacing unsaved state', async () => {
+    component.tabManaged = true;
+    const open = spyOn(component.openRequested, 'emit');
+    const close = spyOn(component.closeRequested, 'emit');
+    await component.openFile();
+    await component.closeDocument();
+    expect(open).toHaveBeenCalledWith({ multiple: false });
+    expect(close).toHaveBeenCalled();
+    expect(runtimeService.openFileDialog).not.toHaveBeenCalled();
+    expect(pdfDocumentService.closeCurrent).not.toHaveBeenCalled();
   });
 
   it('loads and renders first page when opening a file', async () => {
@@ -441,14 +483,15 @@ describe('PdfWorkspaceComponent', () => {
     const updatedBytes = new Uint8Array([2, 3]);
     const updated = { ...original, bytes: updatedBytes };
     component.document = original as any;
-    component.metadata = { title: 'Title', author: 'Author', subject: 'Subject', keywords: 'one, two' };
+    const edited = { title: 'Title', author: 'Author', subject: 'Subject', keywords: 'one, two' };
     pdfSecurityService.updateMetadata.and.resolveTo(updatedBytes);
     pdfDocumentService.replaceCurrentDocumentBytes.and.resolveTo(updated as any);
     spyOn<any>(component, 'renderCurrentPage').and.resolveTo();
 
-    await component.saveMetadata();
+    await component.saveMetadata(edited);
 
-    expect(pdfSecurityService.updateMetadata).toHaveBeenCalledWith(original.bytes, component.metadata);
+    expect(pdfSecurityService.updateMetadata).toHaveBeenCalledWith(original.bytes, edited);
+    expect(component.metadata).toEqual(edited);
     expect(component.document?.bytes).toEqual(updatedBytes);
     expect(component.metadataDialogOpen).toBeFalse();
     expect(component.error).toBeNull();
@@ -459,13 +502,9 @@ describe('PdfWorkspaceComponent', () => {
     component.document = {
       id: 'protect-doc', name: 'sample.pdf', totalPages: 1, bytes: sourceBytes, proxy: {},
     } as any;
-    component.protectionUserPassword = 'reader-password';
-    component.protectionUserPasswordConfirm = 'reader-password';
-    component.protectionOwnerPassword = 'owner-password';
-    component.protectionOwnerPasswordConfirm = 'owner-password';
-    component.permissionPreset = 'print';
+    component.protectionDialogOpen = true;
 
-    await component.protectCurrentPdf();
+    await component.protectCurrentPdf({ userPassword: 'reader-password', ownerPassword: 'owner-password', permissionPreset: 'print' });
 
     expect(pdfSecurityService.protect).toHaveBeenCalledWith(sourceBytes, {
       userPassword: 'reader-password',
@@ -473,8 +512,27 @@ describe('PdfWorkspaceComponent', () => {
       permissionPreset: 'print',
     });
     expect(runtimeService.saveFileDialog).toHaveBeenCalledWith('sample-protected.pdf', jasmine.any(ArrayBuffer));
-    expect(component.protectionUserPassword).toBe('');
-    expect(component.protectionOwnerPassword).toBe('');
+    expect(component.protectionDialogOpen).toBeFalse();
+  });
+
+  it('renders metadata and protection as on-demand overlay dialogs, keeping failures inside the dialog', async () => {
+    const render = async () => { (component as any).cdr.markForCheck(); fixture.detectChanges(); await fixture.whenStable(); };
+    component.document = { id: 'doc', name: 'doc.pdf', totalPages: 1, bytes: new Uint8Array([1]), proxy: {} } as any;
+    await render();
+    expect(fixture.nativeElement.querySelector('app-pdf-protect-dialog')).toBeNull();
+    expect(fixture.nativeElement.querySelector('app-pdf-metadata-dialog')).toBeNull();
+    component.openProtectionDialog();
+    await render();
+    expect(fixture.nativeElement.querySelector('app-pdf-protect-dialog [role="dialog"]')).not.toBeNull();
+    pdfSecurityService.protect.and.rejectWith(new Error('Encryption failed'));
+    await component.protectCurrentPdf({ userPassword: 'reader-password', ownerPassword: 'owner-password', permissionPreset: 'view' });
+    await render();
+    expect(component.protectionDialogOpen).toBeTrue();
+    expect(fixture.nativeElement.querySelector('app-pdf-protect-dialog .error').textContent).toContain('Encryption failed');
+    component.closeProtectionDialog();
+    await render();
+    expect(fixture.nativeElement.querySelector('app-pdf-protect-dialog')).toBeNull();
+    expect(component.dialogError).toBeNull();
   });
 
   it('exports the current page in the selected image format', async () => {
@@ -1130,6 +1188,70 @@ describe('PdfWorkspaceComponent', () => {
     expect(runtimeService.saveFileDialog).toHaveBeenCalledWith('source-part-2.pdf', jasmine.any(ArrayBuffer));
   });
 
+  it('reports merge progress, success, cancellation, invalid files, and failures', async () => {
+    const sourceBytes = new Uint8Array([1]);
+    component.document = { id: 'doc-status', name: 'source.pdf', totalPages: 4, bytes: sourceBytes, proxy: {} } as any;
+    const changeWith = (...files: File[]) => {
+      const input = document.createElement('input');
+      Object.defineProperty(input, 'files', { value: files });
+      const change = new Event('change');
+      Object.defineProperty(change, 'target', { value: input });
+      return change;
+    };
+    const pdf = (name: string) => new File([new Uint8Array([9])], name, { type: 'application/pdf' });
+
+    let resolveMerge!: (bytes: Uint8Array) => void;
+    pdfPageOperationsService.mergePdfs.and.returnValue(new Promise(resolve => { resolveMerge = resolve; }));
+    runtimeService.saveFileDialog.and.resolveTo({ canceled: false, filePath: 'C:\\out\\combined.pdf' });
+    const pending = component.mergePdfsFromFiles(changeWith(pdf('a.pdf'), pdf('b.pdf')));
+    await new Promise(resolve => setTimeout(resolve));
+    expect(component.actionStatus?.kind).toBe('progress');
+    expect(component.actionStatus?.message).toContain('Merging 3 PDFs');
+    expect(component.actionBusy).toBeTrue();
+    resolveMerge(new Uint8Array([2]));
+    await pending;
+    expect(component.actionStatus).toEqual({ kind: 'success', message: 'Merged 3 PDFs into combined.pdf. The open document is unchanged.' });
+    expect(component.actionBusy).toBeFalse();
+
+    (component as any).cdr.markForCheck();
+    fixture.detectChanges();
+    const toast = fixture.nativeElement.querySelector('app-action-status [role="status"]') as HTMLElement;
+    expect(toast.textContent).toContain('Merged 3 PDFs into combined.pdf');
+
+    runtimeService.saveFileDialog.and.resolveTo({ canceled: true });
+    pdfPageOperationsService.mergePdfs.and.resolveTo(new Uint8Array([2]));
+    await component.mergePdfsFromFiles(changeWith(pdf('a.pdf')));
+    expect(component.actionStatus).toEqual({ kind: 'info', message: 'Save cancelled. The merged PDF was not saved.' });
+
+    pdfPageOperationsService.mergePdfs.calls.reset();
+    await component.mergePdfsFromFiles(changeWith(new File(['x'], 'notes.txt', { type: 'text/plain' })));
+    expect(pdfPageOperationsService.mergePdfs).not.toHaveBeenCalled();
+    expect(component.actionStatus?.kind).toBe('error');
+    expect(component.actionStatus?.message).toContain('notes.txt is not a PDF file');
+
+    pdfPageOperationsService.mergePdfs.and.rejectWith(new Error('corrupt file'));
+    await component.mergePdfsFromFiles(changeWith(pdf('broken.pdf')));
+    expect(component.actionStatus).toEqual({ kind: 'error', message: 'Unable to merge PDFs: corrupt file' });
+    (component as any).cdr.markForCheck();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('app-action-status [role="alert"]')).not.toBeNull();
+    (fixture.nativeElement.querySelector('app-action-status button') as HTMLButtonElement).click();
+    expect(component.actionStatus).toBeNull();
+  });
+
+  it('reports save success and cancellation without leaving the workspace busy', async () => {
+    component.document = { id: 'doc-save', name: 'report.pdf', totalPages: 1, bytes: new Uint8Array([1]), proxy: {} } as any;
+    spyOn<any>(component, 'serializeCurrentDocument').and.resolveTo(new Uint8Array([1, 2]));
+    runtimeService.saveFileDialog.and.resolveTo({ canceled: true });
+    await component.saveFileAs();
+    expect(component.actionStatus).toEqual({ kind: 'info', message: 'Save cancelled. Your changes are still open and unsaved.' });
+
+    runtimeService.saveFileDialog.and.resolveTo({ canceled: false, filePath: 'final-report.pdf' });
+    await component.saveFileAs();
+    expect(component.actionStatus).toEqual({ kind: 'success', message: 'Saved final-report.pdf.' });
+    expect(component.actionBusy).toBeFalse();
+  });
+
   it('rotates selected pages and includes page transforms in undo and redo', async () => {
     const originalBytes = new Uint8Array([1]);
     const rotatedBytes = new Uint8Array([2]);
@@ -1335,16 +1457,68 @@ describe('PdfWorkspaceComponent', () => {
       'application/json'
     );
 
-    const json = '{"schemaVersion":1,"fields":[]}';
-    const input = globalThis.document.createElement('input');
-    Object.defineProperty(input, 'files', {
-      value: [new File([json], 'sample-form-data.json', { type: 'application/json' })],
-    });
-    const event = new Event('change');
-    Object.defineProperty(event, 'target', { value: input });
-    await component.importFormDataFile(event);
+    const emptyJson = '{"schemaVersion":1,"fields":[]}';
+    const json = '{"schemaVersion":1,"fields":[{"name":"customer","type":"text","value":"Asha"}]}';
+    const importFile = async (content: string) => {
+      const input = globalThis.document.createElement('input');
+      Object.defineProperty(input, 'files', {
+        value: [new File([content], 'sample-form-data.json', { type: 'application/json' })],
+      });
+      const event = new Event('change');
+      Object.defineProperty(event, 'target', { value: input });
+      await component.importFormDataFile(event);
+    };
+    await importFile(emptyJson);
+    expect(pdfFormService.importFormData).toHaveBeenCalledWith(originalBytes, emptyJson);
+    expect(component.document?.bytes).toEqual(originalBytes);
+    expect(component.actionStatus).toEqual({ kind: 'info', message: 'sample-form-data.json contains no form field values. Nothing was changed.' });
+
+    await importFile(json);
     expect(pdfFormService.importFormData).toHaveBeenCalledWith(originalBytes, json);
     expect(component.document?.bytes).toEqual(importedBytes);
+    expect(component.actionStatus).toEqual({ kind: 'success', message: 'Imported 1 form field value from sample-form-data.json. Save the PDF to keep them.' });
+  });
+
+  it('guides crop and form-field placement modes and reports field creation results', async () => {
+    component.loading = false;
+    component.document = { id: 'guide', name: 'guide.pdf', totalPages: 1, bytes: new Uint8Array([1]), proxy: {} } as any;
+    component.currentPage = 1;
+    component.setCropMode(true);
+    expect(component.actionStatus?.message).toContain('Drag on page 1 to select the area to keep');
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(component.cropMode).toBeFalse();
+    expect(component.actionStatus).toEqual({ kind: 'info', message: 'Crop cancelled. The page was not changed.' });
+
+    component.beginFormFieldAuthoring('checkbox');
+    expect(component.actionStatus?.message).toBe('Click on page 1 where the checkbox should go. Press Escape to cancel.');
+    component.onKeydown(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(component.formAuthoringType).toBeNull();
+    expect(component.actionStatus?.message).toBe('Stopped adding the checkbox. Nothing was added.');
+
+    component.beginFormFieldAuthoring('text');
+    const layer = globalThis.document.createElement('div');
+    (component as any).annotationLayer = { nativeElement: layer };
+    const click = () => {
+      const event = new MouseEvent('mousedown', { clientX: 10, clientY: 10 });
+      Object.defineProperty(event, 'target', { value: layer });
+      return component.startFormFieldPlacement(event);
+    };
+    spyOn(window, 'prompt').and.returnValues('', 'customer', 'customer');
+    pdfFormService.createField.calls.reset();
+    await click();
+    expect(component.actionStatus?.message).toContain('No name entered, so no text field was added.');
+    expect(pdfFormService.createField).not.toHaveBeenCalled();
+
+    pdfFormService.createField.and.rejectWith(new Error('Field already exists'));
+    await click();
+    expect(component.actionStatus).toEqual({ kind: 'error', message: 'Unable to add text field: Field already exists' });
+
+    pdfFormService.createField.and.resolveTo(new Uint8Array([3]));
+    pdfDocumentService.replaceCurrentDocumentBytes.and.resolveTo({ ...component.document, bytes: new Uint8Array([3]) } as any);
+    pdfRenderService.renderPageToCanvas.and.resolveTo();
+    await click();
+    expect(component.actionStatus).toEqual({ kind: 'success', message: 'Added text field "customer" on page 1. Save the PDF to keep it.' });
+    expect(component.formAuthoringType).toBeNull();
   });
 
   it('draws, types, uploads, places, and saves reusable signatures locally', async () => {

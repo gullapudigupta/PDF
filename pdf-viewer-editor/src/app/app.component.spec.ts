@@ -21,4 +21,14 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app.title).toEqual('PDF Viewer & Editor');
   });
+
+  it('shows the company branding at the top without inventing a company logo', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const header: HTMLElement = fixture.nativeElement.querySelector('.app-header');
+    expect(header.querySelector('h1')?.textContent).toBe('PDF');
+    expect(header.textContent).toContain('from Anirdeshya Innovation Private Limited');
+    expect(header.querySelector('img')).toBeNull();
+    expect(header.querySelector('nav')?.getAttribute('aria-label')).toBe('Application navigation');
+  });
 });

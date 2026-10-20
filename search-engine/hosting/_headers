@@ -1,0 +1,5 @@
+# Netlify / Cloudflare Pages: copy to the web build root as `_headers`
+# (`seo.cjs apply` writes this automatically while indexing is BLOCKED).
+# Delete it after the owner approves indexing.
+/*
+  X-Robots-Tag: noindex, nofollow, noarchive

@@ -103,3 +103,31 @@ fieldset:disabled {
   color: var(--accent-strong, #b91c1c);
   font-weight: 600;
 }
+.key-storage {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid #b7dcd6;
+  border-left: 4px solid var(--brand-peacock, #006b63);
+  border-radius: 8px;
+  background: #eef8f6;
+  color: #1f2937;
+}
+.key-storage h3 {
+  color: var(--brand-peacock, #006b63);
+  font-size: 13px;
+  font-weight: 700;
+}
+.key-storage ul {
+  margin: 0;
+  padding-left: 18px;
+  line-height: 1.5;
+}
+.key-storage p {
+  margin: 6px 0;
+}
+.key-guide-button {
+  border-color: var(--brand-lotus, #b33b65);
+  color: var(--brand-lotus, #b33b65);
+  background: #fff;
+  font-weight: 700;
+}

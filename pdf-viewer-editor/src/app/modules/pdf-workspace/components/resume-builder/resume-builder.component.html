@@ -1,0 +1,306 @@
+<div class="backdrop">
+  <section #dialog class="builder" role="dialog" aria-modal="true" aria-labelledby="resume-builder-title" tabindex="-1">
+    <header class="bar">
+      <div class="bar-title">
+        <h2 id="resume-builder-title">Resume builder</h2>
+        <span>ATS-friendly templates &middot; AI drafting with your own key</span>
+      </div>
+      <div class="bar-actions">
+        <label class="page-size">
+          <span>Page</span>
+          <select aria-label="Page size" [(ngModel)]="pageSize">
+            <option value="letter">US Letter</option>
+            <option value="a4">A4</option>
+          </select>
+        </label>
+        <button type="button" class="ghost" (click)="aiPanelOpen = !aiPanelOpen" [attr.aria-expanded]="aiPanelOpen"
+          aria-controls="resume-ai-settings">AI settings<span class="dot" *ngIf="aiReady" aria-label="ready"></span></button>
+        <button type="button" (click)="openInEditor()" [disabled]="exporting">Open in editor</button>
+        <button type="button" class="primary" (click)="downloadPdf()" [disabled]="exporting">Download PDF</button>
+        <button type="button" class="icon-close" aria-label="Close resume builder" title="Close (Esc)" (click)="requestClose()">&times;</button>
+      </div>
+    </header>
+
+    <div class="templates" role="radiogroup" aria-label="Resume template">
+      <button *ngFor="let item of templates" type="button" role="radio" class="template-card"
+        [attr.aria-checked]="template === item.id" [class.selected]="template === item.id" (click)="selectTemplate(item.id)">
+        <span class="thumb" [ngClass]="'thumb-' + item.id" aria-hidden="true"><i></i><b></b><s></s><s></s><b></b><s></s></span>
+        <span class="template-text"><strong>{{ item.name }}</strong><small>{{ item.bestFor }}</small></span>
+      </button>
+    </div>
+
+    <div class="mobile-switch" role="tablist" aria-label="Resume builder view">
+      <button type="button" role="tab" [attr.aria-selected]="mobileView === 'edit'" (click)="mobileView = 'edit'">Edit</button>
+      <button type="button" role="tab" [attr.aria-selected]="mobileView === 'preview'" (click)="mobileView = 'preview'">Preview</button>
+    </div>
+
+    <div class="body">
+      <div class="form-column" [class.mobile-hidden]="mobileView !== 'edit'">
+        <section *ngIf="aiPanelOpen" id="resume-ai-settings" class="card ai-settings" aria-labelledby="resume-ai-heading">
+          <h3 id="resume-ai-heading">AI drafting settings</h3>
+          <div class="key-storage" role="note">
+            <strong>Where is my API key stored?</strong>
+            <span>Nowhere. It stays only in this window's memory while the resume builder is open, is never written to disk,
+              browser storage, cookies or the PDF, and is erased when you clear it, close the builder or reload. It is sent only
+              to the provider you choose.</span>
+            <button #keyGuideButton type="button" class="link-button" (click)="keyGuideOpen = true">How to get an API key</button>
+          </div>
+          <div class="grid two">
+            <label>Provider
+              <select [ngModel]="provider" (ngModelChange)="changeProvider($event)">
+                <option value="openai">OpenAI GPT (recommended)</option>
+                <option value="other">Other OpenAI-compatible API</option>
+              </select>
+            </label>
+            <label>Model
+              <input [(ngModel)]="model" autocomplete="off" spellcheck="false" placeholder="gpt-4o-mini" />
+            </label>
+          </div>
+          <label *ngIf="provider === 'other'">Chat-completions URL (HTTPS)
+            <input [(ngModel)]="endpoint" type="url" autocomplete="off" spellcheck="false" placeholder="https://provider.example/v1/chat/completions" />
+          </label>
+          <label>API key
+            <span class="inline">
+              <input [(ngModel)]="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." />
+              <button type="button" (click)="clearKey()" [disabled]="!apiKey">Clear</button>
+            </span>
+          </label>
+          <label>Extra instructions for every draft (optional)
+            <input [(ngModel)]="aiInstructions" maxlength="300" placeholder="e.g. UK English, emphasise leadership" />
+          </label>
+          <label class="check">
+            <input type="checkbox" [(ngModel)]="consent" />
+            <span>I agree to send my resume text and job description to {{ provider === 'openai' ? 'OpenAI' : 'this provider' }} to generate
+              suggestions. Provider charges may apply. Remove anything you do not want to share.</span>
+          </label>
+          <p class="hint" *ngIf="provider === 'openai'">Requests go to {{ openAiUrl }}. A ChatGPT subscription does not include API access.</p>
+          <p class="error" role="alert" *ngIf="aiError">{{ aiError }}</p>
+        </section>
+
+        <details class="card checklist">
+          <summary>Best-practice checklist <span class="score">{{ passedChecks }}/{{ checks.length }}</span></summary>
+          <ul>
+            <li *ngFor="let check of checks" [class.pass]="check.passed">
+              <span aria-hidden="true" *ngIf="check.passed">&#10003;</span><span aria-hidden="true" *ngIf="!check.passed">&bull;</span>
+              <span>{{ check.label }}<span class="visually-hidden">{{ check.passed ? ' - done' : ' - to do' }}</span></span>
+            </li>
+          </ul>
+          <p class="hint">Keep one column, standard headings and real text (as all templates do) so applicant tracking systems can read it.
+            List roles newest first and tailor keywords to each job.</p>
+        </details>
+
+        <section class="card">
+          <h3>Target job</h3>
+          <label>Job title you are applying for
+            <input [(ngModel)]="data.targetRole" placeholder="e.g. Senior Data Analyst" />
+          </label>
+          <label>Job description (optional, used by AI to match keywords)
+            <textarea [(ngModel)]="data.jobDescription" rows="3" maxlength="12000" placeholder="Paste the job posting here"></textarea>
+          </label>
+        </section>
+
+        <section class="card">
+          <h3>Contact details</h3>
+          <div class="grid two">
+            <label>Full name <input [(ngModel)]="data.contact.name" autocomplete="name" /></label>
+            <label>Professional headline <input [(ngModel)]="data.contact.headline" placeholder="Role | Specialism" /></label>
+            <label>Email <input [(ngModel)]="data.contact.email" type="email" autocomplete="email" /></label>
+            <label>Phone <input [(ngModel)]="data.contact.phone" type="tel" autocomplete="tel" /></label>
+            <label>City, Country <input [(ngModel)]="data.contact.location" placeholder="City, Country" /></label>
+            <label>Links (comma separated) <input [(ngModel)]="data.contact.links" placeholder="linkedin.com/in/you, portfolio" /></label>
+          </div>
+          <p class="hint">Do not add a photo, date of birth, or full address unless the job's country expects it.</p>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <h3>Professional summary</h3>
+            <ng-container *ngTemplateOutlet="aiButton; context: { $implicit: { section: 'summary' } }"></ng-container>
+          </div>
+          <textarea [(ngModel)]="data.summary" rows="4" placeholder="3-4 lines: who you are, years of experience, key strengths, one measurable achievement"></textarea>
+          <ng-container *ngTemplateOutlet="suggestionBox; context: { section: 'summary' }"></ng-container>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <h3>Experience</h3>
+            <button type="button" class="small" (click)="addExperience()">+ Add role</button>
+          </div>
+          <p class="hint">Newest role first. Write rough notes and let AI turn them into achievement bullets (action verb + task + result).</p>
+          <fieldset *ngFor="let item of data.experience; let i = index; let last = last; trackBy: trackIndex" class="entry">
+            <legend>Role {{ i + 1 }}</legend>
+            <div class="grid two">
+              <label>Job title <input [(ngModel)]="item.title" /></label>
+              <label>Company <input [(ngModel)]="item.company" /></label>
+              <label>Location <input [(ngModel)]="item.location" /></label>
+              <div class="grid two dates">
+                <label>Start <input [(ngModel)]="item.start" placeholder="Jan 2021" /></label>
+                <label>End <input [(ngModel)]="item.end" placeholder="Present" /></label>
+              </div>
+            </div>
+            <label>Achievements (one per line)
+              <textarea [(ngModel)]="item.bullets" rows="4" placeholder="- Increased ... by 25% by ..."></textarea>
+            </label>
+            <div class="entry-actions">
+              <ng-container *ngTemplateOutlet="aiButton; context: { $implicit: { section: 'experience', index: i } }"></ng-container>
+              <button type="button" class="small" (click)="moveEntry(data.experience, i, -1)" [disabled]="i === 0" [attr.aria-label]="'Move role ' + (i + 1) + ' up'">Up</button>
+              <button type="button" class="small" (click)="moveEntry(data.experience, i, 1)" [disabled]="last" [attr.aria-label]="'Move role ' + (i + 1) + ' down'">Down</button>
+              <button type="button" class="small danger" (click)="removeEntry(data.experience, i)" [attr.aria-label]="'Remove role ' + (i + 1)">Remove</button>
+            </div>
+            <ng-container *ngTemplateOutlet="suggestionBox; context: { section: 'experience', index: i }"></ng-container>
+          </fieldset>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <h3>Education</h3>
+            <button type="button" class="small" (click)="addEducation()">+ Add education</button>
+          </div>
+          <fieldset *ngFor="let item of data.education; let i = index; let last = last; trackBy: trackIndex" class="entry">
+            <legend>Education {{ i + 1 }}</legend>
+            <div class="grid two">
+              <label>Degree / qualification <input [(ngModel)]="item.degree" /></label>
+              <label>School / university <input [(ngModel)]="item.school" /></label>
+              <label>Location <input [(ngModel)]="item.location" /></label>
+              <div class="grid two dates">
+                <label>Start <input [(ngModel)]="item.start" placeholder="2016" /></label>
+                <label>End <input [(ngModel)]="item.end" placeholder="2020" /></label>
+              </div>
+            </div>
+            <label>Details (optional)
+              <textarea [(ngModel)]="item.details" rows="2" placeholder="Honours, relevant coursework, thesis"></textarea>
+            </label>
+            <div class="entry-actions">
+              <ng-container *ngTemplateOutlet="aiButton; context: { $implicit: { section: 'education', index: i } }"></ng-container>
+              <button type="button" class="small" (click)="moveEntry(data.education, i, -1)" [disabled]="i === 0" [attr.aria-label]="'Move education ' + (i + 1) + ' up'">Up</button>
+              <button type="button" class="small" (click)="moveEntry(data.education, i, 1)" [disabled]="last" [attr.aria-label]="'Move education ' + (i + 1) + ' down'">Down</button>
+              <button type="button" class="small danger" (click)="removeEntry(data.education, i)" [attr.aria-label]="'Remove education ' + (i + 1)">Remove</button>
+            </div>
+            <ng-container *ngTemplateOutlet="suggestionBox; context: { section: 'education', index: i }"></ng-container>
+          </fieldset>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <h3>Skills</h3>
+            <ng-container *ngTemplateOutlet="aiButton; context: { $implicit: { section: 'skills' } }"></ng-container>
+          </div>
+          <textarea [(ngModel)]="data.skills" rows="3" placeholder="Category: skill, skill, skill (one category per line)"></textarea>
+          <ng-container *ngTemplateOutlet="suggestionBox; context: { section: 'skills' }"></ng-container>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <h3>Certifications</h3>
+            <ng-container *ngTemplateOutlet="aiButton; context: { $implicit: { section: 'certifications' } }"></ng-container>
+          </div>
+          <textarea [(ngModel)]="data.certifications" rows="2" placeholder="Certification - Issuer, Year (one per line)"></textarea>
+          <ng-container *ngTemplateOutlet="suggestionBox; context: { section: 'certifications' }"></ng-container>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <h3>Projects <small>(optional)</small></h3>
+            <button type="button" class="small" (click)="addProject()">+ Add project</button>
+          </div>
+          <p class="hint" *ngIf="!data.projects.length">Add projects when they show skills your work history does not.</p>
+          <fieldset *ngFor="let item of data.projects; let i = index; let last = last; trackBy: trackIndex" class="entry">
+            <legend>Project {{ i + 1 }}</legend>
+            <label>Project name <input [(ngModel)]="item.name" /></label>
+            <label>Details (one point per line)
+              <textarea [(ngModel)]="item.details" rows="3"></textarea>
+            </label>
+            <div class="entry-actions">
+              <ng-container *ngTemplateOutlet="aiButton; context: { $implicit: { section: 'projects', index: i } }"></ng-container>
+              <button type="button" class="small" (click)="moveEntry(data.projects, i, -1)" [disabled]="i === 0" [attr.aria-label]="'Move project ' + (i + 1) + ' up'">Up</button>
+              <button type="button" class="small" (click)="moveEntry(data.projects, i, 1)" [disabled]="last" [attr.aria-label]="'Move project ' + (i + 1) + ' down'">Down</button>
+              <button type="button" class="small danger" (click)="removeEntry(data.projects, i)" [attr.aria-label]="'Remove project ' + (i + 1)">Remove</button>
+            </div>
+            <ng-container *ngTemplateOutlet="suggestionBox; context: { section: 'projects', index: i }"></ng-container>
+          </fieldset>
+        </section>
+
+        <div class="form-footer">
+          <button type="button" class="small" (click)="loadExample()">Load example</button>
+          <button type="button" class="small danger" (click)="clearDraft()">Clear draft</button>
+          <span class="hint">Your draft stays in memory until you reload or close the app. Export a PDF to keep it.</span>
+        </div>
+      </div>
+
+      <div class="preview-column" [class.mobile-hidden]="mobileView !== 'preview'" aria-label="Resume preview">
+        <p class="preview-note">Live preview &middot; {{ templateInfo.name }} &middot; {{ pageSize === 'a4' ? 'A4' : 'US Letter' }}</p>
+        <article class="page" [ngClass]="'tpl-' + template" [class.a4]="pageSize === 'a4'">
+          <header class="cv-header">
+            <h1>{{ data.contact.name || 'Your Name' }}</h1>
+            <p class="cv-headline" *ngIf="data.contact.headline || data.targetRole">{{ data.contact.headline || data.targetRole }}</p>
+            <p class="cv-contact" *ngIf="contactLine(data.contact)">{{ contactLine(data.contact) }}</p>
+          </header>
+          <section *ngIf="data.summary.trim()">
+            <h4>Professional Summary</h4>
+            <p>{{ data.summary }}</p>
+          </section>
+          <section *ngIf="data.experience.length">
+            <h4>Experience</h4>
+            <ng-container *ngFor="let item of data.experience">
+              <div class="cv-entry" *ngIf="hasExperience(item)">
+                <div class="cv-row"><strong>{{ item.title }}</strong><span>{{ dateRange(item.start, item.end) }}</span></div>
+                <em *ngIf="item.company || item.location">{{ joinParts(item.company, item.location) }}</em>
+                <ul><li *ngFor="let line of bulletLines(item.bullets)">{{ line }}</li></ul>
+              </div>
+            </ng-container>
+          </section>
+          <section *ngIf="data.education.length">
+            <h4>Education</h4>
+            <ng-container *ngFor="let item of data.education">
+              <div class="cv-entry" *ngIf="hasEducation(item)">
+                <div class="cv-row"><strong>{{ item.degree || item.school }}</strong><span>{{ dateRange(item.start, item.end) }}</span></div>
+                <em *ngIf="(item.degree && item.school) || item.location">{{ joinParts(item.degree ? item.school : '', item.location) }}</em>
+                <p *ngFor="let line of detailLines(item.details)">{{ line }}</p>
+              </div>
+            </ng-container>
+          </section>
+          <section *ngIf="data.skills.trim()">
+            <h4>Skills</h4>
+            <p *ngFor="let line of skillLines()"><strong *ngIf="line.label">{{ line.label }}: </strong>{{ line.items }}</p>
+          </section>
+          <section *ngIf="bulletLines(data.certifications).length">
+            <h4>Certifications</h4>
+            <ul><li *ngFor="let line of bulletLines(data.certifications)">{{ line }}</li></ul>
+          </section>
+          <section *ngIf="data.projects.length">
+            <h4>Projects</h4>
+            <div class="cv-entry" *ngFor="let item of data.projects">
+              <strong>{{ item.name }}</strong>
+              <ul><li *ngFor="let line of bulletLines(item.details)">{{ line }}</li></ul>
+            </div>
+          </section>
+        </article>
+      </div>
+    </div>
+
+    <app-action-status [status]="status" (dismiss)="dismissStatus()"></app-action-status>
+    <app-ai-key-guide *ngIf="keyGuideOpen" (close)="closeKeyGuide()"></app-ai-key-guide>
+  </section>
+</div>
+
+<ng-template #aiButton let-target>
+  <span class="ai-actions">
+    <button type="button" class="ai-button" (click)="draftWithAi(target)" [disabled]="!!aiBusyTarget"
+      [attr.aria-busy]="isAiBusy(target)" title="Draft or improve this section with your AI provider">
+      {{ isAiBusy(target) ? 'Drafting...' : 'Draft with AI' }}
+    </button>
+    <button *ngIf="isAiBusy(target)" type="button" class="small" (click)="cancelAi()">Cancel</button>
+  </span>
+</ng-template>
+
+<ng-template #suggestionBox let-section="section" let-index="index">
+  <div class="suggestion" *ngIf="isSuggestionFor(section, index) && suggestion" role="region" aria-label="AI suggestion">
+    <div class="suggestion-head"><strong>AI suggestion</strong><span>Edit freely before applying. Verify every fact.</span></div>
+    <textarea [(ngModel)]="suggestion.text" rows="5" aria-label="AI suggestion text"></textarea>
+    <div class="entry-actions">
+      <button type="button" class="primary small" (click)="applySuggestion('replace')">Replace</button>
+      <button type="button" class="small" (click)="applySuggestion('append')">Add below</button>
+      <button type="button" class="small" (click)="discardSuggestion()">Discard</button>
+    </div>
+  </div>
+</ng-template>
