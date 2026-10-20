@@ -105,6 +105,7 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-108` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-109` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-110` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-111` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -452,10 +453,11 @@ graph TD
     P4_SIGN_001["P4-SIGN-001: Certificate-based PKCS#7 digital signing and signature verification panel<br/>COMPLETED"]
     P4_QA_001 --> P4_SIGN_001
     style P4_SIGN_001 fill:#c8e6c9
-    P4_QA_002["P4-QA-002: Phase 4b regression, bundle-size and browser verification<br/>PENDING"]
+    P4_QA_002["P4-QA-002: Phase 4b regression, bundle-size and browser verification<br/>COMPLETED"]
     P4_VIEW_001 --> P4_QA_002
     P4_OCR_001 --> P4_QA_002
     P4_SIGN_001 --> P4_QA_002
+    style P4_QA_002 fill:#c8e6c9
 ```
 
 ## Interpretation

@@ -59,7 +59,7 @@ Execute only this checklist and the generated [master entry point](../../master/
 - [x] P4-SIGN-001 (depends on P4-QA-001): Lazy-loaded certificate (PKCS#12)
   PKCS#7 detached signing with optional visible box, and a Signatures
   verification panel, with tests using a generated certificate.
-- [ ] P4-QA-002 (depends on P4-VIEW-001, P4-OCR-001 and P4-SIGN-001): Full
+- [x] P4-QA-002 (depends on P4-VIEW-001, P4-OCR-001 and P4-SIGN-001): Full
   regression, both builds, initial-bundle check (no tesseract/forge), browser
   checks with real OCR and sign/verify, README usage, and registry sync.
 

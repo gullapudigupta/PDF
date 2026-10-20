@@ -1614,7 +1614,7 @@
     {
       "id": "P4-QA-002",
       "name": "Phase 4b regression, bundle-size and browser verification",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 3,
       "value": null,
@@ -1662,10 +1662,28 @@
           "P4-SIGN-001"
         ]
       },
-      "executionResult": null,
-      "verification": null,
-      "artifacts": [],
-      "completedDate": null
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "On phones zoom and search are inside the Tools drawer. Electron file:// OCR asset loading remains unverified and is documented.",
+        "executedAt": "2026-10-20"
+      },
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless",
+          "corepack pnpm exec ng build --configuration extension",
+          "corepack pnpm exec ng build --configuration production,desktop",
+          "node qa-check.cjs (Playwright, Edge headless at 360/768/1440)",
+          "node sign-check.cjs + openssl cms -verify"
+        ],
+        "summary": "212/212 unit tests; both builds pass with initial total 600.92 kB and node-forge, tesseract-js, OCR window and signature UI in lazy chunks only; zoom, search, OCR window and sign dialog verified at 360/768/1440 with no overflow, no heavy chunks before use, zero external requests and no console errors; README usage and limitations updated."
+      },
+      "artifacts": [
+        "pdf-viewer-editor/README.md",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "completedDate": "2026-10-20"
     }
   ]
 }

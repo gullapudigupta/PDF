@@ -35,7 +35,7 @@ node .\master\tools\task-registry.cjs validate
 | 1: MVP | 46 | 43 | 0 | 0 | 3 |
 | 2: Advanced Features | 16 | 0 | 0 | 0 | 16 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
-| 4: AI Workspace MVP | 23 | 22 | 1 | 0 | 0 |
+| 4: AI Workspace MVP | 23 | 23 | 0 | 0 | 0 |
 
 94 product tasks; 1 separate historical QA execution record.
 Historical QA is not counted as product delivery. Estimates use 8 planning hours/day where the source specified days; backlog estimates remain unknown.
@@ -152,7 +152,7 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P4-VIEW-001](agent-tasks/viewer-editor/phase4-tasks.json) | Zoom presets/fit modes/Ctrl+wheel and Ctrl+F search with on-page highlights | viewer-editor | COMPLETED | HIGH | 4 | P4-QA-001 |
 | [P4-OCR-001](agent-tasks/viewer-editor/phase4-tasks.json) | Lazy-loaded offline image-to-text (OCR) window in Indian languages | viewer-editor | COMPLETED | HIGH | 6 | P4-QA-001 |
 | [P4-SIGN-001](agent-tasks/viewer-editor/phase4-tasks.json) | Certificate-based PKCS#7 digital signing and signature verification panel | viewer-editor | COMPLETED | HIGH | 8 | P4-QA-001 |
-| [P4-QA-002](agent-tasks/viewer-editor/phase4-tasks.json) | Phase 4b regression, bundle-size and browser verification | viewer-editor | PENDING | HIGH | 3 | P4-VIEW-001, P4-OCR-001, P4-SIGN-001 |
+| [P4-QA-002](agent-tasks/viewer-editor/phase4-tasks.json) | Phase 4b regression, bundle-size and browser verification | viewer-editor | COMPLETED | HIGH | 3 | P4-VIEW-001, P4-OCR-001, P4-SIGN-001 |
 
 ## Historical Execution Log
 

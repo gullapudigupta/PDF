@@ -6,7 +6,7 @@
     "MIG-004": true,
     "MIG-005": true
   },
-  "sequence": 110,
+  "sequence": 111,
   "history": [
     {
       "sequence": "GSEQ-011",
@@ -507,7 +507,12 @@
       "sequence": "GSEQ-110",
       "date": "2026-10-20",
       "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
+    },
+    {
+      "sequence": "GSEQ-111",
+      "date": "2026-10-20",
+      "note": "Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed."
     }
   ],
-  "lastDigest": "786492d8fb0dee044d15834e76abfe4daa40906a3653720a34c731f6160d8f20"
+  "lastDigest": "afe6057300ed39bf241e8666ffe794e06f3dad4c4bd3978388b23a03dbe8c877"
 }
