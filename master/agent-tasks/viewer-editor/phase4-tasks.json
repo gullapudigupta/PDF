@@ -1966,6 +1966,77 @@
       "verification": null,
       "artifacts": [],
       "completedDate": null
+    },
+    {
+      "id": "P4-OCR-002",
+      "name": "Fix nested Tesseract chunk loading failure (BUG-OCR-001)",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 2,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": ["P4-OCR-001"],
+      "deliverables": [
+        "Typed Tesseract import within the lazy OCR feature",
+        "OCR initialization failure and retry regression tests",
+        "Real development OCR and production/extension lazy graph verification"
+      ],
+      "acceptanceCriteria": [
+        "Recognition no longer requests the nested package-path Tesseract chunk",
+        "OCR remains outside initial application chunks",
+        "Bundled offline assets, worker reuse, cancellation and initialization retry are preserved",
+        "Targeted tests, builds and real browser OCR pass"
+      ],
+      "tags": ["ocr", "bugfix", "lazy-loading", "phase4"],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User resumed BUG-OCR-001 from bugs.json on 2026-10-20."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 126,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": ["P4-OCR-001"]
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Removed the nested dynamic package import and unsafe module cast. Tesseract's typed createWorker and OEM now travel with the already lazy OCR window; worker/core/language configuration is unchanged. Forced the old chunk URL to return 404 before the fix to reproduce the exact reported error, then verified successful real OCR with that URL still blocked. Default web serving is independently blocked by the missing @mobile-gallery-view source; validated development using the existing desktop routing configuration instead. The initial Chromium test launcher timed out; installed Edge ran all targeted tests successfully.",
+        "executedAt": "2026-10-20"
+      },
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "Node v26.12.0: ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/components/ocr/*.spec.ts --include=src/app/modules/pdf-workspace/components/pdf-document-tabs/*.spec.ts (CHROME_BIN=installed Edge)",
+          "Node v26.12.0: ng build --configuration production,desktop --stats-json",
+          "Node v26.12.0: ng build --configuration extension --stats-json",
+          "Node inline assertions over both stats.json chunk/module graphs: no OCR in initial chunks; Tesseract only in lazy OCR chunk 302; no separate tesseract-js chunk",
+          "Integrated Playwright browser: ng serve --host 127.0.0.1 --port 4300 --build-target pdf-viewer-editor:build:development,desktop; real generated image OCR with old chunk URL forced to 404; repeated recognition",
+          "node --test master/tools/task-registry.test.cjs",
+          "node master/tools/task-registry.cjs validate"
+        ],
+        "summary": "22/22 targeted tests and 8/8 registry tests passed. Both production configurations compiled; stats prove Tesseract only belongs to the lazy OCR feature. Real browser OCR returned HELLO OCR 2026 at 95% confidence with no UI errors; a second recognition reused the worker. No OCR resources loaded before opening the window; no worker loaded before recognition. Existing Angular template/CommonJS/deprecated builder warnings remain."
+      },
+      "artifacts": [
+        "bugs.json",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-engine.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-engine.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-window.component.spec.ts",
+        "pdf-viewer-editor/README.md",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "completedDate": "2026-10-20"
     }
   ]
 }

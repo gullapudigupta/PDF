@@ -1,4 +1,5 @@
-import { OcrCancelledError, OcrEngineService, OcrProgress, TesseractModule } from './ocr-engine.service';
+import { createWorker as bundledCreateWorker } from 'tesseract.js';
+import { OcrCancelledError, OcrEngineService, OcrProgress } from './ocr-engine.service';
 
 describe('OcrEngineService', () => {
   let service: OcrEngineService;
@@ -22,12 +23,20 @@ describe('OcrEngineService', () => {
       return worker;
     });
     service = new OcrEngineService();
-    service.loadModule = jasmine.createSpy('loadModule').and.resolveTo({ createWorker } as unknown as TesseractModule);
+    service.loadModule = jasmine.createSpy('loadModule').and.resolveTo({ createWorker });
   });
 
   afterEach(() => service.ngOnDestroy());
 
-  it('loads tesseract lazily with bundled offline assets and LSTM-only models', async () => {
+  it('uses the bundled typed factory without another dynamic package import', async () => {
+    const engine = new OcrEngineService();
+    const module = await engine.loadModule();
+    expect(module.createWorker).toBe(bundledCreateWorker);
+    expect(engine.busy).toBeFalse();
+    engine.ngOnDestroy();
+  });
+
+  it('initializes recognition on demand with bundled offline assets and LSTM-only models', async () => {
     expect(service.loadModule).not.toHaveBeenCalled();
     const progress: OcrProgress[] = [];
     const result = await service.recognize(document.createElement('canvas'), ['eng', 'tel'], step => progress.push(step));
@@ -55,6 +64,22 @@ describe('OcrEngineService', () => {
     await service.recognize(canvas, ['tam', 'eng']);
     expect(createWorker).toHaveBeenCalledTimes(2);
     expect(workers[0].terminate).toHaveBeenCalled();
+  });
+
+  it('surfaces initialization failures and allows a fresh attempt', async () => {
+    createWorker.and.rejectWith(new Error('OCR worker could not be loaded.'));
+    await expectAsync(service.recognize(document.createElement('canvas'), ['eng']))
+      .toBeRejectedWithError('OCR worker could not be loaded.');
+    expect(service.busy).toBeFalse();
+    expect(workers.length).toBe(0);
+
+    createWorker.and.resolveTo({
+      recognize: jasmine.createSpy('recognize').and.resolveTo({ data: { text: 'Hello OCR', confidence: 88 } }),
+      terminate: jasmine.createSpy('terminate').and.resolveTo(undefined),
+    });
+    const result = await service.recognize(document.createElement('canvas'), ['eng']);
+    expect(result.confidence).toBe(88);
+    expect(createWorker).toHaveBeenCalledTimes(2);
   });
 
   it('rejects unknown languages and parallel jobs', async () => {

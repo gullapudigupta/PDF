@@ -5,17 +5,17 @@
     "noTaskCopies": true,
     "sourceOfTruth": "Canonical domain phase JSON only."
   },
-  "totalTasks": 28,
+  "totalTasks": 29,
   "statusSummary": {
     "pending": 5,
     "in_progress": 0,
-    "completed": 23,
+    "completed": 24,
     "blocked": 0,
     "cancelled": 0
   },
-  "completedTasks": 23,
+  "completedTasks": 24,
   "completionPercentage": "82%",
-  "totalEstimatedHours": 114.5,
+  "totalEstimatedHours": 116.5,
   "unestimatedTasks": 0,
   "inheritedUnverifiedCompletions": 0,
   "taskIds": [
@@ -46,7 +46,8 @@
     "P4-CMT-002",
     "P4-CMT-003",
     "P4-CMT-004",
-    "P4-QA-003"
+    "P4-QA-003",
+    "P4-OCR-002"
   ],
   "tasks": [
     {
@@ -240,6 +241,13 @@
     },
     {
       "taskId": "P4-QA-003",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-OCR-002",
       "module": "viewer-editor",
       "phase": 4,
       "canonicalFile": "./viewer-editor/phase4-tasks.json",

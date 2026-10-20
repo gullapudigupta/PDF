@@ -5,7 +5,9 @@
       "title": "Image-to-text recognition fails to load the Tesseract JavaScript chunk",
       "project": "pdf-viewer-editor",
       "reportedAt": "2026-10-20",
-      "status": "deferred",
+      "status": "resolved",
+      "resolvedAt": "2026-10-20",
+      "taskId": "P4-OCR-002",
       "error": "Text recognition failed: Loading chunk node_modules_pnpm_tesseract_js_7_0_0_node_modules_tesseract_js_src_index_js failed. (error: http://127.0.0.1:4300/node_modules_pnpm_tesseract_js_7_0_0_node_modules_tesseract_js_src_index_js.js)",
       "affectedFiles": [
         "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-engine.service.ts",
@@ -14,22 +16,30 @@
       ],
       "investigation": {
         "findings": [
-          "OcrEngineService dynamically imports tesseract.js when recognition first runs.",
+          "OcrEngineService previously dynamically imported tesseract.js when recognition first ran, creating an extra package-path chunk inside an already lazy feature.",
           "The installed Tesseract version is 7.0.0; its package entry point is src/index.js.",
           "The reported development server at 127.0.0.1:4300 was unreachable during investigation.",
-          "Starting the development server failed because Node.js v24.11.0 does not meet the installed Angular CLI requirement: v22.22.3, v24.15.0, or v26.0.0 minimum on the corresponding release line."
+          "Starting the development server initially failed because Node.js v24.11.0 does not meet the installed Angular CLI requirement: v22.22.3, v24.15.0, or v26.0.0 minimum on the corresponding release line.",
+          "A supported Node.js v26.12.0 runtime is available at C:\\Program Files\\nodejs\\node.exe.",
+          "The normal web development configuration is independently blocked by missing @mobile-gallery-view source. Existing desktop routing allowed development-server OCR validation without changing that unrelated code.",
+          "Forcing the old Tesseract chunk URL to return 404 reproduced the exact reported error before the fix. After the fix, OCR succeeds with that URL still blocked."
         ],
-        "rootCause": "Not confirmed; the reported chunk-loading failure has not been reproduced.",
-        "implementationChangesMade": false
+        "rootCause": "An unnecessary nested dynamic import made recognition depend on an additional package-path Tesseract chunk. Missing that chunk causes the reported failure. The reason it was missing in the original browser session could not be established.",
+        "implementationChangesMade": true
       },
-      "nextSteps": [
-        "Use a supported Node.js runtime and reproduce the error with ng serve on port 4300.",
-        "Inspect the failing chunk request and generated lazy-loading graph before choosing a fix.",
-        "Record requirements, design and an executable task in specs/pdf-viewer-editor/tasks.md before implementation.",
-        "Preserve lazy loading and bundled offline OCR assets; verify real recognition and targeted tests.",
-        "Update the task checklist, canonical evidence, completion graph and index sequence after successful completion."
-      ],
-      "notes": "User requested saving this issue for later work. No fix has been implemented."
+      "resolution": {
+        "summary": "Bundle typed Tesseract exports with the dynamically imported OCR window, eliminating the second dynamic package chunk while keeping OCR outside initial application chunks.",
+        "verification": [
+          "22/22 targeted OCR and document-tab tests passed using installed Edge.",
+          "Desktop production and extension builds passed.",
+          "Both build graphs contain Tesseract only in lazy OCR chunk 302, not in initial chunks or a separate tesseract-js chunk.",
+          "Real development-server OCR recognized HELLO OCR 2026 at 95% confidence with the old chunk URL forced to 404.",
+          "Repeated recognition succeeded with one worker load; OCR resources were absent before opening the window.",
+          "8/8 task registry tests passed."
+        ]
+      },
+      "nextSteps": [],
+      "notes": "Reload existing browser tabs after restarting the development server so they use the updated chunk graph. The unrelated missing @mobile-gallery-view dependency was not changed."
     }
   ]
 }

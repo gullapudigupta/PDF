@@ -107,6 +107,8 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-110` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-111` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-112` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-113` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-114` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -470,6 +472,9 @@ graph TD
     P4_CMT_003 --> P4_CMT_004
     P4_QA_003["P4-QA-003: Phase 4c comments regression and browser verification<br/>PENDING"]
     P4_CMT_004 --> P4_QA_003
+    P4_OCR_002["P4-OCR-002: Fix nested Tesseract chunk loading failure (BUG-OCR-001)<br/>COMPLETED"]
+    P4_OCR_001 --> P4_OCR_002
+    style P4_OCR_002 fill:#c8e6c9
 ```
 
 ## Interpretation

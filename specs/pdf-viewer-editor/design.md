@@ -136,8 +136,10 @@
 20. OCR (OCR-01..03): `components/ocr/` contains:
     - a standalone `OcrWindowComponent`, which the tab shell creates with
       `await import('../ocr/ocr-window.component')` into a `ViewContainerRef`;
-    - `OcrEngineService` (provided in the component), which dynamic-imports
-      `tesseract.js` and calls `createWorker(langs, OEM.LSTM_ONLY, { workerPath:
+    - `OcrEngineService` (provided in the component), which imports the typed
+      `createWorker` export inside the already lazy OCR feature, without an
+      additional dynamic package import (OCR-04 / BUG-OCR-001), and calls
+      `createWorker(langs, OEM.LSTM_ONLY, { workerPath:
       'assets/ocr/worker.min.js', corePath: 'assets/ocr/core', langPath:
       'assets/ocr/lang', gzip: true, workerBlobURL: false, cacheMethod: 'none',
       logger })`.
@@ -149,6 +151,12 @@
     at 2x (capped at 4000px on the long side). "Add to PDF" emits text through the
     tab shell to the active workspace's `addTextObjectWithText`.
     Manifest CSP: `script-src 'self' 'wasm-unsafe-eval'`.
+    The tab shell retains its dynamic component import; all other references to
+    the OCR component are type-only. This keeps Tesseract outside the initial
+    graph while eliminating the nested package-path chunk request at recognition
+    time. Worker/core/language loading still starts only on Extract text.
+    Validate with a real generated image under `ng serve`, targeted OCR/tab tests,
+    and build statistics for both production and extension targets.
 21. Signing (SIGN-01..03): `services/pdf-signature.service.ts` dynamic-imports
     `node-forge`. It parses PKCS#12, finds the key bag whose public key matches
     the certificate and builds the chain. With pdf-lib it adds an `AcroForm`

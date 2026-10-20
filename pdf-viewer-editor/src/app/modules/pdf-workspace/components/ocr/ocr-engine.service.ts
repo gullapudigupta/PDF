@@ -1,4 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
+import { createWorker, OEM } from 'tesseract.js';
+import type { Worker, WorkerOptions } from 'tesseract.js';
 
 export interface OcrLanguage {
   code: string;
@@ -40,16 +42,11 @@ export class OcrCancelledError extends Error {
   }
 }
 
-interface TesseractWorker {
-  recognize(image: unknown): Promise<{ data: { text: string; confidence: number } }>;
-  terminate(): Promise<unknown>;
-}
+type TesseractWorker = Pick<Worker, 'recognize' | 'terminate'>;
 
 export interface TesseractModule {
-  createWorker(langs: string | string[], oem: number, options: Record<string, unknown>): Promise<TesseractWorker>;
+  createWorker(langs: string | string[], oem: OEM, options: Partial<WorkerOptions>): Promise<TesseractWorker>;
 }
-
-const LSTM_ONLY = 1;
 
 const STAGE_LABELS: Record<string, string> = {
   'loading tesseract core': 'Loading the OCR engine',
@@ -63,16 +60,13 @@ const STAGE_LABELS: Record<string, string> = {
 };
 
 /**
- * Offline OCR backed by a bundled Tesseract build. The library is fetched with a dynamic
- * import only when recognition first runs, so it never ships in the initial bundle.
+ * Tesseract is bundled with the dynamically imported OCR window, not the initial app.
+ * Avoid a second package-path chunk request when recognition starts.
  */
 @Injectable()
 export class OcrEngineService implements OnDestroy {
-  /** Replaced in tests; keeps tesseract.js out of every eagerly loaded chunk. */
-  loadModule: () => Promise<TesseractModule> = async () => {
-    const module: any = await import('tesseract.js');
-    return (module.default ?? module) as TesseractModule;
-  };
+  /** Replaced in tests; worker/core/language assets still load only on recognition. */
+  loadModule: () => Promise<TesseractModule> = async () => ({ createWorker });
 
   private worker: TesseractWorker | null = null;
   private workerLangs = '';
@@ -146,7 +140,7 @@ export class OcrEngineService implements OnDestroy {
     this.report('Loading the OCR engine', 0);
     const tesseract = await this.loadModule();
     const asset = (path: string) => new URL(path, document.baseURI).href;
-    const worker = await tesseract.createWorker(langs.split('+'), LSTM_ONLY, {
+    const worker = await tesseract.createWorker(langs.split('+'), OEM.LSTM_ONLY, {
       workerPath: asset('assets/ocr/worker.min.js'),
       corePath: asset('assets/ocr/core'),
       langPath: asset('assets/ocr/lang'),

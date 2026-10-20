@@ -62,6 +62,17 @@ Execute only this checklist and the generated [master entry point](../../master/
 - [x] P4-QA-002 (depends on P4-VIEW-001, P4-OCR-001 and P4-SIGN-001): Full
   regression, both builds, initial-bundle check (no tesseract/forge), browser
   checks with real OCR and sign/verify, README usage, and registry sync.
+- [x] P4-OCR-002 (depends on P4-OCR-001): Fix BUG-OCR-001 by eliminating the
+  nested Tesseract package chunk inside the lazy OCR feature; retain typed
+  initialization, offline assets and failure/retry behavior. Run OCR/tab tests,
+  real development-server OCR, production/extension builds and initial-graph
+  checks; update the bug record, README and canonical graph/index evidence.
+  Verified 2026-10-20: 22 OCR/tab tests and 8 registry tests pass; desktop
+  production and extension builds pass, with Tesseract only in lazy OCR chunk
+  302. Browser recognition reads "HELLO OCR 2026" at 95% confidence even with
+  the old chunk URL forced to 404; a second run reuses the worker.
+  Development validation used `development,desktop` because the normal routing
+  configuration references the pre-existing missing `@mobile-gallery-view`.
 - [ ] P4-CMT-001 (depends on P4-QA-002): Native PDF comment model and
   read/write: extend the annotation model, read existing comments/replies with
   pdf.js, write standard annotation dictionaries with appearance streams and

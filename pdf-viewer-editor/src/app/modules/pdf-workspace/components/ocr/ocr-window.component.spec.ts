@@ -87,6 +87,22 @@ describe('OcrWindowComponent', () => {
     expect(component.notice).toContain('at least one language');
   });
 
+  it('shows initialization errors and clears them when recognition is retried', async () => {
+    await component.loadImageFile(await pngFile(), 'scan.png');
+    engine.recognize.and.rejectWith(new Error('OCR worker could not be loaded.'));
+    await component.recognize();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]').textContent)
+      .toContain('Text recognition failed: OCR worker could not be loaded.');
+    expect(component.busy).toBeFalse();
+
+    engine.recognize.and.resolveTo({ text: 'Hello OCR', confidence: 92 });
+    await component.recognize();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('[role="alert"]')).toBeNull();
+    expect(component.resultText).toBe('Hello OCR');
+  });
+
   it('uses the current PDF page as the image source', async () => {
     const canvas = document.createElement('canvas');
     canvas.width = 50;

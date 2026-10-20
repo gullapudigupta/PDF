@@ -35,9 +35,9 @@ node .\master\tools\task-registry.cjs validate
 | 1: MVP | 46 | 43 | 0 | 0 | 3 |
 | 2: Advanced Features | 16 | 0 | 0 | 0 | 16 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
-| 4: AI Workspace MVP | 28 | 23 | 5 | 0 | 0 |
+| 4: AI Workspace MVP | 29 | 24 | 5 | 0 | 0 |
 
-99 product tasks; 1 separate historical QA execution record.
+100 product tasks; 1 separate historical QA execution record.
 Historical QA is not counted as product delivery. Estimates use 8 planning hours/day where the source specified days; backlog estimates remain unknown.
 
 ## Phase 1 - MVP
@@ -158,6 +158,7 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P4-CMT-003](agent-tasks/viewer-editor/phase4-tasks.json) | Lazy Comments panel with replies and review status | viewer-editor | PENDING | HIGH | 7 | P4-CMT-001 |
 | [P4-CMT-004](agent-tasks/viewer-editor/phase4-tasks.json) | XFDF import/export, summary, hide and flatten options | viewer-editor | PENDING | MEDIUM | 5 | P4-CMT-002, P4-CMT-003 |
 | [P4-QA-003](agent-tasks/viewer-editor/phase4-tasks.json) | Phase 4c comments regression and browser verification | viewer-editor | PENDING | HIGH | 3 | P4-CMT-004 |
+| [P4-OCR-002](agent-tasks/viewer-editor/phase4-tasks.json) | Fix nested Tesseract chunk loading failure (BUG-OCR-001) | viewer-editor | COMPLETED | HIGH | 2 | P4-OCR-001 |
 
 ## Historical Execution Log
 

@@ -143,6 +143,11 @@
   or persisted. Unsupported/oversized files (>20 MB or >40 megapixels) and errors
   show clear messages. The extension CSP permits only `'wasm-unsafe-eval'` in
   addition to `'self'`.
+- OCR-04 (BUG-OCR-001): Recognition must not depend on a second, package-path-named
+  Tesseract JavaScript chunk after opening the lazy OCR window. Keep OCR out of
+  initial bundles and preserve offline assets, progress, cancellation and retry
+  after an initialization failure. Verify real OCR in development and verify the
+  lazy-loading graph in production and extension builds.
 - SIGN-01 (certificate signature): "Digitally sign" signs the active PDF with the
   user's PKCS#12 (.pfx/.p12) certificate and password. It creates an
   Adobe-compatible detached PKCS#7 (adbe.pkcs7.detached, SHA-256) signature with

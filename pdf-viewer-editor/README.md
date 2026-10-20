@@ -76,6 +76,7 @@ A modern PDF viewer and editor application that runs as both a desktop applicati
 - **Image to text** opens a separate window. Choose a PNG, JPEG, WebP or BMP image, or read the current PDF page.
 - Supports English and 12 Indian languages. Copy the text, download it as .txt, or use **Add to PDF** to place it as a text box.
 - OCR runs entirely on your device; images are never uploaded. The OCR code loads only when you open the window, and each language's data loads only when you first extract text in that language, so OCR adds nothing to the app's start-up size.
+- Tesseract is included in the lazy OCR window rather than fetched as a second JavaScript chunk when you press **Extract text**. Worker, core and language assets remain bundled locally and load on recognition. After updating a running development build, reload the page before retrying OCR.
 
 **Digital signatures**
 
@@ -302,4 +303,3 @@ This project is licensed under the MIT License - see the [LICENSE](../LICENSE) f
 **Status**: In Active Development  
 **Version**: 0.1.0  
 **Last Updated**: June 16, 2026
-
