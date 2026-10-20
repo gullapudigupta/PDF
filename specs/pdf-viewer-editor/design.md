@@ -114,6 +114,11 @@
       Emits `openPdf(File)` and `close`; Escape closes; key cleared on destroy.
     - `PdfDocumentTabsComponent` shows the "Resume builder" button after
       New PDF and adds the exported file through `addFiles`.
+17. `PdfWorkspaceComponent` uses `templateUrl: './pdf-workspace.component.html'`
+    and `styleUrls: ['./pdf-workspace.component.css']`. The extraction is
+    byte-for-byte (template literal text, no escapes or interpolations), so the
+    compiled view and the emulated-encapsulation CSS are unchanged; specs keep
+    using `TestBed` declarations (the CLI resolves external resources).
 
 ### Execution and graph
 

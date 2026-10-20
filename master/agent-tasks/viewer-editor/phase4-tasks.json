@@ -794,7 +794,7 @@
     {
       "id": "P4-UI-009",
       "name": "Verification follow-up: placement-mode guidance and form-field/import result messages",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "MEDIUM",
       "estimatedHours": 2,
       "value": null,
@@ -842,15 +842,107 @@
           "P4-UI-008"
         ]
       },
-      "executionResult": null,
-      "verification": null,
-      "artifacts": [],
-      "completedDate": null
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Applied the UX fixes found during the \"verify all\" browser pass of every workspace action.",
+        "executedAt": "2026-10-20"
+      },
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless (workspace components + app) -> 103 SUCCESS",
+          "corepack pnpm exec ng build --configuration production,desktop",
+          "corepack pnpm exec ng build --configuration extension",
+          "playwright-core headless Edge checks at 360/768/1440 px"
+        ],
+        "summary": "All tests and both production builds pass with no style-budget warning. In the browser: crop and form-field placement show instructions; field add/duplicate/cancel messages appear; importing an empty form-data file reports that nothing changed; undo/redo report page changes; thumbnails render; form inputs are opaque; no horizontal overflow at any width; on phones the header wraps into two rows, and Resume builder, AI chat and Tools are all clickable."
+      },
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tabs.component.ts",
+        "specs/pdf-viewer-editor/tasks.md"
+      ],
+      "completedDate": "2026-10-20"
+    },
+    {
+      "id": "P4-UI-010",
+      "name": "Split PDF workspace component template and styles into separate HTML and CSS files",
+      "status": "COMPLETED",
+      "priority": "MEDIUM",
+      "estimatedHours": 1,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-UI-009"
+      ],
+      "deliverables": [
+        "pdf-workspace.component.html",
+        "pdf-workspace.component.css",
+        "Component uses templateUrl/styleUrls"
+      ],
+      "acceptanceCriteria": [
+        "Template and styles extracted byte-for-byte into separate files",
+        "Workspace unit tests pass",
+        "Desktop and extension production builds pass without new budget warnings",
+        "UI renders identically in the browser"
+      ],
+      "tags": [
+        "refactor",
+        "maintainability",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: change pdf.component.ts to split css, html."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 116,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-UI-009"
+        ]
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Mechanical extraction script refused templates containing escapes/backticks/interpolation; no markup changes.",
+        "executedAt": "2026-10-20"
+      },
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless (workspace components + services + app) -> 155 SUCCESS",
+          "corepack pnpm exec ng build --configuration production,desktop",
+          "corepack pnpm exec ng build --configuration extension",
+          "playwright-core headless Edge responsive checks at 360/768/1440 px"
+        ],
+        "summary": "Template (435 lines) and styles (786 lines) moved byte-for-byte into .html/.css files; the component file shrank to ~2,800 lines. Tests and both builds pass with no budget warning (unused button transition properties removed). Phone/tablet layouts render the same as before, with no overflow or console errors."
+      },
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.html",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.css"
+      ],
+      "completedDate": "2026-10-20"
     },
     {
       "id": "P4-QA-001",
       "name": "Verify and document AI workspace MVP",
-      "status": "IN_PROGRESS",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 3,
       "value": null,
@@ -865,7 +957,8 @@
         "P4-AI-005",
         "P4-EDIT-001",
         "P4-RES-001",
-        "P4-UI-009"
+        "P4-UI-009",
+        "P4-UI-010"
       ],
       "deliverables": [
         "Usage documentation and verified task evidence"
@@ -892,11 +985,33 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Final Phase 4 regression and documentation pass.",
+        "executedAt": "2026-10-20"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-20",
+      "artifacts": [
+        "pdf-viewer-editor/README.md",
+        "specs/pdf-viewer-editor/tasks.md",
+        "master/agent-tasks/viewer-editor/phase4-tasks.json",
+        "master/CODE_COMPLETION_GRAPH.md",
+        "master/TASKS.md"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless (full suite) -> 185 SUCCESS",
+          "corepack pnpm exec ng build --configuration production,desktop",
+          "corepack pnpm exec ng build --configuration extension",
+          "node --test master/tools/task-registry.test.cjs",
+          "node --test search-engine/seo.test.cjs",
+          "playwright-core headless Edge at 360/768/1440 px with an external-request monitor"
+        ],
+        "summary": "Full regression passed: 185 unit tests, both production builds with no budget warnings, and the registry (8) and SEO (7) tests. Browser checks at 360, 768 and 1440 px: no horizontal overflow; tabs, Resume builder, Tools and AI chat all reachable; AI storage notice and 6-step key guide shown; Send without consent/key is blocked with a message; zero external network requests (no live API calls); no page errors. The README gained a Phase 4 usage guide and limitations."
+      },
       "planningRequired": false,
       "source": {
         "file": "specs/pdf-viewer-editor/tasks.md",
@@ -909,7 +1024,8 @@
           "P4-AI-005",
           "P4-EDIT-001",
           "P4-RES-001",
-          "P4-UI-009"
+          "P4-UI-009",
+          "P4-UI-010"
         ]
       }
     },
@@ -1196,7 +1312,7 @@
     {
       "id": "P4-EDIT-001",
       "name": "Add professional point-size and bold PDF text controls",
-      "status": "PENDING",
+      "status": "COMPLETED",
       "priority": "HIGH",
       "estimatedHours": 4,
       "value": null,
@@ -1233,11 +1349,31 @@
         "scriptable": false,
         "estimatedCostUsd": null
       },
-      "executionResult": null,
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Added optional fontSize/bold fields to overlays and the serializer; legacy overlays unchanged.",
+        "executedAt": "2026-10-20"
+      },
       "jevRecommendation": null,
-      "completedDate": null,
-      "artifacts": [],
-      "verification": null,
+      "completedDate": "2026-10-20",
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.html",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-edit-serialization.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/services/pdf-edit-serialization.service.spec.ts"
+      ],
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless (workspace components + services + app) -> 155 SUCCESS",
+          "corepack pnpm exec ng build --configuration production,desktop",
+          "corepack pnpm exec ng build --configuration extension",
+          "playwright-core headless Edge: 24pt bold preview 18.84px at 628/800 scale, edit/undo, range error, Save"
+        ],
+        "summary": "The toolbar has a Text size (pt) control, 6-72, default 12, plus a Bold toggle. Each applies to the selected text box, or to the next new one when no text box is selected. Size and bold are kept through undo/redo and copy/paste. The preview scales with page zoom. Saved PDFs use Helvetica or Helvetica-Bold at the exact point size (verified in the saved PDF's content stream). Text boxes created before this change export as before."
+      },
       "planningRequired": false,
       "source": {
         "file": "specs/pdf-viewer-editor/tasks.md",

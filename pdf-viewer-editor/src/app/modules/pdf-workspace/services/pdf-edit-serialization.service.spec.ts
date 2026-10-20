@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { PDFDocument } from 'pdf-lib';
+import { decodePDFRawStream, PDFArray, PDFDict, PDFDocument, PDFName, PDFRawStream } from 'pdf-lib';
 
 import { Annotation } from '../models/annotation.model';
 import { PdfEditableOverlay, PdfEditSerializationService } from './pdf-edit-serialization.service';
@@ -46,6 +46,32 @@ describe('PdfEditSerializationService', () => {
     expect(document.getPage(0).node.Contents()).toBeDefined();
     expect(document.getPage(0).node.Annots()?.size()).toBe(2);
     expect(document.getPage(1).node.Contents()).toBeDefined();
+  });
+
+  it('exports styled text at the exact point size with Helvetica regular or bold', async () => {
+    const bytes = await createPdf();
+    const overlays: PdfEditableOverlay[] = [
+      { type: 'text', x: 40, y: 50, width: 300, height: 90, label: 'Text Box', text: 'Heading', fontSize: 24, bold: true },
+      { type: 'text', x: 40, y: 200, width: 300, height: 90, label: 'Text Box', text: 'Body', fontSize: 12, bold: false },
+      { type: 'text', x: 40, y: 320, width: 300, height: 90, label: 'Text Box', text: 'Clamped', fontSize: 500 },
+    ];
+    // Viewport is 2x the page so points must not be scaled by the preview zoom.
+    const updated = await service.flattenEdits(bytes, 1, 800, 1000, overlays, []);
+    const document = await PDFDocument.load(updated);
+    const page = document.getPage(0);
+    const fonts = page.node.Resources()!.lookup(PDFName.of('Font'), PDFDict);
+    const baseFonts = fonts.values().map(ref => (document.context.lookup(ref, PDFDict).get(PDFName.of('BaseFont')) as PDFName).asString());
+    expect([...new Set(baseFonts)]).toEqual(jasmine.arrayWithExactContents(['/Helvetica', '/Helvetica-Bold']));
+
+    const contents = page.node.Contents()!;
+    const streams = contents instanceof PDFArray ? contents.asArray().map(ref => document.context.lookup(ref)) : [contents];
+    const operators = streams
+      .map(stream => new TextDecoder().decode(decodePDFRawStream(stream as PDFRawStream).decode()))
+      .join('\n');
+    expect(operators).toMatch(/ 24 Tf/);
+    expect(operators).toMatch(/ 12 Tf/);
+    expect(operators).toMatch(/ 72 Tf/);
+    expect(operators).not.toMatch(/ 48 Tf/);
   });
 
   it('returns an unchanged copy when there are no edits and rejects invalid inputs', async () => {

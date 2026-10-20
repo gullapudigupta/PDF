@@ -97,6 +97,10 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-100` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-101` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-102` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-103` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-104` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-105` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-106` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -389,8 +393,9 @@ graph TD
     P4_UI_004["P4-UI-004: Add professional Anirdeshya branding and palette<br/>COMPLETED"]
     P4_UI_003 --> P4_UI_004
     style P4_UI_004 fill:#c8e6c9
-    P4_EDIT_001["P4-EDIT-001: Add professional point-size and bold PDF text controls<br/>PENDING"]
+    P4_EDIT_001["P4-EDIT-001: Add professional point-size and bold PDF text controls<br/>COMPLETED"]
     P4_UI_003 --> P4_EDIT_001
+    style P4_EDIT_001 fill:#c8e6c9
     P4_UI_005["P4-UI-005: Consolidate PDF commands into one compact header row<br/>COMPLETED"]
     P4_UI_004 --> P4_UI_005
     style P4_UI_005 fill:#c8e6c9
@@ -413,7 +418,7 @@ graph TD
     P4_UI_008 --> P4_RES_001
     P4_AI_005 --> P4_RES_001
     style P4_RES_001 fill:#c8e6c9
-    P4_QA_001["P4-QA-001: Verify and document AI workspace MVP<br/>IN_PROGRESS"]
+    P4_QA_001["P4-QA-001: Verify and document AI workspace MVP<br/>COMPLETED"]
     P4_UI_005 --> P4_QA_001
     P4_UI_006 --> P4_QA_001
     P4_UI_007 --> P4_QA_001
@@ -423,11 +428,17 @@ graph TD
     P4_EDIT_001 --> P4_QA_001
     P4_RES_001 --> P4_QA_001
     P4_UI_009 --> P4_QA_001
+    P4_UI_010 --> P4_QA_001
+    style P4_QA_001 fill:#c8e6c9
     P4_SEO_001["P4-SEO-001: Approval-gated search engine discoverability kit (blocked until owner approval)<br/>COMPLETED"]
     P4_RES_001 --> P4_SEO_001
     style P4_SEO_001 fill:#c8e6c9
-    P4_UI_009["P4-UI-009: Verification follow-up: placement-mode guidance and form-field/import result messages<br/>PENDING"]
+    P4_UI_009["P4-UI-009: Verification follow-up: placement-mode guidance and form-field/import result messages<br/>COMPLETED"]
     P4_UI_008 --> P4_UI_009
+    style P4_UI_009 fill:#c8e6c9
+    P4_UI_010["P4-UI-010: Split PDF workspace component template and styles into separate HTML and CSS files<br/>COMPLETED"]
+    P4_UI_009 --> P4_UI_010
+    style P4_UI_010 fill:#c8e6c9
 ```
 
 ## Interpretation

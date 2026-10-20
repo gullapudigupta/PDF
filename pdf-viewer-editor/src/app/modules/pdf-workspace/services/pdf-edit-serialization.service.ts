@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PDFDocument, PDFName, PDFPage, PDFString, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, PDFFont, PDFName, PDFPage, PDFString, rgb, StandardFonts } from 'pdf-lib';
 import { Annotation } from '../models/annotation.model';
 
 export interface PdfEditableOverlay {
@@ -13,6 +13,8 @@ export interface PdfEditableOverlay {
   imageSrc?: string;
   url?: string;
   pageNumber?: number;
+  fontSize?: number;
+  bold?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -38,6 +40,7 @@ export class PdfEditSerializationService {
     const scaleX = page.getWidth() / viewportWidth;
     const scaleY = page.getHeight() / viewportHeight;
     const font = await document.embedFont(StandardFonts.Helvetica);
+    let boldFont: PDFFont | null = null;
 
     for (const overlay of overlays) {
       const x = overlay.x * scaleX;
@@ -50,7 +53,22 @@ export class PdfEditSerializationService {
         page.drawImage(image, { x, y, width, height });
       } else {
         const text = overlay.type === 'link' ? (overlay.text || overlay.url || '') : (overlay.text || '');
-        if (text) {
+        const styled = overlay.type === 'text' && (overlay.fontSize !== undefined || overlay.bold !== undefined);
+        if (text && styled) {
+          const size = this.pointSize(overlay.fontSize);
+          if (overlay.bold && !boldFont) boldFont = await document.embedFont(StandardFonts.HelveticaBold);
+          // Matches the on-screen layout: text starts below the 20px object label plus 4px padding.
+          const top = page.getHeight() - (overlay.y + 24) * scaleY;
+          page.drawText(text, {
+            x: x + 4 * scaleX,
+            y: top - size,
+            size,
+            lineHeight: size * 1.35,
+            maxWidth: Math.max(1, width - 8 * scaleX),
+            font: overlay.bold && boldFont ? boldFont : font,
+            color: rgb(0.08, 0.16, 0.34),
+          });
+        } else if (text) {
           page.drawText(text, {
             x,
             y: y + Math.max(2, height * 0.2),
@@ -114,6 +132,11 @@ export class PdfEditSerializationService {
       this.drawAnnotation(annotationPage, annotation, annotationScaleX, annotationScaleY, font);
     }
     return new Uint8Array(await document.save());
+  }
+
+  private pointSize(value: number | undefined): number {
+    const size = Number(value ?? 12);
+    return Number.isFinite(size) ? Math.min(72, Math.max(6, size)) : 12;
   }
 
   private drawAnnotation(

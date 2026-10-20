@@ -35,9 +35,9 @@ node .\master\tools\task-registry.cjs validate
 | 1: MVP | 46 | 43 | 0 | 0 | 3 |
 | 2: Advanced Features | 16 | 0 | 0 | 0 | 16 |
 | 3: Enterprise | 9 | 0 | 9 | 0 | 0 |
-| 4: AI Workspace MVP | 18 | 15 | 2 | 1 | 0 |
+| 4: AI Workspace MVP | 19 | 19 | 0 | 0 | 0 |
 
-89 product tasks; 1 separate historical QA execution record.
+90 product tasks; 1 separate historical QA execution record.
 Historical QA is not counted as product delivery. Estimates use 8 planning hours/day where the source specified days; backlog estimates remain unknown.
 
 ## Phase 1 - MVP
@@ -137,7 +137,7 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P4-UI-002](agent-tasks/viewer-editor/phase4-tasks.json) | Add browser and desktop multiple PDF pickers | viewer-editor | COMPLETED | HIGH | 2 | P4-UI-001 |
 | [P4-UI-003](agent-tasks/viewer-editor/phase4-tasks.json) | Add clickable PDF empty state and state-preserving document tabs | viewer-editor | COMPLETED | HIGH | 5 | P4-UI-002 |
 | [P4-UI-004](agent-tasks/viewer-editor/phase4-tasks.json) | Add professional Anirdeshya branding and palette | viewer-editor | COMPLETED | HIGH | 2 | P4-UI-003 |
-| [P4-EDIT-001](agent-tasks/viewer-editor/phase4-tasks.json) | Add professional point-size and bold PDF text controls | viewer-editor | PENDING | HIGH | 4 | P4-UI-003 |
+| [P4-EDIT-001](agent-tasks/viewer-editor/phase4-tasks.json) | Add professional point-size and bold PDF text controls | viewer-editor | COMPLETED | HIGH | 4 | P4-UI-003 |
 | [P4-UI-005](agent-tasks/viewer-editor/phase4-tasks.json) | Consolidate PDF commands into one compact header row | viewer-editor | COMPLETED | HIGH | 2 | P4-UI-004 |
 | [P4-UI-006](agent-tasks/viewer-editor/phase4-tasks.json) | Create a working blank New PDF document command | viewer-editor | COMPLETED | HIGH | 1.5 | P4-UI-005 |
 | [P4-UI-007](agent-tasks/viewer-editor/phase4-tasks.json) | Separate modal components for Metadata and Protect PDF | viewer-editor | COMPLETED | HIGH | 2.5 | P4-UI-006 |
@@ -145,9 +145,10 @@ Historical QA is not counted as product delivery. Estimates use 8 planning hours
 | [P4-AI-005](agent-tasks/viewer-editor/phase4-tasks.json) | AI key storage notice | viewer-editor | COMPLETED | HIGH | 0.5 | P4-AI-004 |
 | [P4-UI-008](agent-tasks/viewer-editor/phase4-tasks.json) | Verify all PDF actions with staged status messages | viewer-editor | COMPLETED | HIGH | 4 | P4-UI-007 |
 | [P4-RES-001](agent-tasks/viewer-editor/phase4-tasks.json) | Resume builder with four ATS templates and per-section AI drafting | viewer-editor | COMPLETED | HIGH | 10 | P4-UI-008, P4-AI-005 |
-| [P4-QA-001](agent-tasks/viewer-editor/phase4-tasks.json) | Verify and document AI workspace MVP | viewer-editor | IN_PROGRESS | HIGH | 3 | P4-UI-005, P4-UI-006, P4-UI-007, P4-UI-008, P4-AI-004, P4-AI-005, P4-EDIT-001, P4-RES-001, P4-UI-009 |
+| [P4-QA-001](agent-tasks/viewer-editor/phase4-tasks.json) | Verify and document AI workspace MVP | viewer-editor | COMPLETED | HIGH | 3 | P4-UI-005, P4-UI-006, P4-UI-007, P4-UI-008, P4-AI-004, P4-AI-005, P4-EDIT-001, P4-RES-001, P4-UI-009, P4-UI-010 |
 | [P4-SEO-001](agent-tasks/viewer-editor/phase4-tasks.json) | Approval-gated search engine discoverability kit (blocked until owner approval) | viewer-editor | COMPLETED | MEDIUM | 4 | P4-RES-001 |
-| [P4-UI-009](agent-tasks/viewer-editor/phase4-tasks.json) | Verification follow-up: placement-mode guidance and form-field/import result messages | viewer-editor | PENDING | MEDIUM | 2 | P4-UI-008 |
+| [P4-UI-009](agent-tasks/viewer-editor/phase4-tasks.json) | Verification follow-up: placement-mode guidance and form-field/import result messages | viewer-editor | COMPLETED | MEDIUM | 2 | P4-UI-008 |
+| [P4-UI-010](agent-tasks/viewer-editor/phase4-tasks.json) | Split PDF workspace component template and styles into separate HTML and CSS files | viewer-editor | COMPLETED | MEDIUM | 1 | P4-UI-009 |
 
 ## Historical Execution Log
 

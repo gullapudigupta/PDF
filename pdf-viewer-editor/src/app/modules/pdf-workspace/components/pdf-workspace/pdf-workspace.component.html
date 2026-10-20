@@ -1,0 +1,435 @@
+<div class="workspace-container" [class.dark-theme]="theme === 'dark'">
+  <ng-template #workspaceTools>
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="toolbar-brand">
+        <span class="brand-mark" aria-hidden="true">P</span>
+        <h1 i18n="@@pdfWorkspaceTitle">PDF Viewer &amp; Editor</h1>
+      </div>
+      <span class="active-document" *ngIf="document" [title]="document.name">{{ document.name }}</span>
+      <button type="button" title="Open a PDF file" i18n-title="@@openPdfTooltip" i18n="@@openPdf" (click)="openFile()">Open PDF</button>
+      <button type="button" (click)="openRequested.emit({ multiple: true })">Open multiple PDFs</button>
+      <details class="recent-files">
+        <summary i18n="@@recentFiles">Recent</summary>
+        <p *ngIf="!recentFiles.length">No recent PDFs.</p>
+        <ol>
+          <li *ngFor="let recent of recentFiles">
+            <span>{{ recent.isPinned ? 'Pinned: ' : '' }}{{ recent.name }}</span>
+            <button type="button" [attr.aria-label]="'Open ' + recent.name" (click)="openRecentFile(recent)">Open</button>
+            <button type="button" [attr.aria-label]="(recent.isPinned ? 'Unpin ' : 'Pin ') + recent.name" (click)="toggleRecentPin(recent)">{{ recent.isPinned ? 'Unpin' : 'Pin' }}</button>
+            <button type="button" [attr.aria-label]="'Remove ' + recent.name + ' from recent files'" (click)="removeRecentFile(recent)">Remove</button>
+          </li>
+        </ol>
+      </details>
+      <details class="toolbar-customization">
+        <summary i18n="@@customizeToolbar">Customize toolbar</summary>
+        <label><input type="checkbox" [ngModel]="toolbarVisibility.editing" (ngModelChange)="setToolbarVisibility('editing', $event)" /> <span i18n="@@showEditingActions">Editing actions</span></label>
+        <label><input type="checkbox" [ngModel]="toolbarVisibility.search" (ngModelChange)="setToolbarVisibility('search', $event)" /> <span i18n="@@showSearchTools">Search tools</span></label>
+        <label><input type="checkbox" [ngModel]="toolbarVisibility.navigation" (ngModelChange)="setToolbarVisibility('navigation', $event)" /> <span i18n="@@showPageNavigation">Page navigation</span></label>
+        <label><input type="checkbox" [ngModel]="toolbarVisibility.annotations" (ngModelChange)="setToolbarVisibility('annotations', $event)" /> <span i18n="@@showAnnotations">Annotations panel</span></label>
+      </details>
+    </div>
+
+    <fieldset *ngIf="toolbarVisibility.editing" class="pdf-toolbar-actions" aria-label="PDF editing tools" [disabled]="!!document?.isEncrypted || viewingMode !== 'single'">
+      <button i18n="@@savePdf" title="Save changes to this PDF" i18n-title="@@savePdfTooltip" [disabled]="!document || loading" (click)="saveFile()">Save</button>
+      <button i18n="@@savePdfAs" title="Save a copy of this PDF" i18n-title="@@savePdfAsTooltip" [disabled]="!document || loading" (click)="saveFileAs()">Save As</button>
+      <button *ngIf="document" (click)="openMetadataDialog()">Metadata</button>
+      <button *ngIf="document" (click)="openProtectionDialog()">Protect PDF</button>
+      <button [disabled]="!document || loading || totalPages <= 1" (click)="deleteCurrentPage()">Delete Page</button>
+      <button [disabled]="!document || loading" (click)="insertPdfInput.click()">Insert PDF</button>
+      <input #insertPdfInput type="file" accept="application/pdf,.pdf" hidden (change)="insertPagesFromFile($event)" />
+      <button [disabled]="!document || loading" (click)="extractSelectedPages()">Extract Pages</button>
+      <button [disabled]="!document || loading" (click)="mergePdfInput.click()">Merge PDFs</button>
+      <input #mergePdfInput type="file" accept="application/pdf,.pdf" multiple hidden (change)="mergePdfsFromFiles($event)" />
+      <button [disabled]="!document || loading" (click)="splitSelectedPages()">Split PDF</button>
+      <button [disabled]="!document || loading" (click)="rotateSelectedPages(90)">Rotate 90</button>
+      <button [disabled]="!document || loading" (click)="rotateSelectedPages(180)">Rotate 180</button>
+      <button [disabled]="!document || loading" (click)="rotateSelectedPages(270)">Rotate 270</button>
+      <button [disabled]="!document || loading" (click)="setCropMode(true)">Crop Page</button>
+      <button [disabled]="!cropSelection" (click)="applyCropSelection()">Apply Crop</button>
+      <button *ngIf="cropMode || cropSelection" (click)="setCropMode(false)">Cancel Crop</button>
+      <button *ngIf="document" (click)="beginFormFieldAuthoring('text')" [attr.aria-pressed]="formAuthoringType === 'text'">Add Text Field</button>
+      <button *ngIf="document" (click)="beginFormFieldAuthoring('checkbox')" [attr.aria-pressed]="formAuthoringType === 'checkbox'">Add Checkbox Field</button>
+      <button *ngIf="document" (click)="beginFormFieldAuthoring('dropdown')" [attr.aria-pressed]="formAuthoringType === 'dropdown'">Add Dropdown Field</button>
+      <button *ngIf="document" (click)="exportFormData()">Export Form Data</button>
+      <label *ngIf="document">
+        Export page format
+        <select aria-label="Export page format" [(ngModel)]="pageExportFormat">
+          <option value="png">PNG</option>
+          <option value="jpeg">JPEG</option>
+          <option value="svg">SVG</option>
+        </select>
+      </label>
+      <button *ngIf="document" [disabled]="loading || document.isEncrypted" (click)="exportCurrentPage()">Export Current Page</button>
+      <button *ngIf="document" (click)="formDataInput.click()">Import Form Data</button>
+      <input #formDataInput type="file" accept="application/json,.json" hidden (change)="importFormDataFile($event)" />
+      <button *ngIf="selectedFormFieldName" (click)="toggleSelectedFieldRequired()">{{ selectedFormFieldRequired ? 'Mark Optional' : 'Mark Required' }}</button>
+      <button *ngIf="selectedFormFieldName" (click)="editSelectedFormField()">Edit Field</button>
+      <button *ngIf="selectedFormFieldName" (click)="deleteSelectedFormField()">Delete Field</button>
+      <button *ngIf="selectedFormFieldName" (click)="setSelectedFieldCondition()">Set Visibility Rule</button>
+      <button *ngIf="selectedFormFieldName && hasSelectedFieldCondition" (click)="clearSelectedFieldCondition()">Clear Visibility Rule</button>
+      <button [disabled]="!document || loading" (click)="addTextObject()">Add Text</button>
+      <label *ngIf="document" class="annotation-style" [title]="textStyleTarget">Text size (pt)
+        <input aria-label="Text size in points" type="number" min="6" max="72" step="1" style="width: 4.5em"
+          [ngModel]="textFontSizeControl" (change)="setTextFontSize($any($event.target).value)" />
+      </label>
+      <button *ngIf="document" type="button" [attr.aria-pressed]="textBoldControl" [title]="textStyleTarget"
+        style="font-weight: 700" (click)="toggleTextBold()">Bold</button>
+      <button [disabled]="!document || loading" (click)="addImageObject()">Add Image</button>
+      <button [disabled]="!document || loading" (click)="addLinkObject()">Add Link</button>
+      <button *ngIf="document" (click)="openSignatureDialog('signature')">Add Signature</button>
+      <button *ngIf="document" (click)="openSignatureDialog('initials')">Add Initials</button>
+      <button *ngIf="document" (click)="setAnnotationTool('highlight')" [attr.aria-pressed]="annotationTool === 'highlight'">Highlight</button>
+      <button *ngIf="document" (click)="setAnnotationTool('comment')" [attr.aria-pressed]="annotationTool === 'comment'">Comment</button>
+      <button *ngIf="document" (click)="setAnnotationTool('draw')" [attr.aria-pressed]="annotationTool === 'draw'">Draw</button>
+      <button *ngIf="annotationTool" (click)="setAnnotationTool(null)">Select</button>
+      <label *ngIf="document" class="annotation-style">Color <input aria-label="Annotation color" type="color" [(ngModel)]="annotationColor" /></label>
+      <label *ngIf="document" class="annotation-style">Opacity <input aria-label="Annotation opacity" type="range" min="0" max="1" step="0.05" [(ngModel)]="annotationOpacity" /></label>
+      <button [disabled]="!selectedObjectId" (click)="editSelection()">Edit</button>
+      <button [disabled]="!selectedObjectId" (click)="deleteSelection()">Delete</button>
+      <button [disabled]="!canUndo" (click)="undoEdit()">Undo</button>
+      <button [disabled]="!canRedo" (click)="redoEdit()">Redo</button>
+      <button [disabled]="!selectedObjectId" (click)="cutSelection()">Cut</button>
+      <button [disabled]="!selectedObjectId" (click)="copySelection()">Copy</button>
+      <button [disabled]="!clipboardObject" (click)="pasteClipboard()">Paste</button>
+    </fieldset>
+
+    <div class="toolbar-right" *ngIf="toolbarVisibility.search">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="searchInDocument()"
+        aria-label="Search text"
+        placeholder="Search text"
+      />
+      <label><input type="checkbox" [(ngModel)]="searchCaseSensitive" /> Match case</label>
+      <label><input type="checkbox" [(ngModel)]="searchRegexMode" /> Regex</label>
+      <button [disabled]="!document || loading || searching" (click)="searchInDocument()">Search</button>
+    </div>
+  </div>
+  </ng-template>
+
+  <header class="workspace-header" [class.managed-header]="tabManaged">
+    <button #toolsToggle type="button" (click)="togglePanel('tools')" [attr.aria-controls]="toolsPanelId"
+      [attr.aria-expanded]="toolsOpen" i18n="@@workspaceToolsToggle">Tools</button>
+    <ng-container *ngTemplateOutlet="commandTemplate"></ng-container>
+    <ng-container *ngIf="!tabManaged">
+      <span class="workspace-heading">PDF Viewer &amp; Editor</span>
+      <span class="workspace-document" *ngIf="document" [title]="document.name">{{ document.name }}</span>
+    </ng-container>
+    <button #chatToggle type="button" (click)="togglePanel('chat')" [attr.aria-controls]="chatPanelId"
+      [attr.aria-expanded]="chatOpen" i18n="@@workspaceChatToggle">AI chat</button>
+  </header>
+  <div class="workspace-body">
+    <button *ngIf="compactLayout && (toolsOpen || chatOpen)" class="drawer-backdrop"
+      type="button" aria-label="Close side menu" (click)="closePanels()"></button>
+    <aside #toolsPanel [id]="toolsPanelId" class="tools-panel" [hidden]="!toolsOpen"
+      aria-label="All PDF tools" tabindex="-1">
+      <div class="panel-heading"><h2>PDF tools</h2><button type="button" (click)="closePanel('tools')" aria-label="Close tools">Close</button></div>
+      <ng-container *ngTemplateOutlet="workspaceTools"></ng-container>
+      <ng-container *ngTemplateOutlet="pageControls"></ng-container>
+    </aside>
+    <main class="workspace-main" [attr.inert]="compactLayout && (toolsOpen || chatOpen) ? '' : null">
+
+  <p *ngIf="document?.isEncrypted" role="status">
+    This password-protected PDF is open in read-only mode. Editing and autosave are disabled.
+  </p>
+
+  <section *ngIf="passwordPrompt" role="dialog" aria-modal="true" aria-labelledby="pdf-password-title">
+    <form (ngSubmit)="submitPasswordPrompt()">
+      <h2 id="pdf-password-title">Password required</h2>
+      <p>{{ passwordPromptMessage }}</p>
+      <label>
+        PDF password
+        <input type="password" name="pdfPassword" [(ngModel)]="pdfPasswordInput" autocomplete="current-password" autofocus />
+      </label>
+      <button type="submit">Unlock PDF</button>
+      <button type="button" (click)="cancelPasswordPrompt()">Cancel</button>
+    </form>
+  </section>
+
+  <app-pdf-metadata-dialog *ngIf="metadataDialogOpen" [metadata]="metadata" [fileName]="document?.name || ''"
+    [busy]="actionBusy" [error]="dialogError" (save)="saveMetadata($event)" (cancel)="closeMetadataDialog()"></app-pdf-metadata-dialog>
+
+  <app-pdf-protect-dialog *ngIf="protectionDialogOpen" [fileName]="document?.name || ''"
+    [busy]="actionBusy" [error]="dialogError" (protect)="protectCurrentPdf($event)" (cancel)="closeProtectionDialog()"></app-pdf-protect-dialog>
+
+  <ng-template #pageControls>
+  <div class="viewer-controls" *ngIf="document && toolbarVisibility.navigation">
+    <button aria-label="Previous page" title="Go to the previous page" i18n-title="@@previousPageTooltip" i18n="@@previousPage" (click)="previousPage()" [disabled]="atFirstViewingSpread || loading">Previous</button>
+    <span role="status" aria-live="polite" i18n="@@pageCount">Page {{ currentPage }} / {{ totalPages }}</span>
+    <button aria-label="Next page" title="Go to the next page" i18n-title="@@nextPageTooltip" i18n="@@nextPage" (click)="nextPage()" [disabled]="atLastViewingSpread || loading">Next</button>
+
+    <button aria-label="Zoom out" title="Decrease page zoom" i18n-title="@@zoomOutTooltip" (click)="zoomOut()" [disabled]="loading">-</button>
+    <span aria-live="polite">{{ (zoom * 100).toFixed(0) }}%</span>
+    <button aria-label="Zoom in" title="Increase page zoom" i18n-title="@@zoomInTooltip" (click)="zoomIn()" [disabled]="loading">+</button>
+
+    <button aria-label="Rotate counterclockwise" title="Rotate counterclockwise" i18n-title="@@rotateCounterclockwiseTooltip" (click)="rotateLeft()" [disabled]="loading">Rotate left</button>
+    <button aria-label="Rotate clockwise" title="Rotate clockwise" i18n-title="@@rotateClockwiseTooltip" (click)="rotateRight()" [disabled]="loading">Rotate right</button>
+    <label>
+      <span i18n="@@pageLayout">Page layout</span>
+      <select aria-label="Page layout" [ngModel]="viewingMode" (ngModelChange)="setViewingMode($event)">
+        <option value="single">Single page</option>
+        <option value="continuous">Continuous</option>
+        <option value="facing">Facing pages</option>
+      </select>
+    </label>
+    <label>
+      <span i18n="@@theme">Theme</span>
+      <select aria-label="Theme" [ngModel]="theme" (ngModelChange)="setTheme($event)">
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </label>
+    <label><input type="checkbox" [ngModel]="darkPageRendering" (ngModelChange)="setDarkPageRendering($event)" /> Dark page</label>
+    <details class="viewer-help">
+      <summary i18n="@@help">Help</summary>
+      <p i18n="@@keyboardHelp">Use Page Up/Page Down or the arrow keys to navigate, plus/minus to zoom, and Control/Command with Z to undo.</p>
+      <p i18n="@@editingModeHelp">Switch to Single page to edit. Continuous and Facing pages are reading modes.</p>
+    </details>
+    <button type="button" (click)="closeDocument()" [disabled]="loading">Close PDF</button>
+  </div>
+  </ng-template>
+
+  <div class="content" #viewerHost>
+    <span id="viewer-keyboard-help" class="visually-hidden">
+      Use Page Up and Page Down to navigate pages, plus and minus to zoom, and Control or Command with Z to undo.
+    </span>
+    <app-action-status [status]="actionStatus" (dismiss)="dismissActionStatus()"></app-action-status>
+        <div class="status" *ngIf="loading">Loading PDF...</div>
+    <div class="status error" *ngIf="!loading && error">{{ error }}</div>
+    <div class="status" *ngIf="!loading && !document && !error">
+      <button type="button" class="empty-open" (click)="openFile()">Open a PDF to start</button>
+      <button type="button" (click)="openRequested.emit({ multiple: true })">Open multiple PDFs</button>
+    </div>
+    <div class="status" *ngIf="document && viewingMode !== 'single'" role="status">
+      Multi-page viewing is read-only. Switch to Single page to edit this PDF.
+    </div>
+
+    <aside class="navigation-sidebar" *ngIf="document" aria-label="Page thumbnails and bookmarks">
+      <h2>Pages</h2>
+      <div class="thumbnail-viewport" (scroll)="onThumbnailScroll($event)" aria-label="Page thumbnails">
+        <div class="thumbnail-spacer" [style.height.px]="totalPages * thumbnailItemHeight">
+          <div class="thumbnail-item" *ngFor="let page of visibleThumbnailPages"
+            [style.top.px]="(page - 1) * thumbnailItemHeight" [class.active]="page === currentPage"
+            [attr.aria-label]="'Go to page ' + page" draggable="true"
+            (dragstart)="startPageDrag($event, page)" (dragover)="allowPageDrop($event)" (drop)="dropPage($event, page)"
+            role="group">
+            <label><input type="checkbox" [checked]="selectedPages.includes(page)" (change)="togglePageSelection(page, $any($event.target).checked)" /> Select</label>
+            <button type="button" class="thumbnail-navigate" (click)="goToPage(page)">
+              <img *ngIf="thumbnailSources.get(page) as source; else thumbnailPending" class="thumbnail-preview" [src]="source" [alt]="'Preview of page ' + page" />
+              <ng-template #thumbnailPending><span class="thumbnail-preview" style="display: block; margin: 0 auto" aria-hidden="true"></span></ng-template>
+              <span>Page {{ page }}</span>
+              <span class="thumbnail-error" *ngIf="thumbnailRenderStates.get(page) === 'error'">Preview unavailable</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <h2>Bookmarks</h2>
+      <p *ngIf="thumbnailError" class="error" role="alert">{{ thumbnailError }}</p>
+      <p *ngIf="bookmarksLoading">Loading bookmarks...</p>
+      <p *ngIf="bookmarkError" class="error" role="alert">{{ bookmarkError }}</p>
+      <p *ngIf="!bookmarksLoading && !bookmarkError && !bookmarks.length">No bookmarks</p>
+      <ul class="bookmark-list">
+        <li *ngFor="let bookmark of bookmarks" [style.padding-left.px]="bookmark.depth * 12">
+          <button type="button" [disabled]="bookmark.page === null" (click)="navigateToBookmark(bookmark)">
+            {{ bookmark.title }}{{ bookmark.page ? ' (page ' + bookmark.page + ')' : '' }}
+          </button>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="page-stage" *ngIf="document && !loading && viewingMode === 'single'" #stageHost
+      role="region" aria-label="PDF page viewer">
+      <canvas #viewerCanvas tabindex="0" role="img" [attr.aria-describedby]="'viewer-keyboard-help'"
+        [attr.aria-label]="'PDF page ' + currentPage + ' of ' + totalPages" [class.dark-page]="darkPageRendering"></canvas>
+
+      <div class="overlay-layer" #annotationLayer [class.annotation-mode]="annotationTool !== null" [class.crop-mode]="cropMode" [class.form-authoring-mode]="formAuthoringType !== null" [style.width.px]="overlayWidth" [style.height.px]="overlayHeight" (mousedown)="startAnnotation($event); startCrop($event); startFormFieldPlacement($event)" (mousemove)="moveAnnotation($event); moveCrop($event)" (mouseup)="finishAnnotation(); finishCrop()">
+        <ng-container *ngFor="let annotation of pageAnnotations">
+          <div *ngIf="annotation.type !== 'draw'" class="pdf-annotation" [class.pdf-highlight]="annotation.type === 'highlight'" [class.pdf-comment]="annotation.type === 'comment' || annotation.type === 'sticky-note'" [style.left.px]="annotation.rect.x" [style.top.px]="annotation.rect.y" [style.width.px]="annotation.rect.width" [style.height.px]="annotation.rect.height" [style.background-color]="annotationColorFor(annotation)" [style.opacity]="annotation.style.opacity" [title]="annotation.content || annotation.type"></div>
+          <svg *ngIf="annotation.type === 'draw'" class="pdf-drawing" [style.left.px]="annotation.rect.x" [style.top.px]="annotation.rect.y" [style.width.px]="annotation.rect.width" [style.height.px]="annotation.rect.height" [attr.viewBox]="'0 0 ' + annotation.rect.width + ' ' + annotation.rect.height"><polyline [attr.points]="annotation.content" fill="none" [attr.stroke]="annotation.style.color" [attr.stroke-width]="annotation.style.strokeWidth || 2" [attr.opacity]="annotation.style.opacity" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
+        </ng-container>
+        <div *ngIf="annotationDraft" class="annotation-preview" [style.left.px]="annotationDraft.rect.x" [style.top.px]="annotationDraft.rect.y" [style.width.px]="annotationDraft.rect.width" [style.height.px]="annotationDraft.rect.height" [style.background-color]="annotationColor" [style.opacity]="annotationOpacity"></div>
+        <div *ngIf="cropDraft || cropSelection" class="crop-preview"
+          [style.left.px]="(cropDraft || cropSelection)?.x" [style.top.px]="(cropDraft || cropSelection)?.y"
+          [style.width.px]="(cropDraft || cropSelection)?.width" [style.height.px]="(cropDraft || cropSelection)?.height">
+          <span class="crop-handle nw" (mousedown)="startCropResize($event, 'nw')"></span>
+          <span class="crop-handle ne" (mousedown)="startCropResize($event, 'ne')"></span>
+          <span class="crop-handle sw" (mousedown)="startCropResize($event, 'sw')"></span>
+          <span class="crop-handle se" (mousedown)="startCropResize($event, 'se')"></span>
+        </div>
+        <div *ngFor="let widget of formWidgets" class="pdf-form-widget"
+          [style.left.px]="widget.x" [style.top.px]="widget.y"
+          [style.width.px]="widget.width" [style.height.px]="widget.height"
+          [class.selected-form-field]="widget.name === selectedFormFieldName"
+          (mousedown)="$event.stopPropagation()" (click)="selectFormField(widget)">
+          <span *ngIf="widget.required" class="required-field-marker" aria-label="Required field">*</span>
+          <input *ngIf="widget.type === 'text'" [type]="widget.date ? 'date' : 'text'"
+            [attr.aria-label]="widget.name" [ngModel]="widget.value" [disabled]="widget.readOnly"
+            (change)="updateFormField(widget, $any($event.target).value)" />
+          <input *ngIf="widget.type === 'checkbox'" type="checkbox" [attr.aria-label]="widget.name"
+            [checked]="widget.value === 'true'" [disabled]="widget.readOnly"
+            (change)="updateFormField(widget, $any($event.target).checked ? 'true' : 'false')" />
+          <input *ngIf="widget.type === 'radio'" type="radio" [name]="widget.name"
+            [attr.aria-label]="widget.name + ' ' + widget.option" [value]="widget.option"
+            [checked]="widget.value === widget.option" [disabled]="widget.readOnly"
+            (change)="updateFormField(widget, widget.option)" />
+          <select *ngIf="widget.type === 'dropdown'" [attr.aria-label]="widget.name"
+            [ngModel]="widget.value" [disabled]="widget.readOnly"
+            (change)="updateFormField(widget, $any($event.target).value)">
+            <option *ngFor="let option of widget.options" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+        <div
+          *ngFor="let object of overlayObjects"
+          class="overlay-object"
+          [class.selected]="object.id === selectedObjectId"
+          [style.left.px]="object.x"
+          [style.top.px]="object.y"
+          [style.width.px]="object.width"
+          [style.height.px]="object.height"
+          [class.overlay-text]="object.type === 'text'"
+          [class.overlay-image]="object.type === 'image'"
+          [class.overlay-link]="object.type === 'link'"
+          [class.overlay-signature]="object.label === 'Signature' || object.label === 'Initials'"
+          (mousedown)="startMove($event, object.id)"
+        >
+          <div class="overlay-label">{{ object.label }}</div>
+          <div *ngIf="object.type === 'text'" class="overlay-text-content"
+            [style.font-size.px]="object.fontSize ? object.fontSize * pagePixelsPerPoint : null"
+            [style.font-weight]="object.bold ? 700 : null">{{ object.text }}</div>
+          <img
+            *ngIf="object.type === 'image' && object.imageSrc"
+            class="overlay-image-content"
+            [src]="object.imageSrc"
+            [alt]="object.label"
+            draggable="false"
+          />
+          <a
+            *ngIf="object.type === 'link'"
+            class="overlay-link-content"
+            [href]="object.pageNumber ? '#page-' + object.pageNumber : (object.url || '#')"
+            [target]="object.pageNumber ? null : '_blank'"
+            rel="noreferrer"
+            (click)="activateLink($event, object)"
+          >
+            {{ object.text || object.url }}
+          </a>
+
+          <button
+            *ngIf="object.id === selectedObjectId"
+            class="resize-handle nw"
+            type="button"
+            aria-label="Resize northwest"
+            (mousedown)="startResize($event, object.id, 'nw')"
+          ></button>
+          <button
+            *ngIf="object.id === selectedObjectId"
+            class="resize-handle ne"
+            type="button"
+            aria-label="Resize northeast"
+            (mousedown)="startResize($event, object.id, 'ne')"
+          ></button>
+          <button
+            *ngIf="object.id === selectedObjectId"
+            class="resize-handle sw"
+            type="button"
+            aria-label="Resize southwest"
+            (mousedown)="startResize($event, object.id, 'sw')"
+          ></button>
+          <button
+            *ngIf="object.id === selectedObjectId"
+            class="resize-handle se"
+            type="button"
+            aria-label="Resize southeast"
+            (mousedown)="startResize($event, object.id, 'se')"
+          ></button>
+        </div>
+      </div>
+    </div>
+    <div class="multi-page-view" *ngIf="document && !loading && viewingMode !== 'single'"
+      #multiPageView [class.facing-pages]="viewingMode === 'facing'"
+      (scroll)="onMultiPageScroll($event)" [attr.aria-label]="viewingMode === 'continuous' ? 'Continuous PDF pages' : 'Facing PDF pages'">
+      <div *ngIf="viewingMode === 'continuous'" class="page-window-spacer"
+        [style.height.px]="continuousTopSpacerHeight" aria-hidden="true"></div>
+      <div class="mode-page" *ngFor="let page of viewingPages; trackBy: trackPageNumber"
+        [attr.data-view-page]="page">
+        <canvas *ngIf="shouldRenderModePage(page)" #modePageCanvas tabindex="0" role="img"
+          [class.dark-page]="darkPageRendering"
+          [attr.aria-label]="'PDF page ' + page"></canvas>
+        <div *ngIf="!shouldRenderModePage(page)" class="page-placeholder"
+          [style.height.px]="estimatedPageHeight" [attr.aria-label]="'PDF page ' + page"></div>
+        <span>Page {{ page }}</span>
+      </div>
+      <div *ngIf="viewingMode === 'continuous'" class="page-window-spacer"
+        [style.height.px]="continuousBottomSpacerHeight" aria-hidden="true"></div>
+    </div>
+  </div>
+
+<aside class="annotation-panel" *ngIf="document && toolbarVisibility.annotations" aria-label="PDF annotations">
+    <h2>Annotations ({{ annotations.length }})</h2>
+    <label>Filter annotations
+      <select [(ngModel)]="annotationFilter" aria-label="Filter annotations">
+        <option value="all">All types</option><option value="highlight">Highlights</option><option value="comment">Comments</option><option value="sticky-note">Sticky notes</option><option value="draw">Drawings</option>
+      </select>
+    </label>
+    <input type="search" [(ngModel)]="annotationSearch" aria-label="Search annotations" placeholder="Search annotations" />
+    <ul><li *ngFor="let annotation of visibleAnnotations">
+      <button type="button" class="annotation-jump" (click)="jumpToAnnotation(annotation)">{{ annotation.type }} ? page {{ annotation.page }}{{ annotation.content ? ': ' + annotation.content : '' }}</button>
+      <button type="button" [disabled]="!!document?.isEncrypted" (click)="editAnnotation(annotation)">Edit</button><button type="button" [disabled]="!!document?.isEncrypted" (click)="deleteAnnotation(annotation)">Delete</button>
+    </li></ul>
+  </aside>
+  <div class="search-result" *ngIf="searchMessage">{{ searchMessage }}</div>
+  <nav class="search-results" *ngIf="searchResults.length" aria-label="PDF search results">
+    <button type="button" (click)="previousSearchResult()">Previous match</button>
+    <span>Result {{ currentSearchResultIndex + 1 }} of {{ searchResults.length }} pages</span>
+    <button type="button" (click)="nextSearchResult()">Next match</button>
+    <ul>
+      <li *ngFor="let result of searchResults; let i = index">
+        <button type="button" [attr.aria-current]="i === currentSearchResultIndex ? 'page' : null" (click)="navigateToSearchResult(i)">
+          Page {{ result.page }} ({{ result.count }} matches):
+          <ng-container *ngFor="let part of searchResultParts(result.excerpt)"><mark *ngIf="part.match">{{ part.text }}</mark><ng-container *ngIf="!part.match">{{ part.text }}</ng-container></ng-container>
+        </button>
+      </li>
+    </ul>
+  </nav>
+  <div class="signature-backdrop" *ngIf="signatureDialogOpen">
+    <section class="signature-dialog" role="dialog" aria-modal="true" aria-labelledby="signature-dialog-title">
+      <h2 id="signature-dialog-title">{{ signatureKind === 'signature' ? 'Add signature' : 'Add initials' }}</h2>
+      <div class="signature-modes" role="group" aria-label="Signature input method">
+        <button type="button" (click)="setSignatureMode('draw')" [attr.aria-pressed]="signatureMode === 'draw'">Draw</button>
+        <button type="button" (click)="setSignatureMode('type')" [attr.aria-pressed]="signatureMode === 'type'">Type</button>
+        <button type="button" (click)="setSignatureMode('upload')" [attr.aria-pressed]="signatureMode === 'upload'">Upload</button>
+      </div>
+      <canvas *ngIf="signatureMode === 'draw'" #signatureCanvas class="signature-pad" width="420" height="150"
+        aria-label="Draw signature" (pointerdown)="startSignatureStroke($event)"
+        (pointermove)="continueSignatureStroke($event)" (pointerup)="finishSignatureStroke()"
+        (pointercancel)="finishSignatureStroke()"></canvas>
+      <label *ngIf="signatureMode === 'type'" class="signature-type">
+        Type {{ signatureKind }} <input type="text" [(ngModel)]="signatureText" maxlength="80" />
+      </label>
+      <label *ngIf="signatureMode === 'upload'" class="signature-upload">
+        Choose PNG or JPEG <input type="file" accept="image/png,image/jpeg" (change)="loadSignatureFile($event)" />
+      </label>
+      <div class="signature-reusable" *ngIf="signatureAssets.length">
+        <h3>Reusable locally saved items</h3>
+        <button *ngFor="let asset of signatureAssets" type="button" (click)="placeSignatureAsset(asset)">
+          Use {{ asset.name }} ({{ asset.kind }})
+        </button>
+      </div>
+      <div class="signature-dialog-actions">
+        <button type="button" [disabled]="!signatureReady" (click)="saveReusableSignature()">Save for reuse</button>
+        <button type="button" [disabled]="!signatureReady" (click)="placeCurrentSignature()">Place on page</button>
+        <button type="button" (click)="closeSignatureDialog()">Cancel</button>
+      </div>
+      <p *ngIf="signatureError" class="error" role="alert">{{ signatureError }}</p>
+    </section>
+  </div>
+    </main>
+    <aside #chatPanel [id]="chatPanelId" class="chat-panel" [hidden]="!chatOpen"
+      aria-label="AI chat" tabindex="-1">
+      <div class="panel-heading"><h2>AI chat</h2><button type="button" (click)="closePanel('chat')" aria-label="Close AI chat">Close</button></div>
+      <app-ai-chat [document]="document" [currentPage]="currentPage"></app-ai-chat>
+    </aside>
+  </div>
+</div>

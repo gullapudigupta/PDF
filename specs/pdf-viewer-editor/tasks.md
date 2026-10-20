@@ -23,7 +23,7 @@ Execute only this checklist and the generated [master entry point](../../master/
 - [x] P4-UI-005 (depends on P4-UI-004): Consolidate file menu, tabs, Tools and
   AI chat into one compact row beneath branding, remove repeated editor title,
   and verify no header wrapping at phone/tablet/desktop sizes.
-- [ ] P4-EDIT-001 (depends on P4-UI-003): Add point-size/bold controls for new and
+- [x] P4-EDIT-001 (depends on P4-UI-003): Add point-size/bold controls for new and
   selected PDF text overlays, preserving typography across preview/export/history.
 - [x] P4-UI-006 (depends on P4-UI-005): Make "New PDF" create a blank A4 PDF in a
   new editable tab with unique Untitled names; relabel the empty placeholder tab.
@@ -39,11 +39,15 @@ Execute only this checklist and the generated [master entry point](../../master/
   builder with four ATS-friendly templates, structured sections, live preview,
   per-section "Draft with AI" (BYOK, consent, accept/discard), best-practice
   checklist, PDF download and open-in-editor, with tests.
-- [ ] P4-UI-009 (depends on P4-UI-008): Verification follow-up - instructions
+- [x] P4-UI-009 (depends on P4-UI-008): Verification follow-up - instructions
   when crop/form-field placement modes start, success/cancel/error messages for
   form-field creation, field counts / "nothing changed" for form-data import,
-  reliable page thumbnails and opaque form-field inputs (no doubled text).
-- [ ] P4-QA-001 (depends on P4-UI-005, P4-UI-006, P4-UI-007, P4-UI-008, P4-AI-004, P4-AI-005, P4-RES-001, P4-UI-009 and P4-EDIT-001): Run workspace regression tests, production
+  reliable page thumbnails and opaque form-field inputs (no doubled text),
+  undo/redo page-change messages and a two-row phone header (no AI chat overlap).
+- [x] P4-UI-010 (depends on P4-UI-009): Split the PDF workspace component's inline
+  template and styles into `pdf-workspace.component.html` and
+  `pdf-workspace.component.css`; verify tests, both production builds and UI.
+- [x] P4-QA-001 (depends on P4-UI-005, P4-UI-006, P4-UI-007, P4-UI-008, P4-AI-004, P4-AI-005, P4-RES-001, P4-UI-009, P4-UI-010 and P4-EDIT-001): Run workspace regression tests, production
   build and responsive browser checks; document usage/limitations and synchronize
   task evidence, completion graph, and indexes.
 

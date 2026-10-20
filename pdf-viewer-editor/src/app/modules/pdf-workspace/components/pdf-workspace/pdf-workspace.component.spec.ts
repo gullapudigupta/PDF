@@ -1661,6 +1661,47 @@ describe('PdfWorkspaceComponent', () => {
     expect(component.overlayObjects[0].text).toBe('Edited text');
   });
 
+  it('applies point size and bold to new and selected text with undo and copy/paste', async () => {
+    spyOn(window, 'prompt').and.returnValues('Default text', 'Styled text');
+    component.overlayWidth = 600;
+    component.overlayHeight = 400;
+
+    component.addTextObject();
+    expect(component.overlayObjects[0]).toEqual(jasmine.objectContaining({ fontSize: 12, bold: false }));
+
+    component.selectedObjectId = null;
+    expect(component.textStyleTarget).toBe('Applies to the next text box you add');
+    component.setTextFontSize('18');
+    component.toggleTextBold();
+    component.setTextFontSize(99);
+    expect(component.actionStatus?.message).toBe('Text size must be between 6 and 72 points.');
+    expect(component.textFontSize).toBe(18);
+    component.addTextObject();
+    const styled = component.overlayObjects[1];
+    expect(styled).toEqual(jasmine.objectContaining({ text: 'Styled text', fontSize: 18, bold: true }));
+    expect(component.overlayObjects[0]).toEqual(jasmine.objectContaining({ fontSize: 12, bold: false }));
+
+    component.selectedObjectId = component.overlayObjects[0].id;
+    expect(component.textStyleTarget).toBe('Applies to the selected text box');
+    expect(component.textFontSizeControl).toBe(12);
+    component.setTextFontSize(30);
+    component.toggleTextBold();
+    expect(component.overlayObjects[0]).toEqual(jasmine.objectContaining({ fontSize: 30, bold: true }));
+    expect(component.textFontSize).toBe(18);
+
+    await component.undoEdit();
+    expect(component.overlayObjects[0]).toEqual(jasmine.objectContaining({ fontSize: 30, bold: false }));
+    await component.undoEdit();
+    expect(component.overlayObjects[0]).toEqual(jasmine.objectContaining({ fontSize: 12, bold: false }));
+    await component.redoEdit();
+    expect(component.overlayObjects[0].fontSize).toBe(30);
+
+    component.selectedObjectId = styled.id;
+    component.copySelection();
+    component.pasteClipboard();
+    expect(component.overlayObjects[2]).toEqual(jasmine.objectContaining({ fontSize: 18, bold: true }));
+  });
+
   it('creates and edits image object', () => {
     spyOn(window, 'prompt').and.returnValues('https://img/a.png', 'https://img/b.png');
     component.overlayWidth = 600;

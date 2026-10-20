@@ -17,6 +17,64 @@ A modern PDF viewer and editor application that runs as both a desktop applicati
 - ?? **Dark Mode**: Theme support
 - ? **Auto-save**: Automatic document recovery
 
+## Phase 4 MVP usage guide
+
+**Opening and creating PDFs**
+
+- **Open PDF** opens one file; **Open multiple PDFs** opens several at once, each in its own tab. The empty-state buttons do the same.
+- **New PDF** creates a blank A4 document in a new tab, named Untitled-1, Untitled-2 and so on.
+- Unsaved edits stay with their tab while you switch between tabs.
+
+**Layout**
+
+- The top row holds Tools, Open PDF, New PDF, Resume builder, the document tabs and AI chat.
+- **Tools** opens the left menu with every editing option; **AI chat** opens the right-hand assistant.
+- On phones (600px and below) the header wraps into two rows. On phones and tablets both menus open as drawers over the page.
+
+**Page actions**
+
+- Rotate, Crop, Insert, Extract, Split, Merge and Delete each show progress, then a success, cancelled or error message.
+- Crop and form-field placement show an instruction when they start. Press Escape to cancel them.
+- Undo and Redo (Ctrl+Z / Ctrl+Y) also cover page changes and report what they did.
+
+**Text styling**
+
+- Use **Text size (pt)** (6-72, default 12) and **Bold** in the toolbar. With a text box selected they restyle it; otherwise they apply to the next text box you add.
+- Saved PDFs use Helvetica or Helvetica-Bold at the exact point size.
+- Styling never changes the PDF's original text.
+
+**Metadata and Protect PDF**
+
+- Both open in separate dialogs.
+- Protect downloads a password-protected copy. Password-protected PDFs open read-only.
+
+**Forms**
+
+- Add text, checkbox and dropdown fields, fill them, and export or import form data as JSON.
+- Importing reports how many values were applied. A file with no field values changes nothing.
+
+**AI writing assistant (bring your own key)**
+
+- Choose OpenAI (the default) or another OpenAI-compatible endpoint by entering its HTTPS URL and key.
+- The key stays only in this browser tab's memory. It is never saved to disk, browser storage or a server, and it is cleared when you clear it, close the workspace or close the tab.
+- PDF text is sent only after you preview it and give consent.
+- Copy the AI response and paste it into the PDF yourself.
+- **How to get an API key** shows a visual step-by-step guide.
+
+**Resume builder**
+
+- Offers four ATS-friendly templates: Classic, Modern, Professional and Compact.
+- Provides structured sections, a best-practice checklist, optional per-section AI drafting, Download PDF, and Open in editor.
+
+**Limitations**
+
+- A ChatGPT subscription does not include API access, and provider API charges may apply.
+- AI features need network access to the provider you choose.
+- Text edits are overlays placed on the page; existing PDF text cannot be reflowed or restyled.
+- Only standard Helvetica is embedded for added text. Characters outside WinAnsi (for example emoji or Devanagari) are not supported in exported text.
+- Search-engine indexing is blocked until it is explicitly approved; see [../search-engine/README.md](../search-engine/README.md).
+- The company logo is a text placeholder until the official logo is supplied.
+
 ## ?? Prerequisites
 
 - Node.js 20 LTS or higher

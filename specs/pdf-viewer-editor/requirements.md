@@ -43,6 +43,10 @@
   values were applied and says "nothing changed" for a file with no fields.
   Page thumbnails always appear once rendered (no broken-image placeholder),
   and filled form-field inputs hide the PDF's own field appearance beneath them.
+- UI-10 (maintainability): The main PDF workspace component keeps its HTML
+  template and CSS styles in separate `pdf-workspace.component.html` and
+  `pdf-workspace.component.css` files instead of inline strings, with no change
+  to rendered markup, styles, behaviour or bundle style budget.
 - RES-01: A "Resume builder" button in the top command row opens a full-screen,
   responsive (360/768/1440px) resume builder without leaving the workspace.
 - RES-02: Offer four standard, ATS-friendly templates - Classic, Modern,
