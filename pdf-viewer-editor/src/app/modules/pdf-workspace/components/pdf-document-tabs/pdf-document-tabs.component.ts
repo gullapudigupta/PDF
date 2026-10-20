@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, ComponentRef, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { PageSizes, PDFDocument } from 'pdf-lib';
 import { OpenedPdfFile } from '@core/adapters/runtime.adapter';
 import { RuntimeService } from '@core/services/runtime.service';
 import { PdfDocumentTabComponent } from './pdf-document-tab.component';
 import { WorkspaceOpenRequest } from '../pdf-workspace/pdf-workspace.component';
+import type { OcrWindowComponent } from '../ocr/ocr-window.component';
 
 interface DocumentTab {
   id: string;
@@ -27,6 +28,8 @@ interface DocumentTab {
         title="Create a blank A4 PDF in a new tab">New PDF</button>
       <button type="button" class="new-pdf resume" (click)="resumeBuilderOpen = true"
         title="Build a professional resume from 4 ATS-friendly templates with AI help">Resume builder</button>
+      <button type="button" class="new-pdf ocr" (click)="openOcr()" [disabled]="ocrLoading"
+        title="Extract text from an image or the current page (offline OCR, Indian languages)">{{ ocrLoading ? 'Loading…' : 'Image to text' }}</button>
       <div class="document-tabs" role="tablist" aria-label="Open PDF documents">
         <div *ngFor="let tab of tabs; let index = index; trackBy: trackTab" class="tab-item" role="presentation">
           <button #tabButton type="button" role="tab" [id]="'pdf-tab-' + tab.id"
@@ -45,6 +48,7 @@ interface DocumentTab {
     <p *ngIf="error" class="tab-error" role="alert">{{ error }}</p>
     <app-resume-builder *ngIf="resumeBuilderOpen" (close)="resumeBuilderOpen = false"
       (openPdf)="openResume($event)"></app-resume-builder>
+    <ng-container #ocrHost></ng-container>
     <app-pdf-document-tab *ngFor="let tab of tabs; trackBy: trackTab"
       [tabId]="tab.id" [file]="tab.file" [active]="activeId === tab.id"
       [commandTemplate]="activeId === tab.id ? documentCommands : null"
@@ -64,7 +68,7 @@ interface DocumentTab {
     .tab-item [role="tab"] { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .close-tab { padding: 6px 8px; }
     .new-pdf { flex: 0 0 auto; font-weight: 600; white-space: nowrap; }
-    .resume { color: var(--brand-lotus, #b33b65); border-color: #e9b9ca; }
+    .resume, .ocr { color: var(--brand-lotus, #b33b65); border-color: #e9b9ca; }
     .file-menu { position: relative; flex: 0 0 auto; }
     .file-menu summary { display: flex; align-items: center; min-height: 40px; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; color: #202938; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
     .file-menu summary::after { content: ' +'; margin-left: 6px; color: var(--brand-lotus, #b33b65); }
@@ -76,13 +80,17 @@ interface DocumentTab {
       /* Phone: two tidy header rows (Tools/Open/New/AI chat, then Resume builder + scrollable tabs). */
       .document-bar { display: contents; }
       .document-bar::after { content: ''; order: 2; flex-basis: 100%; height: 0; }
-      .resume { order: 3; }
+      .resume, .ocr { order: 3; }
       .document-tabs { order: 4; flex: 1 1 0; }
       button, .file-menu summary { padding: 6px 8px; }
     }
   `],
 })
-export class PdfDocumentTabsComponent {
+export class PdfDocumentTabsComponent implements OnDestroy {
+  @ViewChild('ocrHost', { read: ViewContainerRef, static: true }) ocrHost?: ViewContainerRef;
+  private ocrRef: ComponentRef<OcrWindowComponent> | null = null;
+  ocrLoading = false;
+  private ocrReturnFocus: HTMLElement | null = null;
   @ViewChildren(PdfDocumentTabComponent) hosts?: QueryList<PdfDocumentTabComponent>;
   @ViewChildren('tabButton') tabButtons?: QueryList<ElementRef<HTMLButtonElement>>;
   tabs: DocumentTab[] = [{ id: 'document-1', file: null }];
@@ -101,6 +109,56 @@ export class PdfDocumentTabsComponent {
   }
 
   constructor(private runtime: RuntimeService, private cdr: ChangeDetectorRef) {}
+
+  /** Loads the OCR window chunk on first use only, so OCR never weighs on the initial download. */
+  async openOcr(): Promise<void> {
+    if (this.ocrRef || this.ocrLoading || !this.ocrHost) return;
+    this.ocrReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    this.ocrLoading = true;
+    this.error = '';
+    this.cdr.markForCheck();
+    try {
+      const { OcrWindowComponent } = await import('../ocr/ocr-window.component');
+      const ref = this.ocrHost.createComponent(OcrWindowComponent);
+      const workspace = this.activeWorkspace;
+      ref.setInput('pageSource', workspace?.document ? () => this.activeWorkspace?.renderCurrentPageForOcr() ?? Promise.resolve(null) : null);
+      ref.setInput('canAddToPdf', !!workspace?.canInsertText);
+      ref.instance.close.subscribe(() => this.closeOcr());
+      ref.instance.addToPdf.subscribe(text => {
+        const workspace = this.activeWorkspace;
+        const problem = workspace ? workspace.addTextObjectWithText(text) : 'Open a PDF first.';
+        if (problem) {
+          ref.instance.error = problem;
+          ref.changeDetectorRef.markForCheck();
+        } else {
+          this.closeOcr();
+        }
+      });
+      this.ocrRef = ref;
+    } catch (error) {
+      this.error = `Unable to open Image to text: ${error instanceof Error ? error.message : String(error)}`;
+    } finally {
+      this.ocrLoading = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  closeOcr(): void {
+    const wasOpen = this.ocrRef !== null;
+    this.ocrRef?.destroy();
+    this.ocrRef = null;
+    this.cdr.markForCheck();
+    if (wasOpen) this.ocrReturnFocus?.focus();
+    this.ocrReturnFocus = null;
+  }
+
+  ngOnDestroy(): void {
+    this.closeOcr();
+  }
+
+  private get activeWorkspace() {
+    return this.hosts?.find(host => host.tabId === this.activeId)?.workspace;
+  }
 
   async openDocuments(request: WorkspaceOpenRequest): Promise<void> {
     if (this.selecting) return;

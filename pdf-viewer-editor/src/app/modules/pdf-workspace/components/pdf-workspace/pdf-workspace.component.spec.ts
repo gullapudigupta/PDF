@@ -314,7 +314,7 @@ describe('PdfWorkspaceComponent', () => {
     };
     persistenceService.getSetting.and.callFake(async <T>(key: string): Promise<T | null> =>
       key === 'workspaceView:doc-1'
-        ? { page: 2, zoom: 1.5, viewingMode: 'facing', theme: 'dark', darkPageRendering: true } as T
+        ? { page: 2, zoom: 1.5, zoomMode: 'custom', viewingMode: 'facing', theme: 'dark', darkPageRendering: true } as T
         : null
     );
     runtimeService.openFileDialog.and.resolveTo({ canceled: false, file });
@@ -332,6 +332,7 @@ describe('PdfWorkspaceComponent', () => {
     expect(persistenceService.setSetting).toHaveBeenCalledWith('workspaceView:doc-1', {
       page: 3,
       zoom: 1.5,
+      zoomMode: 'custom',
       viewingMode: 'facing',
       theme: 'dark',
       darkPageRendering: true,
@@ -359,7 +360,7 @@ describe('PdfWorkspaceComponent', () => {
     pdfRenderService.renderLoadedPageToCanvas.and.resolveTo();
     persistenceService.getSetting.and.callFake(async <T>(key: string): Promise<T | null> =>
       key === 'workspaceView:recent-doc'
-        ? { page: 3, zoom: 1.75, viewingMode: 'single', theme: 'dark', darkPageRendering: true } as T
+        ? { page: 3, zoom: 1.75, zoomMode: 'custom', viewingMode: 'single', theme: 'dark', darkPageRendering: true } as T
         : null
     );
 
@@ -398,6 +399,7 @@ describe('PdfWorkspaceComponent', () => {
     expect(persistenceService.setSetting).toHaveBeenCalledWith('workspaceView:doc-views', {
       page: 1,
       zoom: 1,
+      zoomMode: 'fit-page',
       viewingMode: 'facing',
       theme: 'dark',
       darkPageRendering: true,
@@ -674,11 +676,107 @@ describe('PdfWorkspaceComponent', () => {
     component.zoom = 0.55;
     await component.zoomOut();
     expect(component.zoom).toBe(0.5);
+    component.zoom = 4;
+    await component.zoomIn();
+    expect(component.zoom).toBe(4);
+    component.zoom = 0.25;
+    await component.zoomOut();
+    expect(component.zoom).toBe(0.25);
 
     await component.rotateLeft();
     expect(component.rotation).toBe(270);
     await component.rotateRight();
     expect(component.rotation).toBe(0);
+  });
+
+  it('supports fit page, fit width, presets, Ctrl+wheel and Ctrl+0 zoom', async () => {
+    const page = { getViewport: () => ({ width: 600, height: 800 }) };
+    component.document = {
+      id: 'doc-zoom', name: 'doc.pdf', totalPages: 1, bytes: new Uint8Array([1]),
+      proxy: { getPage: async () => page },
+    } as any;
+    component.totalPages = 1;
+    fixture.detectChanges();
+    pdfRenderService.renderPageToCanvas.and.resolveTo();
+
+    await component.setZoomOption('fit-width');
+    let options = pdfRenderService.renderPageToCanvas.calls.mostRecent().args[3]!;
+    expect(component.zoomMode).toBe('fit-width');
+    expect(options.fitWidth).toBeGreaterThan(0);
+    expect(options.fitHeight).toBeUndefined();
+    expect(component.zoomSelectValue).toBe('fit-width');
+
+    await component.setZoomOption('2');
+    options = pdfRenderService.renderPageToCanvas.calls.mostRecent().args[3]!;
+    expect(options).toEqual({ zoom: 2, rotation: 0 });
+    expect(component.zoomLabel).toBe('200%');
+    expect(component.zoomSelectValue).toBe('2');
+
+    const wheel = new WheelEvent('wheel', { deltaY: -100, ctrlKey: true, cancelable: true, bubbles: true });
+    const content = fixture.nativeElement.querySelector('.content') as HTMLElement;
+    content.dispatchEvent(wheel);
+    await new Promise(resolve => setTimeout(resolve, 20));
+    expect(wheel.defaultPrevented).toBeTrue();
+    expect(component.zoom).toBe(2.2);
+    expect(component.zoomSelectValue).toBe('custom');
+
+    const plainWheel = new WheelEvent('wheel', { deltaY: -100, cancelable: true, bubbles: true });
+    content.dispatchEvent(plainWheel);
+    expect(plainWheel.defaultPrevented).toBeFalse();
+
+    const fit = new KeyboardEvent('keydown', { key: '0', ctrlKey: true, cancelable: true });
+    component.onKeydown(fit);
+    await new Promise(resolve => setTimeout(resolve, 20));
+    expect(fit.defaultPrevented).toBeTrue();
+    expect(component.zoomMode).toBe('fit-page');
+    expect(pdfRenderService.renderPageToCanvas.calls.mostRecent().args[3]!.fitHeight).toBeGreaterThan(0);
+    expect(component.zoomLabel).toContain('Fit page');
+  });
+
+  it('focuses search with Ctrl+F and highlights each match on the page', async () => {
+    const textItems = [
+      { str: 'Alpha report', transform: [10, 0, 0, 10, 50, 700], width: 60 },
+      { str: 'second alpha', transform: [10, 0, 0, 10, 50, 650], width: 60 },
+    ];
+    const page = {
+      getViewport: () => ({ width: 600, height: 800, convertToViewportRectangle: (r: number[]) => [r[0], 800 - r[1], r[2], 800 - r[3]] }),
+      getTextContent: async () => ({ items: textItems }),
+    };
+    component.document = {
+      id: 'doc-hits', name: 'doc.pdf', totalPages: 2, bytes: new Uint8Array([1]),
+      proxy: { getPage: async () => page },
+    } as any;
+    component.totalPages = 2;
+    fixture.detectChanges();
+    pdfRenderService.renderPageToCanvas.and.resolveTo();
+    pdfDocumentService.extractText.and.callFake(async (n: number) => (n === 1 ? 'Alpha report second alpha' : 'none'));
+
+    const ctrlF = new KeyboardEvent('keydown', { key: 'f', ctrlKey: true, cancelable: true });
+    component.onKeydown(ctrlF);
+    expect(ctrlF.defaultPrevented).toBeTrue();
+    expect((document.activeElement as HTMLElement).hasAttribute('data-search-input')).toBeTrue();
+
+    component.searchQuery = 'alpha';
+    component.overlayWidth = 600;
+    component.overlayHeight = 800;
+    await component.searchInDocument();
+    expect(component.searchHighlights.length).toBe(2);
+    expect(component.searchHitIndex).toBe(0);
+    const [first, second] = component.searchHighlights;
+    expect(first.y).toBeLessThan(second.y);
+    expect(first.width).toBeCloseTo(25, 0);
+    expect(first.width).toBeCloseTo(second.width, 3);
+
+    fixture.detectChanges();
+    const marks = fixture.nativeElement.querySelectorAll('.search-hit');
+    expect(marks.length).toBe(2);
+    expect(marks[0].classList).toContain('current');
+
+    component.onSearchKeydown(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(component.searchHitIndex).toBe(1);
+    expect(component.searchPositionLabel).toContain('match 2 of 2');
+    component.onSearchKeydown(new KeyboardEvent('keydown', { key: 'Enter', shiftKey: true }));
+    expect(component.searchHitIndex).toBe(0);
   });
 
   it('creates page highlights with selected color and opacity', () => {
@@ -1661,6 +1759,29 @@ describe('PdfWorkspaceComponent', () => {
     expect(component.overlayObjects[0].text).toBe('Edited text');
   });
 
+  it('adds OCR text as an editable text box and renders the current page for OCR', async () => {
+    component.overlayWidth = 600;
+    component.overlayHeight = 800;
+    expect(component.addTextObjectWithText('Hello')).toBe('Open a PDF first.');
+    component.document = { id: 'doc', name: 'doc.pdf', totalPages: 2, bytes: new Uint8Array([1]), proxy: {
+      getPage: async () => ({ getViewport: () => ({ width: 612, height: 792 }) }),
+    } } as any;
+    component.currentPage = 2;
+    expect(component.addTextObjectWithText('   ')).toBe('There is no text to add.');
+    expect(component.addTextObjectWithText('నమస్తే\nline two')).toBeNull();
+    expect(component.overlayObjects[0]).toEqual(jasmine.objectContaining({ type: 'text', text: 'నమస్తే\nline two' }));
+    expect(component.selectedObjectId).toBe(component.overlayObjects[0].id);
+    expect(component.actionStatus?.message).toContain('page 2');
+
+    const render = pdfRenderService.renderLoadedPageToCanvas;
+    render.calls.reset();
+    render.and.resolveTo();
+    const image = await component.renderCurrentPageForOcr();
+    expect(image?.label).toBe('doc.pdf – page 2');
+    const options = render.calls.mostRecent().args[3];
+    expect(options?.zoom).toBeCloseTo(300 / 72, 5);
+  });
+
   it('applies point size and bold to new and selected text with undo and copy/paste', async () => {
     spyOn(window, 'prompt').and.returnValues('Default text', 'Styled text');
     component.overlayWidth = 600;
@@ -1842,7 +1963,8 @@ describe('PdfWorkspaceComponent', () => {
     const zoomIn = new KeyboardEvent('keydown', { key: '+', cancelable: true });
     component.onKeydown(zoomIn);
     expect(zoomIn.defaultPrevented).toBeTrue();
-    expect(component.zoom).toBeCloseTo(1.1);
+    expect(component.zoom).toBe(1.25);
+    expect(component.zoomMode).toBe('custom');
 
     const input = document.createElement('input');
     const deleteFromInput = new KeyboardEvent('keydown', { key: 'Delete', cancelable: true });

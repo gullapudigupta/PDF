@@ -35,6 +35,8 @@
       <button i18n="@@savePdfAs" title="Save a copy of this PDF" i18n-title="@@savePdfAsTooltip" [disabled]="!document || loading" (click)="saveFileAs()">Save As</button>
       <button *ngIf="document" (click)="openMetadataDialog()">Metadata</button>
       <button *ngIf="document" (click)="openProtectionDialog()">Protect PDF</button>
+      <button *ngIf="document" [disabled]="signatureLoading" (click)="openSignDialog()" title="Sign a copy with your .pfx/.p12 certificate">Digitally sign</button>
+      <button *ngIf="document" [disabled]="signatureLoading" (click)="openSignaturesPanel()" title="Check the digital signatures in this PDF">Signatures</button>
       <button [disabled]="!document || loading || totalPages <= 1" (click)="deleteCurrentPage()">Delete Page</button>
       <button [disabled]="!document || loading" (click)="insertPdfInput.click()">Insert PDF</button>
       <input #insertPdfInput type="file" accept="application/pdf,.pdf" hidden (change)="insertPagesFromFile($event)" />
@@ -96,11 +98,13 @@
 
     <div class="toolbar-right" *ngIf="toolbarVisibility.search">
       <input
-        type="text"
+        type="search"
+        data-search-input
         [(ngModel)]="searchQuery"
-        (keyup.enter)="searchInDocument()"
+        (keydown)="onSearchKeydown($event)"
         aria-label="Search text"
-        placeholder="Search text"
+        placeholder="Search text (Ctrl+F)"
+        title="Enter: next match · Shift+Enter: previous match"
       />
       <label><input type="checkbox" [(ngModel)]="searchCaseSensitive" /> Match case</label>
       <label><input type="checkbox" [(ngModel)]="searchRegexMode" /> Regex</label>
@@ -154,15 +158,24 @@
   <app-pdf-protect-dialog *ngIf="protectionDialogOpen" [fileName]="document?.name || ''"
     [busy]="actionBusy" [error]="dialogError" (protect)="protectCurrentPdf($event)" (cancel)="closeProtectionDialog()"></app-pdf-protect-dialog>
 
+  <ng-container #signatureHost></ng-container>
+
   <ng-template #pageControls>
   <div class="viewer-controls" *ngIf="document && toolbarVisibility.navigation">
     <button aria-label="Previous page" title="Go to the previous page" i18n-title="@@previousPageTooltip" i18n="@@previousPage" (click)="previousPage()" [disabled]="atFirstViewingSpread || loading">Previous</button>
     <span role="status" aria-live="polite" i18n="@@pageCount">Page {{ currentPage }} / {{ totalPages }}</span>
     <button aria-label="Next page" title="Go to the next page" i18n-title="@@nextPageTooltip" i18n="@@nextPage" (click)="nextPage()" [disabled]="atLastViewingSpread || loading">Next</button>
 
-    <button aria-label="Zoom out" title="Decrease page zoom" i18n-title="@@zoomOutTooltip" (click)="zoomOut()" [disabled]="loading">-</button>
-    <span aria-live="polite">{{ (zoom * 100).toFixed(0) }}%</span>
-    <button aria-label="Zoom in" title="Increase page zoom" i18n-title="@@zoomInTooltip" (click)="zoomIn()" [disabled]="loading">+</button>
+    <button aria-label="Zoom out" title="Zoom out (Ctrl+-)" i18n-title="@@zoomOutTooltip" (click)="zoomOut()" [disabled]="loading || zoom <= 0.25">-</button>
+    <select class="zoom-select" aria-label="Zoom level" title="Zoom (Ctrl+mouse wheel, Ctrl+0 fits the page)"
+      [ngModel]="zoomSelectValue" (ngModelChange)="setZoomOption($event)" [disabled]="loading">
+      <option value="fit-page">Fit page</option>
+      <option value="fit-width">Fit width</option>
+      <option *ngFor="let preset of zoomPresets" [value]="'' + preset">{{ preset * 100 }}%</option>
+      <option value="custom" hidden>{{ (zoom * 100).toFixed(0) }}%</option>
+    </select>
+    <span class="zoom-label" aria-live="polite">{{ zoomLabel }}</span>
+    <button aria-label="Zoom in" title="Zoom in (Ctrl++)" i18n-title="@@zoomInTooltip" (click)="zoomIn()" [disabled]="loading || zoom >= 4">+</button>
 
     <button aria-label="Rotate counterclockwise" title="Rotate counterclockwise" i18n-title="@@rotateCounterclockwiseTooltip" (click)="rotateLeft()" [disabled]="loading">Rotate left</button>
     <button aria-label="Rotate clockwise" title="Rotate clockwise" i18n-title="@@rotateClockwiseTooltip" (click)="rotateRight()" [disabled]="loading">Rotate right</button>
@@ -184,7 +197,7 @@
     <label><input type="checkbox" [ngModel]="darkPageRendering" (ngModelChange)="setDarkPageRendering($event)" /> Dark page</label>
     <details class="viewer-help">
       <summary i18n="@@help">Help</summary>
-      <p i18n="@@keyboardHelp">Use Page Up/Page Down or the arrow keys to navigate, plus/minus to zoom, and Control/Command with Z to undo.</p>
+      <p i18n="@@keyboardHelp">Use Page Up/Page Down or the arrow keys to navigate, plus/minus or Ctrl+mouse wheel to zoom, Ctrl+0 to fit the page, Ctrl+F to search, and Control/Command with Z to undo.</p>
       <p i18n="@@editingModeHelp">Switch to Single page to edit. Continuous and Facing pages are reading modes.</p>
     </details>
     <button type="button" (click)="closeDocument()" [disabled]="loading">Close PDF</button>
@@ -193,7 +206,7 @@
 
   <div class="content" #viewerHost>
     <span id="viewer-keyboard-help" class="visually-hidden">
-      Use Page Up and Page Down to navigate pages, plus and minus to zoom, and Control or Command with Z to undo.
+      Use Page Up and Page Down to navigate pages, plus and minus or Control with the mouse wheel to zoom, Control F to search, and Control or Command with Z to undo.
     </span>
     <app-action-status [status]="actionStatus" (dismiss)="dismissActionStatus()"></app-action-status>
         <div class="status" *ngIf="loading">Loading PDF...</div>
@@ -240,11 +253,14 @@
     </aside>
 
     <div class="page-stage" *ngIf="document && !loading && viewingMode === 'single'" #stageHost
-      role="region" aria-label="PDF page viewer">
+      [class.zoom-custom]="zoomMode === 'custom'" role="region" aria-label="PDF page viewer">
       <canvas #viewerCanvas tabindex="0" role="img" [attr.aria-describedby]="'viewer-keyboard-help'"
         [attr.aria-label]="'PDF page ' + currentPage + ' of ' + totalPages" [class.dark-page]="darkPageRendering"></canvas>
 
       <div class="overlay-layer" #annotationLayer [class.annotation-mode]="annotationTool !== null" [class.crop-mode]="cropMode" [class.form-authoring-mode]="formAuthoringType !== null" [style.width.px]="overlayWidth" [style.height.px]="overlayHeight" (mousedown)="startAnnotation($event); startCrop($event); startFormFieldPlacement($event)" (mousemove)="moveAnnotation($event); moveCrop($event)" (mouseup)="finishAnnotation(); finishCrop()">
+        <mark *ngFor="let hit of searchHighlights; let i = index" class="search-hit" [class.current]="i === searchHitIndex"
+          [style.left.px]="hit.x" [style.top.px]="hit.y" [style.width.px]="hit.width" [style.height.px]="hit.height"
+          [attr.aria-hidden]="true"></mark>
         <ng-container *ngFor="let annotation of pageAnnotations">
           <div *ngIf="annotation.type !== 'draw'" class="pdf-annotation" [class.pdf-highlight]="annotation.type === 'highlight'" [class.pdf-comment]="annotation.type === 'comment' || annotation.type === 'sticky-note'" [style.left.px]="annotation.rect.x" [style.top.px]="annotation.rect.y" [style.width.px]="annotation.rect.width" [style.height.px]="annotation.rect.height" [style.background-color]="annotationColorFor(annotation)" [style.opacity]="annotation.style.opacity" [title]="annotation.content || annotation.type"></div>
           <svg *ngIf="annotation.type === 'draw'" class="pdf-drawing" [style.left.px]="annotation.rect.x" [style.top.px]="annotation.rect.y" [style.width.px]="annotation.rect.width" [style.height.px]="annotation.rect.height" [attr.viewBox]="'0 0 ' + annotation.rect.width + ' ' + annotation.rect.height"><polyline [attr.points]="annotation.content" fill="none" [attr.stroke]="annotation.style.color" [attr.stroke-width]="annotation.style.strokeWidth || 2" [attr.opacity]="annotation.style.opacity" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>
@@ -381,9 +397,9 @@
   </aside>
   <div class="search-result" *ngIf="searchMessage">{{ searchMessage }}</div>
   <nav class="search-results" *ngIf="searchResults.length" aria-label="PDF search results">
-    <button type="button" (click)="previousSearchResult()">Previous match</button>
-    <span>Result {{ currentSearchResultIndex + 1 }} of {{ searchResults.length }} pages</span>
-    <button type="button" (click)="nextSearchResult()">Next match</button>
+    <button type="button" (click)="previousSearchResult()" title="Shift+Enter in the search box">Previous match</button>
+    <span aria-live="polite">{{ searchPositionLabel }}</span>
+    <button type="button" (click)="nextSearchResult()" title="Enter in the search box">Next match</button>
     <ul>
       <li *ngFor="let result of searchResults; let i = index">
         <button type="button" [attr.aria-current]="i === currentSearchResultIndex ? 'page' : null" (click)="navigateToSearchResult(i)">

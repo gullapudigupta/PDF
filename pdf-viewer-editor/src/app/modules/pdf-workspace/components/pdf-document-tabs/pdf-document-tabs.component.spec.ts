@@ -51,6 +51,41 @@ describe('PdfDocumentTabsComponent', () => {
     expect(fixture.nativeElement.querySelector('app-resume-builder')).toBeNull();
   });
 
+  it('loads the Image to text window only when requested and closes it again', async () => {
+    expect(fixture.nativeElement.querySelector('app-ocr-window')).toBeNull();
+    const button = Array.from(fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>)
+      .find(item => item.textContent?.trim() === 'Image to text') as HTMLButtonElement;
+    expect(button).toBeTruthy();
+    await component.openOcr();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('app-ocr-window')).not.toBeNull();
+    await component.openOcr();
+    expect(fixture.nativeElement.querySelectorAll('app-ocr-window').length).toBe(1);
+    component.closeOcr();
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('app-ocr-window')).toBeNull();
+
+    const workspace = { document: {}, canInsertText: true, addTextObjectWithText: jasmine.createSpy('add').and.returnValue(null), renderCurrentPageForOcr: jasmine.createSpy('render') };
+    Object.defineProperty(component, 'activeWorkspace', { get: () => workspace });
+    await component.openOcr();
+    fixture.detectChanges();
+    const ocr = fixture.debugElement.query(By.css('app-ocr-window')).componentInstance;
+    expect(ocr.canAddToPdf).toBeTrue();
+    expect(ocr.pageSource).toEqual(jasmine.any(Function));
+    ocr.addToPdf.emit('Scanned text');
+    fixture.detectChanges();
+    expect(workspace.addTextObjectWithText).toHaveBeenCalledWith('Scanned text');
+    expect(fixture.nativeElement.querySelector('app-ocr-window')).toBeNull();
+
+    workspace.addTextObjectWithText.and.returnValue('Switch to Single page view to add text.');
+    await component.openOcr();
+    fixture.detectChanges();
+    const again = fixture.debugElement.query(By.css('app-ocr-window')).componentInstance;
+    again.addToPdf.emit('Scanned text');
+    expect(again.error).toBe('Switch to Single page view to add text.');
+    component.closeOcr();
+  });
+
   it('opens multiple PDFs separately and selects an already-open file without duplicating it', async () => {
     await component.openDocuments({ multiple: true });
     fixture.detectChanges();

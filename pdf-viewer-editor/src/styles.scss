@@ -20,3 +20,22 @@ body {
   line-height: 1.45;
   color: #333;
 }
+
+/* Workspace viewer additions kept global because the workspace component style budget is full. */
+.content .page-stage.zoom-custom,
+.content .page-stage.zoom-custom canvas { max-width: none; }
+.overlay-layer .search-hit {
+  position: absolute;
+  padding: 0;
+  border-radius: 2px;
+  background: rgba(255, 213, 0, .38);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.overlay-layer .search-hit.current {
+  background: rgba(255, 128, 0, .5);
+  outline: 2px solid #c2410c;
+  outline-offset: 1px;
+}
+.viewer-controls .zoom-select { min-width: 96px; }
+.viewer-controls .zoom-label { min-width: 7.5em; font-variant-numeric: tabular-nums; }

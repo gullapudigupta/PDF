@@ -1,5 +1,4 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, inject } from '@angular/core';import { Store } from '@ngrx/store';
 import { RuntimeService } from '@core/services/runtime.service';
 import { OpenedPdfFile } from '@core/adapters/runtime.adapter';
 import { PasswordResponses } from 'pdfjs-dist';
@@ -23,6 +22,16 @@ type EditableObjectType = 'text' | 'image' | 'link';
 type ViewingMode = 'single' | 'continuous' | 'facing';
 type WorkspaceTheme = 'light' | 'dark';
 type ToolbarGroup = 'editing' | 'search' | 'navigation' | 'annotations';
+export type ZoomMode = 'custom' | 'fit-page' | 'fit-width';
+const MIN_ZOOM = 0.25;
+const MAX_ZOOM = 4;
+
+export interface SearchHighlight {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
 
 export interface WorkspaceOpenRequest {
   multiple: boolean;
@@ -145,6 +154,10 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
   searching = false;
   searchResults: SearchResult[] = [];
   currentSearchResultIndex = 0;
+  searchHighlights: SearchHighlight[] = [];
+  searchHitIndex = 0;
+  private pendingSearchHit: 'first' | 'last' = 'first';
+  private wheelZoomBusy = false;
   visibleThumbnailPages: number[] = [];
   thumbnailItemHeight = 140;
   readonly thumbnailRenderStates = new Map<number, 'loading' | 'ready' | 'error'>();
@@ -190,6 +203,8 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
   currentPage = 1;
   totalPages = 0;
   zoom = 1;
+  zoomMode: ZoomMode = 'fit-page';
+  readonly zoomPresets = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
   rotation = 0;
   viewingMode: ViewingMode = 'single';
   theme: WorkspaceTheme = 'light';
@@ -242,6 +257,8 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
   private autosaveTimer: ReturnType<typeof setTimeout> | null = null;
   private savedFilePath: string | null = null;
   private passwordResolver: ((password: string | null) => void) | null = null;
+
+  private readonly hostElement: ElementRef<HTMLElement> = inject(ElementRef);
 
   constructor(
     private store: Store,
@@ -439,6 +456,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
     const viewState = await this.persistenceService.getSetting<{
       page?: number;
       zoom?: number;
+      zoomMode?: ZoomMode;
       viewingMode?: ViewingMode;
       theme?: WorkspaceTheme;
       darkPageRendering?: boolean;
@@ -448,9 +466,11 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
     this.currentPage = Number.isInteger(viewState?.page)
       ? Math.min(Math.max(viewState!.page!, 1), this.totalPages)
       : 1;
-    this.zoom = typeof viewState?.zoom === 'number' && Number.isFinite(viewState.zoom)
-      ? Math.min(3, Math.max(0.5, viewState.zoom))
-      : 1;
+    const savedZoom = typeof viewState?.zoom === 'number' && Number.isFinite(viewState.zoom) ? viewState.zoom : null;
+    this.zoomMode = viewState?.zoomMode === 'custom' && savedZoom !== null ? 'custom'
+      : viewState?.zoomMode === 'fit-width' ? 'fit-width' : 'fit-page';
+    this.zoom = this.zoomMode === 'custom' ? this.clampZoom(savedZoom!) : 1;
+    this.searchHighlights = [];
     this.viewingMode = viewState?.viewingMode && ['single', 'continuous', 'facing'].includes(viewState.viewingMode)
       ? viewState.viewingMode
       : this.preferredViewingMode;
@@ -665,6 +685,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
       await this.persistenceService.setSetting(`workspaceView:${this.document.id}`, {
         page: this.currentPage,
         zoom: this.zoom,
+        zoomMode: this.zoomMode,
         viewingMode: this.viewingMode,
         theme: this.theme,
         darkPageRendering: this.darkPageRendering,
@@ -1380,6 +1401,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
       this.document.id,
       this.viewingMode,
       pages.join(','),
+      this.zoomMode,
       this.zoom,
       this.rotation,
       this.darkPageRendering,
@@ -1400,7 +1422,9 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
           document.proxy,
           pages[index],
           canvases[index].nativeElement,
-          { fitWidth, zoom: this.zoom, rotation: this.rotation }
+          this.zoomMode === 'custom'
+            ? { zoom: this.zoom, rotation: this.rotation }
+            : { fitWidth, zoom: 1, rotation: this.rotation }
         );
       }
       this.scrollToModePage(this.currentPage);
@@ -1414,17 +1438,100 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
     target?.scrollIntoView({ block: 'start', behavior: 'auto' });
   }
 
-  async zoomIn(): Promise<void> {
-    this.zoom = Math.min(3, this.zoom + 0.1);
+  get zoomLabel(): string {
+    const percent = `${Math.round(this.zoom * 100)}%`;
+    if (this.zoomMode === 'fit-page') return `Fit page (${percent})`;
+    if (this.zoomMode === 'fit-width') return `Fit width (${percent})`;
+    return percent;
+  }
+
+  get zoomSelectValue(): string {
+    if (this.zoomMode !== 'custom') return this.zoomMode;
+    return this.zoomPresets.some(preset => Math.abs(preset - this.zoom) < 0.001) ? String(this.zoom) : 'custom';
+  }
+
+  async setZoomOption(value: string): Promise<void> {
+    if (value === 'fit-page' || value === 'fit-width') {
+      await this.setZoomMode(value);
+      return;
+    }
+    const zoom = Number(value);
+    if (Number.isFinite(zoom) && zoom > 0) await this.setZoom(zoom);
+  }
+
+  async setZoomMode(mode: 'fit-page' | 'fit-width'): Promise<void> {
+    this.zoomMode = mode;
+    this.renderedModeKey = '';
+    await this.renderCurrentPage();
+    await this.persistWorkspaceViewState();
+  }
+
+  async setZoom(value: number): Promise<void> {
+    this.zoomMode = 'custom';
+    this.zoom = this.clampZoom(value);
+    this.renderedModeKey = '';
     await this.persistWorkspaceViewState();
     await this.renderCurrentPage();
   }
 
-  async zoomOut(): Promise<void> {
-    this.zoom = Math.max(0.5, this.zoom - 0.1);
-    await this.persistWorkspaceViewState();
-    await this.renderCurrentPage();
+  async zoomIn(): Promise<void> {
+    const next = this.zoomPresets.find(preset => preset > this.zoom + 0.001) ?? MAX_ZOOM;
+    await this.setZoom(next);
   }
+
+  async zoomOut(): Promise<void> {
+    const next = [...this.zoomPresets].reverse().find(preset => preset < this.zoom - 0.001) ?? MIN_ZOOM;
+    await this.setZoom(next);
+  }
+
+  private clampZoom(value: number): number {
+    return Math.round(Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, value)) * 100) / 100;
+  }
+
+  @HostListener('wheel', ['$event'])
+  onWheel(event: WheelEvent): void {
+    if (!this.active || !this.document || !(event.ctrlKey || event.metaKey) || !event.deltaY) return;
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target?.closest('.content')) return;
+    event.preventDefault();
+    if (this.wheelZoomBusy) return;
+    this.wheelZoomBusy = true;
+    const factor = event.deltaY < 0 ? 1.1 : 1 / 1.1;
+    void this.setZoom(this.zoom * factor).finally(() => {
+      this.wheelZoomBusy = false;
+      this.cdr.markForCheck();
+    });
+  }
+
+  focusSearch(): void {
+    const inputs = Array.from(this.hostElement.nativeElement.querySelectorAll<HTMLInputElement>('input[data-search-input]'));
+    let input = inputs.find(element => element.offsetParent !== null || element.getClientRects().length > 0);
+    if (!input && !this.toolsOpen) {
+      this.toolsOpen = true;
+      this.cdr.detectChanges();
+      input = Array.from(this.hostElement.nativeElement.querySelectorAll<HTMLInputElement>('input[data-search-input]'))
+        .find(element => element.closest('.tools-panel'));
+    }
+    if (!input) {
+      this.setActionStatus('info', 'Search is hidden. Turn on the Search toolbar in Tools > Toolbar to search this PDF.');
+      return;
+    }
+    input.focus();
+    input.select();
+  }
+
+  onSearchKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    const query = this.searchQuery.trim();
+    if (this.searchResults.length && query === this.lastSearchQuery) {
+      void (event.shiftKey ? this.previousSearchResult() : this.nextSearchResult());
+    } else {
+      void this.searchInDocument();
+    }
+  }
+
+  private lastSearchQuery = '';
 
   async rotateLeft(): Promise<void> {
     this.rotation = (this.rotation - 90 + 360) % 360;
@@ -1491,6 +1598,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
 
       this.searchResults = results;
       this.currentSearchResultIndex = 0;
+      this.lastSearchQuery = query;
       if (results.length) {
         const totalMatches = results.reduce((total, result) => total + result.count, 0);
         await this.navigateToSearchResult(0);
@@ -1506,23 +1614,130 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
     }
   }
 
-  async navigateToSearchResult(index: number): Promise<void> {
+  async navigateToSearchResult(index: number, hit: 'first' | 'last' = 'first'): Promise<void> {
     if (index < 0 || index >= this.searchResults.length) return;
     this.currentSearchResultIndex = index;
+    this.pendingSearchHit = hit;
+    if (this.currentPage === this.searchResults[index].page && this.viewingMode === 'single') {
+      await this.updateSearchHighlights();
+      return;
+    }
     this.currentPage = this.searchResults[index].page;
     await this.renderCurrentPage();
   }
 
   async previousSearchResult(): Promise<void> {
     if (!this.searchResults.length) return;
+    if (this.searchHitIndex > 0 && this.currentPage === this.searchResults[this.currentSearchResultIndex]?.page) {
+      this.searchHitIndex -= 1;
+      this.scrollSearchHitIntoView();
+      return;
+    }
     const index = (this.currentSearchResultIndex - 1 + this.searchResults.length) % this.searchResults.length;
-    await this.navigateToSearchResult(index);
+    await this.navigateToSearchResult(index, 'last');
   }
 
   async nextSearchResult(): Promise<void> {
     if (!this.searchResults.length) return;
+    if (this.searchHitIndex < this.searchHighlights.length - 1 && this.currentPage === this.searchResults[this.currentSearchResultIndex]?.page) {
+      this.searchHitIndex += 1;
+      this.scrollSearchHitIntoView();
+      return;
+    }
     const index = (this.currentSearchResultIndex + 1) % this.searchResults.length;
     await this.navigateToSearchResult(index);
+  }
+
+  get searchPositionLabel(): string {
+    const result = this.searchResults[this.currentSearchResultIndex];
+    if (!result) return '';
+    const hits = this.searchHighlights.length;
+    const match = hits ? ` · match ${this.searchHitIndex + 1} of ${hits} on this page` : '';
+    return `Page ${result.page} (${this.currentSearchResultIndex + 1} of ${this.searchResults.length} pages)${match}`;
+  }
+
+  private searchMatcher(): RegExp | null {
+    const query = this.searchQuery.trim();
+    if (!query || query !== this.lastSearchQuery) return null;
+    try {
+      const pattern = this.searchRegexMode ? query : query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp(pattern, this.searchCaseSensitive ? 'g' : 'gi');
+    } catch {
+      return null;
+    }
+  }
+
+  private async updateSearchHighlights(): Promise<void> {
+    const pageResult = this.searchResults[this.currentSearchResultIndex];
+    const matcher = this.searchMatcher();
+    if (!this.document || !matcher || pageResult?.page !== this.currentPage || this.viewingMode !== 'single') {
+      this.searchHighlights = [];
+      this.searchHitIndex = 0;
+      return;
+    }
+    try {
+      const page = await this.document.proxy?.getPage?.(this.currentPage);
+      if (!page || typeof page.getTextContent !== 'function' || typeof page.getViewport !== 'function') {
+        this.searchHighlights = [];
+        return;
+      }
+      const viewport = page.getViewport({ scale: 1, rotation: this.rotation });
+      const scaleX = viewport.width > 0 ? this.overlayWidth / viewport.width : 1;
+      const scaleY = viewport.height > 0 ? this.overlayHeight / viewport.height : 1;
+      const content = await page.getTextContent();
+      const items = (content.items as any[]).filter(item => typeof item.str === 'string' && Array.isArray(item.transform));
+      let text = '';
+      const spans = items.map(item => {
+        const start = text.length;
+        text += item.str + ' ';
+        return { item, start, end: start + item.str.length };
+      });
+      const highlights: SearchHighlight[] = [];
+      let match: RegExpExecArray | null;
+      matcher.lastIndex = 0;
+      while ((match = matcher.exec(text)) && highlights.length < 500) {
+        if (!match[0].length) {
+          matcher.lastIndex++;
+          continue;
+        }
+        const matchStart = match.index;
+        const matchEnd = match.index + match[0].length;
+        for (const span of spans) {
+          if (span.end <= matchStart || span.start >= matchEnd || span.end === span.start) continue;
+          const [a, b, c, d, e, f] = span.item.transform as number[];
+          const fontHeight = Math.hypot(c, d) || Math.hypot(a, b) || 10;
+          const itemWidth = Number(span.item.width) || fontHeight * span.item.str.length * 0.5;
+          const length = span.end - span.start;
+          const from = (Math.max(matchStart, span.start) - span.start) / length;
+          const to = (Math.min(matchEnd, span.end) - span.start) / length;
+          const rect = viewport.convertToViewportRectangle([
+            e + itemWidth * from, f - fontHeight * 0.2, e + itemWidth * to, f + fontHeight * 0.95,
+          ]) as number[];
+          highlights.push({
+            x: Math.min(rect[0], rect[2]) * scaleX,
+            y: Math.min(rect[1], rect[3]) * scaleY,
+            width: Math.max(2, Math.abs(rect[2] - rect[0]) * scaleX),
+            height: Math.max(4, Math.abs(rect[3] - rect[1]) * scaleY),
+          });
+        }
+      }
+      this.searchHighlights = highlights;
+      this.searchHitIndex = this.pendingSearchHit === 'last' ? Math.max(0, highlights.length - 1) : 0;
+      this.pendingSearchHit = 'first';
+      this.cdr.markForCheck();
+      this.scrollSearchHitIntoView();
+    } catch {
+      this.searchHighlights = [];
+      this.searchHitIndex = 0;
+    }
+  }
+
+  private scrollSearchHitIntoView(): void {
+    this.cdr.markForCheck();
+    requestAnimationFrame(() => {
+      const hit = this.hostElement.nativeElement.querySelector<HTMLElement>('.search-hit.current');
+      hit?.scrollIntoView?.({ block: 'center', inline: 'nearest', behavior: 'smooth' });
+    });
   }
 
   searchResultParts(text: string): { text: string; match: boolean }[] {
@@ -1651,6 +1866,22 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
 
     const target = event.target instanceof HTMLElement ? event.target : null;
     if (target?.closest('app-ai-chat')) return;
+    if ((event.ctrlKey || event.metaKey) && !event.altKey && this.document) {
+      if (key === 'f') {
+        this.focusSearch();
+        event.preventDefault();
+        return;
+      }
+      if (!target?.closest('input, textarea, select, [contenteditable="true"]')) {
+        if (key === '0') void this.setZoomMode('fit-page');
+        else if (key === '+' || key === '=') void this.zoomIn();
+        else if (key === '-') void this.zoomOut();
+        if (key === '0' || key === '+' || key === '=' || key === '-') {
+          event.preventDefault();
+          return;
+        }
+      }
+    }
     if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
 
     if (key === 'backspace' || key === 'delete') {
@@ -1898,11 +2129,47 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
 
   addTextObject(): void {
     const text = window.prompt('Enter text for the new text box:', 'Sample text') ?? 'Sample text';
+    this.insertTextObject(text, 220, 90);
+  }
+
+  get canInsertText(): boolean {
+    return !!this.document && !this.document.isEncrypted && !this.loading && this.viewingMode === 'single';
+  }
+
+  /** Inserts externally produced text (for example OCR output) as a normal editable text box. */
+  addTextObjectWithText(text: string): string | null {
+    const value = text.trim();
+    if (!value) return 'There is no text to add.';
+    if (!this.document) return 'Open a PDF first.';
+    if (this.document.isEncrypted) return 'This PDF is password-protected and read-only.';
+    if (this.viewingMode !== 'single') return 'Switch to Single page view to add text.';
+    const lines = value.split('\n').length;
+    const lineHeight = this.textFontSize * this.pagePixelsPerPoint * 1.35;
+    const width = Math.max(180, Math.min(520, (this.overlayWidth || 600) * 0.8));
+    const height = Math.max(60, Math.min((this.overlayHeight || 800) * 0.8, lines * lineHeight + 40));
+    this.insertTextObject(value, width, height);
+    this.setActionStatus('success', `Added the extracted text to page ${this.currentPage} as a text box. Drag it into place, then save the PDF.`);
+    this.cdr.markForCheck();
+    return null;
+  }
+
+  /** Renders the current page at OCR resolution (about 300 dpi, capped at 4000 px on the long side). */
+  async renderCurrentPageForOcr(): Promise<{ canvas: HTMLCanvasElement; label: string } | null> {
+    if (!this.document || this.loading) return null;
+    const page = await this.document.proxy.getPage(this.currentPage);
+    const base = page.getViewport({ scale: 1, rotation: this.rotation });
+    const scale = Math.max(1, Math.min(300 / 72, 4000 / Math.max(base.width, base.height)));
+    const canvas = document.createElement('canvas');
+    await this.pdfRenderService.renderLoadedPageToCanvas(this.document.proxy, this.currentPage, canvas, { zoom: scale, rotation: this.rotation });
+    return { canvas, label: `${this.document.name} – page ${this.currentPage}` };
+  }
+
+  private insertTextObject(text: string, width: number, height: number): void {
     const object = this.createBaseObject({
       type: 'text',
       label: 'Text Box',
-      width: 220,
-      height: 90,
+      width,
+      height,
       text,
       fontSize: this.textFontSize,
       bold: this.textBold,
@@ -2699,12 +2966,14 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
       return;
     }
 
-    const options = {
-      fitWidth: Math.max(100, host.clientWidth - 32),
-      fitHeight: Math.max(100, host.clientHeight - 32),
-      zoom: this.zoom,
-      rotation: this.rotation,
-    };
+    const options = this.zoomMode === 'custom'
+      ? { zoom: this.zoom, rotation: this.rotation }
+      : {
+        fitWidth: this.availableStageWidth(host),
+        ...(this.zoomMode === 'fit-page' ? { fitHeight: Math.max(100, host.clientHeight - 32) } : {}),
+        zoom: 1,
+        rotation: this.rotation,
+      };
     if (this.document.isEncrypted) {
       await this.pdfRenderService.renderLoadedPageToCanvas(this.document.proxy, this.currentPage, canvas, options);
     } else {
@@ -2712,23 +2981,52 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
     }
 
     this.syncOverlayBounds(canvas);
-    await this.updatePagePixelsPerPoint();
+    const measured = await this.updatePagePixelsPerPoint();
+    if (measured && this.zoomMode !== 'custom') this.zoom = Math.round(this.pagePixelsPerPoint * 100) / 100;
     await this.loadFormWidgets();
+    await this.updateSearchHighlights();
+    this.cdr.markForCheck();
   }
 
-  private async updatePagePixelsPerPoint(): Promise<void> {
+  private availableStageWidth(host: HTMLElement): number {
+    let width = host.clientWidth - 42;
+    const sidebar = host.querySelector<HTMLElement>('.navigation-sidebar');
+    if (sidebar && typeof getComputedStyle === 'function' && getComputedStyle(host).flexDirection !== 'column') {
+      width -= sidebar.offsetWidth + 18;
+    }
+    return Math.max(100, width);
+  }
+
+  private async updatePagePixelsPerPoint(): Promise<boolean> {
     try {
       const page = await this.document?.proxy?.getPage(this.currentPage);
       const height = page?.getViewport?.({ scale: 1, rotation: this.rotation })?.height;
-      this.pagePixelsPerPoint = height > 0 && this.overlayHeight > 0 ? this.overlayHeight / height : 1;
+      const measured = height > 0 && this.overlayHeight > 0;
+      this.pagePixelsPerPoint = measured ? this.overlayHeight / height : 1;
+      return measured;
     } catch {
       this.pagePixelsPerPoint = 1;
+      return false;
     }
   }
 
+  private overlayBoundsPage: number | null = null;
+
   private syncOverlayBounds(canvas: HTMLCanvasElement): void {
+    const previousWidth = this.overlayWidth;
+    const previousHeight = this.overlayHeight;
     this.overlayWidth = canvas.clientWidth || canvas.width || 0;
     this.overlayHeight = canvas.clientHeight || canvas.height || 0;
+    const samePage = this.overlayBoundsPage === this.currentPage;
+    this.overlayBoundsPage = this.currentPage;
+    if (samePage && previousWidth > 0 && previousHeight > 0 && this.overlayWidth > 0 && this.overlayHeight > 0
+      && (Math.abs(previousWidth - this.overlayWidth) > 0.5 || Math.abs(previousHeight - this.overlayHeight) > 0.5)) {
+      const sx = this.overlayWidth / previousWidth;
+      const sy = this.overlayHeight / previousHeight;
+      this.overlayObjects = this.overlayObjects.map(object => (object.pageNumber ?? this.currentPage) === this.currentPage
+        ? { ...object, x: object.x * sx, y: object.y * sy, width: object.width * sx, height: object.height * sy }
+        : object);
+    }
     this.overlayObjects = this.overlayObjects.map((object) => this.clampObject(object));
   }
 

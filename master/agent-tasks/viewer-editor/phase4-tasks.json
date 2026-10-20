@@ -1381,6 +1381,267 @@
           "P4-UI-003"
         ]
       }
+    },
+    {
+      "id": "P4-VIEW-001",
+      "name": "Zoom presets/fit modes/Ctrl+wheel and Ctrl+F search with on-page highlights",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 4,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-QA-001"
+      ],
+      "deliverables": [
+        "Zoom menu with presets, Fit page, Fit width",
+        "Ctrl/Cmd wheel and 0/+/- shortcuts",
+        "Ctrl/Cmd+F search focus and Enter/Shift+Enter navigation",
+        "On-page search highlights"
+      ],
+      "acceptanceCriteria": [
+        "Zoom clamped 25-400% and fit modes re-apply on resize",
+        "Matches highlighted on page with current match emphasised",
+        "Workspace tests pass"
+      ],
+      "tags": [
+        "zoom",
+        "search",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: implement zoom in and zoom out, search pdf functionality, image to text conversion in a separate window, add digital signature functionality. Choices: enhance zoom/search; Tesseract bundled offline; English, Hindi, Telugu, Tamil and other Indian languages; certificate-based PKCS#12 signing with verify panel."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 117,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-QA-001"
+        ]
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Zoom now uses true percentages (100% = actual page size) with Fit page (default) and Fit width modes persisted per document; presets 25-400%; Ctrl+wheel and Ctrl+0/+/- shortcuts; overlays rescale on zoom. Search adds Ctrl+F focus, Enter/Shift+Enter match navigation, on-page highlight boxes from pdf.js text positions with the current match emphasised and scrolled into view. Styles placed in global styles.scss because the component style budget is full.",
+        "executedAt": "2026-10-20"
+      },
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "pnpm exec ng test --watch=false --browsers=ChromeHeadless --include=src/app/modules/pdf-workspace/components/pdf-workspace"
+        ],
+        "summary": "68 workspace component tests passed including fit page/fit width/presets/Ctrl+wheel/Ctrl+0 and Ctrl+F with on-page match highlight navigation."
+      },
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.html",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-workspace/pdf-workspace.component.spec.ts",
+        "pdf-viewer-editor/src/styles.scss"
+      ],
+      "completedDate": "2026-10-20"
+    },
+    {
+      "id": "P4-OCR-001",
+      "name": "Lazy-loaded offline image-to-text (OCR) window in Indian languages",
+      "status": "COMPLETED",
+      "priority": "HIGH",
+      "estimatedHours": 6,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-QA-001"
+      ],
+      "deliverables": [
+        "OcrWindowComponent (standalone, lazy)",
+        "OcrEngineService with bundled tesseract assets",
+        "Extension CSP wasm-unsafe-eval"
+      ],
+      "acceptanceCriteria": [
+        "tesseract.js not in initial bundle",
+        "Image, paste and current-page sources with progress and cancel",
+        "Copy, download .txt and add-to-PDF",
+        "Tests with mocked engine pass"
+      ],
+      "tags": [
+        "ocr",
+        "lazy-loading",
+        "offline",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: implement zoom in and zoom out, search pdf functionality, image to text conversion in a separate window, add digital signature functionality. Choices: enhance zoom/search; Tesseract bundled offline; English, Hindi, Telugu, Tamil and other Indian languages; certificate-based PKCS#12 signing with verify panel.",
+        "User: OCR must load only when the user opens the component, to keep the initial bundle small."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 118,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-QA-001"
+        ]
+      },
+      "executionResult": {
+        "model": "Copilot SDK session (model identifier not exposed)",
+        "provider": "GitHub Copilot",
+        "executionNotes": "Initial bundle unchanged apart from about 0.5 kB of button code (main 551.79 kB). Real OCR read 'INVOICE 2026 / Hello Anirdeshya' at 93% confidence in under 1 s. Known limitation: Electron production loads via file://, so asset fetches from the OCR worker are unverified there.",
+        "executedAt": "2026-10-20"
+      },
+      "verification": {
+        "status": "passed",
+        "commands": [
+          "corepack pnpm exec ng test --watch=false --browsers=ChromeHeadless (199/199 full suite + new OCR/tabs specs 19/19)",
+          "corepack pnpm exec ng build --configuration extension (initial 591.21 kB; OCR window 23 kB and tesseract-js 16 kB lazy chunks)",
+          "playwright-core headless Edge: real offline OCR of image and current PDF page, zero external requests"
+        ],
+        "summary": "Image to text window loads on demand: the tab-shell button dynamically imports OcrWindowComponent, and tesseract.js is imported only on the first recognition. Worker, WASM core and 13 gz language models are served from assets/ocr; only the selected languages are fetched. Supports upload/drag/paste/current page, cancel, copy, download .txt and Add to PDF as an editable text box."
+      },
+      "artifacts": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-engine.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-window.component.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-window.component.html",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-window.component.scss",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-engine.service.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-window.component.spec.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/pdf-document-tabs/pdf-document-tabs.component.ts",
+        "pdf-viewer-editor/angular.json"
+      ],
+      "completedDate": "2026-10-20"
+    },
+    {
+      "id": "P4-SIGN-001",
+      "name": "Certificate-based PKCS#7 digital signing and signature verification panel",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 8,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-QA-001"
+      ],
+      "deliverables": [
+        "PdfSignatureService (lazy node-forge)",
+        "PdfSignDialogComponent",
+        "Signatures verification panel"
+      ],
+      "acceptanceCriteria": [
+        "Signed PDF has adbe.pkcs7.detached SHA-256 signature covering whole file",
+        "Verification reports Valid / Modified / Invalid",
+        "Certificate and password never persisted",
+        "Tests with generated certificate pass"
+      ],
+      "tags": [
+        "digital-signature",
+        "security",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: implement zoom in and zoom out, search pdf functionality, image to text conversion in a separate window, add digital signature functionality. Choices: enhance zoom/search; Tesseract bundled offline; English, Hindi, Telugu, Tamil and other Indian languages; certificate-based PKCS#12 signing with verify panel."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 119,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-QA-001"
+        ]
+      },
+      "executionResult": null,
+      "verification": null,
+      "artifacts": [],
+      "completedDate": null
+    },
+    {
+      "id": "P4-QA-002",
+      "name": "Phase 4b regression, bundle-size and browser verification",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 3,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-VIEW-001",
+        "P4-OCR-001",
+        "P4-SIGN-001"
+      ],
+      "deliverables": [
+        "Verification evidence and README usage"
+      ],
+      "acceptanceCriteria": [
+        "Full tests and both builds pass",
+        "Initial chunks exclude tesseract.js and node-forge",
+        "Real OCR and sign/verify verified in browser at 360/768/1440"
+      ],
+      "tags": [
+        "qa",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: implement zoom in and zoom out, search pdf functionality, image to text conversion in a separate window, add digital signature functionality. Choices: enhance zoom/search; Tesseract bundled offline; English, Hindi, Telugu, Tamil and other Indian languages; certificate-based PKCS#12 signing with verify panel.",
+        "User: OCR must load only when the user opens the component, to keep the initial bundle small."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 120,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-VIEW-001",
+          "P4-OCR-001",
+          "P4-SIGN-001"
+        ]
+      },
+      "executionResult": null,
+      "verification": null,
+      "artifacts": [],
+      "completedDate": null
     }
   ]
 }

@@ -1,0 +1,80 @@
+<div class="backdrop">
+  <section #dialog class="ocr" role="dialog" aria-modal="true" aria-labelledby="ocr-title" aria-describedby="ocr-privacy"
+    tabindex="-1" (keydown)="onDialogKeydown($event)">
+    <header class="bar">
+      <div class="bar-title">
+        <h2 id="ocr-title">Image to text</h2>
+        <span id="ocr-privacy">Offline OCR &middot; runs on this device &middot; images are never uploaded or saved</span>
+      </div>
+      <button type="button" class="icon-close" aria-label="Close image to text" title="Close (Esc)" (click)="requestClose()">&times;</button>
+    </header>
+
+    <div class="body">
+      <div class="column source">
+        <div class="card">
+          <h3>1. Choose an image</h3>
+          <div class="source-actions">
+            <button type="button" class="primary" (click)="chooseFile()" [disabled]="busy || loadingSource">Upload image</button>
+            <button type="button" (click)="pasteFromClipboard()" [disabled]="busy || loadingSource">Paste image</button>
+            <button type="button" (click)="useCurrentPage()" [disabled]="busy || loadingSource || !pageSource"
+              [title]="pageSource ? 'Read text from the page shown in the editor' : 'Open a PDF to use its current page'">Current PDF page</button>
+          </div>
+          <input #fileInput type="file" hidden accept="image/png,image/jpeg,image/webp,image/bmp" (change)="onFileSelected($event)" />
+          <div class="drop-zone" [class.dragging]="dragging" (dragover)="onDragOver($event)" (dragleave)="dragging = false" (drop)="onDrop($event)">
+            <img *ngIf="previewUrl; else emptyPreview" [src]="previewUrl" [alt]="'Preview of ' + sourceLabel" />
+            <ng-template #emptyPreview>
+              <p *ngIf="!loadingSource">Drop an image here, or press <kbd>Ctrl</kbd>+<kbd>V</kbd> to paste a screenshot.<br />
+                <small>PNG, JPEG, WebP or BMP &middot; up to 20 MB</small></p>
+              <p *ngIf="loadingSource" role="status">Preparing image…</p>
+            </ng-template>
+          </div>
+          <p class="source-label" *ngIf="sourceLabel">Source: <strong>{{ sourceLabel }}</strong></p>
+        </div>
+
+        <div class="card">
+          <h3>2. Languages in the image</h3>
+          <p class="hint">Select every language that appears. Fewer languages give faster, more accurate results.</p>
+          <div class="languages" role="group" aria-label="OCR languages">
+            <label *ngFor="let language of languages" class="check" [class.on]="isSelected(language.code)">
+              <input type="checkbox" [checked]="isSelected(language.code)" [disabled]="busy"
+                (change)="toggleLanguage(language.code, $any($event.target).checked)" />
+              <span>{{ language.label }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="column result">
+        <div class="card grow">
+          <div class="result-head">
+            <h3>3. Extract and use the text</h3>
+            <span class="confidence" *ngIf="confidence !== null && !busy">Confidence {{ confidence }}%</span>
+          </div>
+          <div class="run-row">
+            <button type="button" class="primary" (click)="recognize()" [disabled]="!hasImage || busy || loadingSource">Extract text</button>
+            <button type="button" *ngIf="busy" class="danger" (click)="cancel()">Cancel</button>
+            <span class="hint" *ngIf="!busy">{{ languageSummary }}</span>
+          </div>
+          <div class="progress" *ngIf="busy && progress" role="status" aria-live="polite">
+            <span>{{ progress.stage }}… {{ progressPercent }}%</span>
+            <progress max="100" [value]="progressPercent"></progress>
+            <small>The first run loads the OCR engine and language data from this app; later runs are faster.</small>
+          </div>
+          <p class="error" *ngIf="error" role="alert">{{ error }}</p>
+          <p class="notice" *ngIf="notice && !error" role="status">{{ notice }}</p>
+          <label class="result-label">
+            <span>Recognised text (you can edit it)</span>
+            <textarea [(ngModel)]="resultText" [disabled]="busy" rows="14" spellcheck="true"
+              placeholder="Extracted text appears here."></textarea>
+          </label>
+          <div class="result-actions">
+            <button type="button" (click)="copyText()" [disabled]="!resultText || busy">Copy</button>
+            <button type="button" (click)="downloadText()" [disabled]="!resultText || busy">Download .txt</button>
+            <button type="button" class="primary" (click)="insertIntoPdf()" [disabled]="!resultText.trim() || busy || !canAddToPdf"
+              [title]="canAddToPdf ? 'Insert as a text box on the current page' : 'Open an editable PDF in Single page view to add text'">Add to PDF as text box</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

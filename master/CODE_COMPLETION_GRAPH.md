@@ -101,6 +101,9 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-104` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-105` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-106` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-107` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-108` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-109` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -439,6 +442,18 @@ graph TD
     P4_UI_010["P4-UI-010: Split PDF workspace component template and styles into separate HTML and CSS files<br/>COMPLETED"]
     P4_UI_009 --> P4_UI_010
     style P4_UI_010 fill:#c8e6c9
+    P4_VIEW_001["P4-VIEW-001: Zoom presets/fit modes/Ctrl+wheel and Ctrl+F search with on-page highlights<br/>COMPLETED"]
+    P4_QA_001 --> P4_VIEW_001
+    style P4_VIEW_001 fill:#c8e6c9
+    P4_OCR_001["P4-OCR-001: Lazy-loaded offline image-to-text (OCR) window in Indian languages<br/>COMPLETED"]
+    P4_QA_001 --> P4_OCR_001
+    style P4_OCR_001 fill:#c8e6c9
+    P4_SIGN_001["P4-SIGN-001: Certificate-based PKCS#7 digital signing and signature verification panel<br/>PENDING"]
+    P4_QA_001 --> P4_SIGN_001
+    P4_QA_002["P4-QA-002: Phase 4b regression, bundle-size and browser verification<br/>PENDING"]
+    P4_VIEW_001 --> P4_QA_002
+    P4_OCR_001 --> P4_QA_002
+    P4_SIGN_001 --> P4_QA_002
 ```
 
 ## Interpretation

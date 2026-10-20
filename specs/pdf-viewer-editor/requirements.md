@@ -16,7 +16,8 @@
 - AI-05: Validate endpoint/model/key/input and response shape; show actionable
   authentication, rate-limit, network/CORS, timeout, and malformed-response errors.
   Support cancellation, prevent duplicate requests, and bound input/history size.
-  Scanned PDFs without a text layer require manually pasted text (no OCR in this MVP).
+  Scanned PDFs without a text layer require manually pasted text, or OCR-02
+  to extract it first.
 - AI-06: Next to the API-key notice, provide a "How to get an API key" button that
   opens a visual, step-by-step illustrated guide (separate component, modal):
   sign in to the OpenAI platform, add billing (ChatGPT Plus is separate), open
@@ -112,8 +113,63 @@
   copy/manual-edit behavior, responsive layout, existing workspace tests, production
   compilation, and registry graph/index generation without live billable API calls.
 
+## Phase 4b - Viewing, OCR and certificate signatures
+
+- VIEW-01 (zoom): Keep -/+ and add a zoom menu with presets (50-400%), Fit page
+  and Fit width, Ctrl/Cmd + mouse wheel and Ctrl/Cmd + 0/+/- shortcuts. Zoom stays
+  within 25-400%, the label shows the current percentage and fit mode, and fit
+  modes re-apply when the window or panels resize. Overlays and text styling scale
+  with zoom.
+- VIEW-02 (search): Ctrl/Cmd+F opens and focuses the search box (also in the
+  Tools drawer on phones). Enter / Shift+Enter go to the next / previous match.
+  Matches are highlighted on the rendered page, with the current match emphasised
+  and scrolled into view. The UI shows "N matches on M pages" or "No matches".
+  Match case and Regex options keep working; invalid regex shows an error.
+- OCR-01 (lazy loading): The OCR window, `tesseract.js` and the signing library
+  must not be in the initial JavaScript bundle. They load through dynamic
+  `import()` only when the user opens the feature. The OCR engine core (WASM) and
+  language models are fetched only when recognition runs, then reused while the
+  window stays open, and released on close.
+- OCR-02 (image to text): A separate full-screen "Image to text" window opened from
+  the top command row. Sources are an uploaded PNG/JPEG/WebP/BMP image, a pasted
+  clipboard image, or the current PDF page rendered at OCR resolution. Languages:
+  English, Hindi, Telugu, Tamil, Bengali, Marathi, Gujarati, Kannada, Malayalam,
+  Punjabi, Odia, Urdu and Assamese, combinable. The window shows an image preview,
+  staged progress (loading engine / loading language / recognising %), cancel,
+  and editable result text with confidence. It offers Copy, Download .txt, and
+  "Add to PDF as text box" (inserts a normal text overlay in the active document).
+- OCR-03 (privacy/offline): OCR runs entirely on the device. Engine and language
+  data are bundled with the app (no CDN, no network). Images are never uploaded
+  or persisted. Unsupported/oversized files (>20 MB or >40 megapixels) and errors
+  show clear messages. The extension CSP permits only `'wasm-unsafe-eval'` in
+  addition to `'self'`.
+- SIGN-01 (certificate signature): "Digitally sign" signs the active PDF with the
+  user's PKCS#12 (.pfx/.p12) certificate and password. It creates an
+  Adobe-compatible detached PKCS#7 (adbe.pkcs7.detached, SHA-256) signature with
+  signer name, reason, location and signing time. An optional visible signature
+  box (name/date/reason) is placed on a chosen page area. Pending edits are
+  applied first. Signing produces a new download, "<name>-signed.pdf", and warns
+  that any later edit invalidates the signature.
+- SIGN-02 (verification): A "Signatures" panel lists the signatures in the open
+  PDF with signer, issuer, signing time, reason, certificate validity dates, and
+  status: Valid (document unchanged since signing), Modified after signing,
+  Invalid, or Unsupported format. It states that trust in the certificate issuer
+  is not checked (no online CA/revocation lookups).
+- SIGN-03 (key safety): The certificate file and password are held only in
+  memory for the signing operation, never saved, logged or sent anywhere, and are
+  cleared after signing or cancel. Wrong passwords, certificates with no private
+  key, expired certificates (warning) and encrypted PDFs (blocked) show clear
+  messages.
+- QA-02: Unit tests for zoom/search, OCR (engine mocked) and signing/verifying
+  with a generated test certificate. Both production builds pass; build stats
+  prove `tesseract.js`/`node-forge` are not in initial chunks; browser checks at
+  360/768/1440px with real offline OCR of a sample image and a real
+  sign-then-verify round trip.
+
 Provider-specific non-compatible APIs, streaming, cloud key storage, automatic
-PDF replacement, OCR, and a backend credential proxy are outside this MVP.
+PDF replacement, online certificate trust/revocation (OCSP/CRL), timestamp
+authorities (TSA), long-term validation (LTV) and a backend credential proxy are
+outside this MVP.
 
 
 ## Traceability
