@@ -163,17 +163,17 @@
       "phase": "phase4",
       "name": "AI Workspace MVP",
       "file": "./phase4-tasks.json",
-      "totalTasks": 23,
+      "totalTasks": 28,
       "statusSummary": {
-        "pending": 0,
+        "pending": 5,
         "in_progress": 0,
         "completed": 23,
         "blocked": 0,
         "cancelled": 0
       },
       "completedTasks": 23,
-      "completionPercentage": "100%",
-      "totalEstimatedHours": 83.5,
+      "completionPercentage": "82%",
+      "totalEstimatedHours": 114.5,
       "unestimatedTasks": 0,
       "inheritedUnverifiedCompletions": 0,
       "taskIds": [
@@ -199,22 +199,27 @@
         "P4-VIEW-001",
         "P4-OCR-001",
         "P4-SIGN-001",
-        "P4-QA-002"
+        "P4-QA-002",
+        "P4-CMT-001",
+        "P4-CMT-002",
+        "P4-CMT-003",
+        "P4-CMT-004",
+        "P4-QA-003"
       ]
     }
   ],
   "progressTracking": {
-    "totalTasks": 95,
+    "totalTasks": 100,
     "statusSummary": {
-      "pending": 9,
+      "pending": 14,
       "in_progress": 0,
       "completed": 67,
       "blocked": 19,
       "cancelled": 0
     },
     "completedTasks": 67,
-    "completionPercentage": "70%",
-    "totalEstimatedHours": 1099.5,
+    "completionPercentage": "67%",
+    "totalEstimatedHours": 1130.5,
     "unestimatedTasks": 17,
     "inheritedUnverifiedCompletions": 7,
     "taskIds": [
@@ -312,7 +317,12 @@
       "P4-VIEW-001",
       "P4-OCR-001",
       "P4-SIGN-001",
-      "P4-QA-002"
+      "P4-QA-002",
+      "P4-CMT-001",
+      "P4-CMT-002",
+      "P4-CMT-003",
+      "P4-CMT-004",
+      "P4-QA-003"
     ]
   },
   "tasks": [
@@ -976,6 +986,41 @@
     },
     {
       "taskId": "P4-QA-002",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-CMT-001",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-CMT-002",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-CMT-003",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-CMT-004",
+      "module": "viewer-editor",
+      "phase": 4,
+      "canonicalFile": "./viewer-editor/phase4-tasks.json",
+      "modulePath": "../../pdf-viewer-editor/"
+    },
+    {
+      "taskId": "P4-QA-003",
       "module": "viewer-editor",
       "phase": 4,
       "canonicalFile": "./viewer-editor/phase4-tasks.json",

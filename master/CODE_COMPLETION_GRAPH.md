@@ -106,6 +106,7 @@ Start execution only through [TASKS.md](TASKS.md).
 - `GSEQ-109` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-110` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 - `GSEQ-111` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
+- `GSEQ-112` (2026-10-20): Canonical tasks synchronized; task entry point, indexes, and dependency graph refreshed.
 
 ## Complete Dependency Graph
 
@@ -458,6 +459,17 @@ graph TD
     P4_OCR_001 --> P4_QA_002
     P4_SIGN_001 --> P4_QA_002
     style P4_QA_002 fill:#c8e6c9
+    P4_CMT_001["P4-CMT-001: Native PDF comment model and read/write<br/>PENDING"]
+    P4_QA_002 --> P4_CMT_001
+    P4_CMT_002["P4-CMT-002: Acrobat-style commenting tools<br/>PENDING"]
+    P4_CMT_001 --> P4_CMT_002
+    P4_CMT_003["P4-CMT-003: Lazy Comments panel with replies and review status<br/>PENDING"]
+    P4_CMT_001 --> P4_CMT_003
+    P4_CMT_004["P4-CMT-004: XFDF import/export, summary, hide and flatten options<br/>PENDING"]
+    P4_CMT_002 --> P4_CMT_004
+    P4_CMT_003 --> P4_CMT_004
+    P4_QA_003["P4-QA-003: Phase 4c comments regression and browser verification<br/>PENDING"]
+    P4_CMT_004 --> P4_QA_003
 ```
 
 ## Interpretation

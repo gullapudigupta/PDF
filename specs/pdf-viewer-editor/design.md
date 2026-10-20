@@ -172,6 +172,42 @@
     `PdfSignDialogComponent` (standalone, lazy) holds the file and password in
     fields that are cleared in `finally`. The workspace flattens edits through
     the existing serializer before signing.
+22. Comments and notes (CMT-01..08, planned):
+    - Model: extend `Annotation` with `subtype` (Text, Highlight, Underline,
+      StrikeOut, FreeText, Square, Circle, Line, Ink), `quadPoints`, `inkLists`,
+      `lineEnds`, `inReplyTo`, `replies`, `reviewState`, `markedState`,
+      `createdAt`/`modifiedAt` and `sourceRef` (the original PDF object number
+      for imported comments). Existing records migrate to the new fields on load.
+    - Read: `PdfCommentReaderService` uses pdf.js `page.getAnnotations()` for
+      geometry and the content and author fields. It builds threads from
+      `inReplyTo` and review states from replies with
+      `stateModel`. It converts PDF user space to viewport coordinates with the
+      page viewport transform.
+    - Write: `PdfCommentWriterService` (pdf-lib):
+      - it removes the original annotations the user edited or deleted (matched
+        by `sourceRef`) and keeps every other `/Annots` entry unchanged;
+      - it writes new annotation dictionaries with `/Rect`, `/C`, `/CA`, `/T`,
+        `/M`, `/CreationDate`, `/Contents`, `/NM` (a stable id),
+        `/QuadPoints`, `/InkList`, `/L`, `/LE`, `/IRT`, `/State` and
+        `/StateModel`;
+      - it adds an `/AP /N` appearance stream for each annotation so that
+        viewers which do not create appearances still render it, plus a
+        `/Popup` for markup types.
+      `flattenEdits` keeps today's drawing path only for "Save flattened".
+    - UI:
+      - a `CommentToolbarComponent` sits in the Tools menu;
+      - text-markup selection uses the existing pdf.js text layer and
+        `Range.getClientRects()`, converted to QuadPoints;
+      - `CommentPopupComponent` is anchored to the annotation;
+      - `CommentsPanelComponent` is standalone and lazy, loaded with
+        `import()` into a `ViewContainerRef` in the right-hand area, with an
+        "AI chat | Comments" switch;
+      - the author name is stored in local settings (not in the PDF until a
+        comment is saved).
+    - XFDF: `XfdfService` (lazy) serializes and parses with `DOMParser`, mapping
+      annotation types, pages (0-based), rects, colours, dates (PDF date
+      format) and reply/state attributes.
+    - All mutations go through the existing undo/redo history and autosave.
 
 ### Execution and graph
 

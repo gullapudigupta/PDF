@@ -1,0 +1,35 @@
+{
+  "bugs": [
+    {
+      "id": "BUG-OCR-001",
+      "title": "Image-to-text recognition fails to load the Tesseract JavaScript chunk",
+      "project": "pdf-viewer-editor",
+      "reportedAt": "2026-10-20",
+      "status": "deferred",
+      "error": "Text recognition failed: Loading chunk node_modules_pnpm_tesseract_js_7_0_0_node_modules_tesseract_js_src_index_js failed. (error: http://127.0.0.1:4300/node_modules_pnpm_tesseract_js_7_0_0_node_modules_tesseract_js_src_index_js.js)",
+      "affectedFiles": [
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-engine.service.ts",
+        "pdf-viewer-editor/src/app/modules/pdf-workspace/components/ocr/ocr-engine.service.spec.ts",
+        "pdf-viewer-editor/angular.json"
+      ],
+      "investigation": {
+        "findings": [
+          "OcrEngineService dynamically imports tesseract.js when recognition first runs.",
+          "The installed Tesseract version is 7.0.0; its package entry point is src/index.js.",
+          "The reported development server at 127.0.0.1:4300 was unreachable during investigation.",
+          "Starting the development server failed because Node.js v24.11.0 does not meet the installed Angular CLI requirement: v22.22.3, v24.15.0, or v26.0.0 minimum on the corresponding release line."
+        ],
+        "rootCause": "Not confirmed; the reported chunk-loading failure has not been reproduced.",
+        "implementationChangesMade": false
+      },
+      "nextSteps": [
+        "Use a supported Node.js runtime and reproduce the error with ng serve on port 4300.",
+        "Inspect the failing chunk request and generated lazy-loading graph before choosing a fix.",
+        "Record requirements, design and an executable task in specs/pdf-viewer-editor/tasks.md before implementation.",
+        "Preserve lazy loading and bundled offline OCR assets; verify real recognition and targeted tests.",
+        "Update the task checklist, canonical evidence, completion graph and index sequence after successful completion."
+      ],
+      "notes": "User requested saving this issue for later work. No fix has been implemented."
+    }
+  ]
+}

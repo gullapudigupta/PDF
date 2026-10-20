@@ -5,17 +5,17 @@
   "requirements": "../../REQUIREMENTS.md",
   "design": "../../DESIGN.md",
   "progressTracking": {
-    "totalTasks": 38,
+    "totalTasks": 43,
     "statusSummary": {
-      "pending": 0,
+      "pending": 5,
       "in_progress": 0,
       "completed": 38,
       "blocked": 0,
       "cancelled": 0
     },
     "completedTasks": 38,
-    "completionPercentage": "100%",
-    "totalEstimatedHours": 339.5,
+    "completionPercentage": "88%",
+    "totalEstimatedHours": 370.5,
     "unestimatedTasks": 0,
     "inheritedUnverifiedCompletions": 0,
     "taskIds": [
@@ -56,7 +56,12 @@
       "P4-VIEW-001",
       "P4-OCR-001",
       "P4-SIGN-001",
-      "P4-QA-002"
+      "P4-QA-002",
+      "P4-CMT-001",
+      "P4-CMT-002",
+      "P4-CMT-003",
+      "P4-CMT-004",
+      "P4-QA-003"
     ]
   },
   "phases": [
@@ -97,17 +102,17 @@
     {
       "phase": "phase4",
       "file": "./phase4-tasks.json",
-      "totalTasks": 23,
+      "totalTasks": 28,
       "statusSummary": {
-        "pending": 0,
+        "pending": 5,
         "in_progress": 0,
         "completed": 23,
         "blocked": 0,
         "cancelled": 0
       },
       "completedTasks": 23,
-      "completionPercentage": "100%",
-      "totalEstimatedHours": 83.5,
+      "completionPercentage": "82%",
+      "totalEstimatedHours": 114.5,
       "unestimatedTasks": 0,
       "inheritedUnverifiedCompletions": 0,
       "taskIds": [
@@ -133,7 +138,12 @@
         "P4-VIEW-001",
         "P4-OCR-001",
         "P4-SIGN-001",
-        "P4-QA-002"
+        "P4-QA-002",
+        "P4-CMT-001",
+        "P4-CMT-002",
+        "P4-CMT-003",
+        "P4-CMT-004",
+        "P4-QA-003"
       ]
     }
   ]

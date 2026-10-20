@@ -62,6 +62,26 @@ Execute only this checklist and the generated [master entry point](../../master/
 - [x] P4-QA-002 (depends on P4-VIEW-001, P4-OCR-001 and P4-SIGN-001): Full
   regression, both builds, initial-bundle check (no tesseract/forge), browser
   checks with real OCR and sign/verify, README usage, and registry sync.
+- [ ] P4-CMT-001 (depends on P4-QA-002): Native PDF comment model and
+  read/write: extend the annotation model, read existing comments/replies with
+  pdf.js, write standard annotation dictionaries with appearance streams and
+  popups via pdf-lib, preserve unsupported annotations, migrate old records,
+  round-trip tests.
+- [ ] P4-CMT-002 (depends on P4-CMT-001): Comment tools: sticky note,
+  highlight/underline/strike-through from text selection, text box, rectangle,
+  ellipse, line/arrow, pencil, eraser, colour/opacity, note popup, Escape
+  cancel, undo/redo, author name setting, responsive Tools placement, tests.
+- [ ] P4-CMT-003 (depends on P4-CMT-001): Lazy Comments panel: list by page,
+  search, filter (type/author/colour/status), sort, jump-to-comment, replies,
+  review status and checked mark, edit/delete, AI chat | Comments switch,
+  phone/tablet drawer, accessibility, tests.
+- [ ] P4-CMT-004 (depends on P4-CMT-002 and P4-CMT-003): XFDF export/import,
+  comment summary export, delete all comments, hide comments toggle and "Save
+  flattened" option, with tests.
+- [ ] P4-QA-003 (depends on P4-CMT-004): Full regression, both builds,
+  initial-bundle check (no more than 15 kB growth), browser checks at
+  360/768/1440 (add, reply, status, save, reopen), cross-viewer check of a saved
+  sample, README usage/limitations and registry sync.
 
 Update this checklist and canonical task evidence after each successful completion.
 

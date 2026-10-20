@@ -1684,6 +1684,288 @@
         "specs/pdf-viewer-editor/tasks.md"
       ],
       "completedDate": "2026-10-20"
+    },
+    {
+      "id": "P4-CMT-001",
+      "name": "Native PDF comment model and read/write",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 8,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-QA-002"
+      ],
+      "deliverables": [
+        "Extended annotation model with migration",
+        "PdfCommentReaderService (pdf.js)",
+        "PdfCommentWriterService (pdf-lib) with appearance streams and popups",
+        "Round-trip tests"
+      ],
+      "acceptanceCriteria": [
+        "Comments save as standard /Annot objects with /T, /M, /Contents, /NM, /Popup and /AP",
+        "Existing comments and replies in opened PDFs are listed and editable without duplicates on save",
+        "Unsupported annotations (links, widgets, signatures, attachments) are preserved unchanged",
+        "Saved comments reopen correctly in pdf.js"
+      ],
+      "tags": [
+        "comments",
+        "annotations",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: we need to add comments and notes just like Acrobat; save this to phase4-tasks.json.",
+        "User: implementation will be done in a separate session (planning only now)."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 121,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-QA-002"
+        ]
+      },
+      "executionResult": null,
+      "verification": null,
+      "artifacts": [],
+      "completedDate": null
+    },
+    {
+      "id": "P4-CMT-002",
+      "name": "Acrobat-style commenting tools",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 8,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-CMT-001"
+      ],
+      "deliverables": [
+        "CommentToolbarComponent",
+        "Text-selection markup to QuadPoints",
+        "CommentPopupComponent",
+        "Author name setting"
+      ],
+      "acceptanceCriteria": [
+        "Sticky note, highlight, underline, strike-through, text box, rectangle, ellipse, line/arrow, pencil and eraser work",
+        "Colour and opacity apply; Escape cancels the active tool",
+        "All actions support undo/redo",
+        "Tools are reachable on phone, tablet and desktop"
+      ],
+      "tags": [
+        "comments",
+        "ui",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: we need to add comments and notes just like Acrobat; save this to phase4-tasks.json.",
+        "User: implementation will be done in a separate session (planning only now)."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 122,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-CMT-001"
+        ]
+      },
+      "executionResult": null,
+      "verification": null,
+      "artifacts": [],
+      "completedDate": null
+    },
+    {
+      "id": "P4-CMT-003",
+      "name": "Lazy Comments panel with replies and review status",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 7,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-CMT-001"
+      ],
+      "deliverables": [
+        "CommentsPanelComponent (lazy chunk)",
+        "AI chat | Comments switch",
+        "Reply and status UI"
+      ],
+      "acceptanceCriteria": [
+        "Comments are listed by page with search, filter (type/author/colour/status) and sort",
+        "Clicking a comment jumps to and selects it",
+        "Replies are stored as /IRT and review status as /State + /StateModel Review",
+        "Panel is a drawer on phones/tablets and keyboard/screen-reader accessible"
+      ],
+      "tags": [
+        "comments",
+        "ui",
+        "accessibility",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: we need to add comments and notes just like Acrobat; save this to phase4-tasks.json.",
+        "User: implementation will be done in a separate session (planning only now)."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 123,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-CMT-001"
+        ]
+      },
+      "executionResult": null,
+      "verification": null,
+      "artifacts": [],
+      "completedDate": null
+    },
+    {
+      "id": "P4-CMT-004",
+      "name": "XFDF import/export, summary, hide and flatten options",
+      "status": "PENDING",
+      "priority": "MEDIUM",
+      "estimatedHours": 5,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-CMT-002",
+        "P4-CMT-003"
+      ],
+      "deliverables": [
+        "XfdfService (lazy)",
+        "Comment summary export",
+        "Delete all, Hide comments and Save flattened options"
+      ],
+      "acceptanceCriteria": [
+        "XFDF exported from the app imports back losslessly and opens in Acrobat",
+        "Comment summary is grouped by page",
+        "Delete all asks for confirmation",
+        "Save flattened draws comments into page content"
+      ],
+      "tags": [
+        "comments",
+        "interop",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: we need to add comments and notes just like Acrobat; save this to phase4-tasks.json.",
+        "User: implementation will be done in a separate session (planning only now)."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 124,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-CMT-002",
+          "P4-CMT-003"
+        ]
+      },
+      "executionResult": null,
+      "verification": null,
+      "artifacts": [],
+      "completedDate": null
+    },
+    {
+      "id": "P4-QA-003",
+      "name": "Phase 4c comments regression and browser verification",
+      "status": "PENDING",
+      "priority": "HIGH",
+      "estimatedHours": 3,
+      "value": null,
+      "recommendedModel": [],
+      "modelRationale": "Use the current Copilot session; no model override.",
+      "dependencies": [
+        "P4-CMT-004"
+      ],
+      "deliverables": [
+        "Verification evidence and README usage"
+      ],
+      "acceptanceCriteria": [
+        "Full tests and both builds pass",
+        "Initial bundle grows by no more than 15 kB",
+        "Add, reply, status, save and reopen verified in browser at 360/768/1440",
+        "A saved sample shows comments in another PDF viewer"
+      ],
+      "tags": [
+        "qa",
+        "phase4"
+      ],
+      "module": "viewer-editor",
+      "modulePath": "../../../pdf-viewer-editor/",
+      "phase": 4,
+      "userClarifications": [
+        "User: we need to add comments and notes just like Acrobat; save this to phase4-tasks.json.",
+        "User: implementation will be done in a separate session (planning only now)."
+      ],
+      "modelAssignment": null,
+      "executionPlan": {
+        "order": 125,
+        "batch": 4,
+        "band": "phase-4",
+        "scriptable": false,
+        "estimatedCostUsd": null
+      },
+      "jevRecommendation": null,
+      "planningRequired": false,
+      "source": {
+        "file": "specs/pdf-viewer-editor/tasks.md",
+        "declaredDependencies": [
+          "P4-CMT-004"
+        ]
+      },
+      "executionResult": null,
+      "verification": null,
+      "artifacts": [],
+      "completedDate": null
     }
   ]
 }

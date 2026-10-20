@@ -171,6 +171,77 @@ PDF replacement, online certificate trust/revocation (OCSP/CRL), timestamp
 authorities (TSA), long-term validation (LTV) and a backend credential proxy are
 outside this MVP.
 
+## Phase 4c - Acrobat-style comments and notes (planned, separate session)
+
+Today the workspace's highlight/comment/sticky-note annotations are drawn into
+the page content when saving, so other PDF readers cannot see them as comments.
+Phase 4c replaces this with real, interoperable PDF annotations.
+
+- CMT-01 (native annotations): Comments are saved as standard PDF annotation
+  objects that open as comments in Adobe Acrobat/Reader, Edge and Chrome. Each
+  annotation stores its author (`/T`), modified date (`/M`), creation date, note
+  text (`/Contents`), colour, opacity, and a popup (`/Popup`) where the type
+  supports one. Supported types:
+  - sticky note (`/Text`, Comment icon);
+  - text highlight, underline and strike-through (`/Highlight`, `/Underline`,
+    `/StrikeOut`, with `QuadPoints` from a text selection);
+  - text box (`/FreeText`);
+  - rectangle, ellipse, line/arrow (`/Square`, `/Circle`, `/Line`);
+  - pencil drawing (`/Ink`).
+  Saved files keep comments editable; flattening into the page happens only when
+  the user asks for it.
+- CMT-02 (open existing comments): When a PDF is opened, its existing markup
+  annotations and replies are read and shown in the comments list and on the page.
+  They can be edited, replied to and deleted, and saving does not create
+  duplicates. Annotation types the app cannot edit (links, widgets, file
+  attachments, sounds, signatures) are kept unchanged.
+- CMT-03 (commenting tools): A Comment toolbar is available in the Tools menu and
+  on phones, with: Sticky note, Highlight, Underline, Strike-through, Text box,
+  Rectangle, Ellipse, Line/Arrow, Pencil and Eraser; colour and opacity pickers;
+  Select/Hand mode. Text markups use the PDF text layer selection. A sticky note
+  is placed by click/tap and opens its note popup. Escape cancels the active tool.
+  Every action supports undo/redo.
+- CMT-04 (comments panel): A "Comments" panel lists all comments grouped by page,
+  showing type icon, author, date, a text snippet and reply count. It supports:
+  - search;
+  - filter by type, author, colour and review status;
+  - sort by page, date or author;
+  - click to jump to and select the comment on the page;
+  - expand/collapse all, and replies.
+  On phones and tablets it opens as a drawer; on desktop it shares the right-hand
+  side area with AI chat as a switchable tab.
+- CMT-05 (replies and review status): Users can reply to any comment (stored as
+  `/IRT` reply annotations) and set a review status (None, Accepted, Rejected,
+  Cancelled, Completed), which is stored as `/State` + `/StateModel Review`
+  replies, so Acrobat shows it. A private "checked" mark (`/StateModel Marked`)
+  is also supported. Edit and delete apply to the user's own replies and to
+  imported ones.
+- CMT-06 (author identity): The author name is set once (default "Guest") in a
+  small settings field and saved locally on the device. It is used for new
+  comments and replies.
+- CMT-07 (export, import, flatten, print): Comments can be:
+  - exported to and imported from XFDF (Acrobat-compatible);
+  - exported as a comment summary (plain text, grouped by page);
+  - removed all at once (with confirmation).
+  "Save with comments flattened" draws comments into the page as today. A
+  "Hide comments" toggle hides them on screen.
+- CMT-08 (performance and accessibility): The comments panel and XFDF code load
+  on first use (lazy chunks). The initial bundle grows by no more than 15 kB.
+  Comment tools, list items and popups are keyboard reachable with ARIA labels
+  and visible focus. Screen readers announce add/delete/reply.
+- QA-03: Unit tests for annotation read/write round trips (including reopening in
+  pdf.js), replies/status, XFDF import/export and the panel. Both production
+  builds pass. Browser checks at 360/768/1440px add, reply, set status, save,
+  reopen and confirm comments persist. A saved sample is confirmed to show
+  comments in another PDF viewer.
+
+Open decisions to confirm at the start of the Phase 4c session:
+- Whether the Comments panel shares the right-hand side with AI chat (proposed)
+  or gets its own side.
+- Whether stamps (Approved, Draft, etc.) and file-attachment comments are needed
+  in this MVP. They are currently out of scope.
+- Whether the default on save keeps comments editable (proposed) or flattens them.
+
 
 ## Traceability
 - Design source: `specs/pdf-viewer-editor/design.md`
