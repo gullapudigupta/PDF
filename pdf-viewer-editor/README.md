@@ -66,8 +66,30 @@ A modern PDF viewer and editor application that runs as both a desktop applicati
 - Offers four ATS-friendly templates: Classic, Modern, Professional and Compact.
 - Provides structured sections, a best-practice checklist, optional per-section AI drafting, Download PDF, and Open in editor.
 
+**Zoom and search**
+
+- Use **-** / **+**, the zoom list (Fit page, Fit width, 25%-400%), Ctrl+- / Ctrl++, Ctrl+mouse wheel, or Ctrl+0 to fit the page.
+- Press Ctrl+F to search. Enter goes to the next match and Shift+Enter to the previous one. **Match case** and **Regex** are optional, and matches are listed by page.
+
+**Image to text (OCR)**
+
+- **Image to text** opens a separate window. Choose a PNG, JPEG, WebP or BMP image, or read the current PDF page.
+- Supports English and 12 Indian languages. Copy the text, download it as .txt, or use **Add to PDF** to place it as a text box.
+- OCR runs entirely on your device; images are never uploaded. The OCR code loads only when you open the window, and each language's data loads only when you first extract text in that language, so OCR adds nothing to the app's start-up size.
+
+**Digital signatures**
+
+- **Digitally sign** signs with your PKCS#12 certificate (.pfx or .p12) and its password. You can add signer name, reason, location and an optional visible signature box on any page and corner.
+- Pending edits are applied first, and a signed copy is saved as `<name>-signed.pdf`. The original file is not changed.
+- **Signatures** checks every signature in the open PDF and shows Valid, Changed after signing, Invalid or Not supported, with signer, time, reason and certificate dates.
+- The certificate and password are kept in memory only for that signature and are never saved or uploaded. The signing code loads only when you first use these buttons.
+
 **Limitations**
 
+- Signatures use RSA certificates with PKCS#7 detached SHA-256 (`adbe.pkcs7.detached`). The Signatures panel confirms that the document is unchanged and matches the certificate. It does not check trust chains, revocation or timestamps.
+- Signing saves a full copy, so signing an already-signed PDF again invalidates its earlier signatures. Do not edit a signed copy.
+- In the packaged desktop app (loaded from `file://`), OCR's on-demand worker assets have not been verified yet. OCR is verified in the web and extension builds.
+- OCR accuracy depends on image quality; review the text before using it.
 - A ChatGPT subscription does not include API access, and provider API charges may apply.
 - AI features need network access to the provider you choose.
 - Text edits are overlays placed on the page; existing PDF text cannot be reflowed or restyled.

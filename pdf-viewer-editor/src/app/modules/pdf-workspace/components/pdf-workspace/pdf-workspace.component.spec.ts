@@ -1,3 +1,4 @@
+import { By } from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
@@ -535,6 +536,38 @@ describe('PdfWorkspaceComponent', () => {
     await render();
     expect(fixture.nativeElement.querySelector('app-pdf-protect-dialog')).toBeNull();
     expect(component.dialogError).toBeNull();
+  });
+
+  it('loads the digital signature dialog and panel on demand and saves the signed copy', async () => {
+    const render = async () => { (component as any).cdr.markForCheck(); fixture.detectChanges(); await fixture.whenStable(); };
+    component.document = { id: 'doc', name: 'deal.pdf', totalPages: 3, bytes: new Uint8Array([1]), proxy: {} } as any;
+    component.currentPage = 2;
+    await render();
+    expect(fixture.nativeElement.querySelector('app-pdf-sign-dialog')).toBeNull();
+
+    await component.openSignDialog();
+    await render();
+    const dialog = fixture.debugElement.query(By.css('app-pdf-sign-dialog'));
+    expect(dialog).not.toBeNull();
+    expect(dialog.componentInstance.page).toBe(2);
+    expect(dialog.componentInstance.pageCount).toBe(3);
+    expect(dialog.componentInstance.prepareDocument).toEqual(jasmine.any(Function));
+
+    runtimeService.saveFileDialog.calls.reset();
+    runtimeService.saveFileDialog.and.resolveTo({ canceled: false, filePath: 'C:\\docs\\deal-signed.pdf' });
+    dialog.componentInstance.signed.emit({ bytes: new Uint8Array([9]), signerName: 'Ravi Kumar', warning: '' });
+    await fixture.whenStable();
+    await render();
+    expect(fixture.nativeElement.querySelector('app-pdf-sign-dialog')).toBeNull();
+    expect(runtimeService.saveFileDialog).toHaveBeenCalledWith('deal-signed.pdf', jasmine.any(ArrayBuffer));
+    expect(component.actionStatus?.message).toContain('Signed by Ravi Kumar and saved as deal-signed.pdf');
+
+    await component.openSignaturesPanel();
+    await render();
+    expect(fixture.nativeElement.querySelector('app-pdf-signatures-panel')).not.toBeNull();
+    component.closeSignatureWindow();
+    await render();
+    expect(fixture.nativeElement.querySelector('app-pdf-signatures-panel')).toBeNull();
   });
 
   it('exports the current page in the selected image format', async () => {

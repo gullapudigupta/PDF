@@ -56,7 +56,7 @@ Execute only this checklist and the generated [master entry point](../../master/
 - [x] P4-OCR-001 (depends on P4-QA-001): Lazy-loaded "Image to text" window with
   offline bundled Tesseract (13 languages), image/paste/current-page sources,
   progress, cancel, copy/download/add-to-PDF, extension CSP update, with tests.
-- [ ] P4-SIGN-001 (depends on P4-QA-001): Lazy-loaded certificate (PKCS#12)
+- [x] P4-SIGN-001 (depends on P4-QA-001): Lazy-loaded certificate (PKCS#12)
   PKCS#7 detached signing with optional visible box, and a Signatures
   verification panel, with tests using a generated certificate.
 - [ ] P4-QA-002 (depends on P4-VIEW-001, P4-OCR-001 and P4-SIGN-001): Full

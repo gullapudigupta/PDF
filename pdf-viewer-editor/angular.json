@@ -23,7 +23,7 @@
             "polyfills": ["@angular/localize/init", "zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "allowedCommonJsDependencies": ["tesseract.js", "regenerator-runtime/runtime"],
+            "allowedCommonJsDependencies": ["tesseract.js", "regenerator-runtime/runtime", "node-forge"],
             "assets": [
               "src/favicon.ico",
               "src/assets",

@@ -1,5 +1,6 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, inject } from '@angular/core';import { Store } from '@ngrx/store';
+import { AfterViewChecked, ChangeDetectorRef, Component, ComponentRef, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren, ViewContainerRef, inject } from '@angular/core';import { Store } from '@ngrx/store';
 import { RuntimeService } from '@core/services/runtime.service';
+import type { SignedPdfResult } from '../pdf-signatures/pdf-sign-dialog.component';
 import { OpenedPdfFile } from '@core/adapters/runtime.adapter';
 import { PasswordResponses } from 'pdfjs-dist';
 import { PdfDocumentService, LoadedPdfDocument, PdfPasswordCancelledError } from '../../services/pdf-document.service';
@@ -138,6 +139,9 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
   @ViewChild('multiPageView') multiPageView?: ElementRef<HTMLDivElement>;
   @ViewChildren('modePageCanvas') modePageCanvases?: QueryList<ElementRef<HTMLCanvasElement>>;
   @ViewChild('signatureCanvas') signatureCanvas?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('signatureHost', { read: ViewContainerRef, static: true }) signatureHost?: ViewContainerRef;
+  private signatureWindow: ComponentRef<unknown> | null = null;
+  signatureLoading = false;
 
   compactLayout = window.innerWidth < 1024;
   toolsOpen = !this.compactLayout;
@@ -296,6 +300,7 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
   }
 
   ngOnDestroy(): void {
+    this.closeSignatureWindow();
     if (this.actionStatusTimer) clearTimeout(this.actionStatusTimer);
     if (this.panelLayoutFrame !== null) cancelAnimationFrame(this.panelLayoutFrame);
     if (this.viewStateSaveTimer) clearTimeout(this.viewStateSaveTimer);
@@ -855,6 +860,79 @@ export class PdfWorkspaceComponent implements AfterViewChecked, OnChanges, OnDes
       this.setActionStatus('error', this.dialogError);
     } finally {
       this.actionBusy = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  /** Opens the certificate signing dialog. Its code and node-forge load only on first use. */
+  async openSignDialog(): Promise<void> {
+    if (!this.document || this.document.isEncrypted || this.signatureLoading) return;
+    const document = this.document;
+    await this.openSignatureWindow(async host => {
+      const { PdfSignDialogComponent } = await import('../pdf-signatures/pdf-sign-dialog.component');
+      const ref = host.createComponent(PdfSignDialogComponent);
+      ref.setInput('fileName', document.name);
+      ref.setInput('pageCount', document.totalPages);
+      ref.setInput('currentPage', this.currentPage);
+      ref.setInput('prepareDocument', () => this.serializeCurrentDocument());
+      ref.instance.cancel.subscribe(() => this.closeSignatureWindow());
+      ref.instance.signed.subscribe(result => void this.saveSignedCopy(document.name, result));
+      return ref;
+    });
+  }
+
+  /** Opens the signature verification panel for the PDF as it is currently loaded. */
+  async openSignaturesPanel(): Promise<void> {
+    if (!this.document || this.signatureLoading) return;
+    const document = this.document;
+    await this.openSignatureWindow(async host => {
+      const { PdfSignaturesPanelComponent } = await import('../pdf-signatures/pdf-signatures-panel.component');
+      const ref = host.createComponent(PdfSignaturesPanelComponent);
+      ref.setInput('fileName', document.name);
+      ref.setInput('pdfBytes', document.bytes);
+      ref.instance.close.subscribe(() => this.closeSignatureWindow());
+      return ref;
+    });
+  }
+
+  closeSignatureWindow(): void {
+    this.signatureWindow?.destroy();
+    this.signatureWindow = null;
+    this.cdr.markForCheck();
+  }
+
+  private async openSignatureWindow(create: (host: ViewContainerRef) => Promise<ComponentRef<unknown>>): Promise<void> {
+    if (!this.signatureHost) return;
+    if (this.compactLayout) this.closePanels();
+    this.closeSignatureWindow();
+    this.signatureLoading = true;
+    this.cdr.markForCheck();
+    try {
+      this.signatureWindow = await create(this.signatureHost);
+    } catch (error) {
+      this.setActionStatus('error', `Unable to open digital signatures: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
+      this.signatureLoading = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  private async saveSignedCopy(sourceName: string, result: SignedPdfResult): Promise<void> {
+    this.closeSignatureWindow();
+    const name = `${sourceName.replace(/\.pdf$/i, '')}-signed.pdf`;
+    this.setActionStatus('progress', 'Saving the signed copy...');
+    try {
+      const saved = await this.savePdfBytes(name, result.bytes);
+      if (saved.canceled) {
+        this.setActionStatus('info', 'Save cancelled. The signed copy was not saved.');
+        return;
+      }
+      const warning = result.warning ? ` ${result.warning}` : '';
+      this.setActionStatus(result.warning ? 'info' : 'success',
+        `Signed by ${result.signerName} and saved as ${this.savedName(saved, name)}. Open that file to check its signature; do not edit it, or the signature becomes invalid.${warning}`);
+    } catch (error) {
+      this.setActionStatus('error', `Unable to save the signed copy: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
       this.cdr.markForCheck();
     }
   }
